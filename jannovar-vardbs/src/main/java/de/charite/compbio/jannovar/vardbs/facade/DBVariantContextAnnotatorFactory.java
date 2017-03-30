@@ -52,6 +52,24 @@ public class DBVariantContextAnnotatorFactory {
 	}
 
 	/**
+	 * Construct gnomAD {@link VariantContext} annotator factory.
+	 * 
+	 * @param vcfDBPath
+	 *            Path to gzip-compressed, normalized and tbi-indexed gnomAD file to use for the annotation
+	 * @param fastaRefPath
+	 *            Path to reference FASTA file
+	 * @param options
+	 *            Configuration for the variant context annotation
+	 * @return Preconfigured {@link DBVariantContextAnnotator} object
+	 * @throws JannovarVarDBException
+	 *             on problems loading the resources
+	 */
+	public DBVariantContextAnnotator constructGnomad(String vcfDBPath, String fastaRefPath, DBAnnotationOptions options)
+			throws JannovarVarDBException {
+		return new DBVariantContextAnnotator(new ExacAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+	}
+
+	/**
 	 * Construct UK10K {@link VariantContext} annotator factory.
 	 * 
 	 * @param vcfDBPath
@@ -86,7 +104,6 @@ public class DBVariantContextAnnotatorFactory {
 			DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(new ClinVarAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
-
 
 	/**
 	 * Construct Cosmic {@link VariantContext} annotator factory.

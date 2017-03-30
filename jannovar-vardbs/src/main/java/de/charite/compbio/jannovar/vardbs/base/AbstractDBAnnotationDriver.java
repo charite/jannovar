@@ -59,17 +59,18 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 			List<GenotypeMatch> positionOverlaps = new ArrayList<>();
 			while (iter.hasNext()) {
 				final VariantContext dbVC = iter.next();
-				genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
+				if (!options.isReportOverlappingAsMatching()) // unnecessary in this case
+					genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
 				if (options.isReportOverlapping() || options.isReportOverlappingAsMatching())
 					positionOverlaps.addAll(matcher.positionOverlaps(obsVC, dbVC));
 			}
 
 			// Pick best record for each alternative allele
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsMatch = buildAnnotatingDBRecordsWrapper(
-					genotypeMatches);
+					genotypeMatches, true);
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsOverlap = buildAnnotatingDBRecordsWrapper(
-					positionOverlaps);
-			HashMap<Integer, AnnotatingRecord<RecordType>> emptyMap = new HashMap<Integer, AnnotatingRecord<RecordType>>();
+					positionOverlaps, false);
+			HashMap<Integer, AnnotatingRecord<RecordType>> emptyMap = new HashMap<>();
 
 			// Use these records to annotate the variant call in obsVC (record-wise but also per alternative allele)
 			if (options.isReportOverlappingAsMatching())
@@ -85,14 +86,17 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	 * Build mapping from alternative allele number to db VCF record to use
 	 * 
 	 * For SNVs, there should only be one value in the value set at which all alleles point to for most cases. The
-	 * variant with the lowermost allele number will be chosen for annotating the reference allele.
+	 * selection of the record for each observed allele is delegated to the subclass' {@link #pickAnnotatingDBRecords}.
 	 * 
 	 * @param genotypeMatches
 	 *            List of {@link GenotypeMatch} objects to build the annotating database records from
-	 * @return Resulting map from alternative allele ID (starting with 1) to the database record to use
+	 * @param isMatch
+	 *            whether or not to consider true matching alleles (<code>true</code>) or only position-based overlaps
+	 *            (<code>false</code>)
+	 * @return Resulting map from alternative observed allele ID (starting with 1) to the database record to use
 	 */
 	private HashMap<Integer, AnnotatingRecord<RecordType>> buildAnnotatingDBRecordsWrapper(
-			List<GenotypeMatch> genotypeMatches) {
+			List<GenotypeMatch> genotypeMatches, boolean isMatch) {
 		// Collect annotating variants for each allele
 		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords = new HashMap<>();
 		HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord = new HashMap<>();
@@ -105,21 +109,24 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 						new AnnotatingRecord<RecordType>(vcToRecord.convert(match.getDBVC()), match.getDbAllele()));
 		}
 
-		return pickAnnotatingDBRecords(annotatingRecords, matchToRecord);
+		return pickAnnotatingDBRecords(annotatingRecords, matchToRecord, isMatch);
 	}
 
 	/**
-	 * Pick annotating DB records
+	 * Pick best annotating DB record for each alternative observed allele
 	 * 
 	 * @param annotatingRecords
 	 *            Map of alternative allele number to genotype match
 	 * @param matchToRecord
-	 *            Mapping from alternative allel number to record
+	 *            Mapping from alternative allele number to record
+	 * @param isMatch
+	 *            whether or not to consider true matching alleles (<code>true</code>) or only position-based overlaps
+	 *            (<code>false</code>)
 	 * @return Mapping from alternative allele number to <code>RecordType</code>
 	 */
 	protected abstract HashMap<Integer, AnnotatingRecord<RecordType>> pickAnnotatingDBRecords(
 			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord);
+			HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord, boolean isMatch);
 
 	/**
 	 * Annotate the given {@link VariantContext} with the given database records

@@ -408,6 +408,11 @@ public final class DBSNPRecord {
 		return alleleFrequenciesG1K;
 	}
 
+	public double highestAlleleFreqG1KOverall() {
+		return alleleFrequenciesG1K.stream().max(Double::compare).orElse(0.0);
+	}
+
+
 	public boolean isCommon() {
 		return common;
 	}

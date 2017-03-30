@@ -136,10 +136,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 
 		if (cafList.stream().allMatch(i -> (i == 0.0)))
 			return; // do not set list of zeroes
-		
+
 		// Prepend reference frequency
 		double afRef = 1.0 - cafList.stream().mapToDouble(x -> x).sum();
-		afRef = Math.max(afRef, 0);  // no negative values
+		afRef = Math.max(afRef, 0); // no negative values
 		cafList.add(0, afRef);
 
 		if (!cafList.isEmpty())
@@ -237,7 +237,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<DBSNPRecord>> pickAnnotatingDBRecords(
 			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<DBSNPRecord>> matchToRecord) {
+			HashMap<GenotypeMatch, AnnotatingRecord<DBSNPRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<DBSNPRecord>> annotatingDBSNPRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
@@ -250,8 +250,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 					final DBSNPRecord update = matchToRecord.get(m).getRecord();
 					if (update.getAlleleFrequenciesG1K().size() <= alleleNo)
 						continue; // no number to update
-					else if (current.getAlleleFrequenciesG1K().size() <= alleleNo || current.getAlleleFrequenciesG1K()
-							.get(alleleNo) < update.getAlleleFrequenciesG1K().get(alleleNo))
+					if ((isMatch && current.getAlleleFrequenciesG1K().get(alleleNo - 1) < update
+							.getAlleleFrequenciesG1K().get(alleleNo - 1))
+							|| (!isMatch
+									&& current.highestAlleleFreqG1KOverall() < update.highestAlleleFreqG1KOverall()))
 						annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}

@@ -45,6 +45,18 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Prefix to use for ExAC VCF INFO Fields */
 	public String prefixExac;
 
+	/** Path to gnomAD exomes VCF file to use for the annotation */
+	public String pathVCFGnomadExomes;
+
+	/** Prefix to use for gnomAD exomes INFO fields */
+	public String prefixVCFGnomadExomes;
+
+	/** Path to gnomAD genomes VCF file to use for the annotation */
+	public String pathVCFGnomadGenomes;
+
+	/** Prefix to use for gnomAD genomes INFO fields */
+	public String prefixVCFGnomadGenomes;
+
 	/** Path to UK10K VCF file to use for the annotation */
 	public String pathVCFUK10K;
 
@@ -161,6 +173,14 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations").setDefault("EXAC_")
 				.required(false);
+		annotationGroup.addArgument("--gnomad-exomes-vcf")
+				.help("Path to gnomAD exomes VCF file, activates gnomAD exomes annotation").required(false);
+		annotationGroup.addArgument("--gnomad-exomes-prefix").help("Prefix for ExgnomAD exomes AC annotations")
+				.setDefault("GNOMAD_EXOMES_").required(false);
+		annotationGroup.addArgument("--gnomad-genomes-vcf")
+				.help("Path to gnomAD genomes VCF file, activates gnomAD genomes annotation").required(false);
+		annotationGroup.addArgument("--gnomad-genomes-prefix").help("Prefix for ExgnomAD genomes AC annotations")
+				.setDefault("GNOMAD_GENOMES_").required(false);
 		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation")
 				.required(false);
 		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
@@ -246,6 +266,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixDBSNP = args.getString("dbsnp_prefix");
 		pathVCFExac = args.getString("exac_vcf");
 		prefixExac = args.getString("exac_prefix");
+		pathVCFGnomadExomes = args.getString("gnomad_exomes_vcf");
+		prefixVCFGnomadExomes = args.getString("gnomad_exomes_prefix");
+		pathVCFGnomadGenomes = args.getString("gnomad_genomes_vcf");
+		prefixVCFGnomadGenomes = args.getString("gnomad_genomes_prefix");
 		pathVCFUK10K = args.getString("uk10k_vcf");
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");

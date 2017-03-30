@@ -9,9 +9,9 @@ import htsjdk.variant.variantcontext.VariantContext;
  */
 public final class GenotypeMatch {
 
-	/** Numeric index of the observed allele */
+	/** Numeric index of the observed allele (in <code>obsVC</code>) */
 	final int observedAllele;
-	/** Numeric index of the database allele */
+	/** Numeric index of the database allele (in <code>dbVC</code>) */
 	final int dbAllele;
 	/** The observed VariantContext */
 	final VariantContext obsVC;
