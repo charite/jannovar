@@ -140,11 +140,11 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			}
 
 			// If configured, annotate using gnomAD genomes VCF file (extend header to use for writing out)
-			if (options.pathVCFGnomadExomes != null) {
+			if (options.pathVCFGnomadGenomes != null) {
 				DBAnnotationOptions gnomadOptions = DBAnnotationOptions.createDefaults();
-				gnomadOptions.setIdentifierPrefix(options.prefixVCFGnomadExomes);
+				gnomadOptions.setIdentifierPrefix(options.prefixVCFGnomadGenomes);
 				DBVariantContextAnnotator gnomadGenomesAnno = new DBVariantContextAnnotatorFactory()
-						.constructGnomad(options.pathVCFGnomadExomes, options.pathFASTARef, gnomadOptions);
+						.constructGnomad(options.pathVCFGnomadGenomes, options.pathFASTARef, gnomadOptions);
 				gnomadGenomesAnno.extendHeader(vcfHeader);
 				stream = stream.map(gnomadGenomesAnno::annotateVariantContext);
 			}
