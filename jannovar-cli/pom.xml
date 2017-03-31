@@ -71,11 +71,16 @@
 			<artifactId>jannovar-htsjdk</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>de.charite.compbio</groupId>
-			<artifactId>jannovar-vardbs</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>de.charite.compbio</groupId>
+            <artifactId>jannovar-vardbs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.charite.compbio</groupId>
+            <artifactId>jannovar-stats</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>

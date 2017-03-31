@@ -9,6 +9,7 @@ import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions;
 import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
 import de.charite.compbio.jannovar.cmd.download.JannovarDownloadOptions;
 import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosomeOptions;
+import de.charite.compbio.jannovar.cmd.statistics.JannovarGatherStatisticsOptions;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -39,6 +40,7 @@ public final class Jannovar {
 		JannovarAnnotateVCFOptions.setupParser(subParsers);
 		JannovarDBListOptions.setupParser(subParsers);
 		JannovarDownloadOptions.setupParser(subParsers);
+		JannovarGatherStatisticsOptions.setupParser(subParsers);
 		ProjectTranscriptToChromosomeOptions.setupParser(subParsers);
 		parser.defaultHelp(true);
 		parser.epilog("You can find out more at http://jannovar.rtfd.org");

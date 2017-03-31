@@ -88,4 +88,32 @@ public class Statistics {
 		}
 	}
 
+	public Map<PutativeImpact, Integer> getCountPutativeImpacts() {
+		return countPutativeImpacts;
+	}
+
+	public Map<VariantEffect, Integer> getCountVariantEffects() {
+		return countVariantEffects;
+	}
+
+	public Map<GenomeRegion, Integer> getCountGenomeRegion() {
+		return countGenomeRegion;
+	}
+
+	public Map<TsTv, Integer> getTsTvCount() {
+		return tsTvCount;
+	}
+
+	public Map<Integer, Integer> getAltAlleleCountHist() {
+		return altAlleleCountHist;
+	}
+
+	public Map<String, Integer> getFilterCount() {
+		return filterCount;
+	}
+
+	public Map<Boolean, Integer> getIsFilteredCount() {
+		return isFilteredCount;
+	}
+
 }
