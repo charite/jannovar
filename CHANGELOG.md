@@ -9,6 +9,7 @@
 
 ### jannovar-cli
 
+* Adding `statistics` command for computing statistics on variants in VCF file
 * Fixing bug in HGVS to VCF
 * Better handling missing `.dict` file for HGVS to VCF translation
 * Adding `--annotate-as-singleton-pedigree` parameter for annotation of singleton pedigrees without pedigree file (single individual is assumed to be affected)
@@ -60,6 +61,10 @@
 
 * Removing this outdated module.
   Use the classes in `de.charite.compbio.jannovar.mendel` instead
+
+### jannovar-stats
+
+* all-new module for gathering statistics on VCF files
 
 ## v0.20
 
