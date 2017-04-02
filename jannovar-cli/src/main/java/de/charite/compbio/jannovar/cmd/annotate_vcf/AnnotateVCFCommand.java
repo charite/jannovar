@@ -46,6 +46,7 @@ import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.samtools.util.Interval;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
+import htsjdk.variant.vcf.VCFContigHeaderLine;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
@@ -117,10 +118,11 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			CloseableIterator<VariantContext> iter;
 			if (useInterval) {
 				Interval itv = RegionParser.parse(options.getInterval());
-				Integer contigID = refDict.getContigNameToID().get(itv.getContig());
-				if (contigID == null)
-					throw new UncheckedJannovarException("Unknown contig from --interval: " + itv.getContig());
-				int end = refDict.getContigIDToLength().get(contigID);
+				int end = 1000 * 1000 * 1000;  // "some large number"
+				for (VCFContigHeaderLine line : vcfHeader.getContigLines()) {
+					if (line.getID().equals(itv.getContig()))
+						end = line.getSAMSequenceRecord().getSequenceLength();
+				}
 				if (itv.getStart() == 0 && itv.getEnd() == 0)
 					itv = new Interval(itv.getContig(), 1, end);
 				iter = vcfReader.query(itv.getContig(), itv.getStart(), itv.getEnd());
