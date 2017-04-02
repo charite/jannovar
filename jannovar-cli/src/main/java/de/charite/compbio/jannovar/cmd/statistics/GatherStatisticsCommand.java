@@ -2,6 +2,9 @@ package de.charite.compbio.jannovar.cmd.statistics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
@@ -45,6 +48,8 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 				new VariantContextAnnotator.Options(false, false, false, false, isUtrOffTarget,
 						isIntronicSpliceOffTarget));
 
+		Map<String, Integer> errorMsgs = new TreeMap<>();
+
 		System.err.println("Opening VCF file...");
 		final String vcfPath = options.getPathInputVCF();
 		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
@@ -57,8 +62,8 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 				try {
 					statsCollector.put(vc, annotator.buildAnnotations(vc));
 				} catch (InvalidCoordinatesException e) {
-					System.err.println("Problem annotating variant");
-					e.printStackTrace();
+					errorMsgs.putIfAbsent(e.getMessage(), 0);
+					errorMsgs.put(e.getMessage(), errorMsgs.get(e.getMessage()) + 1);
 				}
 			}
 
@@ -73,6 +78,10 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 				System.err.println("Unhandled exception");
 				e1.printStackTrace();
 			}
+
+			System.err.println("The following error messages occured");
+			for (Entry<String, Integer> e : errorMsgs.entrySet())
+				System.err.println(e.getValue() + " times: " + e.getKey());
 
 			System.err.println("Wrote report to \"" + options.getPathOutputReport() + "\".");
 			final long endTime = System.nanoTime();

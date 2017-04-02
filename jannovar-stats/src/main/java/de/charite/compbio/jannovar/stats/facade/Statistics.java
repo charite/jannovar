@@ -60,7 +60,7 @@ public class Statistics {
 
 	public void putGenomeRegion(GenomeRegion region) {
 		this.countGenomeRegion.putIfAbsent(region, 0);
-		this.countGenomeRegion.put(region, this.countGenomeRegion.get(region));
+		this.countGenomeRegion.put(region, this.countGenomeRegion.get(region) + 1);
 	}
 
 	public void putTsTv(TsTv tsTv) {
