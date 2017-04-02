@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
@@ -41,8 +42,11 @@ import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotator;
 import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotatorFactory;
 import htsjdk.samtools.SAMSequenceDictionary;
+import htsjdk.samtools.util.CloseableIterator;
+import htsjdk.samtools.util.Interval;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
+import htsjdk.variant.vcf.VCFContigHeaderLine;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
@@ -88,7 +92,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 		final String vcfPath = options.getPathInputVCF();
 
-		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
+		// whether or not to require availability of an index
+		final boolean useInterval = (options.getInterval() != null && !options.getInterval().equals(""));
+
+		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), useInterval)) {
 			if (this.options.getVerbosity() >= 1) {
 				final SAMSequenceDictionary seqDict = VCFFileReader.getSequenceDictionary(new File(vcfPath));
 				if (seqDict != null) {
@@ -107,7 +114,26 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			System.err.println("Annotating VCF...");
 			final long startTime = System.nanoTime();
 
-			Stream<VariantContext> stream = vcfReader.iterator().stream();
+			// Jump to interval if given, otherwise start at beginning
+			CloseableIterator<VariantContext> iter;
+			if (useInterval) {
+				Interval itv = RegionParser.parse(options.getInterval());
+				int end = 1000 * 1000 * 1000;  // "some large number"
+				for (VCFContigHeaderLine line : vcfHeader.getContigLines()) {
+					if (line.getID().equals(itv.getContig()))
+						end = line.getSAMSequenceRecord().getSequenceLength();
+				}
+				if (itv.getStart() == 0 && itv.getEnd() == 0)
+					itv = new Interval(itv.getContig(), 1, end);
+				iter = vcfReader.query(itv.getContig(), itv.getStart(), itv.getEnd());
+				System.err.println("Will read interval " + itv.toString());
+			} else {
+				System.err.println("Will read full input file");
+				iter = vcfReader.iterator();
+			}
+
+			// Obtain Java 8 stream from iterator
+			Stream<VariantContext> stream = iter.stream();
 
 			// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
 			if (options.pathVCFDBSNP != null) {

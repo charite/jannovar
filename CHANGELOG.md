@@ -9,6 +9,7 @@
 
 ### jannovar-cli
 
+* Adding `--interval` argument for only processing a part of the file
 * Adding `statistics` command for computing statistics on variants in VCF file
 * Fixing bug in HGVS to VCF
 * Better handling missing `.dict` file for HGVS to VCF translation
