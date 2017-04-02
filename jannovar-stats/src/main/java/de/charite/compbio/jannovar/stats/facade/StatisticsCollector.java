@@ -101,7 +101,7 @@ public class StatisticsCollector {
 			Set<Integer> seen = new HashSet<>();
 			for (Allele a : gt.getAlleles()) {
 				final int idx = vc.getAlleleIndex(a);
-				if (!seen.contains(idx))
+				if (!seen.contains(idx) && idx != 0)
 					count += 1;
 				seen.add(idx);
 			}
@@ -117,7 +117,8 @@ public class StatisticsCollector {
 
 	private void putVariantEffect(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
-		stats.putVariantEffect(alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType());
+		if (alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType() != null)
+			stats.putVariantEffect(alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType());
 	}
 
 	private void putGenomeRegion(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
@@ -222,7 +223,8 @@ public class StatisticsCollector {
 
 	private void putPutativeImpact(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
-		stats.putPutativeImpact(alleleAnno.getHighestImpactAnnotation().getPutativeImpact());
+		if (alleleAnno.getHighestImpactAnnotation().getPutativeImpact() != null)
+			stats.putPutativeImpact(alleleAnno.getHighestImpactAnnotation().getPutativeImpact());
 	}
 
 	public ImmutableList<String> getSampleNames() {
