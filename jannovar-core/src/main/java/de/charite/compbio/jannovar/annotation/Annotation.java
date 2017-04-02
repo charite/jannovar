@@ -324,6 +324,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	/**
 	 * @return most pathogenic {@link VariantEffect} link {@link #effects}, <code>null</code> if none.
 	 */
+	// TODO: rename to getMostPathogenicVariantEffect
 	public VariantEffect getMostPathogenicVarType() {
 		if (effects.isEmpty())
 			return null;

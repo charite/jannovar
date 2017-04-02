@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.annotation.PutativeImpact;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 
@@ -39,7 +40,11 @@ public class StatisticsWriter implements AutoCloseable {
 	}
 
 	private void printHeader(String token) {
-		writer.println(token + "\t" + Joiner.on('\t').join(statsCollector.getSampleNames()));
+		writer.print(token + "\tALL");
+		if (!statsCollector.getSampleNames().isEmpty())
+			writer.println("\t" + Joiner.on('\t').join(statsCollector.getSampleNames()));
+		else
+			writer.println();
 	}
 
 	private void writeVariantEffects() {
@@ -49,11 +54,13 @@ public class StatisticsWriter implements AutoCloseable {
 
 		writer.println();
 		writer.println("[variant_effects]");
-		printHeader("VE");
+		printHeader("variant_effect");
 
 		for (VariantEffect effect : keys) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(effect.toString());
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getCountVariantEffects().getOrDefault(effect, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
@@ -70,11 +77,13 @@ public class StatisticsWriter implements AutoCloseable {
 
 		writer.println();
 		writer.println("[genome_regions]");
-		printHeader("GR");
+		printHeader("genome_region");
 
 		for (GenomeRegion region : keys) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(region.toString());
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getCountGenomeRegion().getOrDefault(region, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
@@ -87,11 +96,13 @@ public class StatisticsWriter implements AutoCloseable {
 	private void writeTsTvCount() {
 		writer.println();
 		writer.println("[ts_tv_count]");
-		printHeader("TT");
+		printHeader("ts_tv_count");
 
 		for (TsTv tsTv : TsTv.values()) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(tsTv.toString());
+			arr.add(Integer
+					.toString(statsCollector.getPerSampleStats().get(null).getTsTvCount().getOrDefault(tsTv, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer
@@ -108,10 +119,12 @@ public class StatisticsWriter implements AutoCloseable {
 
 		writer.println();
 		writer.println("[alt_allele_count]");
-		printHeader("AC");
+		printHeader("alt_allele_count");
 		for (Integer count : keys) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(count.toString());
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getAltAlleleCountHist().getOrDefault(count, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
@@ -128,10 +141,12 @@ public class StatisticsWriter implements AutoCloseable {
 
 		writer.println();
 		writer.println("[filter_count]");
-		printHeader("FC");
+		printHeader("filter");
 		for (String filter : keys) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(filter);
+			arr.add(Integer
+					.toString(statsCollector.getPerSampleStats().get(null).getFilterCount().getOrDefault(filter, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
@@ -144,7 +159,7 @@ public class StatisticsWriter implements AutoCloseable {
 	private void writeIsFilteredCount() {
 		writer.println();
 		writer.println("[is_filtered_count]");
-		printHeader("FT");
+		printHeader("is_filtered");
 
 		for (Boolean isFiltered : ImmutableList.of(false, true)) {
 			ArrayList<String> arr = new ArrayList<>();
@@ -152,6 +167,8 @@ public class StatisticsWriter implements AutoCloseable {
 				arr.add("FILTER");
 			else
 				arr.add("PASS");
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getIsFilteredCount().getOrDefault(isFiltered, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
@@ -168,11 +185,13 @@ public class StatisticsWriter implements AutoCloseable {
 
 		writer.println();
 		writer.println("[putative_impacts]");
-		printHeader("PI");
+		printHeader("putative_impact");
 
 		for (PutativeImpact impact : keys) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(impact.toString());
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getCountPutativeImpacts().getOrDefault(impact, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(statsCollector.getPerSampleStats().get(name).getCountPutativeImpacts()
@@ -184,11 +203,16 @@ public class StatisticsWriter implements AutoCloseable {
 
 	private void writeHeader() {
 		writer.println("# This file was written by jannovar statistics");
+		writer.println("# Jannovar version: " + getVersion());
 	}
 
 	@Override
 	public void close() throws Exception {
 		this.writer.close();
+	}
+
+	private static String getVersion() {
+		return StatisticsWriter.class.getPackage().getSpecificationVersion();
 	}
 
 }
