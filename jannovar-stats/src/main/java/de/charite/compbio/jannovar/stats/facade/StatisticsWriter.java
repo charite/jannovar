@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.annotation.PutativeImpact;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 
