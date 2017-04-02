@@ -27,6 +27,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Path to input VCF file */
 	private String pathInputVCF = null;
 
+	/** Interval to annotate */
+	private String interval = "";
+
 	/** Path to output VCF file */
 	private String pathOutputVCF = null;
 
@@ -158,6 +161,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
 
 		ArgumentGroup annotationGroup = subParser.addArgumentGroup("Annotation Arguments (optional)");
+		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)").required(false)
+				.setDefault("");
 		annotationGroup.addArgument("--pedigree-file").help("Pedigree file to use for Mendelian inheritance annotation")
 				.required(false);
 		annotationGroup.addArgument("--annotate-as-singleton-pedigree")
@@ -255,6 +260,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public void setFromArgs(Namespace args) throws CommandLineParsingException {
 		super.setFromArgs(args);
 
+		interval = args.getString("interval");
 		escapeAnnField = args.getBoolean("escape_ann_field");
 		pathInputVCF = args.getString("input_vcf");
 		pathOutputVCF = args.getString("output_vcf");
@@ -298,6 +304,14 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				|| pathClinVar != null || pathCosmic != null))
 			throw new CommandLineParsingException(
 					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
+	}
+
+	public String getInterval() {
+		return interval;
+	}
+
+	public void setInterval(String interval) {
+		this.interval = interval;
 	}
 
 	public String getPathInputVCF() {
@@ -559,12 +573,15 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
-				+ ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
-				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac + ", prefixExac=" + prefixExac
-				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar
-				+ ", prefixClinVar=" + prefixClinVar + ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic
-				+ ", pathPedFile=" + pathPedFile + ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree
-				+ ", useThresholdFilters=" + useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
+				+ ", interval=" + interval + ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP
+				+ ", prefixDBSNP=" + prefixDBSNP + ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac
+				+ ", prefixExac=" + prefixExac + ", pathVCFGnomadExomes=" + pathVCFGnomadExomes
+				+ ", prefixVCFGnomadExomes=" + prefixVCFGnomadExomes + ", pathVCFGnomadGenomes=" + pathVCFGnomadGenomes
+				+ ", prefixVCFGnomadGenomes=" + prefixVCFGnomadGenomes + ", pathVCFUK10K=" + pathVCFUK10K
+				+ ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar
+				+ ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile=" + pathPedFile
+				+ ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree + ", useThresholdFilters="
+				+ useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
 				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
 				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
 				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
