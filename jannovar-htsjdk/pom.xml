@@ -11,7 +11,7 @@
     <parent>
         <groupId>de.charite.compbio</groupId>
         <artifactId>Jannovar</artifactId>
-        <version>0.21</version>
+        <version>0.22-SNAPSHOT</version>
     </parent>
 
     <properties>
