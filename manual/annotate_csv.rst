@@ -42,7 +42,7 @@ ALT
   the alternative bases
 
 
-Right now it is only possible to use teh column number and not the header column. This might be extendet in the future. Possible CSV file types are:
+Right now it is only possible to use the column number and not the header column. This might be extended in the future. Possible CSV file types are:
 
 Default
 	Standard comma separated format, as for RFC4180 but allowing empty lines.
