@@ -57,12 +57,13 @@ public class StatisticsCollector {
 		putAltAlleleCount(vc, null);
 		putFilter(vc, null);
 		// register per-allele counts
-		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			putPutativeImpact(vc, null, alleleAnnotations.get(i - 1));
-			putVariantEffect(vc, null, alleleAnnotations.get(i - 1));
-			putGenomeRegion(vc, null, alleleAnnotations.get(i - 1));
-			putTsTv(vc, null, i - 1);
-		}
+		if (alleleAnnotations != null)
+			for (int i = 1; i < vc.getNAlleles(); ++i) {
+				putPutativeImpact(vc, null, alleleAnnotations.get(i - 1));
+				putVariantEffect(vc, null, alleleAnnotations.get(i - 1));
+				putGenomeRegion(vc, null, alleleAnnotations.get(i - 1));
+				putTsTv(vc, null, i - 1);
+			}
 
 		// Counts for the variants for each sample
 		Set<Integer> seen = new HashSet<>();
@@ -80,12 +81,13 @@ public class StatisticsCollector {
 			for (Allele allele : gt.getAlleles()) {
 				final int aIdx = vc.getAlleleIndex(allele);
 				// ignore wild-type allele, count each variant allele only once
-				if (aIdx != 0 && !seen.contains(aIdx)) {
-					putPutativeImpact(vc, sampleName, alleleAnnotations.get(aIdx - 1));
-					putVariantEffect(vc, sampleName, alleleAnnotations.get(aIdx - 1));
-					putGenomeRegion(vc, sampleName, alleleAnnotations.get(aIdx - 1));
-					putTsTv(vc, sampleName, aIdx);
-				}
+				if (alleleAnnotations != null)
+					if (aIdx != 0 && !seen.contains(aIdx)) {
+						putPutativeImpact(vc, sampleName, alleleAnnotations.get(aIdx - 1));
+						putVariantEffect(vc, sampleName, alleleAnnotations.get(aIdx - 1));
+						putGenomeRegion(vc, sampleName, alleleAnnotations.get(aIdx - 1));
+						putTsTv(vc, sampleName, aIdx);
+					}
 				seen.add(aIdx);
 			}
 		}
@@ -117,12 +119,16 @@ public class StatisticsCollector {
 
 	private void putVariantEffect(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
-		if (alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType() != null)
+		if (alleleAnno != null && alleleAnno.getHighestImpactAnnotation() != null
+				&& alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType() != null)
 			stats.putVariantEffect(alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType());
 	}
 
 	private void putGenomeRegion(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
+		if (alleleAnno.getHighestImpactAnnotation() == null
+				|| alleleAnno.getHighestImpactAnnotation().getEffects() == null)
+			return;
 		final SortedSet<VariantEffect> effects = alleleAnno.getHighestImpactAnnotation().getEffects();
 		final ImmutableSortedSet<VariantEffect> codingEffects = ImmutableSortedSet.of(
 				VariantEffect.FRAMESHIFT_ELONGATION, VariantEffect.FRAMESHIFT_TRUNCATION,
@@ -223,7 +229,8 @@ public class StatisticsCollector {
 
 	private void putPutativeImpact(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
-		if (alleleAnno.getHighestImpactAnnotation().getPutativeImpact() != null)
+		if (alleleAnno != null && alleleAnno.getHighestImpactAnnotation() != null
+				&& alleleAnno.getHighestImpactAnnotation().getPutativeImpact() != null)
 			stats.putPutativeImpact(alleleAnno.getHighestImpactAnnotation().getPutativeImpact());
 	}
 

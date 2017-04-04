@@ -50,6 +50,8 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 
 		Map<String, Integer> errorMsgs = new TreeMap<>();
 
+		String prevChrom = null;
+		
 		System.err.println("Opening VCF file...");
 		final String vcfPath = options.getPathInputVCF();
 		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
@@ -59,6 +61,11 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 					vcfReader.getFileHeader().getSampleNamesInOrder());
 
 			for (VariantContext vc : vcfReader) {
+				if (!vc.getContig().equals(prevChrom)) {
+					prevChrom = vc.getContig();
+					System.err.println("Starting on contig " + prevChrom);
+				}
+				
 				try {
 					statsCollector.put(vc, annotator.buildAnnotations(vc));
 				} catch (InvalidCoordinatesException e) {

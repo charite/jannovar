@@ -2,6 +2,10 @@
 
 ## develop
 
+### jannovar-statistics
+
+* Fixing NPE in case of null variant annotations (e.g., unknown contig)
+
 ## v0.21
 
 ### all
