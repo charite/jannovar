@@ -6,6 +6,7 @@ import de.charite.compbio.jannovar.vardbs.clinvar.ClinVarAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.cosmic.CosmicAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.exac.ExacAnnotationDriver;
+import de.charite.compbio.jannovar.vardbs.gnomad.GnomadAnnotationDriver;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -66,7 +67,7 @@ public class DBVariantContextAnnotatorFactory {
 	 */
 	public DBVariantContextAnnotator constructGnomad(String vcfDBPath, String fastaRefPath, DBAnnotationOptions options)
 			throws JannovarVarDBException {
-		return new DBVariantContextAnnotator(new ExacAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+		return new DBVariantContextAnnotator(new GnomadAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
@@ -118,8 +119,8 @@ public class DBVariantContextAnnotatorFactory {
 	 * @throws JannovarVarDBException
 	 *             on problems loading the resources
 	 */
-	public DBVariantContextAnnotator constructCosmic(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+	public DBVariantContextAnnotator constructCosmic(String vcfDBPath, String fastaRefPath, DBAnnotationOptions options)
+			throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 

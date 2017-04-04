@@ -167,7 +167,7 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 				}
 				final ExacRecord record = records.get(i).getRecord();
 				final int alleleNo = records.get(i).getAlleleNo();
-				if (record.getAlleleHetCounts(pop).isEmpty()) {
+				if (record.getAlleleHetCounts(pop) != null && record.getAlleleHetCounts(pop).isEmpty()) {
 					acList.add(0);
 				} else {
 					acList.add(record.getAlleleHetCounts(pop).get(alleleNo - 1));
