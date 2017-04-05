@@ -4,6 +4,7 @@
 
 ### jannovar-statistics
 
+* Fixing counting bug that made UTR3 variants be counted as UTR5
 * Fixing NPE in case of null variant annotations (e.g., unknown contig)
 
 ## v0.21

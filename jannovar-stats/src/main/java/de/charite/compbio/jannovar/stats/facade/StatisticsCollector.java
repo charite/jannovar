@@ -169,7 +169,7 @@ public class StatisticsCollector {
 				stats.putGenomeRegion(GenomeRegion.UTR5);
 				break;
 			} else if (utr3Effects.contains(effect)) {
-				stats.putGenomeRegion(GenomeRegion.UTR5);
+				stats.putGenomeRegion(GenomeRegion.UTR3);
 				break;
 			} else if (upstreamEffects.contains(effect)) {
 				stats.putGenomeRegion(GenomeRegion.UPSTREAM);
