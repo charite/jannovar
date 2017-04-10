@@ -111,16 +111,15 @@ public class VariantContextMendelianAnnotator {
 
 		// Create mapping from MOH to genotype calls and pre-filter if configured to do so
 		HashMap<SubModeOfInheritance, List<GenotypeCalls>> origCalls = new HashMap<>();
-		origCalls.put(SubModeOfInheritance.AUTOSOMAL_DOMINANT, buildGenotypeCalls(vcs));
-		origCalls.put(SubModeOfInheritance.X_DOMINANT, origCalls.get(SubModeOfInheritance.AUTOSOMAL_DOMINANT));
-		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_COMP_HET,
-				buildGenotypeCalls(vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList())));
-		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_HOM_ALT,
-				origCalls.get(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_HOM_ALT));
-		origCalls.put(SubModeOfInheritance.X_RECESSIVE_COMP_HET,
-				buildGenotypeCalls(vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList())));
-		origCalls.put(SubModeOfInheritance.X_RECESSIVE_HOM_ALT,
-				origCalls.get(SubModeOfInheritance.X_RECESSIVE_HOM_ALT));
+		final List<GenotypeCalls> allCalls = buildGenotypeCalls(vcs);
+		final List<GenotypeCalls> recessiveCalls = buildGenotypeCalls(
+				vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList()));
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_DOMINANT, allCalls);
+		origCalls.put(SubModeOfInheritance.X_DOMINANT, allCalls);
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_COMP_HET, recessiveCalls);
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_HOM_ALT, allCalls);
+		origCalls.put(SubModeOfInheritance.X_RECESSIVE_COMP_HET, recessiveCalls);
+		origCalls.put(SubModeOfInheritance.X_RECESSIVE_HOM_ALT, allCalls);
 
 		// Filter to compatible records
 		HashMap<SubModeOfInheritance, List<GenotypeCalls>> filteredGenotypeCalls = new HashMap<>();

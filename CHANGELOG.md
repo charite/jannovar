@@ -2,6 +2,10 @@
 
 ## develop
 
+### jannovar-htsjdk
+
+* Fixin NPE problem with inheritance annotation
+
 ### jannovar-statistics
 
 * Fixing counting bug that made UTR3 variants be counted as UTR5
