@@ -36,6 +36,7 @@ public class StatisticsWriter implements AutoCloseable {
 		writeAltAlleleCountHist();
 		writeFilterCount();
 		writeIsFilteredCount();
+		writeContigCounts();
 	}
 
 	private void printHeader(String token) {
@@ -196,6 +197,28 @@ public class StatisticsWriter implements AutoCloseable {
 				arr.add(Integer.toString(statsCollector.getPerSampleStats().get(name).getCountPutativeImpacts()
 						.getOrDefault(impact, 0)));
 			}
+			writer.println(Joiner.on('\t').join(arr));
+		}
+	}
+
+	private void writeContigCounts() {
+		TreeSet<String> contigs = new TreeSet<>();
+		for (Statistics stats : statsCollector.getPerSampleStats().values())
+			contigs.addAll(stats.getContigCount().keySet());
+
+		writer.println();
+		writer.println("[contig_counts]");
+		printHeader("contig");
+
+		for (String	contig : contigs) {
+			ArrayList<String> arr = new ArrayList<>();
+			arr.add(contig);
+			arr.add(Integer.toString(
+					statsCollector.getPerSampleStats().get(null).getContigCount().getOrDefault(contig, 0)));
+
+			for (String name : statsCollector.getSampleNames())
+				arr.add(Integer.toString(
+						statsCollector.getPerSampleStats().get(name).getContigCount().getOrDefault(contig, 0)));
 			writer.println(Joiner.on('\t').join(arr));
 		}
 	}

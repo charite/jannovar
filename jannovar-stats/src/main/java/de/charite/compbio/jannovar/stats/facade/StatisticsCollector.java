@@ -56,6 +56,7 @@ public class StatisticsCollector {
 		// register per-variant counts
 		putAltAlleleCount(vc, null);
 		putFilter(vc, null);
+		putContig(vc, null);
 		// register per-allele counts
 		if (alleleAnnotations != null)
 			for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -74,6 +75,7 @@ public class StatisticsCollector {
 				continue; // skip non-alternative genotypes
 
 			// register per-variant counts
+			putContig(vc, sampleName);
 			putAltAlleleCount(vc, sampleName);
 			putFilter(vc, sampleName);
 
@@ -90,6 +92,17 @@ public class StatisticsCollector {
 					}
 				seen.add(aIdx);
 			}
+		}
+	}
+
+	private void putContig(VariantContext vc, String sampleName) {
+		final Statistics stats = perSampleStats.get(sampleName);
+		if (sampleName == null) {
+			stats.putContig(vc.getContig());
+		} else {
+			final Genotype gt = vc.getGenotype(sampleName);
+			if (!gt.isHomRef() && !gt.isNoCall())
+				stats.putContig(vc.getContig());
 		}
 	}
 

@@ -36,6 +36,9 @@ public class Statistics {
 	/** Number of failing/passing variants (any filter is considered failing) */
 	private Map<Boolean, Integer> isFilteredCount;
 
+	/** Number of variants on the contigs */
+	private Map<String, Integer> contigCount;
+
 	// Counts of variant GQ scores should already be in bcftools stats
 
 	public Statistics() {
@@ -46,6 +49,7 @@ public class Statistics {
 		this.altAlleleCountHist = new HashMap<>();
 		this.filterCount = new HashMap<>();
 		this.isFilteredCount = new HashMap<>();
+		this.contigCount = new HashMap<>();
 	}
 
 	public void putPutativeImpact(PutativeImpact impact) {
@@ -88,6 +92,11 @@ public class Statistics {
 		}
 	}
 
+	public void putContig(String contig) {
+		contigCount.putIfAbsent(contig, 0);
+		contigCount.put(contig, contigCount.get(contig) + 1);
+	}
+
 	public Map<PutativeImpact, Integer> getCountPutativeImpacts() {
 		return countPutativeImpacts;
 	}
@@ -114,6 +123,10 @@ public class Statistics {
 
 	public Map<Boolean, Integer> getIsFilteredCount() {
 		return isFilteredCount;
+	}
+
+	public Map<String, Integer> getContigCount() {
+		return contigCount;
 	}
 
 }
