@@ -117,7 +117,7 @@ final class ClinVarVariantContextToRecordConverter implements VariantContextToRe
 							clnDiseaseDbNameList.size(), clnRevStatList.size(), clnAccessionList.size()));
 			for (int i = 0; i < numDiseaseAlleles; ++i)
 				diseaseInfos.add(new ClinVarDiseaseInfo(
-						ClinVarSignificance.fromInteger(Integer.parseInt(getFromList(clnSigList, i, "25"))),
+						ClinVarSignificance.fromInteger(Integer.parseInt(getFromList(clnSigList, i, "255"))),
 						getFromList(clnDiseaseDbList, i, ""), getFromList(clnDiseaseDbIdList, i, ""),
 						getFromList(clnDiseaseDbNameList, i, ""),
 						ClinVarRevisionStatus.fromString(getFromList(clnRevStatList, i, "no_assertion")),

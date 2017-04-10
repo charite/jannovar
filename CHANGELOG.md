@@ -12,6 +12,10 @@
 * Fixing counting bug that made UTR3 variants be counted as UTR5
 * Fixing NPE in case of null variant annotations (e.g., unknown contig)
 
+### jannovar-vardbs
+
+* Fixing problem with default value of `CLNSIG` (`"25"` -> `"255"`)
+
 ## v0.21
 
 ### all
