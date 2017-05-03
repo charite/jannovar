@@ -17,6 +17,10 @@
 * Fixing a problem with normalization on variant annotation
 * Fixing problem with default value of `CLNSIG` (`"25"` -> `"255"`)
 
+### jannovar-filter
+
+* Incorporating gnomAD annotation into exclusion by frequency for inheritance filter (#343)
+
 ### jannovar-cli
 
 * Checking that reference is given also for gnomAD VCF annotation

@@ -39,7 +39,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Prefix to use for dbSNP VCF INFO Fields */
 	public String prefixDBSNP = null;
 
-	/** Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation */
+	/**
+	 * Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation
+	 */
 	public String pathFASTARef = null;
 
 	/** Path to ExAC VCF file to use for the annotation */
@@ -52,13 +54,13 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public String pathVCFGnomadExomes;
 
 	/** Prefix to use for gnomAD exomes INFO fields */
-	public String prefixVCFGnomadExomes;
+	public String prefixGnomadExomes;
 
 	/** Path to gnomAD genomes VCF file to use for the annotation */
 	public String pathVCFGnomadGenomes;
 
 	/** Prefix to use for gnomAD genomes INFO fields */
-	public String prefixVCFGnomadGenomes;
+	public String prefixGnomadGenomes;
 
 	/** Path to UK10K VCF file to use for the annotation */
 	public String pathVCFUK10K;
@@ -82,8 +84,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public String pathPedFile;
 
 	/**
-	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the single individual
-	 * is the affected index.
+	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the
+	 * single individual is the affected index.
 	 */
 	public boolean annotateAsSingletonPedigree;
 
@@ -130,9 +132,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private boolean offTargetFilterIntronicSpliceIsOffTarget;
 
 	/**
-	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome) and genotype-wise
-	 * filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet, MinAafHomAlt, MinAafHomRef) in inheritance
-	 * mode compatibility annotation.
+	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome)
+	 * and genotype-wise filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet,
+	 * MinAafHomAlt, MinAafHomRef) in inheritance mode compatibility annotation.
 	 */
 	private boolean inheritanceAnnoUseFilters;
 
@@ -151,80 +153,94 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 			}
 		};
 
-		Subparser subParser = subParsers.addParser("annotate-vcf", true).help("annotate VCF files").setDefault("cmd",
-				handler);
+		Subparser subParser = subParsers.addParser("annotate-vcf", true).help("annotate VCF files")
+				.setDefault("cmd", handler);
 		subParser.description("Perform annotation of a single VCF file");
 
 		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
-		requiredGroup.addArgument("-i", "--input-vcf").help("Path to input VCF file").required(true);
-		requiredGroup.addArgument("-o", "--output-vcf").help("Path to output VCF file").required(true);
-		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		requiredGroup.addArgument("-i", "--input-vcf").help("Path to input VCF file")
+				.required(true);
+		requiredGroup.addArgument("-o", "--output-vcf").help("Path to output VCF file")
+				.required(true);
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file")
+				.required(true);
 
-		ArgumentGroup annotationGroup = subParser.addArgumentGroup("Annotation Arguments (optional)");
-		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)").required(false)
-				.setDefault("");
-		annotationGroup.addArgument("--pedigree-file").help("Pedigree file to use for Mendelian inheritance annotation")
-				.required(false);
+		ArgumentGroup annotationGroup =
+				subParser.addArgumentGroup("Annotation Arguments (optional)");
+		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)")
+				.required(false).setDefault("");
+		annotationGroup.addArgument("--pedigree-file")
+				.help("Pedigree file to use for Mendelian inheritance annotation").required(false);
 		annotationGroup.addArgument("--annotate-as-singleton-pedigree")
 				.help("Annotate VCF file with single individual as singleton pedigree (singleton assumed to be affected)")
 				.required(false).setDefault(false).action(Arguments.storeTrue());
-		annotationGroup.addArgument("--ref-fasta")
-				.help("Path to FAI-indexed reference FASTA file, required for dbSNP/ExAC/UK10K-based annotation");
-		annotationGroup.addArgument("--dbsnp-vcf").help("Path to dbSNP VCF file, activates dbSNP annotation")
-				.required(false);
-		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations").setDefault("DBSNP_")
-				.required(false);
-		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation")
-				.required(false);
-		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations").setDefault("EXAC_")
-				.required(false);
+		annotationGroup.addArgument("--ref-fasta").help(
+				"Path to FAI-indexed reference FASTA file, required for dbSNP/ExAC/UK10K-based annotation");
+		annotationGroup.addArgument("--dbsnp-vcf")
+				.help("Path to dbSNP VCF file, activates dbSNP annotation").required(false);
+		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations")
+				.setDefault("DBSNP_").required(false);
+		annotationGroup.addArgument("--exac-vcf")
+				.help("Path to ExAC VCF file, activates ExAC annotation").required(false);
+		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations")
+				.setDefault("EXAC_").required(false);
 		annotationGroup.addArgument("--gnomad-exomes-vcf")
-				.help("Path to gnomAD exomes VCF file, activates gnomAD exomes annotation").required(false);
-		annotationGroup.addArgument("--gnomad-exomes-prefix").help("Prefix for ExgnomAD exomes AC annotations")
-				.setDefault("GNOMAD_EXOMES_").required(false);
+				.help("Path to gnomAD exomes VCF file, activates gnomAD exomes annotation")
+				.required(false);
+		annotationGroup.addArgument("--gnomad-exomes-prefix")
+				.help("Prefix for ExgnomAD exomes AC annotations").setDefault("GNOMAD_EXOMES_")
+				.required(false);
 		annotationGroup.addArgument("--gnomad-genomes-vcf")
-				.help("Path to gnomAD genomes VCF file, activates gnomAD genomes annotation").required(false);
-		annotationGroup.addArgument("--gnomad-genomes-prefix").help("Prefix for ExgnomAD genomes AC annotations")
-				.setDefault("GNOMAD_GENOMES_").required(false);
-		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation")
+				.help("Path to gnomAD genomes VCF file, activates gnomAD genomes annotation")
 				.required(false);
-		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
+		annotationGroup.addArgument("--gnomad-genomes-prefix")
+				.help("Prefix for ExgnomAD genomes AC annotations").setDefault("GNOMAD_GENOMES_")
 				.required(false);
-		annotationGroup.addArgument("--clinvar-vcf").help("Path to ClinVar file, activates ClinVar annotation")
-				.required(false);
-		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
-				.required(false);
-		annotationGroup.addArgument("--cosmic-vcf").help("Path to COSMIC file, activates COSMIC annotation")
-				.required(false);
-		annotationGroup.addArgument("--cosmic-prefix").help("Prefix for COSMIC annotations").setDefault("COSMIC_")
-				.required(false);
-		annotationGroup.addArgument("--inheritance-anno-use-filters").help("Use filters in inheritance mode annotation")
-				.setDefault(false).action(Arguments.storeTrue());
-
-		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
-		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters").setDefault(false)
+		annotationGroup.addArgument("--uk10k-vcf")
+				.help("Path to UK10K VCF file, activates UK10K annotation").required(false);
+		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations")
+				.setDefault("UK10K_").required(false);
+		annotationGroup.addArgument("--clinvar-vcf")
+				.help("Path to ClinVar file, activates ClinVar annotation").required(false);
+		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations")
+				.setDefault("CLINVAR_").required(false);
+		annotationGroup.addArgument("--cosmic-vcf")
+				.help("Path to COSMIC file, activates COSMIC annotation").required(false);
+		annotationGroup.addArgument("--cosmic-prefix").help("Prefix for COSMIC annotations")
+				.setDefault("COSMIC_").required(false);
+		annotationGroup.addArgument("--inheritance-anno-use-filters")
+				.help("Use filters in inheritance mode annotation").setDefault(false)
 				.action(Arguments.storeTrue());
+
+		ArgumentGroup threshFilterGroup =
+				subParser.addArgumentGroup("Threshold-filter related arguments");
+		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters")
+				.setDefault(false).action(Arguments.storeTrue());
 		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het").help("Minimal coverage for het. call")
-				.setDefault(threshDefaults.getMinGtCovHet()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-hom-alt").help("Minimal coverage for hom. alt calls")
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het")
+				.help("Minimal coverage for het. call").setDefault(threshDefaults.getMinGtCovHet())
+				.type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-hom-alt")
+				.help("Minimal coverage for hom. alt calls")
 				.setDefault(threshDefaults.getMinGtCovHomAlt()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-max-cov").help("Maximal coverage for a sample")
-				.setDefault(threshDefaults.getMaxCov()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-gq").help("Minimal genotype call quality")
-				.setDefault(threshDefaults.getMinGtGq()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-max-cov")
+				.help("Maximal coverage for a sample").setDefault(threshDefaults.getMaxCov())
+				.type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-gq")
+				.help("Minimal genotype call quality").setDefault(threshDefaults.getMinGtGq())
+				.type(Integer.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-het")
-				.help("Minimal het. call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHet())
-				.type(Double.class);
+				.help("Minimal het. call alternate allele fraction")
+				.setDefault(threshDefaults.getMinGtAafHet()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-het")
-				.help("Maximal het. call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHet())
-				.type(Double.class);
+				.help("Maximal het. call alternate allele fraction")
+				.setDefault(threshDefaults.getMaxGtAafHet()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-hom-alt")
-				.help("Minimal hom. alt call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHomAlt())
-				.type(Double.class);
+				.help("Minimal hom. alt call alternate allele fraction")
+				.setDefault(threshDefaults.getMinGtAafHomAlt()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-hom-ref")
-				.help("Maximal hom. ref call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHomRef())
-				.type(Double.class);
+				.help("Maximal hom. ref call alternate allele fraction")
+				.setDefault(threshDefaults.getMaxGtAafHomRef()).type(Double.class);
 		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ad")
 				.help("Maximal allele fraction for autosomal dominant inheritance mode")
 				.setDefault(threshDefaults.getMaxAlleleFrequencyAd()).type(Double.class);
@@ -237,21 +253,24 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.help("Enable filter for on/off-target based on effect impact").setDefault(false)
 				.action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--utr-is-off-target")
-				.help("Make UTR count as off-target (default is to count UTR as on-target)").setDefault(false)
-				.action(Arguments.storeTrue());
+				.help("Make UTR count as off-target (default is to count UTR as on-target)")
+				.setDefault(false).action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--intronic-splice-is-off-target")
 				.help("Make intronic (non-consensus site) splice region count as off-target (default is to count as on-target)")
 				.setDefault(false).action(Arguments.storeTrue());
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
-		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
-				.dest("escape_ann_field").setDefault(true).action(Arguments.storeFalse());
+		optionalGroup.addArgument("--no-escape-ann-field")
+				.help("Disable escaping of INFO/ANN field in VCF output").dest("escape_ann_field")
+				.setDefault(true).action(Arguments.storeFalse());
 		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false)
 				.action(Arguments.storeTrue());
-		optionalGroup.addArgument("--no-3-prime-shifting").help("Disable shifting towards 3' of transcript")
-				.dest("3_prime_shifting").setDefault(true).action(Arguments.storeFalse());
-		optionalGroup.addArgument("--3-letter-amino-acids").help("Enable usage of 3 letter amino acid codes")
-				.setDefault(false).action(Arguments.storeTrue());
+		optionalGroup.addArgument("--no-3-prime-shifting")
+				.help("Disable shifting towards 3' of transcript").dest("3_prime_shifting")
+				.setDefault(true).action(Arguments.storeFalse());
+		optionalGroup.addArgument("--3-letter-amino-acids")
+				.help("Enable usage of 3 letter amino acid codes").setDefault(false)
+				.action(Arguments.storeTrue());
 
 		JannovarBaseOptions.setupParser(subParser);
 	}
@@ -273,9 +292,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathVCFExac = args.getString("exac_vcf");
 		prefixExac = args.getString("exac_prefix");
 		pathVCFGnomadExomes = args.getString("gnomad_exomes_vcf");
-		prefixVCFGnomadExomes = args.getString("gnomad_exomes_prefix");
+		prefixGnomadExomes = args.getString("gnomad_exomes_prefix");
 		pathVCFGnomadGenomes = args.getString("gnomad_genomes_vcf");
-		prefixVCFGnomadGenomes = args.getString("gnomad_genomes_prefix");
+		prefixGnomadGenomes = args.getString("gnomad_genomes_prefix");
 		pathVCFUK10K = args.getString("uk10k_vcf");
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");
@@ -300,8 +319,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		offTargetFilterUtrIsOffTarget = args.getBoolean("utr_is_off_target");
 		offTargetFilterIntronicSpliceIsOffTarget = args.getBoolean("intronic_splice_is_off_target");
 
-		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null
-				|| pathClinVar != null || pathCosmic != null || pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null))
+		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null
+				|| pathVCFUK10K != null || pathClinVar != null || pathCosmic != null
+				|| pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null))
 			throw new CommandLineParsingException(
 					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
 	}
@@ -424,6 +444,38 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	public void setPrefixCosmic(String prefixCosmic) {
 		this.prefixCosmic = prefixCosmic;
+	}
+
+	public String getPathVCFGnomadExomes() {
+		return pathVCFGnomadExomes;
+	}
+
+	public void setPathVCFGnomadExomes(String pathVCFGnomadExomes) {
+		this.pathVCFGnomadExomes = pathVCFGnomadExomes;
+	}
+
+	public String getPrefixGnomadExomes() {
+		return prefixGnomadExomes;
+	}
+
+	public void setPrefixGnomadExomes(String prefixGnomadExomes) {
+		this.prefixGnomadExomes = prefixGnomadExomes;
+	}
+
+	public String getPathVCFGnomadGenomes() {
+		return pathVCFGnomadGenomes;
+	}
+
+	public void setPathVCFGnomadGenomes(String pathVCFGnomadGenomes) {
+		this.pathVCFGnomadGenomes = pathVCFGnomadGenomes;
+	}
+
+	public String getPrefixGnomadGenomes() {
+		return prefixGnomadGenomes;
+	}
+
+	public void setPrefixGnomadGenomes(String prefixGnomadGenomes) {
+		this.prefixGnomadGenomes = prefixGnomadGenomes;
 	}
 
 	public boolean isAnnotateAsSingletonPedigree() {
@@ -550,7 +602,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		return offTargetFilterIntronicSpliceIsOffTarget;
 	}
 
-	public void setOffTargetFilterIntronicSpliceIsOffTarget(boolean offTargetFilterIntronicSpliceIsOffTarget) {
+	public void setOffTargetFilterIntronicSpliceIsOffTarget(
+			boolean offTargetFilterIntronicSpliceIsOffTarget) {
 		this.offTargetFilterIntronicSpliceIsOffTarget = offTargetFilterIntronicSpliceIsOffTarget;
 	}
 
@@ -572,25 +625,30 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	@Override
 	public String toString() {
-		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
-				+ ", interval=" + interval + ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP
-				+ ", prefixDBSNP=" + prefixDBSNP + ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac
+		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF="
+				+ pathInputVCF + ", interval=" + interval + ", pathOutputVCF=" + pathOutputVCF
+				+ ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
+				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac
 				+ ", prefixExac=" + prefixExac + ", pathVCFGnomadExomes=" + pathVCFGnomadExomes
-				+ ", prefixVCFGnomadExomes=" + prefixVCFGnomadExomes + ", pathVCFGnomadGenomes=" + pathVCFGnomadGenomes
-				+ ", prefixVCFGnomadGenomes=" + prefixVCFGnomadGenomes + ", pathVCFUK10K=" + pathVCFUK10K
-				+ ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar
-				+ ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile=" + pathPedFile
-				+ ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree + ", useThresholdFilters="
-				+ useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
-				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
-				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
+				+ ", prefixGnomadExomes=" + prefixGnomadExomes + ", pathVCFGnomadGenomes="
+				+ pathVCFGnomadGenomes + ", prefixGnomadGenomes=" + prefixGnomadGenomes
+				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K
+				+ ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar
+				+ ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile="
+				+ pathPedFile + ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree
+				+ ", useThresholdFilters=" + useThresholdFilters + ", threshFiltMinGtCovHet="
+				+ threshFiltMinGtCovHet + ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt
+				+ ", threshFiltMaxCov=" + threshFiltMaxCov + ", threshFiltMinGtGq="
+				+ threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
 				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
-				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
-				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
-				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
-				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
-				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget
-				+ ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters + "]";
+				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef="
+				+ threshFiltMaxGtAafHomRef + ", threshFiltMaxAlleleFrequencyAd="
+				+ threshFiltMaxAlleleFrequencyAd + ", threshFiltMaxAlleleFrequencyAr="
+				+ threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
+				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget="
+				+ offTargetFilterUtrIsOffTarget + ", offTargetFilterIntronicSpliceIsOffTarget="
+				+ offTargetFilterIntronicSpliceIsOffTarget + ", inheritanceAnnoUseFilters="
+				+ inheritanceAnnoUseFilters + "]";
 	}
 
 }

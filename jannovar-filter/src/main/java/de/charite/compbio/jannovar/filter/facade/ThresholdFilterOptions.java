@@ -37,6 +37,12 @@ public class ThresholdFilterOptions {
 	/** Prefix of dbSNP annotation */
 	private final String dbSnpPrefix;
 
+	/** Prefix of gnomAD exomes annotation */
+	private final String gnomAdExomesPrefix;
+
+	/** Prefix of gnomAD genomes annotation */
+	private final String gnomAdGenomesPrefix;
+
 	/** Maximal alternative allele's frequency for autosomal dominant inheritance mode */
 	private final double maxAlleleFrequencyAd;
 
@@ -45,12 +51,14 @@ public class ThresholdFilterOptions {
 
 	/** @return {@link ThresholdFilterOptions} with conservative default settings */
 	public static ThresholdFilterOptions buildDefaultOptions() {
-		return new ThresholdFilterOptions(8, 4, 10000, 20, 0.2, 0.8, 0.7, 0.3, "EXAC_", "DBSNP_", 0.01, 0.01);
+		return new ThresholdFilterOptions(8, 4, 10000, 20, 0.2, 0.8, 0.7, 0.3, "EXAC_", "DBSNP_",
+				"GNOMAD_GENOMES_", "GNOMAD_EXOMES_", 0.01, 0.01);
 	}
 
-	public ThresholdFilterOptions(int minGtCovHet, int minGtCovHomAlt, int maxCov, int minGtGq, double minGtAafHet,
-			double maxGtAafHet, double minGtAafHomAlt, double maxGtAafHomRef, String exacPrefix, String dbSnpPrefix,
-			double maxAlleleFrequencyAd, double maxAlleleFrequencyAr) {
+	public ThresholdFilterOptions(int minGtCovHet, int minGtCovHomAlt, int maxCov, int minGtGq,
+			double minGtAafHet, double maxGtAafHet, double minGtAafHomAlt, double maxGtAafHomRef,
+			String exacPrefix, String dbSnpPrefix, String gnomAdGenomesPrefix,
+			String gnomAdExomesPrefix, double maxAlleleFrequencyAd, double maxAlleleFrequencyAr) {
 		super();
 		this.minGtCovHet = minGtCovHet;
 		this.minGtCovHomAlt = minGtCovHomAlt;
@@ -62,6 +70,8 @@ public class ThresholdFilterOptions {
 		this.maxGtAafHomRef = maxGtAafHomRef;
 		this.exacPrefix = exacPrefix;
 		this.dbSnpPrefix = dbSnpPrefix;
+		this.gnomAdExomesPrefix = gnomAdExomesPrefix;
+		this.gnomAdGenomesPrefix = gnomAdGenomesPrefix;
 		this.maxAlleleFrequencyAd = maxAlleleFrequencyAd;
 		this.maxAlleleFrequencyAr = maxAlleleFrequencyAr;
 	}
@@ -114,13 +124,24 @@ public class ThresholdFilterOptions {
 		return maxAlleleFrequencyAr;
 	}
 
+	public String getGnomAdExomesPrefix() {
+		return gnomAdExomesPrefix;
+	}
+
+	public String getGnomAdGenomesPrefix() {
+		return gnomAdGenomesPrefix;
+	}
+
 	@Override
 	public String toString() {
-		return "ThresholdFilterOptions [minGtCovHet=" + minGtCovHet + ", minGtCovHomAlt=" + minGtCovHomAlt + ", maxCov="
-				+ maxCov + ", minGtGq=" + minGtGq + ", minGtAafHet=" + minGtAafHet + ", maxGtAafHet=" + maxGtAafHet
-				+ ", minGtAafHomAlt=" + minGtAafHomAlt + ", maxGtAafHomRef=" + maxGtAafHomRef + ", exacPrefix="
-				+ exacPrefix + ", dbSnpPrefix=" + dbSnpPrefix + ", maxAlleleFrequencyAd=" + maxAlleleFrequencyAd
-				+ ", maxAlleleFrequencyAr=" + maxAlleleFrequencyAr + "]";
+		return "ThresholdFilterOptions [minGtCovHet=" + minGtCovHet + ", minGtCovHomAlt="
+				+ minGtCovHomAlt + ", maxCov=" + maxCov + ", minGtGq=" + minGtGq + ", minGtAafHet="
+				+ minGtAafHet + ", maxGtAafHet=" + maxGtAafHet + ", minGtAafHomAlt="
+				+ minGtAafHomAlt + ", maxGtAafHomRef=" + maxGtAafHomRef + ", exacPrefix="
+				+ exacPrefix + ", dbSnpPrefix=" + dbSnpPrefix + ", gnomAdExomesPrefix="
+				+ gnomAdExomesPrefix + ", gnomAdGenomesPrefix=" + gnomAdGenomesPrefix
+				+ ", maxAlleleFrequencyAd=" + maxAlleleFrequencyAd + ", maxAlleleFrequencyAr="
+				+ maxAlleleFrequencyAr + "]";
 	}
 
 	@Override
@@ -129,6 +150,10 @@ public class ThresholdFilterOptions {
 		int result = 1;
 		result = prime * result + ((dbSnpPrefix == null) ? 0 : dbSnpPrefix.hashCode());
 		result = prime * result + ((exacPrefix == null) ? 0 : exacPrefix.hashCode());
+		result = prime * result
+				+ ((gnomAdExomesPrefix == null) ? 0 : gnomAdExomesPrefix.hashCode());
+		result = prime * result
+				+ ((gnomAdGenomesPrefix == null) ? 0 : gnomAdGenomesPrefix.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(maxAlleleFrequencyAd);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -168,19 +193,33 @@ public class ThresholdFilterOptions {
 				return false;
 		} else if (!exacPrefix.equals(other.exacPrefix))
 			return false;
-		if (Double.doubleToLongBits(maxAlleleFrequencyAd) != Double.doubleToLongBits(other.maxAlleleFrequencyAd))
+		if (gnomAdExomesPrefix == null) {
+			if (other.gnomAdExomesPrefix != null)
+				return false;
+		} else if (!gnomAdExomesPrefix.equals(other.gnomAdExomesPrefix))
 			return false;
-		if (Double.doubleToLongBits(maxAlleleFrequencyAr) != Double.doubleToLongBits(other.maxAlleleFrequencyAr))
+		if (gnomAdGenomesPrefix == null) {
+			if (other.gnomAdGenomesPrefix != null)
+				return false;
+		} else if (!gnomAdGenomesPrefix.equals(other.gnomAdGenomesPrefix))
+			return false;
+		if (Double.doubleToLongBits(maxAlleleFrequencyAd) != Double
+				.doubleToLongBits(other.maxAlleleFrequencyAd))
+			return false;
+		if (Double.doubleToLongBits(maxAlleleFrequencyAr) != Double
+				.doubleToLongBits(other.maxAlleleFrequencyAr))
 			return false;
 		if (maxCov != other.maxCov)
 			return false;
 		if (Double.doubleToLongBits(maxGtAafHet) != Double.doubleToLongBits(other.maxGtAafHet))
 			return false;
-		if (Double.doubleToLongBits(maxGtAafHomRef) != Double.doubleToLongBits(other.maxGtAafHomRef))
+		if (Double.doubleToLongBits(maxGtAafHomRef) != Double
+				.doubleToLongBits(other.maxGtAafHomRef))
 			return false;
 		if (Double.doubleToLongBits(minGtAafHet) != Double.doubleToLongBits(other.minGtAafHet))
 			return false;
-		if (Double.doubleToLongBits(minGtAafHomAlt) != Double.doubleToLongBits(other.minGtAafHomAlt))
+		if (Double.doubleToLongBits(minGtAafHomAlt) != Double
+				.doubleToLongBits(other.minGtAafHomAlt))
 			return false;
 		if (minGtCovHet != other.minGtCovHet)
 			return false;

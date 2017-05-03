@@ -24,7 +24,10 @@ public class VariantFilterAnnotator {
 	/** Configuration for threshold-based filter */
 	private final ThresholdFilterOptions options;
 
-	/** Names of samples of affected individuals; used for pushing information from genotype-level to variant level */
+	/**
+	 * Names of samples of affected individuals; used for pushing information from genotype-level to
+	 * variant level
+	 */
 	private final ImmutableList<String> affecteds;
 
 	public VariantFilterAnnotator(ThresholdFilterOptions options, ImmutableList<String> affecteds) {
@@ -33,7 +36,8 @@ public class VariantFilterAnnotator {
 	}
 
 	/**
-	 * Annotate FILTER of <code>vc</code> with genotype-based filters and based on the list of affected samples
+	 * Annotate FILTER of <code>vc</code> with genotype-based filters and based on the list of
+	 * affected samples
 	 * 
 	 * @param builder
 	 *            {@link VariantContextBuilder} to create new variant context for
@@ -43,7 +47,8 @@ public class VariantFilterAnnotator {
 	 *            Updated genotypes with filter annotation
 	 * @return reference to <code>builder</code> after the update
 	 */
-	public VariantContextBuilder annotateVariant(VariantContextBuilder builder, VariantContext vc, List<Genotype> gts) {
+	public VariantContextBuilder annotateVariant(VariantContextBuilder builder, VariantContext vc,
+			List<Genotype> gts) {
 		// If all genotype calls are filtered out then add filter to variant-level FILTER column
 		HashSet<String> filters = new HashSet<String>(vc.getFilters());
 		if (!affecteds.isEmpty()) {
@@ -66,13 +71,29 @@ public class VariantFilterAnnotator {
 		final ArrayList<Double> dbSnpCaf = ((ArrayList<Double>) vc.getAttribute(keyDbSnpCaf));
 		double dbSnpBestAf;
 		try {
-			dbSnpBestAf = (dbSnpCaf == null) ? -1 : Collections.max(dbSnpCaf.subList(1, dbSnpCaf.size()));
+			dbSnpBestAf =
+					(dbSnpCaf == null) ? -1 : Collections.max(dbSnpCaf.subList(1, dbSnpCaf.size()));
 		} catch (NoSuchElementException e) {
 			dbSnpBestAf = 0;
 			System.err.println("FOO");
 		}
-		// Get maximum of both frequencies
-		final double highestAf = Math.max(exacBestAf, dbSnpBestAf);
+		// Check best frequency from gnomAD genomes
+		final String keyGnomAdGenomesAfPopmax = options.getGnomAdGenomesPrefix() + "AF_POPMAX";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Double> gnomadGenomesAfs =
+				((ArrayList<Double>) vc.getAttribute(keyGnomAdGenomesAfPopmax));
+		final double gnomAdGenomesAf =
+				(gnomadGenomesAfs == null) ? -1 : Collections.max(gnomadGenomesAfs);
+		// Check best frequency from gnomAD exomes
+		final String keyGnomAdExomesAfPopmax = options.getGnomAdExomesPrefix() + "AF_POPMAX";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Double> gnomadExomesAfs =
+				((ArrayList<Double>) vc.getAttribute(keyGnomAdExomesAfPopmax));
+		final double gnomAdExomesAf =
+				(gnomadExomesAfs == null) ? -1 : Collections.max(gnomadExomesAfs);
+		// Get maximum of all frequencies
+		final double highestAf = Collections
+				.max(ImmutableList.of(exacBestAf, dbSnpBestAf, gnomAdGenomesAf, gnomAdExomesAf));
 		if (highestAf > 0) {
 			if (highestAf > options.getMaxAlleleFrequencyAd())
 				filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD);
