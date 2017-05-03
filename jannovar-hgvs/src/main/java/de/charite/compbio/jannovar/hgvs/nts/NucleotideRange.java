@@ -61,8 +61,7 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 
 	@Override
 	public String toString() {
-		return "NucleotideRange [firstPos=" + firstPos + ", lastPos=" + lastPos + ", toString()=" + super.toString()
-				+ "]";
+		return "NucleotideRange [firstPos=" + firstPos + ", lastPos=" + lastPos + "]";
 	}
 
 	@Override

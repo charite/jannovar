@@ -62,8 +62,7 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 
 	@Override
 	public String toString() {
-		return "ProteinShortSequenceRepeatVariability [range=" + range + ", minCount=" + minCount + ", maxCount="
-				+ maxCount + ", toString()=" + super.toString() + "]";
+		return "ProteinShortSequenceRepeatVariability [range=" + range + ", minCount=" + minCount + ", maxCount=" + maxCount + "]";
 	}
 
 	@Override

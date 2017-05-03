@@ -56,7 +56,7 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 	@Override
 	public String toString() {
 		return "NucleotideShortSequenceRepeatVariability [range=" + range + ", minCount=" + minCount + ", maxCount="
-				+ maxCount + ", toString()=" + super.toString() + "]";
+				+ maxCount + "]";
 	}
 
 	@Override

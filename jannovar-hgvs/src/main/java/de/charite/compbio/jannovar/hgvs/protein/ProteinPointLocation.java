@@ -86,7 +86,7 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 		} else if (offset < 0) {
 			offsetStr = Integer.toString(offset);
 		}
-		
+
 		if (code == AminoAcidCode.THREE_LETTER)
 			return Translator.getTranslator().toLong(aa.charAt(0)) + (pos + 1) + offsetStr;
 		else
@@ -96,7 +96,7 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 	@Override
 	public String toString() {
 		return "ProteinPointLocation [aa=" + aa + ", pos=" + pos + ", offset=" + offset + ", downstreamOfTerminal="
-				+ downstreamOfTerminal + ", toString()=" + super.toString() + "]";
+				+ downstreamOfTerminal + "]";
 	}
 
 	@Override

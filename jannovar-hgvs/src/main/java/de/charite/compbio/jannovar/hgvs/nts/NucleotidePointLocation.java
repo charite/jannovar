@@ -102,7 +102,7 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	@Override
 	public String toString() {
 		return "NucleotidePointLocation [basePos=" + basePos + ", offset=" + offset + ", downstreamOfCDS="
-				+ downstreamOfCDS + ", toString()=" + super.toString() + "]";
+				+ downstreamOfCDS + "]";
 	}
 
 	@Override
