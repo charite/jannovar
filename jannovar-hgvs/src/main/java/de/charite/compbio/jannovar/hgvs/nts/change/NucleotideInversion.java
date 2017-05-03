@@ -82,7 +82,7 @@ public class NucleotideInversion extends NucleotideChange {
 
 	@Override
 	public String toString() {
-		return "NucleotideInversion [range=" + range + ", seq=" + seq + ", toString()=" + super.toString() + "]";
+		return "NucleotideInversion [range=" + range + ", seq=" + seq + "]";
 	}
 
 	@Override

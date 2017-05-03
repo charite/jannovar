@@ -111,8 +111,7 @@ public class ProteinFrameshift extends ProteinChange {
 
 	@Override
 	public String toString() {
-		return "ProteinFrameshift [position=" + position + ", targetAA=" + targetAA + ", shiftLength=" + shiftLength
-				+ ", toString()=" + super.toString() + "]";
+		return "ProteinFrameshift [position=" + position + ", targetAA=" + targetAA + ", shiftLength=" + shiftLength + "]";
 	}
 
 	@Override

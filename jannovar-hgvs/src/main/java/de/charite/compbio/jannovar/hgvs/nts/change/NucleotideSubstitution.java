@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 
 /**
  * Substitution of one nucleotide.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class NucleotideSubstitution extends NucleotideChange {
@@ -65,8 +65,7 @@ public class NucleotideSubstitution extends NucleotideChange {
 
 	@Override
 	public String toString() {
-		return "NucleotideSubstitution [position=" + position + ", fromNT=" + fromNT + ", toNT=" + toNT
-				+ ", toString()=" + super.toString() + "]";
+		return "NucleotideSubstitution [position=" + position + ", fromNT=" + fromNT + ", toNT=" + toNT + "]";
 	}
 
 	@Override

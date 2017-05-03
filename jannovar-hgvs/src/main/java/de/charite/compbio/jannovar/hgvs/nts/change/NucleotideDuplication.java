@@ -87,7 +87,7 @@ public class NucleotideDuplication extends NucleotideChange {
 
 	@Override
 	public String toString() {
-		return "NucleotideDuplication [range=" + range + ", seq=" + seq + ", toString()=" + super.toString() + "]";
+		return "NucleotideDuplication [range=" + range + ", seq=" + seq + "]";
 	}
 
 	@Override

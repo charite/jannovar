@@ -87,7 +87,7 @@ public class NucleotideDeletion extends NucleotideChange {
 
 	@Override
 	public String toString() {
-		return "NucleotideDeletion [range=" + range + ", seq=" + seq + ", toString()=" + super.toString() + "]";
+		return "NucleotideDeletion [range=" + range + ", seq=" + seq + "]";
 	}
 
 	@Override

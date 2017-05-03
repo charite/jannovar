@@ -35,4 +35,10 @@ public class NucleotideDeletionTest {
 		Assert.assertEquals("(124_125del2)", del.toHGVSString());
 	}
 
+	@Test
+	public void testToString() {
+		NucleotideDeletion del = NucleotideDeletion.buildWithOffsetWithLength(true, 123, 0, 124, 0, 2);
+		System.out.println(del);
+	}
+
 }
