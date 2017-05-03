@@ -1,6 +1,7 @@
 # Ignore releases
 */0.*
 
+# Maven stuff
 target
 dependency-reduced-pom.xml
 # Vim swap files
@@ -13,7 +14,8 @@ dependency-reduced-pom.xml
 .settings
 # Coverity stuff
 cov-int*
-# Maven stuff
+# IDEA stuff
+/.idea/
 *.iml
 *.versionsBackup
 # download directory
@@ -26,6 +28,7 @@ cov-int*
 /*.ped
 log.txt
 data
+!/jannovar-core/src/main/java/de/charite/compbio/jannovar/data/
 # built manual
 manual/_build
 # Java Mission Control flight recorder files
