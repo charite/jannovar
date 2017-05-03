@@ -73,9 +73,9 @@ public class ThresholdFilterHeaderExtender {
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HET,
 				"Het. genotype has alternative allele fraction >" + options.getMaxGtAafHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_AAF_HOM_ALT,
-				"Hom. alt genotype has alternative allele fraction <" + options.getMinGtCovHomAlt()));
+				"Hom. alt genotype has alternative allele fraction <" + options.getMinGtAafHomAlt()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HOM_REF,
-				"Genotype has coverage >" + options.getMaxGtAafHomRef()));
+				"Wild-type genotype has AAF >" + options.getMaxGtAafHomRef()));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_ALL_AFFECTED_GTS_FILTERED,
 				"The genotype calls of all affected individuals have been filtered for this variant."));

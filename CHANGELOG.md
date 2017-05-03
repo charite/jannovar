@@ -20,6 +20,7 @@
 ### jannovar-filter
 
 * Incorporating gnomAD annotation into exclusion by frequency for inheritance filter (#343)
+* Fixing header description for `MinAafHomAlt` and `MaxAafHomRef` (#342)
 
 ### jannovar-cli
 
