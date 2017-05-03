@@ -14,7 +14,12 @@
 
 ### jannovar-vardbs
 
+* Fixing a problem with normalization on variant annotation
 * Fixing problem with default value of `CLNSIG` (`"25"` -> `"255"`)
+
+### jannovar-cli
+
+* Checking that reference is given also for gnomAD VCF annotation
 
 ## v0.21
 

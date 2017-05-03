@@ -114,7 +114,7 @@ public final class AlleleMatcher {
 			VariantDescription nd = normalizer.normalizeVariant(vd);
 			if (nd.getRef().isEmpty()) // is insertion
 				nd = normalizer.normalizeInsertion(vd);
-			vars.add(vd);
+			vars.add(nd);
 		}
 		return vars;
 	}

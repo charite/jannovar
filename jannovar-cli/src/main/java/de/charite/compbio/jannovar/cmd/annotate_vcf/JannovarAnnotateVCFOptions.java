@@ -301,7 +301,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		offTargetFilterIntronicSpliceIsOffTarget = args.getBoolean("intronic_splice_is_off_target");
 
 		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null
-				|| pathClinVar != null || pathCosmic != null))
+				|| pathClinVar != null || pathCosmic != null || pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null))
 			throw new CommandLineParsingException(
 					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
 	}
