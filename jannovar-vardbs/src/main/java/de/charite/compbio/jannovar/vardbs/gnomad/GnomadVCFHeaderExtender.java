@@ -71,7 +71,8 @@ public class GnomadVCFHeaderExtender extends VCFHeaderExtender {
 			popName = "all populations";
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
-		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AN_" + pop, 1, VCFHeaderLineType.Integer,
+		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AN_" + pop, VCFHeaderLineCount.A,
+				VCFHeaderLineType.Integer,
 				"Overall number of positions/chromosomes with coverage in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
