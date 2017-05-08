@@ -33,7 +33,7 @@ public enum SupportedVarCaller {
 				&& gt.hasAnyAttribute("NV")) {
 			return PLATYPUS;
 		} else {
-			throw new RuntimeException("Cannot guess variant caller for genotype: " + gt.toBriefString());
+			return GATK_CALLER;  // sometimes GATK does not write out anything here... :(
 		}
 	}
 

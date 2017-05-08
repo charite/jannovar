@@ -22,6 +22,8 @@ public class GatkGenotypeFilterImpl implements GenotypeFilterImpl {
 	@Override
 	public double getAlternativeAlleleFraction(Genotype gt) {
 		int[] ads = gt.getAD();
+		if (ads == null)
+			return 0.0;
 		int sum = 0;
 		for (int i = 1; i < ads.length; ++i)
 			sum += ads[i];
@@ -30,7 +32,10 @@ public class GatkGenotypeFilterImpl implements GenotypeFilterImpl {
 
 	@Override
 	public double getAlleleFraction(Genotype gt, int alleleNo) {
-		return ((double) gt.getAD()[alleleNo]) / gt.getDP();
+		if (gt.getDP() == 0)
+			return 0.0;
+		else
+			return ((double) gt.getAD()[alleleNo]) / gt.getDP();
 	}
 
 }
