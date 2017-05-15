@@ -75,7 +75,6 @@ public class VariantFilterAnnotator {
 					(dbSnpCaf == null) ? -1 : Collections.max(dbSnpCaf.subList(1, dbSnpCaf.size()));
 		} catch (NoSuchElementException e) {
 			dbSnpBestAf = 0;
-			System.err.println("FOO");
 		}
 		// Check best frequency from gnomAD genomes
 		final String keyGnomAdGenomesAfPopmax = options.getGnomAdGenomesPrefix() + "AF_POPMAX";

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +16,9 @@ import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.filter.facade.PedigreeFilterAnnotator;
+import de.charite.compbio.jannovar.filter.facade.PedigreeFilterHeaderExtender;
+import de.charite.compbio.jannovar.filter.facade.PedigreeFilterOptions;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
@@ -93,16 +97,15 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		final String vcfPath = options.getPathInputVCF();
 
 		// whether or not to require availability of an index
-		final boolean useInterval =
-				(options.getInterval() != null && !options.getInterval().equals(""));
+		final boolean useInterval = (options.getInterval() != null
+				&& !options.getInterval().equals(""));
 
 		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), useInterval)) {
 			if (this.options.getVerbosity() >= 1) {
-				final SAMSequenceDictionary seqDict =
-						VCFFileReader.getSequenceDictionary(new File(vcfPath));
+				final SAMSequenceDictionary seqDict = VCFFileReader
+						.getSequenceDictionary(new File(vcfPath));
 				if (seqDict != null) {
-					final GenomeRegionListFactoryFromSAMSequenceDictionary factory =
-							new GenomeRegionListFactoryFromSAMSequenceDictionary();
+					final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
 					this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
 					this.progressReporter.printHeader();
 					this.progressReporter.start();
@@ -139,7 +142,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			// Obtain Java 8 stream from iterator
 			Stream<VariantContext> stream = iter.stream();
 
-			// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
+			// If configured, annotate using dbSNP VCF file (extend header to
+			// use for writing out)
 			if (options.pathVCFDBSNP != null) {
 				DBAnnotationOptions dbSNPOptions = DBAnnotationOptions.createDefaults();
 				dbSNPOptions.setIdentifierPrefix(options.prefixDBSNP);
@@ -149,7 +153,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(dbSNPAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using ExAC VCF file (extend header to use for writing out)
+			// If configured, annotate using ExAC VCF file (extend header to use
+			// for writing out)
 			if (options.pathVCFExac != null) {
 				DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
 				exacOptions.setIdentifierPrefix(options.prefixExac);
@@ -159,31 +164,34 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(exacAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using gnomAD exomes VCF file (extend header to use for
+			// If configured, annotate using gnomAD exomes VCF file (extend
+			// header to use for
 			// writing out)
 			if (options.pathVCFGnomadExomes != null) {
 				DBAnnotationOptions gnomadOptions = DBAnnotationOptions.createDefaults();
 				gnomadOptions.setIdentifierPrefix(options.prefixGnomadExomes);
-				DBVariantContextAnnotator gnomadExomesAnno =
-						new DBVariantContextAnnotatorFactory().constructGnomad(
-								options.pathVCFGnomadExomes, options.pathFASTARef, gnomadOptions);
+				DBVariantContextAnnotator gnomadExomesAnno = new DBVariantContextAnnotatorFactory()
+						.constructGnomad(options.pathVCFGnomadExomes, options.pathFASTARef,
+								gnomadOptions);
 				gnomadExomesAnno.extendHeader(vcfHeader);
 				stream = stream.map(gnomadExomesAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using gnomAD genomes VCF file (extend header to use for
+			// If configured, annotate using gnomAD genomes VCF file (extend
+			// header to use for
 			// writing out)
 			if (options.pathVCFGnomadGenomes != null) {
 				DBAnnotationOptions gnomadOptions = DBAnnotationOptions.createDefaults();
 				gnomadOptions.setIdentifierPrefix(options.prefixGnomadGenomes);
-				DBVariantContextAnnotator gnomadGenomesAnno =
-						new DBVariantContextAnnotatorFactory().constructGnomad(
-								options.pathVCFGnomadGenomes, options.pathFASTARef, gnomadOptions);
+				DBVariantContextAnnotator gnomadGenomesAnno = new DBVariantContextAnnotatorFactory()
+						.constructGnomad(options.pathVCFGnomadGenomes, options.pathFASTARef,
+								gnomadOptions);
 				gnomadGenomesAnno.extendHeader(vcfHeader);
 				stream = stream.map(gnomadGenomesAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using UK10K VCF file (extend header to use for writing out)
+			// If configured, annotate using UK10K VCF file (extend header to
+			// use for writing out)
 			if (options.pathVCFUK10K != null) {
 				DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
 				exacOptions.setIdentifierPrefix(options.prefixUK10K);
@@ -193,18 +201,20 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(uk10kAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using ClinVar VCF file (extend header to use for writing out)
+			// If configured, annotate using ClinVar VCF file (extend header to
+			// use for writing out)
 			if (options.pathClinVar != null) {
 				DBAnnotationOptions clinVarOptions = DBAnnotationOptions.createDefaults();
 				clinVarOptions.setIdentifierPrefix(options.prefixClinVar);
-				DBVariantContextAnnotator clinvarAnno =
-						new DBVariantContextAnnotatorFactory().constructClinVar(options.pathClinVar,
-								options.pathFASTARef, clinVarOptions);
+				DBVariantContextAnnotator clinvarAnno = new DBVariantContextAnnotatorFactory()
+						.constructClinVar(options.pathClinVar, options.pathFASTARef,
+								clinVarOptions);
 				clinvarAnno.extendHeader(vcfHeader);
 				stream = stream.map(clinvarAnno::annotateVariantContext);
 			}
 
-			// If configured, annotate using COSMIC VCF file (extend header to use for writing out)
+			// If configured, annotate using COSMIC VCF file (extend header to
+			// use for writing out)
 			if (options.pathCosmic != null) {
 				DBAnnotationOptions cosmicOptions = DBAnnotationOptions.createDefaults();
 				cosmicOptions.setIdentifierPrefix(options.prefixCosmic);
@@ -214,7 +224,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(cosmicAnno::annotateVariantContext);
 			}
 
-			// If configured, use threshold-based annotation (extend headr to use for writing out)
+			// If configured, use threshold-based annotation (extend header to
+			// use for writing out)
 			if (options.useThresholdFilters) {
 				// Build options object for threshold filter
 				ThresholdFilterOptions thresholdFilterOptions = new ThresholdFilterOptions(
@@ -229,9 +240,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 						options.getThreshFiltMaxAlleleFrequencyAr());
 				// Add headers
 				new ThresholdFilterHeaderExtender(thresholdFilterOptions).addHeaders(vcfHeader);
-				// Build list of affecteds; take from pedigree file if given. Otherwise, assume one
-				// single individual is
-				// always affected and otherwise warn about missing pedigree.
+				// Build list of affecteds; take from pedigree file if given.
+				// Otherwise, assume one single individual is always affected and otherwise warn
+				// about missing pedigree.
 				ArrayList<String> affecteds = new ArrayList<>();
 				if (options.pathPedFile == null) {
 					if (vcfHeader.getNGenotypeSamples() == 1) {
@@ -262,9 +273,35 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 										+ "only genotype FT");
 					}
 				}
-				ThresholdFilterAnnotator thresholdFilterAnno =
-						new ThresholdFilterAnnotator(thresholdFilterOptions, affecteds);
+				ThresholdFilterAnnotator thresholdFilterAnno = new ThresholdFilterAnnotator(
+						thresholdFilterOptions, affecteds);
 				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
+
+				// When configured to use advanced pedigree filters (must come
+				// after threshold-based filtration)
+				if (options.useAdvancedPedigreeFilters) {
+					// Build options object from configuration and extend headers
+					PedigreeFilterOptions pedFilterOptions = new PedigreeFilterOptions(
+							options.getThreshDeNovoParentAd2());
+					new PedigreeFilterHeaderExtender(pedFilterOptions).addHeaders(vcfHeader);
+
+					// Load pedigree
+					Pedigree pedigree;
+					try {
+						pedigree = loadPedigree(vcfHeader);
+					} catch (IOException e) {
+						System.err.println("Problem loading pedigree from " + options.pathPedFile);
+						System.err.println(e.getMessage());
+						System.err.println("\n");
+						e.printStackTrace(System.err);
+						return;
+					}
+
+					// Construct annotator and register with pipeline
+					PedigreeFilterAnnotator pedFilterAnnotator = new PedigreeFilterAnnotator(
+							pedFilterOptions, pedigree);
+					stream = stream.map(pedFilterAnnotator::annotateVariantContext);
+				}
 			}
 
 			// Add step for annotating with variant effect
@@ -285,9 +322,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			}
 
 			// Create VCF output writer
-			ImmutableList<VCFHeaderLine> jvHeaderLines =
-					ImmutableList.of(new VCFHeaderLine("jannovarVersion", Jannovar.getVersion()),
-							new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(argv)));
+			ImmutableList<VCFHeaderLine> jvHeaderLines = ImmutableList.of(
+					new VCFHeaderLine("jannovarVersion", Jannovar.getVersion()),
+					new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(argv)));
 
 			// Construct VariantContextWriter and start annotationg pipeline
 			try (VariantContextWriter vcfWriter = VariantContextWriterConstructionHelper
@@ -350,10 +387,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				throw new IncompatiblePedigreeException(
 						"VCF file does not have exactly one sample but required for singleton pedigree construction");
 			final String sampleName = vcfHeader.getSampleNamesInOrder().get(0);
-			final PedPerson pedPerson =
-					new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN, Disease.AFFECTED);
-			final PedFileContents pedContents =
-					new PedFileContents(ImmutableList.of(), ImmutableList.of(pedPerson));
+			final PedPerson pedPerson = new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN,
+					Disease.AFFECTED);
+			final PedFileContents pedContents = new PedFileContents(ImmutableList.of(),
+					ImmutableList.of(pedPerson));
 			return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
 		}
 	}
@@ -379,9 +416,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		if (options.pathPedFile != null || options.annotateAsSingletonPedigree) {
 			final Pedigree pedigree = loadPedigree(vcfHeader);
 			checkPedigreeCompatibility(pedigree, vcfHeader);
-			final GeneWiseMendelianAnnotationProcessor mendelProcessor =
-					new GeneWiseMendelianAnnotationProcessor(pedigree, jannovarData,
-							vc -> writer.add(vc), options.isInheritanceAnnoUseFilters());
+			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
+					pedigree, jannovarData, vc -> writer.add(vc),
+					options.isInheritanceAnnoUseFilters());
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
 			return new ConsumerProcessor(vc -> writer.add(vc));

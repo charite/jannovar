@@ -41,11 +41,16 @@
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
-		<dependency>
-			<groupId>de.charite.compbio</groupId>
-			<artifactId>jannovar-htsjdk</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>de.charite.compbio</groupId>
+            <artifactId>jannovar-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.charite.compbio</groupId>
+            <artifactId>jannovar-htsjdk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>

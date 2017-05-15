@@ -13,7 +13,8 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 /**
- * Perform annotation (sof-filtering) based on coverage/alternative allele fraction/genotype call quality
+ * Perform annotation (sof-filtering) based on coverage/alternative allele
+ * fraction/genotype call quality
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
@@ -22,7 +23,10 @@ public class ThresholdFilterAnnotator {
 	/** Configuration for the threshold-based filter */
 	private final ThresholdFilterOptions options;
 
-	/** Names of samples of affected individuals; used for pushing information from genotype-level to variant level */
+	/**
+	 * Names of samples of affected individuals; used for pushing information
+	 * from genotype-level to variant level
+	 */
 	private final ImmutableList<String> affecteds;
 
 	/** Helper for genotype-wide application of filters */
@@ -34,8 +38,8 @@ public class ThresholdFilterAnnotator {
 	public ThresholdFilterAnnotator(ThresholdFilterOptions options, Collection<String> affected) {
 		this.options = options;
 		this.affecteds = ImmutableList.copyOf(affected);
-		this.gtAnnotator = new GenotypeFilterAnnotator(options);
-		this.varAnnotator = new VariantFilterAnnotator(options, this.affecteds);
+		this.gtAnnotator = new GenotypeFilterAnnotator(this.options);
+		this.varAnnotator = new VariantFilterAnnotator(this.options, this.affecteds);
 	}
 
 	/**

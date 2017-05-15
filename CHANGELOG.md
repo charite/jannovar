@@ -1,6 +1,16 @@
 # Jannovar Changelog
 
-## develop
+## develop (unreleased)
+
+### jannovar-cli
+
+* Integrating the advanced pedigree-based filters (useful for filtration to de novo variants).
+
+### jannovar-filter
+
+* Adding code for performing more advanced filtration/annotation filtering to de novo variants.
+
+## v0.22
 
 ### jannovar-htsjdk
 
