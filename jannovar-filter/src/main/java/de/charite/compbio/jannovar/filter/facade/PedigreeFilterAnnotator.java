@@ -1,10 +1,8 @@
 package de.charite.compbio.jannovar.filter.facade;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Pedigree.IndexedPerson;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
 import htsjdk.variant.variantcontext.Allele;

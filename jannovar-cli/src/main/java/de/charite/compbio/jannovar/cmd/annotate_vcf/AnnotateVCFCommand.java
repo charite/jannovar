@@ -1,21 +1,12 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions.BedAnnotationOptions;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterOptions;
@@ -54,6 +45,12 @@ import htsjdk.variant.vcf.VCFContigHeaderLine;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
@@ -301,6 +298,15 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					PedigreeFilterAnnotator pedFilterAnnotator = new PedigreeFilterAnnotator(
 							pedFilterOptions, pedigree);
 					stream = stream.map(pedFilterAnnotator::annotateVariantContext);
+				}
+				
+				// Annotate from BED files
+				List<BedFileAnnotator> annotators = new ArrayList<>();
+				for (BedAnnotationOptions bedAnnotationOptions : options.getBedAnnotationOptions()) {
+					BedFileAnnotator annotator = new BedFileAnnotator(bedAnnotationOptions);
+					annotators.add(annotator);
+					annotator.extendHeader(vcfHeader);
+					stream = stream.map(annotator::annotateVariantContext);
 				}
 			}
 

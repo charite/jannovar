@@ -1,5 +1,8 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 import de.charite.compbio.jannovar.UncheckedJannovarException;
@@ -9,8 +12,11 @@ import de.charite.compbio.jannovar.cmd.JannovarBaseOptions;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterOptions;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.Argument;
+import net.sourceforge.argparse4j.inf.ArgumentAction;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
@@ -41,8 +47,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public String prefixDBSNP = null;
 
 	/**
-	 * Path to the reference FAI-indexed FASTA file (required for
-	 * dbSNP/ExAC/UK10K-based annotation
+	 * Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation
 	 */
 	public String pathFASTARef = null;
 
@@ -86,8 +91,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public String pathPedFile;
 
 	/**
-	 * Whether or not to perform compatible inheritance mode annotation with the
-	 * assumption that the single individual is the affected index.
+	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the
+	 * single individual is the affected index.
 	 */
 	public boolean annotateAsSingletonPedigree;
 
@@ -95,8 +100,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public boolean useThresholdFilters;
 
 	/**
-	 * Whether or not to use the advanced pedigree filters (mainly useful for de
-	 * novo variants)
+	 * Whether or not to use the advanced pedigree filters (mainly useful for de novo variants)
 	 */
 	public boolean useAdvancedPedigreeFilters;
 
@@ -113,38 +117,32 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private int threshFiltMinGtGq;
 
 	/**
-	 * Threshold filter: minimal alternative allele fraction for heterozygous
-	 * calls
+	 * Threshold filter: minimal alternative allele fraction for heterozygous calls
 	 */
 	private double threshFiltMinGtAafHet;
 
 	/**
-	 * Threshold filter: maximal alternative allele fraction for heterozygous
-	 * calls
+	 * Threshold filter: maximal alternative allele fraction for heterozygous calls
 	 */
 	private double threshFiltMaxGtAafHet;
 
 	/**
-	 * Threshold filter: minimal alternative allele fraction for homozygous
-	 * alternative calls
+	 * Threshold filter: minimal alternative allele fraction for homozygous alternative calls
 	 */
 	private double threshFiltMinGtAafHomAlt;
 
 	/**
-	 * Threshold filter: maximal alternative allele fraction for homozygous ref
-	 * calls
+	 * Threshold filter: maximal alternative allele fraction for homozygous ref calls
 	 */
 	private double threshFiltMaxGtAafHomRef;
 
 	/**
-	 * Threshold filter: maximal allele frequency for autosomal dominant
-	 * inheritance mode
+	 * Threshold filter: maximal allele frequency for autosomal dominant inheritance mode
 	 */
 	private double threshFiltMaxAlleleFrequencyAd;
 
 	/**
-	 * Threshold filter: maximal allele frequency for autosomal recessive
-	 * inheritance mode
+	 * Threshold filter: maximal allele frequency for autosomal recessive inheritance mode
 	 */
 	private double threshFiltMaxAlleleFrequencyAr;
 
@@ -158,15 +156,17 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private boolean offTargetFilterIntronicSpliceIsOffTarget;
 
 	/**
-	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd,
-	 * MaxFreqAr, and OffExome) and genotype-wise filters (MaxCov, MinCovHet,
-	 * MinCovHomAlt, MinGq, MinAafHet, MaxAafHet, MinAafHomAlt, MinAafHomRef) in
-	 * inheritance mode compatibility annotation.
+	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome)
+	 * and genotype-wise filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet,
+	 * MinAafHomAlt, MinAafHomRef) in inheritance mode compatibility annotation.
 	 */
 	private boolean inheritanceAnnoUseFilters;
 
 	/** Maximal support of alternative allele in parent for de novo variant. */
 	private Integer threshDeNovoParentAd2;
+
+	/** Configuration for annotation with BED files. */
+	private List<BedAnnotationOptions> bedAnnotationOptions = new ArrayList<>();
 
 	/**
 	 * Setup {@link ArgumentParser}
@@ -183,80 +183,101 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 			}
 		};
 
-		Subparser subParser =
-				subParsers.addParser("annotate-vcf", true).help("annotate VCF files").setDefault("cmd", handler);
+		Subparser subParser = subParsers.addParser("annotate-vcf", true).help("annotate VCF files")
+				.setDefault("cmd", handler);
 		subParser.description("Perform annotation of a single VCF file");
 
 		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
-		requiredGroup.addArgument("-i", "--input-vcf").help("Path to input VCF file").required(true);
-		requiredGroup.addArgument("-o", "--output-vcf").help("Path to output VCF file").required(true);
-		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		requiredGroup.addArgument("-i", "--input-vcf").help("Path to input VCF file")
+				.required(true);
+		requiredGroup.addArgument("-o", "--output-vcf").help("Path to output VCF file")
+				.required(true);
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file")
+				.required(true);
 
-		ArgumentGroup annotationGroup = subParser.addArgumentGroup("Annotation Arguments (optional)");
-		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)").required(false)
-				.setDefault("");
-		annotationGroup.addArgument("--pedigree-file").help("Pedigree file to use for Mendelian inheritance annotation")
-				.required(false);
+		ArgumentGroup annotationGroup = subParser
+				.addArgumentGroup("Annotation Arguments (optional)");
+		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)")
+				.required(false).setDefault("");
+		annotationGroup.addArgument("--pedigree-file")
+				.help("Pedigree file to use for Mendelian inheritance annotation").required(false);
 		annotationGroup.addArgument("--annotate-as-singleton-pedigree")
 				.help("Annotate VCF file with single individual as singleton pedigree (singleton assumed to be affected)")
 				.required(false).setDefault(false).action(Arguments.storeTrue());
-		annotationGroup.addArgument("--ref-fasta")
-				.help("Path to FAI-indexed reference FASTA file, required for dbSNP/ExAC/UK10K-based annotation");
-		annotationGroup.addArgument("--dbsnp-vcf").help("Path to dbSNP VCF file, activates dbSNP annotation")
-				.required(false);
-		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations").setDefault("DBSNP_")
-				.required(false);
-		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation")
-				.required(false);
-		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations").setDefault("EXAC_")
-				.required(false);
+		annotationGroup.addArgument("--ref-fasta").help(
+				"Path to FAI-indexed reference FASTA file, required for dbSNP/ExAC/UK10K-based annotation");
+		annotationGroup.addArgument("--dbsnp-vcf")
+				.help("Path to dbSNP VCF file, activates dbSNP annotation").required(false);
+		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations")
+				.setDefault("DBSNP_").required(false);
+		annotationGroup.addArgument("--exac-vcf")
+				.help("Path to ExAC VCF file, activates ExAC annotation").required(false);
+		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations")
+				.setDefault("EXAC_").required(false);
 		annotationGroup.addArgument("--gnomad-exomes-vcf")
-				.help("Path to gnomAD exomes VCF file, activates gnomAD exomes annotation").required(false);
-		annotationGroup.addArgument("--gnomad-exomes-prefix").help("Prefix for ExgnomAD exomes AC annotations")
-				.setDefault("GNOMAD_EXOMES_").required(false);
+				.help("Path to gnomAD exomes VCF file, activates gnomAD exomes annotation")
+				.required(false);
+		annotationGroup.addArgument("--gnomad-exomes-prefix")
+				.help("Prefix for ExgnomAD exomes AC annotations").setDefault("GNOMAD_EXOMES_")
+				.required(false);
 		annotationGroup.addArgument("--gnomad-genomes-vcf")
-				.help("Path to gnomAD genomes VCF file, activates gnomAD genomes annotation").required(false);
-		annotationGroup.addArgument("--gnomad-genomes-prefix").help("Prefix for ExgnomAD genomes AC annotations")
-				.setDefault("GNOMAD_GENOMES_").required(false);
-		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation")
+				.help("Path to gnomAD genomes VCF file, activates gnomAD genomes annotation")
 				.required(false);
-		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
+		annotationGroup.addArgument("--gnomad-genomes-prefix")
+				.help("Prefix for ExgnomAD genomes AC annotations").setDefault("GNOMAD_GENOMES_")
 				.required(false);
-		annotationGroup.addArgument("--clinvar-vcf").help("Path to ClinVar file, activates ClinVar annotation")
-				.required(false);
-		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
-				.required(false);
-		annotationGroup.addArgument("--cosmic-vcf").help("Path to COSMIC file, activates COSMIC annotation")
-				.required(false);
-		annotationGroup.addArgument("--cosmic-prefix").help("Prefix for COSMIC annotations").setDefault("COSMIC_")
-				.required(false);
-		annotationGroup.addArgument("--inheritance-anno-use-filters").help("Use filters in inheritance mode annotation")
-				.setDefault(false).action(Arguments.storeTrue());
-
-		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
-		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters").setDefault(false)
+		annotationGroup.addArgument("--uk10k-vcf")
+				.help("Path to UK10K VCF file, activates UK10K annotation").required(false);
+		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations")
+				.setDefault("UK10K_").required(false);
+		annotationGroup.addArgument("--clinvar-vcf")
+				.help("Path to ClinVar file, activates ClinVar annotation").required(false);
+		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations")
+				.setDefault("CLINVAR_").required(false);
+		annotationGroup.addArgument("--cosmic-vcf")
+				.help("Path to COSMIC file, activates COSMIC annotation").required(false);
+		annotationGroup.addArgument("--cosmic-prefix").help("Prefix for COSMIC annotations")
+				.setDefault("COSMIC_").required(false);
+		annotationGroup.addArgument("--inheritance-anno-use-filters")
+				.help("Use filters in inheritance mode annotation").setDefault(false)
 				.action(Arguments.storeTrue());
+
+		ArgumentGroup bedAnnotationGroup = subParser
+				.addArgumentGroup("BED-based Annotation (optional)");
+		bedAnnotationGroup.addArgument("--bed-annotation")
+				.help("Add BED file to use for annotating. The value must be of the format "
+						+ "\"pathToBed:infoField:description[:colNo]\".")
+				.action(Arguments.append());
+
+		ArgumentGroup threshFilterGroup = subParser
+				.addArgumentGroup("Threshold-filter related arguments");
+		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters")
+				.setDefault(false).action(Arguments.storeTrue());
 		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het").help("Minimal coverage for het. call")
-				.setDefault(threshDefaults.getMinGtCovHet()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-hom-alt").help("Minimal coverage for hom. alt calls")
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het")
+				.help("Minimal coverage for het. call").setDefault(threshDefaults.getMinGtCovHet())
+				.type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-hom-alt")
+				.help("Minimal coverage for hom. alt calls")
 				.setDefault(threshDefaults.getMinGtCovHomAlt()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-max-cov").help("Maximal coverage for a sample")
-				.setDefault(threshDefaults.getMaxCov()).type(Integer.class);
-		threshFilterGroup.addArgument("--gt-thresh-filt-min-gq").help("Minimal genotype call quality")
-				.setDefault(threshDefaults.getMinGtGq()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-max-cov")
+				.help("Maximal coverage for a sample").setDefault(threshDefaults.getMaxCov())
+				.type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-gq")
+				.help("Minimal genotype call quality").setDefault(threshDefaults.getMinGtGq())
+				.type(Integer.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-het")
-				.help("Minimal het. call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHet())
-				.type(Double.class);
+				.help("Minimal het. call alternate allele fraction")
+				.setDefault(threshDefaults.getMinGtAafHet()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-het")
-				.help("Maximal het. call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHet())
-				.type(Double.class);
+				.help("Maximal het. call alternate allele fraction")
+				.setDefault(threshDefaults.getMaxGtAafHet()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-hom-alt")
-				.help("Minimal hom. alt call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHomAlt())
-				.type(Double.class);
+				.help("Minimal hom. alt call alternate allele fraction")
+				.setDefault(threshDefaults.getMinGtAafHomAlt()).type(Double.class);
 		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-hom-ref")
-				.help("Maximal hom. ref call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHomRef())
-				.type(Double.class);
+				.help("Maximal hom. ref call alternate allele fraction")
+				.setDefault(threshDefaults.getMaxGtAafHomRef()).type(Double.class);
 		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ad")
 				.help("Maximal allele fraction for autosomal dominant inheritance mode")
 				.setDefault(threshDefaults.getMaxAlleleFrequencyAd()).type(Double.class);
@@ -265,32 +286,35 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.setDefault(threshDefaults.getMaxAlleleFrequencyAr()).type(Double.class);
 		PedigreeFilterOptions pedDefaults = PedigreeFilterOptions.buildDefaultOptions();
 		threshFilterGroup.addArgument("--use-advanced-pedigree-filters")
-				.help("Use advanced pedigree-based filters (mainly useful for de novo variants)").setDefault(false)
-				.action(Arguments.storeTrue());
+				.help("Use advanced pedigree-based filters (mainly useful for de novo variants)")
+				.setDefault(false).action(Arguments.storeTrue());
 		threshFilterGroup.addArgument("--de-novo-max-parent-ad2")
-				.help("Maximal support of alternative allele in parent for de novo variants.").type(Integer.class)
-				.setDefault(pedDefaults.getDeNovoMaxParentAd2());
+				.help("Maximal support of alternative allele in parent for de novo variants.")
+				.type(Integer.class).setDefault(pedDefaults.getDeNovoMaxParentAd2());
 
 		ArgumentGroup offTargetGroup = subParser.addArgumentGroup("Exome on/off target filters");
 		offTargetGroup.addArgument("--enable-off-target-filter")
 				.help("Enable filter for on/off-target based on effect impact").setDefault(false)
 				.action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--utr-is-off-target")
-				.help("Make UTR count as off-target (default is to count UTR as on-target)").setDefault(false)
-				.action(Arguments.storeTrue());
+				.help("Make UTR count as off-target (default is to count UTR as on-target)")
+				.setDefault(false).action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--intronic-splice-is-off-target")
 				.help("Make intronic (non-consensus site) splice region count as off-target (default is to count as on-target)")
 				.setDefault(false).action(Arguments.storeTrue());
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
-		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
-				.dest("escape_ann_field").setDefault(true).action(Arguments.storeFalse());
+		optionalGroup.addArgument("--no-escape-ann-field")
+				.help("Disable escaping of INFO/ANN field in VCF output").dest("escape_ann_field")
+				.setDefault(true).action(Arguments.storeFalse());
 		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false)
 				.action(Arguments.storeTrue());
-		optionalGroup.addArgument("--no-3-prime-shifting").help("Disable shifting towards 3' of transcript")
-				.dest("3_prime_shifting").setDefault(true).action(Arguments.storeFalse());
-		optionalGroup.addArgument("--3-letter-amino-acids").help("Enable usage of 3 letter amino acid codes")
-				.setDefault(false).action(Arguments.storeTrue());
+		optionalGroup.addArgument("--no-3-prime-shifting")
+				.help("Disable shifting towards 3' of transcript").dest("3_prime_shifting")
+				.setDefault(true).action(Arguments.storeFalse());
+		optionalGroup.addArgument("--3-letter-amino-acids")
+				.help("Enable usage of 3 letter amino acid codes").setDefault(false)
+				.action(Arguments.storeTrue());
 
 		JannovarBaseOptions.setupParser(subParser);
 	}
@@ -322,6 +346,11 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathCosmic = args.getString("cosmic_vcf");
 		prefixCosmic = args.getString("cosmic_prefix");
 		inheritanceAnnoUseFilters = args.getBoolean("inheritance_anno_use_filters");
+		
+		for (Object o : args.getList("bed_annotation")) {
+			final String s = (String)o;
+			bedAnnotationOptions.add(BedAnnotationOptions.parseFrom(s));
+		}
 
 		useThresholdFilters = args.getBoolean("use_threshold_filters");
 		threshFiltMinGtCovHet = args.getInt("gt_thresh_filt_min_cov_het");
@@ -341,9 +370,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		offTargetFilterUtrIsOffTarget = args.getBoolean("utr_is_off_target");
 		offTargetFilterIntronicSpliceIsOffTarget = args.getBoolean("intronic_splice_is_off_target");
 
-		if (pathFASTARef == null
-				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null
-						|| pathCosmic != null || pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null))
+		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null
+				|| pathVCFUK10K != null || pathClinVar != null || pathCosmic != null
+				|| pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null))
 			throw new CommandLineParsingException(
 					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
 	}
@@ -624,7 +653,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		return offTargetFilterIntronicSpliceIsOffTarget;
 	}
 
-	public void setOffTargetFilterIntronicSpliceIsOffTarget(boolean offTargetFilterIntronicSpliceIsOffTarget) {
+	public void setOffTargetFilterIntronicSpliceIsOffTarget(
+			boolean offTargetFilterIntronicSpliceIsOffTarget) {
 		this.offTargetFilterIntronicSpliceIsOffTarget = offTargetFilterIntronicSpliceIsOffTarget;
 	}
 
@@ -644,27 +674,50 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.inheritanceAnnoUseFilters = inheritanceAnnoUseFilters;
 	}
 
+	public boolean isUseAdvancedPedigreeFilters() {
+		return useAdvancedPedigreeFilters;
+	}
+
+	public void setUseAdvancedPedigreeFilters(boolean useAdvancedPedigreeFilters) {
+		this.useAdvancedPedigreeFilters = useAdvancedPedigreeFilters;
+	}
+
+	public List<BedAnnotationOptions> getBedAnnotationOptions() {
+		return bedAnnotationOptions;
+	}
+
+	public void setBedAnnotationOptions(List<BedAnnotationOptions> bedAnnotationOptions) {
+		this.bedAnnotationOptions = bedAnnotationOptions;
+	}
+
 	@Override
 	public String toString() {
-		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
-				+ ", interval=" + interval + ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP
-				+ ", prefixDBSNP=" + prefixDBSNP + ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac
+		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF="
+				+ pathInputVCF + ", interval=" + interval + ", pathOutputVCF=" + pathOutputVCF
+				+ ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
+				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac
 				+ ", prefixExac=" + prefixExac + ", pathVCFGnomadExomes=" + pathVCFGnomadExomes
-				+ ", prefixGnomadExomes=" + prefixGnomadExomes + ", pathVCFGnomadGenomes=" + pathVCFGnomadGenomes
-				+ ", prefixGnomadGenomes=" + prefixGnomadGenomes + ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K="
-				+ prefixUK10K + ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar + ", pathCosmic="
-				+ pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile=" + pathPedFile
-				+ ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree + ", useThresholdFilters="
-				+ useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
-				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
-				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
-				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
-				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
+				+ ", prefixGnomadExomes=" + prefixGnomadExomes + ", pathVCFGnomadGenomes="
+				+ pathVCFGnomadGenomes + ", prefixGnomadGenomes=" + prefixGnomadGenomes
+				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K
+				+ ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar
+				+ ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile="
+				+ pathPedFile + ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree
+				+ ", useThresholdFilters=" + useThresholdFilters + ", useAdvancedPedigreeFilters="
+				+ useAdvancedPedigreeFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
+				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov="
+				+ threshFiltMaxCov + ", threshFiltMinGtGq=" + threshFiltMinGtGq
+				+ ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet + ", threshFiltMaxGtAafHet="
+				+ threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt=" + threshFiltMinGtAafHomAlt
+				+ ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
 				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
-				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
-				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
-				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget
-				+ ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters + "]";
+				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr
+				+ ", offTargetFilterEnabled=" + offTargetFilterEnabled
+				+ ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
+				+ ", offTargetFilterIntronicSpliceIsOffTarget="
+				+ offTargetFilterIntronicSpliceIsOffTarget + ", inheritanceAnnoUseFilters="
+				+ inheritanceAnnoUseFilters + ", threshDeNovoParentAd2=" + threshDeNovoParentAd2
+				+ ", bedAnnotationOptions=" + bedAnnotationOptions + "]";
 	}
 
 	public Integer getThreshDeNovoParentAd2() {
@@ -673,6 +726,82 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	public void setThreshDeNovoParentAd2(Integer threshDeNovoParentAd2) {
 		this.threshDeNovoParentAd2 = threshDeNovoParentAd2;
+	}
+
+	/**
+	 * Configuration for annotation with BED file.
+	 */
+	public static class BedAnnotationOptions {
+
+		/**
+		 * Construct new BED annotation from command line option value.
+		 * 
+		 * <p>
+		 * The value must have the format: <code>pathToBed:infoField:description[:colNo]</code>
+		 * </p>
+		 * 
+		 * @param strValue
+		 *            String to parse from
+		 * @return Constructed {@link BedAnnotationOptions} from the given string value.
+		 */
+		public static BedAnnotationOptions parseFrom(String strValue) {
+			String tokens[] = strValue.split(":", 4);
+			if (tokens.length < 3) {
+				throw new RuntimeException("Could not parse BED annotation from " + strValue);
+			} else if (tokens.length == 3) {
+				return new BedAnnotationOptions(tokens[0], tokens[1], tokens[2]);
+			} else {
+				return new BedAnnotationOptions(tokens[0], tokens[1], tokens[2],
+						Integer.parseInt(tokens[3]));
+			}
+		}
+
+		/** Path to BED file */
+		private final String pathBed;
+
+		/** Label to use for INFO field. */
+		private final String infoField;
+
+		/** Description to use for INFO field. */
+		private final String description;
+
+		/** 0-based column to write into VCF file, if any, <code>-1</code> for none */
+		private final int colNo;
+
+		public BedAnnotationOptions(String pathBed, String infoField, String description) {
+			this(pathBed, infoField, description, -1);
+		}
+
+		public BedAnnotationOptions(String pathBed, String infoField, String description,
+				int colNo) {
+			this.pathBed = pathBed;
+			this.infoField = infoField;
+			this.description = description;
+			this.colNo = colNo;
+		}
+
+		public String getPathBed() {
+			return pathBed;
+		}
+
+		public int getColNo() {
+			return colNo;
+		}
+
+		public String getInfoField() {
+			return infoField;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		@Override
+		public String toString() {
+			return "BedAnnotationOptions [pathBed=" + pathBed + ", colNo=" + colNo + ", infoField="
+					+ infoField + ", description=" + description + "]";
+		}
+
 	}
 
 }
