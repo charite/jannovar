@@ -58,7 +58,7 @@ public class ThresholdFilterHeaderExtender {
 	public void addHeaders(VCFHeader header) {
 		if (!header.hasFormatLine("FT"))
 			header.addMetaDataLine(
-					new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.Character, "Filters applied to genotype call"));
+					new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.String, "Filters applied to genotype call"));
 
 		header.addMetaDataLine(
 				new VCFFilterHeaderLine(FILTER_GT_MAX_COV, "Genotype has coverage >" + options.getMaxCov()));
