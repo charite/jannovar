@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.ValueColumnDescription;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
@@ -33,7 +32,8 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 		// configured at all
 		if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0) {
 			if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching())
-				addHeadersInfixes(header, prefix, "OVL_", " (requiring no genotype match, only position overlap)");
+				addHeadersInfixes(header, prefix, "OVL_",
+						" (requiring no genotype match, only position overlap)");
 		}
 	}
 
@@ -46,7 +46,9 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 	 * </p>
 	 */
 	private void addHeadersInfixes(VCFHeader header, String prefix, String infix, String note) {
-		for (ValueColumnDescription desc : tsvOptions.getValueColumnDescriptions()) {
+		for (String colName : tsvOptions.getColumnNames()) {
+			final GenericTSVValueColumnDescription desc = tsvOptions.getValueColumnDescriptions()
+					.get(colName);
 			final VCFHeaderLineCount count;
 			if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0
 					&& options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
@@ -55,8 +57,9 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 				count = VCFHeaderLineCount.UNBOUNDED;
 			}
 
-			final VCFInfoHeaderLine headerLine = new VCFInfoHeaderLine(prefix + infix + desc.getFieldName(), count,
-					desc.getValueType(), desc.getFieldDescription() + note);
+			final VCFInfoHeaderLine headerLine = new VCFInfoHeaderLine(
+					prefix + infix + desc.getFieldName(), count, desc.getValueType(),
+					desc.getFieldDescription() + note);
 			header.addMetaDataLine(headerLine);
 		}
 	}

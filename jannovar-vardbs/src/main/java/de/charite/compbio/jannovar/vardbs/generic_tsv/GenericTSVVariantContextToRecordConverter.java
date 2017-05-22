@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.ValueColumnDescription;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -42,7 +41,9 @@ final class GenericTSVVariantContextToRecordConverter
 			builder.setRef(vc.getReference().toString());
 			builder.setAlt(vc.getAlternateAllele(0).toString());
 		}
-		for (ValueColumnDescription desc : tsvOptions.getValueColumnDescriptions()) {
+		for (String colName : tsvOptions.getColumnNames()) {
+			final GenericTSVValueColumnDescription desc = tsvOptions.getValueColumnDescriptions()
+					.get(colName);
 			builder.getValues().add(vc.getAttribute(desc.getFieldName()));
 		}
 

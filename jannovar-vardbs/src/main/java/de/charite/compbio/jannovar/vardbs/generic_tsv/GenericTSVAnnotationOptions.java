@@ -1,10 +1,14 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Configuration for generic TSV annotation.
@@ -13,11 +17,58 @@ import java.util.List;
  */
 public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 
+	/**
+	 * Construct new TSV annotation configuration from command line option value.
+	 * 
+	 * <p>
+	 * The value must have the format:
+	 * <code>pathToTsvFile:oneBasedOffset:colContig:colStart:colEnd:colRef(or=0):
+	 * colAlt(or=0):colValue:fieldType:fieldName:fieldDescription:accumulationStrategy</code>
+	 * </p>
+	 * 
+	 * @param strValue
+	 *            String to parse from
+	 * @return Constructed {@link BedAnnotationOptions} from the given string value.
+	 */
+	public static GenericTSVAnnotationOptions parseFrom(String strValue) {
+		String tokens[] = strValue.split(":");
+		if (tokens.length != 12) {
+			throw new RuntimeException(
+					"Too few tokens in TSV annotation configuration " + strValue);
+		}
+
+		final String pathTsvFile = tokens[0];
+		final int oneBasedOffset = Integer.parseInt(tokens[1]);
+		final int colContig = Integer.parseInt(tokens[2]);
+		final int colStart = Integer.parseInt(tokens[3]);
+		final int colEnd = Integer.parseInt(tokens[4]);
+		final int colRef = Integer.parseInt(tokens[5]);
+		final int colAlt = Integer.parseInt(tokens[6]);
+		final int colValue = Integer.parseInt(tokens[7]);
+		final String fieldType = tokens[8];
+		final String fieldName = tokens[9];
+		final String fieldDescription = tokens[10];
+		final String accStrategy = tokens[11];
+
+		final boolean ovlAsIdentical = (colRef == 0) || (colAlt == 0);
+		final GenericTSVAnnotationTarget target = ((colRef == 0) || (colAlt == 0))
+				? GenericTSVAnnotationTarget.POSITION : GenericTSVAnnotationTarget.VARIANT;
+
+		return new GenericTSVAnnotationOptions(true, ovlAsIdentical, "",
+				MultipleMatchBehaviour.BEST_ONLY, new File(pathTsvFile), target,
+				(oneBasedOffset != 0), colContig, colStart, colEnd, colRef, colAlt,
+				ImmutableList.of(fieldName),
+				ImmutableMap.of(fieldName,
+						new GenericTSVValueColumnDescription(colValue,
+								VCFHeaderLineType.valueOf(fieldType), fieldName, fieldDescription,
+								GenericTSVAccumulationStrategy.valueOf(accStrategy))));
+	}
+
 	/** File with TSV annotations. */
 	private File tsvFile;
 
 	/** Configuration of annotation target. */
-	private AnnotationTarget annotationTarget = AnnotationTarget.VARIANT;
+	private GenericTSVAnnotationTarget annotationTarget = GenericTSVAnnotationTarget.VARIANT;
 
 	/** Whether or not coordinates are 1-based. */
 	private boolean oneBasedPositions = true;
@@ -37,15 +88,19 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 	/** 1-based index of column with variant allele, 0 for none. */
 	private int altAlleleColumnIndex = 5;
 
+	/** Column description names as ordered as in file. */
+	private List<String> columnNames = new ArrayList<>();
+
 	/** Description of value columns. */
-	List<ValueColumnDescription> valueColumnDescriptions = new ArrayList<>();
+	private Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions = new HashMap<>();
 
 	public GenericTSVAnnotationOptions(boolean reportOverlapping,
 			boolean reportOverlappingAsIdentical, String identifierPrefix,
 			MultipleMatchBehaviour multiMatchBehaviour, File tsvFile,
-			AnnotationTarget annotationTarget, boolean oneBasedPositions, int contigColumnIndex,
-			int beginColumnIndex, int endColumnIndex, int refAlleleColumnIndex,
-			int altAlleleColumnIndex, List<ValueColumnDescription> valueColumnDescriptions) {
+			GenericTSVAnnotationTarget annotationTarget, boolean oneBasedPositions,
+			int contigColumnIndex, int beginColumnIndex, int endColumnIndex,
+			int refAlleleColumnIndex, int altAlleleColumnIndex, List<String> columnNames,
+			Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions) {
 		super(reportOverlapping, reportOverlappingAsIdentical, identifierPrefix,
 				multiMatchBehaviour);
 
@@ -57,6 +112,7 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 		this.endColumnIndex = endColumnIndex;
 		this.refAlleleColumnIndex = refAlleleColumnIndex;
 		this.altAlleleColumnIndex = altAlleleColumnIndex;
+		this.columnNames = columnNames;
 		this.valueColumnDescriptions = valueColumnDescriptions;
 	}
 
@@ -68,11 +124,11 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 		this.tsvFile = tsvFile;
 	}
 
-	public AnnotationTarget getAnnotationTarget() {
+	public GenericTSVAnnotationTarget getAnnotationTarget() {
 		return annotationTarget;
 	}
 
-	public void setAnnotationTarget(AnnotationTarget annotationTarget) {
+	public void setAnnotationTarget(GenericTSVAnnotationTarget annotationTarget) {
 		this.annotationTarget = annotationTarget;
 	}
 
@@ -124,11 +180,20 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 		this.altAlleleColumnIndex = altAlleleColumnIndex;
 	}
 
-	public List<ValueColumnDescription> getValueColumnDescriptions() {
+	public List<String> getColumnNames() {
+		return columnNames;
+	}
+
+	public void setColumnNames(List<String> columnNames) {
+		this.columnNames = columnNames;
+	}
+
+	public Map<String, GenericTSVValueColumnDescription> getValueColumnDescriptions() {
 		return valueColumnDescriptions;
 	}
 
-	public void setValueColumnDescriptions(List<ValueColumnDescription> valueColumnDescriptions) {
+	public void setValueColumnDescriptions(
+			Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions) {
 		this.valueColumnDescriptions = valueColumnDescriptions;
 	}
 
@@ -139,114 +204,8 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 				+ ", contigColumnIndex=" + contigColumnIndex + ", beginColumnIndex="
 				+ beginColumnIndex + ", endColumnIndex=" + endColumnIndex
 				+ ", refAlleleColumnIndex=" + refAlleleColumnIndex + ", altAlleleColumnIndex="
-				+ altAlleleColumnIndex + ", valueColumnDescriptions=" + valueColumnDescriptions
-				+ ", super.toString()=" + super.toString() + "]";
+				+ altAlleleColumnIndex + ", columnNames=" + columnNames
+				+ ", valueColumnDescriptions=" + valueColumnDescriptions + "]";
 	}
-
-	/**
-	 * Description of a value column.
-	 *
-	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
-	 */
-	public static class ValueColumnDescription {
-
-		private int columnIndex = 6;
-
-		private VCFHeaderLineType valueType = VCFHeaderLineType.String;
-
-		private String fieldName = "VALUE_";
-
-		private String fieldDescription = "";
-
-		private AccumulationStrategy accumulationStrategy = AccumulationStrategy.CHOOSE_FIRST;
-
-		public ValueColumnDescription() {
-		}
-
-		public ValueColumnDescription(int columnIndex, VCFHeaderLineType valueType,
-				String fieldName, String fieldDescription,
-				AccumulationStrategy accumulationStrategy) {
-			this.columnIndex = columnIndex;
-			this.valueType = valueType;
-			this.fieldName = fieldName;
-			this.fieldDescription = fieldDescription;
-			this.accumulationStrategy = accumulationStrategy;
-		}
-
-		public int getColumnIndex() {
-			return columnIndex;
-		}
-
-		public void setColumnIndex(int columnIndex) {
-			this.columnIndex = columnIndex;
-		}
-
-		public VCFHeaderLineType getValueType() {
-			return valueType;
-		}
-
-		public void setValueType(VCFHeaderLineType valueType) {
-			this.valueType = valueType;
-		}
-
-		public String getFieldName() {
-			return fieldName;
-		}
-
-		public void setFieldName(String fieldName) {
-			this.fieldName = fieldName;
-		}
-
-		public String getFieldDescription() {
-			return fieldDescription;
-		}
-
-		public void setFieldDescription(String fieldDescription) {
-			this.fieldDescription = fieldDescription;
-		}
-
-		public AccumulationStrategy getAccumulationStrategy() {
-			return accumulationStrategy;
-		}
-
-		public void setAccumulationStrategy(AccumulationStrategy accumulationStrategy) {
-			this.accumulationStrategy = accumulationStrategy;
-		}
-
-		@Override
-		public String toString() {
-			return "ValueColumnDescription [columnIndex=" + columnIndex + ", valueType=" + valueType
-					+ ", fieldName=" + fieldName + ", fieldDescription=" + fieldDescription
-					+ ", accumulationStrategy=" + accumulationStrategy + "]";
-		}
-
-	}
-
-	/**
-	 * Enumeration describing accumulation strategy for annotation with TSV for multiple matches.
-	 * 
-	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
-	 */
-	public static enum AccumulationStrategy {
-		/** Choose first */
-		CHOOSE_FIRST,
-		/** Use average, only applicable to numbers, fall back to first. */
-		AVERAGE,
-		/** Use largest value, only applicable to numbers, fall back to first. */
-		CHOOSE_MAX;
-	}
-
-	/**
-	 * Enumeration for describing annotation target (either position only or variant, e.g.
-	 * <code>C&gt;T</code>.
-	 *
-	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
-	 */
-	public static enum AnnotationTarget {
-		/** TSV file annotates a position. */
-		POSITION,
-		/** TSV file annotates a variant allele. */
-		VARIANT;
-	};
 
 }

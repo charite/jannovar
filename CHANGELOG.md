@@ -4,11 +4,16 @@
 
 ### jannovar-cli
 
+* Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 * Integrating the advanced pedigree-based filters (useful for filtration to de novo variants).
 
 ### jannovar-filter
 
 * Adding code for performing more advanced filtration/annotation filtering to de novo variants.
+
+### jannovar-vardbs
+
+* Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 
 ## v0.22
 

@@ -6,12 +6,12 @@ import de.charite.compbio.jannovar.vardbs.base.DatabaseVariantContextProvider;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.ValueColumnDescription;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,15 +59,25 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 
 		// Annotate with records with genotype matches
 		for (int i = 0; i < options.getValueColumnDescriptions().size(); i++) {
-			final ValueColumnDescription desc = options.getValueColumnDescriptions().get(i);
-			annotateWith(vc, "", dbRecordsMatch, desc, i, builder);
+			final String colName = options.getColumnNames().get(i);
+			final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+					.get(colName);
+			final String refColName = desc.getRefField();
+			final GenericTSVValueColumnDescription refDesc = options.getValueColumnDescriptions()
+					.get(refColName);
+			annotateWith(vc, "", dbRecordsMatch, desc, refDesc, builder);
 		}
 
 		// Annotate with records with overlapping positions
 		if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
 			for (int i = 0; i < options.getValueColumnDescriptions().size(); i++) {
-				final ValueColumnDescription desc = options.getValueColumnDescriptions().get(i);
-				annotateWith(vc, "OVL_", dbRecordsOverlap, desc, i, builder);
+				final String colName = options.getColumnNames().get(i);
+				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+						.get(colName);
+				final String refColName = desc.getRefField();
+				final GenericTSVValueColumnDescription refDesc = options
+						.getValueColumnDescriptions().get(refColName);
+				annotateWith(vc, "OVL_", dbRecordsOverlap, desc, refDesc, builder);
 			}
 		}
 
@@ -105,49 +115,233 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 	}
 
 	/**
+	 * Helper for comparable pairs.
+	 */
+	private static class LabeledValue<Label extends Comparable<Label>, Value>
+			implements Comparable<LabeledValue<Label, Value>> {
+
+		private final Label label;
+		private final Value value;
+
+		public LabeledValue(Label label, Value value) {
+			this.label = label;
+			this.value = value;
+		}
+
+		public Label getLabel() {
+			return label;
+		}
+
+		public Value getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			return "LabeledValue [label=" + label + ", value=" + value + "]";
+		}
+
+		@Override
+		public int compareTo(LabeledValue<Label, Value> o) {
+			return label.compareTo(o.getLabel());
+		}
+
+	}
+
+	/**
 	 * Annotate <code>vc</code> with the annotating database records.
+	 * 
+	 * @param refDesc
 	 */
 	private void annotateWith(VariantContext vc, String infix,
-			Map<Integer, List<VariantContext>> dbRecords, ValueColumnDescription desc, int i,
+			Map<Integer, List<VariantContext>> dbRecords, GenericTSVValueColumnDescription desc,
+			GenericTSVValueColumnDescription refDesc, VariantContextBuilder builder) {
+		if (dbRecords.values().stream().allMatch(lst -> lst.isEmpty())) {
+			return;  // no annotation necessary
+		}
+		
+		switch (desc.getValueType()) {
+		case Character:
+			switch (refDesc.getValueType()) {
+			case Character:
+				this.<Character, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Flag:
+				this.<Boolean, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Float:
+				this.<Double, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Integer:
+				this.<Integer, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case String:
+			default:
+				this.<String, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			}
+			break;
+		case Flag:
+			switch (refDesc.getValueType()) {
+			case Character:
+				this.<Character, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Flag:
+				this.<Boolean, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Float:
+				this.<Double, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Integer:
+				this.<Integer, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case String:
+			default:
+				this.<String, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			}
+			break;
+		case Float:
+			switch (refDesc.getValueType()) {
+			case Character:
+				this.<Character, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Flag:
+				this.<Boolean, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Float:
+				this.<Double, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Integer:
+				this.<Integer, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case String:
+			default:
+				this.<String, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			}
+			break;
+		case Integer:
+			switch (refDesc.getValueType()) {
+			case Character:
+				this.<Character, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Flag:
+				this.<Boolean, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Float:
+				this.<Double, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Integer:
+				this.<Integer, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case String:
+			default:
+				this.<String, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			}
+			break;
+		case String:
+		default:
+			switch (refDesc.getValueType()) {
+			case Character:
+				this.<Character, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Flag:
+				this.<Boolean, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Float:
+				this.<Double, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case Integer:
+				this.<Integer, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			case String:
+			default:
+				this.<String, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
+						builder);
+				break;
+			}
+			break;
+		}
+	}
+
+	private <Label extends Comparable<Label>, Value> void annotateWithImpl(VariantContext vc,
+			String infix, Map<Integer, List<VariantContext>> dbRecords,
+			GenericTSVValueColumnDescription desc, GenericTSVValueColumnDescription refDesc,
 			VariantContextBuilder builder) {
 		// Prepare annotation list with one entry for each allele
 		final List<Object> annotations = new ArrayList<>();
-		final Map<Integer, List<Object>> values = new HashMap<>();
-		for (int j = 0; j < vc.getNAlleles(); ++j) {
+		final Map<Integer, List<LabeledValue<Label, Value>>> labeledValues = new HashMap<>();
+		for (int alleleNo = 0; alleleNo < vc.getNAlleles(); ++alleleNo) {
 			annotations.add(".");
-			values.put(j, new ArrayList<>());
-			for (VariantContext dbRecord : dbRecords.get(j)) {
-				values.get(j).add(dbRecord.getAttribute(desc.getFieldName()));
+			labeledValues.put(alleleNo, new ArrayList<>());
+			for (VariantContext dbRecord : dbRecords.get(alleleNo)) {
+				labeledValues.get(alleleNo)
+						.add(new LabeledValue<Label, Value>(
+								(Label) dbRecord.getAttribute(refDesc.getFieldName()),
+								(Value) dbRecord.getAttribute(desc.getFieldName())));
 			}
 		}
 
-		// TODO: refactor this and make it prettier
 		switch (desc.getValueType()) {
 		case Character:
 		case Flag:
 		case String:
 			// Only pick first available
 			for (int j = 0; j < vc.getNAlleles(); ++j) {
-				if (!values.get(j).isEmpty()) {
-					annotations.set(j, values.get(j).get(0));
+				if (!labeledValues.get(j).isEmpty()) {
+					annotations.set(j, labeledValues.get(j).get(0).getValue());
 				}
 			}
 			break;
 		case Float:
 			for (int j = 0; j < vc.getNAlleles(); ++j) {
-				if (!values.get(j).isEmpty()) {
-					switch (desc.getAccumulationStrategy()) {
+				if (!labeledValues.get(j).isEmpty()) {
+					switch (refDesc.getAccumulationStrategy()) {
 					case AVERAGE:
-						annotations.set(j, values.get(j).stream().mapToDouble(x -> (Double) x)
-								.average().orElse(0.0));
+						annotations.set(j, labeledValues.get(j).stream()
+								.mapToDouble(x -> (Double) x.getValue()).average().orElse(0.0));
 						break;
 					case CHOOSE_FIRST:
-						annotations.set(j, values.get(j).get(0));
+						annotations.set(j, labeledValues.get(j).get(0).getValue());
+						break;
+					case CHOOSE_MIN:
+						annotations.set(j,
+								labeledValues.get(j).stream()
+										.min(Comparator.<LabeledValue<Label, Value>> naturalOrder())
+										.map(x -> (Object) x.getValue()).orElse("."));
 						break;
 					case CHOOSE_MAX:
 					default:
-						annotations.set(j, values.get(j).stream().mapToDouble(x -> (Double) x).max()
-								.orElse(0.0));
+						annotations.set(j,
+								labeledValues.get(j).stream()
+										.max(Comparator.<LabeledValue<Label, Value>> naturalOrder())
+										.map(x -> (Object) x.getValue()).orElse("."));
 						break;
 					}
 				}
@@ -155,19 +349,27 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			break;
 		case Integer:
 			for (int j = 0; j < vc.getNAlleles(); ++j) {
-				if (!values.get(j).isEmpty()) {
-					switch (desc.getAccumulationStrategy()) {
+				if (!labeledValues.get(j).isEmpty()) {
+					switch (refDesc.getAccumulationStrategy()) {
 					case AVERAGE:
-						annotations.set(j, values.get(j).stream().mapToInt(x -> (Integer) x)
-								.average().orElse(0));
+						annotations.set(j, labeledValues.get(j).stream()
+								.mapToDouble(x -> (Integer) x.getValue()).average().orElse(0.0));
 						break;
 					case CHOOSE_FIRST:
-						annotations.set(j, values.get(j).get(0));
+						annotations.set(j, labeledValues.get(j).get(0).getValue());
+						break;
+					case CHOOSE_MIN:
+						annotations.set(j,
+								labeledValues.get(j).stream()
+										.min(Comparator.<LabeledValue<Label, Value>> naturalOrder())
+										.map(x -> (Object) x.getValue()).orElse("."));
 						break;
 					case CHOOSE_MAX:
 					default:
 						annotations.set(j,
-								values.get(j).stream().mapToInt(x -> (Integer) x).max().orElse(0));
+								labeledValues.get(j).stream()
+										.max(Comparator.<LabeledValue<Label, Value>> naturalOrder())
+										.map(x -> (Object) x.getValue()).orElse("."));
 						break;
 					}
 				}
@@ -177,9 +379,8 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			break;
 		}
 
-		
 		// Put annotation into variant context builder
-		final String label = options.getVCFIdentifierPrefix() + infix + desc.getFieldName();
+		final String label = options.getVCFIdentifierPrefix() + infix + refDesc.getFieldName();
 		builder.attribute(label, annotations);
 	}
 

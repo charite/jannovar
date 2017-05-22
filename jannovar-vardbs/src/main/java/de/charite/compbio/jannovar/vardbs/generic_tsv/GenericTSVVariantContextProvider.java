@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.vardbs.base.DatabaseVariantContextProvider;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.ValueColumnDescription;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.tribble.readers.TabixReader;
 import htsjdk.tribble.readers.TabixReader.Iterator;
@@ -86,7 +85,8 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 			builder.chr(tokens[options.getContigColumnIndex() - 1]);
 
 			final int delta = options.isOneBasedPositions() ? 0 : 1;
-			final int startPos = Integer.parseInt(tokens[options.getBeginColumnIndex() - 1]) - delta;
+			final int startPos = Integer.parseInt(tokens[options.getBeginColumnIndex() - 1])
+					- delta;
 			builder.start(startPos);
 			builder.stop(startPos);
 
@@ -97,7 +97,9 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 				builder.alleles("N");
 			}
 
-			for (ValueColumnDescription desc : options.getValueColumnDescriptions()) {
+			for (String colName : options.getColumnNames()) {
+				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+						.get(colName);
 				final Object value;
 				final String token = tokens[desc.getColumnIndex() - 1];
 

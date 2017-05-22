@@ -1,17 +1,15 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions.MultipleMatchBehaviour;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.AccumulationStrategy;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.AnnotationTarget;
-import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions.ValueColumnDescription;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Before;
 
 /**
@@ -44,12 +42,14 @@ public class GenericTSVAnnotationDriverWithRemmBaseTest {
 		ResourceUtils.copyResourceToFile("/chr1.fasta.fai", new File(faiPath));
 
 		// Construct options
-		List<ValueColumnDescription> descriptions = new ArrayList<>();
-		descriptions.add(new ValueColumnDescription(3, VCFHeaderLineType.Float, "REMM_SCORE",
-				"ReMM Score", AccumulationStrategy.CHOOSE_MAX));
+		Map<String, GenericTSVValueColumnDescription> descriptions = new HashMap<>();
+		descriptions.put("REMM_SCORE",
+				new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Float, "REMM_SCORE",
+						"ReMM Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
 		this.options = new GenericTSVAnnotationOptions(true, false, "",
 				MultipleMatchBehaviour.BEST_ONLY, new File(genericTsvPath),
-				AnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0, descriptions);
+				GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0,
+				ImmutableList.of("REMM_SCORE"), descriptions);
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(true);
 
