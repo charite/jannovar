@@ -346,10 +346,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathCosmic = args.getString("cosmic_vcf");
 		prefixCosmic = args.getString("cosmic_prefix");
 		inheritanceAnnoUseFilters = args.getBoolean("inheritance_anno_use_filters");
-		
-		for (Object o : args.getList("bed_annotation")) {
-			final String s = (String)o;
-			bedAnnotationOptions.add(BedAnnotationOptions.parseFrom(s));
+
+		if (args.getList("bed_annotation") != null) {
+			for (Object o : args.getList("bed_annotation")) {
+				final String s = (String) o;
+				bedAnnotationOptions.add(BedAnnotationOptions.parseFrom(s));
+			}
 		}
 
 		useThresholdFilters = args.getBoolean("use_threshold_filters");

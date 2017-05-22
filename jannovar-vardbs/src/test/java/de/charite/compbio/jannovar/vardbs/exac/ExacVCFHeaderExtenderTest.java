@@ -28,6 +28,7 @@ public class ExacVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("EXAC_");
 
 		new ExacVCFHeaderExtender(options).addHeaders(header);
 

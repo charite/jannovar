@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.vardbs.uk10k;
+package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,23 +14,24 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
 
 /**
- * Test for annotation with UK10K reporting overlaps as matches
+ * Test for annotation with dbNSFP with default options
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KAnnotationDriverBaseTest {
+public class GenericTSVAnnotationDriverWithDbnsfpReportOnlyOverlappingTest
+		extends GenericTSVAnnotationDriverWithDbnsfpBaseTest {
 
 	@Before
-	public void setUpClass() throws Exception {
-		super.setUpClass();
+	public void setUp() throws Exception {
+		super.setUp();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(true);
+		options.setIdentifierPrefix("DBNSFP_");
 	}
 
 	@Test
-	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
-		options.setIdentifierPrefix("UK10K_");
-		UK10KAnnotationDriver driver = new UK10KAnnotationDriver(dbUK10KVCFPath, fastaPath, options);
+	public void testAnnotateExtendHeader() throws JannovarVarDBException {
+		GenericTSVAnnotationDriver driver = new GenericTSVAnnotationDriver(fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();
 
@@ -45,19 +46,20 @@ public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KA
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(3, header.getInfoHeaderLines().size());
+		Assert.assertEquals(4, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(3, header.getIDHeaderLines().size());
+		Assert.assertEquals(4, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("UK10K_AC"));
-		Assert.assertNotNull(header.getInfoHeaderLine("UK10K_AN"));
-		Assert.assertNotNull(header.getInfoHeaderLine("UK10K_AF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_AAREF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_RS_DBSNP147"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_HG19POS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_SIFT_SCORE"));
 	}
 
 	@Test
 	public void testAnnotateVariantContext() throws JannovarVarDBException {
-		UK10KAnnotationDriver driver = new UK10KAnnotationDriver(dbUK10KVCFPath, fastaPath, options);
+		GenericTSVAnnotationDriver driver = new GenericTSVAnnotationDriver(fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 
 		Assert.assertEquals(0, vc.getAttributes().size());
@@ -67,15 +69,19 @@ public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KA
 
 		Assert.assertEquals(".", annotated.getID());
 
-		Assert.assertEquals(3, annotated.getAttributes().size());
+		Assert.assertEquals(4, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[AC, AF, AN]", keys.toString());
+		Assert.assertEquals("[DBNSFP_AAREF, DBNSFP_HG19POS, DBNSFP_RS_DBSNP147, DBNSFP_SIFT_SCORE]",
+				keys.toString());
 
-		Assert.assertEquals("[5, 5, 5]", annotated.getAttributeAsString("AC", null));
-		Assert.assertEquals("[6.612007405448294E-4, 6.612007405448294E-4, 6.612007405448294E-4]",
-				annotated.getAttributeAsString("AF", null));
-		Assert.assertEquals("7562", annotated.getAttributeAsString("AN", null));
+		Assert.assertEquals("[., L, L, L]", annotated.getAttributeAsString("DBNSFP_AAREF", null));
+		Assert.assertEquals("[., 69119, 69119, 69119]",
+				annotated.getAttributeAsString("DBNSFP_HG19POS", null));
+		Assert.assertEquals("[., ., ., .]",
+				annotated.getAttributeAsString("DBNSFP_RS_DBSNP147", null));
+		Assert.assertEquals("[., 0.0, 0.0, 0.0]",
+				annotated.getAttributeAsString("DBNSFP_SIFT_SCORE", null));
 	}
 
 }

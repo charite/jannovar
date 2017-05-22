@@ -26,6 +26,7 @@ public class UK10KAnnotationDriverReportNoOverlappingTest extends UK10KAnnotatio
 		super.setUpClass();
 		options.setReportOverlapping(false);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("UK10K_");
 	}
 
 	@Test

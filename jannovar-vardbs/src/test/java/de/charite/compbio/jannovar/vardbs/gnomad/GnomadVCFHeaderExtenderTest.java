@@ -28,6 +28,7 @@ public class GnomadVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("GNOMAD_");
 
 		new GnomadVCFHeaderExtender(options).addHeaders(header);
 

@@ -13,6 +13,7 @@ import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
+import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
@@ -38,9 +39,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	 */
 	public DBSNPAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
 			throws JannovarVarDBException {
-		super(vcfPath, fastaPath, options, new DBSNPVariantContextToRecordConverter());
+		super(new VCFReaderVariantProvider(vcfPath), fastaPath, options, new DBSNPVariantContextToRecordConverter());
+		VCFReaderVariantProvider vcfProvider = (VCFReaderVariantProvider) this.variantProvider;
 
-		this.dbSNPInfo = new DBSNPInfoFactory().build(vcfReader.getFileHeader());
+		this.dbSNPInfo = new DBSNPInfoFactory().build(vcfProvider.getVcfReader().getFileHeader());
 		if (dbSNPInfo.dbSNPBuildID != 147)
 			throw new JannovarVarDBException(
 					"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b174");

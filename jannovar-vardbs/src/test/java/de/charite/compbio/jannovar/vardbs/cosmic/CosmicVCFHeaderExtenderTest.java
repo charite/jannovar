@@ -28,6 +28,7 @@ public class CosmicVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("COSMIC_");
 
 		new CosmicVCFHeaderExtender(options).addHeaders(header);
 

@@ -29,6 +29,7 @@ public class GnomadExomesAnnotationDriverReportNoOverlappingTest extends GnomadE
 
 	@Test
 	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("GNOMAD_");
 		GnomadAnnotationDriver driver = new GnomadAnnotationDriver(gnomadVCFPath, fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();
@@ -103,6 +104,7 @@ public class GnomadExomesAnnotationDriverReportNoOverlappingTest extends GnomadE
 
 	@Test
 	public void testAnnotateVariantContext() throws JannovarVarDBException {
+		options.setIdentifierPrefix("");
 		GnomadAnnotationDriver driver = new GnomadAnnotationDriver(gnomadVCFPath, fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 

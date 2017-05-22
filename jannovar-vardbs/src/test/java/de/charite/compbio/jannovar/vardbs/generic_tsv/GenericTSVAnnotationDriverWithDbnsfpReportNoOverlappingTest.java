@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.vardbs.dbsnp;
+package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,23 +14,24 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
 
 /**
- * Test for annotation with dbSNP with overlapping as matching
+ * Test for annotation with dbNSFP with default options
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPAnnotationDriverBaseTest {
+public class GenericTSVAnnotationDriverWithDbnsfpReportNoOverlappingTest
+		extends GenericTSVAnnotationDriverWithDbnsfpBaseTest {
 
 	@Before
-	public void setUpClass() throws Exception {
-		super.setUpClass();
+	public void setUp() throws Exception {
+		super.setUp();
 		options.setReportOverlapping(false);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("DBNSFP_");
 	}
 
 	@Test
-	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
-		options.setIdentifierPrefix("DBSNP_");
-		DBSNPAnnotationDriver driver = new DBSNPAnnotationDriver(dbSNPVCFPath, fastaPath, options);
+	public void testAnnotateExtendHeader() throws JannovarVarDBException {
+		GenericTSVAnnotationDriver driver = new GenericTSVAnnotationDriver(fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();
 
@@ -45,22 +46,20 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(6, header.getInfoHeaderLines().size());
+		Assert.assertEquals(4, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(6, header.getIDHeaderLines().size());
+		Assert.assertEquals(4, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_AAREF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_RS_DBSNP147"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_HG19POS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBNSFP_SIFT_SCORE"));
 	}
 
 	@Test
 	public void testAnnotateVariantContext() throws JannovarVarDBException {
-		DBSNPAnnotationDriver driver = new DBSNPAnnotationDriver(dbSNPVCFPath, fastaPath, options);
+		GenericTSVAnnotationDriver driver = new GenericTSVAnnotationDriver(fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 
 		Assert.assertEquals(0, vc.getAttributes().size());
@@ -68,18 +67,21 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 
 		VariantContext annotated = driver.annotateVariantContext(vc);
 
-		Assert.assertEquals("rs540538026", annotated.getID());
+		Assert.assertEquals(".", annotated.getID());
 
 		Assert.assertEquals(4, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[CAF, COMMON, G5, IDS]", keys.toString());
+		Assert.assertEquals("[DBNSFP_AAREF, DBNSFP_HG19POS, DBNSFP_RS_DBSNP147, DBNSFP_SIFT_SCORE]",
+				keys.toString());
 
-		Assert.assertEquals("[0.97324, 0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
-		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
-		Assert.assertNull(annotated.getAttributeAsString("G5A", null));
-		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("COMMON", null));
-		Assert.assertEquals("[rs540538026, ., .]", annotated.getAttributeAsString("IDS", null));
+		Assert.assertEquals("[., L, L, L]", annotated.getAttributeAsString("DBNSFP_AAREF", null));
+		Assert.assertEquals("[., 69119, 69119, 69119]",
+				annotated.getAttributeAsString("DBNSFP_HG19POS", null));
+		Assert.assertEquals("[., ., ., .]",
+				annotated.getAttributeAsString("DBNSFP_RS_DBSNP147", null));
+		Assert.assertEquals("[., 0.0, 0.0, 0.0]",
+				annotated.getAttributeAsString("DBNSFP_SIFT_SCORE", null));
 	}
 
 }

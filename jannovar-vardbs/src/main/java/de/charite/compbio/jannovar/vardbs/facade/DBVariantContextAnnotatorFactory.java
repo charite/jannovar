@@ -6,6 +6,7 @@ import de.charite.compbio.jannovar.vardbs.clinvar.ClinVarAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.cosmic.CosmicAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPAnnotationDriver;
 import de.charite.compbio.jannovar.vardbs.exac.ExacAnnotationDriver;
+import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.gnomad.GnomadAnnotationDriver;
 import htsjdk.variant.variantcontext.VariantContext;
 
@@ -122,6 +123,25 @@ public class DBVariantContextAnnotatorFactory {
 	public DBVariantContextAnnotator constructCosmic(String vcfDBPath, String fastaRefPath, DBAnnotationOptions options)
 			throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+	}
+
+	/**
+	 * Construct TSV {@link VariantContext} annotator factory.
+	 *
+	 * @param tsvPath
+	 *            Path to the bgzip-ed TSV annotation file, e.g., dbNSFP or CADD
+	 * @param fastaRefPath
+	 *            Path to reference FASTA file
+	 * @param options
+	 *            Configuration for the variant context annotation
+	 * @return Preconfigured {@link DBVariantContextAnnotator} object
+	 * @throws JannovarVarDBException
+	 *             on problems loading the resources
+	 */
+	public DBVariantContextAnnotator constructGenericTSV(
+			String tsvPath, String fastaRefPath, GenericTSVAnnotationOptions options)
+			throws JannovarVarDBException {
+		return new DBVariantContextAnnotator(new CosmicAnnotationDriver(tsvPath, fastaRefPath, options), options);
 	}
 
 }

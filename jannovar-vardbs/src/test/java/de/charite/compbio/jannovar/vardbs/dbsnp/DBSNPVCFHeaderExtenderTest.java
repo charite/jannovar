@@ -28,6 +28,7 @@ public class DBSNPVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("DBSNP_");
 
 		new DBSNPVCFHeaderExtender(options).addHeaders(header);
 

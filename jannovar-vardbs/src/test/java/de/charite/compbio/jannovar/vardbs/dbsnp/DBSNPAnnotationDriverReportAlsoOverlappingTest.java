@@ -29,6 +29,7 @@ public class DBSNPAnnotationDriverReportAlsoOverlappingTest extends DBSNPAnnotat
 
 	@Test
 	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("DBSNP_");
 		DBSNPAnnotationDriver driver = new DBSNPAnnotationDriver(dbSNPVCFPath, fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();
