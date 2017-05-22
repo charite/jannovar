@@ -41,6 +41,8 @@ import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationDriver
 import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVAnnotationTarget;
 import de.charite.compbio.jannovar.vardbs.generic_tsv.GenericTSVValueColumnDescription;
+import de.charite.compbio.jannovar.vardbs.generic_vcf.GenericVCFAnnotationDriver;
+import de.charite.compbio.jannovar.vardbs.generic_vcf.GenericVCFAnnotationOptions;
 import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.samtools.util.Interval;
@@ -306,48 +308,57 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 							pedFilterOptions, pedigree);
 					stream = stream.map(pedFilterAnnotator::annotateVariantContext);
 				}
+			}
 
-				// Annotate from BED files
-				List<BedFileAnnotator> bedFileAnnotators = new ArrayList<>();
-				for (BedAnnotationOptions bedAnnotationOptions : options
-						.getBedAnnotationOptions()) {
-					BedFileAnnotator annotator = new BedFileAnnotator(bedAnnotationOptions);
-					bedFileAnnotators.add(annotator);
-					annotator.extendHeader(vcfHeader);
-					stream = stream.map(annotator::annotateVariantContext);
+			// Annotate from BED files
+			List<BedFileAnnotator> bedFileAnnotators = new ArrayList<>();
+			for (BedAnnotationOptions bedAnnotationOptions : options
+					.getBedAnnotationOptions()) {
+				BedFileAnnotator annotator = new BedFileAnnotator(bedAnnotationOptions);
+				bedFileAnnotators.add(annotator);
+				annotator.extendHeader(vcfHeader);
+				stream = stream.map(annotator::annotateVariantContext);
+			}
+
+			// Annotate using dbNSFP
+			GenericTSVAnnotationDriver dbNsfpAnnotator;
+			if (options.getPathDbNsfp() != null) {
+				Map<String, GenericTSVValueColumnDescription> descriptions = new HashMap<>();
+				for (String colName : options.getColumnsDbNsfp()) {
+					descriptions.put(colName, DbNsfpFields.DBNSFP_FIELDS.get(colName));
 				}
+				GenericTSVAnnotationOptions dbNsfpAnnotationOptions = new GenericTSVAnnotationOptions(
+						true, false, options.getPrefixDbNsfp(),
+						MultipleMatchBehaviour.BEST_ONLY, new File(options.getPathDbNsfp()),
+						GenericTSVAnnotationTarget.VARIANT, true, options.getDbNsfpColContig(),
+						options.getDbNsfpColPosition(), options.getDbNsfpColPosition(), 3, 4,
+						options.getColumnsDbNsfp(), descriptions);
+				dbNsfpAnnotator = new GenericTSVAnnotationDriver(options.getPathFASTARef(),
+						dbNsfpAnnotationOptions);
+				dbNsfpAnnotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
+				stream = stream.map(dbNsfpAnnotator::annotateVariantContext);
+			}
 
-				// Annotate using dbNSFP
-				GenericTSVAnnotationDriver dbNsfpAnnotator;
-				if (options.getPathDbNsfp() != null) {
-					Map<String, GenericTSVValueColumnDescription> descriptions = new HashMap<>();
-					for (String colName : options.getColumnsDbNsfp()) {
-						descriptions.put(colName, DbNsfpFields.DBNSFP_FIELDS.get(colName));
-					}
-					GenericTSVAnnotationOptions dbNsfpAnnotationOptions = new GenericTSVAnnotationOptions(
-							true, false, options.getPrefixDbNsfp(), MultipleMatchBehaviour.BEST_ONLY,
-							new File(options.getPathDbNsfp()), GenericTSVAnnotationTarget.VARIANT,
-							true,
-							options.getDbNsfpColContig(), options.getDbNsfpColPosition(), options.getDbNsfpColPosition(),
-							3, 4, options.getColumnsDbNsfp(), descriptions);
-					dbNsfpAnnotator = new GenericTSVAnnotationDriver(options.getPathFASTARef(), dbNsfpAnnotationOptions);
-					dbNsfpAnnotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
-					stream = stream.map(dbNsfpAnnotator::annotateVariantContext);
-				}
+			// Annotate from generic TSV files
+			List<GenericTSVAnnotationDriver> tsvAnnotators = new ArrayList<>();
+			for (GenericTSVAnnotationOptions tsvAnnotationOptions : options
+					.getTsvAnnotationOptions()) {
+				GenericTSVAnnotationDriver annotator = new GenericTSVAnnotationDriver(
+						options.getPathFASTARef(), tsvAnnotationOptions);
+				tsvAnnotators.add(annotator);
+				annotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
+				stream = stream.map(annotator::annotateVariantContext);
+			}
 
-				// Annotate from generic TSV files
-				List<GenericTSVAnnotationDriver> tsvAnnotators = new ArrayList<>();
-				for (GenericTSVAnnotationOptions tsvAnnotationOptions : options
-						.getTsvAnnotationOptions()) {
-					GenericTSVAnnotationDriver annotator = new GenericTSVAnnotationDriver(
-							options.getPathFASTARef(), tsvAnnotationOptions);
-					tsvAnnotators.add(annotator);
-					annotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
-					stream = stream.map(annotator::annotateVariantContext);
-				}
-
-				// Annotate from generic VCF files
-				// TODO: throw new RuntimeException("We are the  failure!");
+			// Annotate from generic VCF files
+			List<GenericVCFAnnotationDriver> vcfAnnotators = new ArrayList<>();
+			for (GenericVCFAnnotationOptions vcfAnnotationOptions : options
+					.getVcfAnnotationOptions()) {
+				GenericVCFAnnotationDriver annotator = new GenericVCFAnnotationDriver(
+						vcfAnnotationOptions.getPathVcfFile(), options.getPathFASTARef(), vcfAnnotationOptions);
+				vcfAnnotators.add(annotator);
+				annotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
+				stream = stream.map(annotator::annotateVariantContext);
 			}
 
 			// Add step for annotating with variant effect

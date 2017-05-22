@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Adding experimental support for annotating with VCF files
 * Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 * Integrating the advanced pedigree-based filters (useful for filtration to de novo variants).
 
@@ -13,6 +14,7 @@
 
 ### jannovar-vardbs
 
+* Adding experimental support for annotating with VCF files
 * Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 
 ## v0.22

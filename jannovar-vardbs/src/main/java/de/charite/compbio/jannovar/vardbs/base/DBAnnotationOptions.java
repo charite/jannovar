@@ -24,15 +24,18 @@ public class DBAnnotationOptions {
 
 	/** Whether or not to report overlapping variants at all (default: true) */
 	private boolean reportOverlapping;
-	/** Whether or not to consider overlapping variants as identical (behaviour of other tools, default: false */
+	/**
+	 * Whether or not to consider overlapping variants as identical (behaviour of other tools,
+	 * default: false
+	 */
 	private boolean reportOverlappingAsMatching;
 	/** Prefix for identifiers, e.g. "DBSNP_" */
 	private String identifierPrefix;
 	/** Behaviour on multiple matching annotations */
 	private MultipleMatchBehaviour multiMatchBehaviour;
 
-	public DBAnnotationOptions(boolean reportOverlapping, boolean reportOverlappingAsIdentical, String identifierPrefix,
-			MultipleMatchBehaviour multiMatchBehaviour) {
+	public DBAnnotationOptions(boolean reportOverlapping, boolean reportOverlappingAsIdentical,
+			String identifierPrefix, MultipleMatchBehaviour multiMatchBehaviour) {
 		this.reportOverlapping = reportOverlapping;
 		this.reportOverlappingAsMatching = reportOverlappingAsIdentical;
 		this.identifierPrefix = identifierPrefix;
@@ -80,8 +83,9 @@ public class DBAnnotationOptions {
 
 	@Override
 	public String toString() {
-		return "DBAnnotationOptions [reportOverlapping=" + reportOverlapping + ", reportOverlappingAsMatching="
-				+ reportOverlappingAsMatching + ", identifierPrefix=" + identifierPrefix + ", multiMatchBehaviour="
+		return "DBAnnotationOptions [reportOverlapping=" + reportOverlapping
+				+ ", reportOverlappingAsMatching=" + reportOverlappingAsMatching
+				+ ", identifierPrefix=" + identifierPrefix + ", multiMatchBehaviour="
 				+ multiMatchBehaviour + "]";
 	}
 
