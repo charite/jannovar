@@ -113,7 +113,9 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 			for (int i = start; i < end; ++i) {
 				int offset = (countType == VCFHeaderLineCount.R) ? 0 : 1;
 				if (records.containsKey(i) && records.get(i).getRecord().hasAttribute(fieldName)) {
-					valueList.add(records.get(i).getRecord().getAttributeAsList(fieldName).get(i - offset));
+					final AnnotatingRecord<VariantContext> annoRecord = records.get(i);
+					valueList.add(annoRecord.getRecord().getAttributeAsList(fieldName).get(
+							annoRecord.getAlleleNo() - offset));
 				} else {
 					valueList.add(".");
 				}
