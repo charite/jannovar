@@ -157,32 +157,32 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			Map<Integer, List<VariantContext>> dbRecords, GenericTSVValueColumnDescription desc,
 			GenericTSVValueColumnDescription refDesc, VariantContextBuilder builder) {
 		if (dbRecords.values().stream().allMatch(lst -> lst.isEmpty())) {
-			return;  // no annotation necessary
+			return; // no annotation necessary
 		}
-		
+
 		switch (desc.getValueType()) {
 		case Character:
 			switch (refDesc.getValueType()) {
 			case Character:
 				this.<Character, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Flag:
 				this.<Boolean, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Float:
 				this.<Double, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Double.MIN_VALUE, Double.MAX_VALUE);
 				break;
 			case Integer:
 				this.<Integer, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				break;
 			case String:
 			default:
 				this.<String, Character> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			}
 			break;
@@ -190,24 +190,24 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			switch (refDesc.getValueType()) {
 			case Character:
 				this.<Character, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Flag:
 				this.<Boolean, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Float:
 				this.<Double, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Double.MIN_VALUE, Double.MAX_VALUE);
 				break;
 			case Integer:
 				this.<Integer, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				break;
 			case String:
 			default:
 				this.<String, Boolean> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			}
 			break;
@@ -215,24 +215,24 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			switch (refDesc.getValueType()) {
 			case Character:
 				this.<Character, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Flag:
 				this.<Boolean, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Float:
-				this.<Double, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+				this.<Double, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc, builder,
+						Double.MIN_VALUE, Double.MAX_VALUE);
 				break;
 			case Integer:
 				this.<Integer, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				break;
 			case String:
 			default:
-				this.<String, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+				this.<String, Double> annotateWithImpl(vc, infix, dbRecords, desc, refDesc, builder,
+						null, null);
 				break;
 			}
 			break;
@@ -240,24 +240,24 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			switch (refDesc.getValueType()) {
 			case Character:
 				this.<Character, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Flag:
 				this.<Boolean, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Float:
 				this.<Double, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Double.MIN_VALUE, Double.MAX_VALUE);
 				break;
 			case Integer:
 				this.<Integer, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				break;
 			case String:
 			default:
 				this.<String, Integer> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			}
 			break;
@@ -266,24 +266,24 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			switch (refDesc.getValueType()) {
 			case Character:
 				this.<Character, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Flag:
 				this.<Boolean, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, null, null);
 				break;
 			case Float:
-				this.<Double, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+				this.<Double, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc, builder,
+						Double.MIN_VALUE, Double.MAX_VALUE);
 				break;
 			case Integer:
 				this.<Integer, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+						builder, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				break;
 			case String:
 			default:
-				this.<String, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc,
-						builder);
+				this.<String, String> annotateWithImpl(vc, infix, dbRecords, desc, refDesc, builder,
+						null, null);
 				break;
 			}
 			break;
@@ -293,7 +293,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 	private <Label extends Comparable<Label>, Value> void annotateWithImpl(VariantContext vc,
 			String infix, Map<Integer, List<VariantContext>> dbRecords,
 			GenericTSVValueColumnDescription desc, GenericTSVValueColumnDescription refDesc,
-			VariantContextBuilder builder) {
+			VariantContextBuilder builder, Label minValue, Label maxValue) {
 		// Prepare annotation list with one entry for each allele
 		final List<Object> annotations = new ArrayList<>();
 		final Map<Integer, List<LabeledValue<Label, Value>>> labeledValues = new HashMap<>();
@@ -301,14 +301,22 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			annotations.add(".");
 			labeledValues.put(alleleNo, new ArrayList<>());
 			for (VariantContext dbRecord : dbRecords.get(alleleNo)) {
-				labeledValues.get(alleleNo)
-						.add(new LabeledValue<Label, Value>(
-								(Label) dbRecord.getAttribute(refDesc.getFieldName()),
-								(Value) dbRecord.getAttribute(desc.getFieldName())));
+				Label label = (Label) dbRecord.getAttribute(refDesc.getFieldName());
+				if (label == null && minValue != null && maxValue != null) {
+					if (refDesc
+							.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MIN) {
+						label = maxValue;
+					} else if (refDesc
+							.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MAX) {
+						label = minValue;
+					}
+				}
+				labeledValues.get(alleleNo).add(new LabeledValue<Label, Value>(label,
+						(Value) dbRecord.getAttribute(desc.getFieldName())));
 			}
 		}
 
-		switch (desc.getValueType()) {
+		switch (refDesc.getValueType()) {
 		case Character:
 		case Flag:
 		case String:
@@ -380,7 +388,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 		}
 
 		// Put annotation into variant context builder
-		final String label = options.getVCFIdentifierPrefix() + infix + refDesc.getFieldName();
+		final String label = options.getVCFIdentifierPrefix() + infix + desc.getFieldName();
 		builder.attribute(label, annotations);
 	}
 

@@ -127,19 +127,32 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 
 				switch (desc.getValueType()) {
 				case Flag:
-					colValues.put(colName,
-							splitTokens.stream()
-									.map(s -> (Object) ImmutableList
-											.of("1", "Y", "y", "T", "t", "yes", "true").contains(s))
-									.collect(Collectors.toList()));
+					colValues.put(colName, splitTokens.stream().map(s -> {
+						if (s == null || ".".equals(s)) {
+							return null;
+						} else {
+							return (Object) ImmutableList.of("1", "Y", "y", "T", "t", "yes", "true")
+									.contains(s);
+						}
+					}).collect(Collectors.toList()));
 					break;
 				case Float:
-					colValues.put(colName, splitTokens.stream()
-							.map(s -> (Object) Double.parseDouble(s)).collect(Collectors.toList()));
+					colValues.put(colName, splitTokens.stream().map(s -> {
+						if (s == null || ".".equals(s)) {
+							return null;
+						} else {
+							return (Object) Double.parseDouble(s);
+						}
+					}).collect(Collectors.toList()));
 					break;
 				case Integer:
-					colValues.put(colName, splitTokens.stream()
-							.map(s -> (Object) Integer.parseInt(s)).collect(Collectors.toList()));
+					colValues.put(colName, splitTokens.stream().map(s -> {
+						if (s == null || ".".equals(s)) {
+							return null;
+						} else {
+							return (Object) Integer.parseInt(s);
+						}
+					}).collect(Collectors.toList()));
 					break;
 				case Character:
 				case String:
@@ -152,7 +165,7 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 			// For each, now select the best according to strategy.
 			Map<String, Object> values = new HashMap<>();
 
-			for (String colName : allColNames) {
+			for (String colName : options.getColumnNames()) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
 						.get(colName);
 				final GenericTSVValueColumnDescription refDesc = options
@@ -169,8 +182,15 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 					final List<
 							LabeledValue<Double, Object>> doubleLabeledValues = new ArrayList<>();
 					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
-						doubleLabeledValues.add(new LabeledValue<Double, Object>(
-								(Double) colValues.get(refDesc.getFieldName()).get(i), i));
+						Double value = (Double) colValues.get(refDesc.getFieldName()).get(i);
+						if (value == null && refDesc
+								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MIN) {
+							value = Double.MAX_VALUE;
+						} else if (value == null && refDesc
+								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MAX) {
+							value = Double.MIN_VALUE;
+						}
+						doubleLabeledValues.add(new LabeledValue<Double, Object>(value, i));
 					}
 
 					if (doubleLabeledValues.isEmpty()) {
@@ -193,12 +213,24 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 							key = 0;
 						}
 
-						values.put(colName, colValues.get(refDesc.getFieldName()).get(key));
+						if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
+							values.put(colName, colValues.get(desc.getFieldName()).get(0));
+						} else {
+							values.put(colName, colValues.get(desc.getFieldName()).get(key));
+						}
 					}
 					break;
 				case Integer:
 					final List<LabeledValue<Integer, Object>> intLabeledValues = new ArrayList<>();
 					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
+						Integer value = (Integer) colValues.get(refDesc.getFieldName()).get(i);
+						if (value == null && refDesc
+								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MIN) {
+							value = Integer.MAX_VALUE;
+						} else if (value == null && refDesc
+								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MAX) {
+							value = Integer.MIN_VALUE;
+						}
 						intLabeledValues.add(new LabeledValue<Integer, Object>(
 								(Integer) colValues.get(refDesc.getFieldName()).get(i), i));
 					}
@@ -223,7 +255,11 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 							key = 0;
 						}
 
-						values.put(colName, colValues.get(refDesc.getFieldName()).get(key));
+						if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
+							values.put(colName, colValues.get(desc.getFieldName()).get(0));
+						} else {
+							values.put(colName, colValues.get(desc.getFieldName()).get(key));
+						}
 					}
 					break;
 				default:
