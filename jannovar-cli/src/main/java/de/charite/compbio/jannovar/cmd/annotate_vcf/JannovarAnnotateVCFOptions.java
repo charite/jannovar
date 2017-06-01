@@ -264,9 +264,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.addArgumentGroup("Annotation with dbNSFP (experimental; optional)");
 		dbNsfpAnnotationGroup.addArgument("--dbnsfp-tsv").help("Patht to dbNSFP TSV file")
 				.required(false);
-		dbNsfpAnnotationGroup.addArgument("--dbnsfp-col-contig")
+		dbNsfpAnnotationGroup.addArgument("--dbnsfp-col-contig").type(Integer.class)
 				.help("Column index of contig in dbNSFP").setDefault(1);
-		dbNsfpAnnotationGroup.addArgument("--dbnsfp-col-position")
+		dbNsfpAnnotationGroup.addArgument("--dbnsfp-col-position").type(Integer.class)
 				.help("Column index of position in dbNSFP").setDefault(2);
 		dbNsfpAnnotationGroup.addArgument("--dbnsfp-prefix").help("Prefix for dbNSFP annotations")
 				.setDefault("DBNSFP_").required(false);
@@ -280,14 +280,13 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 						+ "\"pathToBed:infoField:description[:colNo]\".")
 				.action(Arguments.append());
 
-
 		ArgumentGroup vcfAnnotationGroup = subParser
 				.addArgumentGroup("Generic VCF-based Annotation (experimental; optional)");
 		vcfAnnotationGroup.addArgument("--vcf-annotation")
 				.help("Add VCF file to use for annotating. The value must be of the format "
 						+ "\"pathToVfFile:prefix:field1,field2,field3\".")
 				.action(Arguments.append());
-		
+
 		ArgumentGroup tsvAnnotationGroup = subParser
 				.addArgumentGroup("TSV-based Annotation (experimental; optional)");
 		tsvAnnotationGroup.addArgument("--tsv-annotation")
@@ -454,7 +453,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null
 				|| pathVCFUK10K != null || pathClinVar != null || pathCosmic != null
-				|| pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null || pathDbNsfp != null 
+				|| pathVCFGnomadExomes != null || pathVCFGnomadGenomes != null || pathDbNsfp != null
 				|| !tsvAnnotationOptions.isEmpty() || !vcfAnnotationOptions.isEmpty()))
 			throw new CommandLineParsingException(
 					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");

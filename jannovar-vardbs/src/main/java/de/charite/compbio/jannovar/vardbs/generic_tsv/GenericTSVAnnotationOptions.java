@@ -34,7 +34,8 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 		String tokens[] = strValue.split(":");
 		if (tokens.length != 12) {
 			throw new RuntimeException(
-					"Too few tokens in TSV annotation configuration " + strValue);
+					"Wrong number of tokens tokens in TSV annotation configuration " + strValue
+							+ " expected 12 but was " + tokens.length);
 		}
 
 		final String pathTsvFile = tokens[0];

@@ -8,6 +8,14 @@ import htsjdk.tribble.readers.TabixReader.Iterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Read TSV records as {@link VariantContext} entries.
@@ -97,30 +105,137 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 				builder.alleles("N");
 			}
 
+			// Collect all required column names (ref column names might not be selected for
+			// printing)
+			Set<String> allColNames = new HashSet<>(options.getColumnNames());
 			for (String colName : options.getColumnNames()) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
 						.get(colName);
-				final Object value;
+				if (desc.getRefField() != null) {
+					allColNames.add(desc.getRefField());
+				}
+			}
+
+			// Collect values from all required columns
+			Map<String, List<Object>> colValues = new HashMap<>();
+			for (String colName : allColNames) {
+				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+						.get(colName);
 				final String token = tokens[desc.getColumnIndex() - 1];
+				final String sep = ";";
+				final ImmutableList<String> splitTokens = ImmutableList.copyOf(token.split(sep));
 
 				switch (desc.getValueType()) {
 				case Flag:
-					value = ImmutableList.of("1", "Y", "y", "T", "t", "yes", "true")
-							.contains(token);
+					colValues.put(colName,
+							splitTokens.stream()
+									.map(s -> (Object) ImmutableList
+											.of("1", "Y", "y", "T", "t", "yes", "true").contains(s))
+									.collect(Collectors.toList()));
 					break;
 				case Float:
-					value = Double.parseDouble(token);
+					colValues.put(colName, splitTokens.stream()
+							.map(s -> (Object) Double.parseDouble(s)).collect(Collectors.toList()));
 					break;
 				case Integer:
-					value = Integer.parseInt(token);
+					colValues.put(colName, splitTokens.stream()
+							.map(s -> (Object) Integer.parseInt(s)).collect(Collectors.toList()));
 					break;
 				case Character:
 				case String:
 				default:
-					value = token;
+					colValues.put(colName, ImmutableList.<Object> copyOf(splitTokens));
 					break;
 				}
-				builder.attribute(desc.getFieldName(), value);
+			}
+
+			// For each, now select the best according to strategy.
+			Map<String, Object> values = new HashMap<>();
+
+			for (String colName : allColNames) {
+				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+						.get(colName);
+				final GenericTSVValueColumnDescription refDesc = options
+						.getValueColumnDescriptions().get(desc.getRefField());
+
+				switch (refDesc.getValueType()) {
+				case Character:
+				case Flag:
+				case String:
+					// Pick first one
+					values.put(colName, colValues.get(colName).get(0));
+					break;
+				case Float:
+					final List<
+							LabeledValue<Double, Object>> doubleLabeledValues = new ArrayList<>();
+					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
+						doubleLabeledValues.add(new LabeledValue<Double, Object>(
+								(Double) colValues.get(refDesc.getFieldName()).get(i), i));
+					}
+
+					if (doubleLabeledValues.isEmpty()) {
+						values.put(colName, ".");
+					} else {
+						final int key;
+						switch (refDesc.getAccumulationStrategy()) {
+						case CHOOSE_MIN:
+							Collections.sort(doubleLabeledValues);
+							key = (int) doubleLabeledValues.get(0).getValue();
+							break;
+						case CHOOSE_MAX:
+							Collections.sort(doubleLabeledValues);
+							key = (int) doubleLabeledValues.get(doubleLabeledValues.size() - 1)
+									.getValue();
+							break;
+						case CHOOSE_FIRST:
+						case AVERAGE:
+						default:
+							key = 0;
+						}
+
+						values.put(colName, colValues.get(refDesc.getFieldName()).get(key));
+					}
+					break;
+				case Integer:
+					final List<LabeledValue<Integer, Object>> intLabeledValues = new ArrayList<>();
+					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
+						intLabeledValues.add(new LabeledValue<Integer, Object>(
+								(Integer) colValues.get(refDesc.getFieldName()).get(i), i));
+					}
+
+					if (intLabeledValues.isEmpty()) {
+						values.put(colName, ".");
+					} else {
+						final int key;
+						switch (refDesc.getAccumulationStrategy()) {
+						case CHOOSE_MIN:
+							Collections.sort(intLabeledValues);
+							key = (int) intLabeledValues.get(0).getValue();
+							break;
+						case CHOOSE_MAX:
+							Collections.sort(intLabeledValues);
+							key = (int) intLabeledValues.get(intLabeledValues.size() - 1)
+									.getValue();
+							break;
+						case CHOOSE_FIRST:
+						case AVERAGE:
+						default:
+							key = 0;
+						}
+
+						values.put(colName, colValues.get(refDesc.getFieldName()).get(key));
+					}
+					break;
+				default:
+					break;
+				}
+			}
+
+			// Finally, write out one value
+			for (String colName : options.getColumnNames()) {
+				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
+						.get(colName);
+				builder.attribute(desc.getFieldName(), values.get(colName));
 			}
 
 			return builder.make();
@@ -129,6 +244,40 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 		@Override
 		public void close() {
 			/* nop */
+		}
+
+	}
+
+	/**
+	 * Helper for comparable pairs.
+	 */
+	private static class LabeledValue<Label extends Comparable<Label>, Value>
+			implements Comparable<LabeledValue<Label, Value>> {
+
+		private final Label label;
+		private final Value value;
+
+		public LabeledValue(Label label, Value value) {
+			this.label = label;
+			this.value = value;
+		}
+
+		public Label getLabel() {
+			return label;
+		}
+
+		public Value getValue() {
+			return value;
+		}
+
+		@Override
+		public String toString() {
+			return "LabeledValue [label=" + label + ", value=" + value + "]";
+		}
+
+		@Override
+		public int compareTo(LabeledValue<Label, Value> o) {
+			return label.compareTo(o.getLabel());
 		}
 
 	}
