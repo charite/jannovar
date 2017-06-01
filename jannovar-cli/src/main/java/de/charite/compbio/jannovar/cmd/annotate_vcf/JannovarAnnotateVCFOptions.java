@@ -292,7 +292,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		tsvAnnotationGroup.addArgument("--tsv-annotation")
 				.help("Add TSV file to use for annotating. The value must be of the format "
 						+ "\"pathToTsvFile:oneBasedOffset:colContig:colStart:colEnd:colRef(or=0):"
-						+ "colAlt(or=0):colValue:fieldType:fieldName:fieldDescription:"
+						+ "colAlt(or=0):isRefAnnotated(R=yes,A=no):colValue:fieldType:fieldName:fieldDescription:"
 						+ "accumulationStrategy\".")
 				.action(Arguments.append());
 

@@ -58,7 +58,7 @@ public class GenericTSVAnnotationDriverWithDbnsfpBaseTest {
 						"Sift Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
 		this.options = new GenericTSVAnnotationOptions(true, false, "DBNSFP_",
 				MultipleMatchBehaviour.BEST_ONLY, new File(genericTsvPath),
-				GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 3, 4,
+				GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 3, 4, true,
 				ImmutableList.of("AAREF", "RS_DBSNP147", "HG19POS", "SIFT_SCORE"), descriptions);
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);

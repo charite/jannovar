@@ -43,12 +43,10 @@ public class GenericTSVAnnotationDriverWithRemmBaseTest {
 
 		// Construct options
 		Map<String, GenericTSVValueColumnDescription> descriptions = new HashMap<>();
-		descriptions.put("REMM_SCORE",
-				new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Float, "REMM_SCORE",
-						"ReMM Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
-		this.options = new GenericTSVAnnotationOptions(true, false, "",
-				MultipleMatchBehaviour.BEST_ONLY, new File(genericTsvPath),
-				GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0,
+		descriptions.put("REMM_SCORE", new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Float, "REMM_SCORE",
+				"ReMM Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
+		this.options = new GenericTSVAnnotationOptions(true, false, "", MultipleMatchBehaviour.BEST_ONLY,
+				new File(genericTsvPath), GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0, true,
 				ImmutableList.of("REMM_SCORE"), descriptions);
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(true);

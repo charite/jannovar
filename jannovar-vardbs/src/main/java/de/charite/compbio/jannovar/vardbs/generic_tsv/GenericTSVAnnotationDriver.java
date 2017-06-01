@@ -56,7 +56,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			dbRecordsMatch = pickDBRecords(vc, true);
 			dbRecordsOverlap = pickDBRecords(vc, false);
 		}
-
+		
 		// Annotate with records with genotype matches
 		for (int i = 0; i < options.getValueColumnDescriptions().size(); i++) {
 			final String colName = options.getColumnNames().get(i);
@@ -316,19 +316,20 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			}
 		}
 
+		final int offset = options.isRefAlleleAnnotated() ? 0 : 1;
 		switch (refDesc.getValueType()) {
 		case Character:
 		case Flag:
 		case String:
 			// Only pick first available
-			for (int j = 0; j < vc.getNAlleles(); ++j) {
+			for (int j = offset; j < vc.getNAlleles(); ++j) {
 				if (!labeledValues.get(j).isEmpty()) {
 					annotations.set(j, labeledValues.get(j).get(0).getValue());
 				}
 			}
 			break;
 		case Float:
-			for (int j = 0; j < vc.getNAlleles(); ++j) {
+			for (int j = offset; j < vc.getNAlleles(); ++j) {
 				if (!labeledValues.get(j).isEmpty()) {
 					switch (refDesc.getAccumulationStrategy()) {
 					case AVERAGE:
@@ -356,7 +357,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			}
 			break;
 		case Integer:
-			for (int j = 0; j < vc.getNAlleles(); ++j) {
+			for (int j = offset; j < vc.getNAlleles(); ++j) {
 				if (!labeledValues.get(j).isEmpty()) {
 					switch (refDesc.getAccumulationStrategy()) {
 					case AVERAGE:
