@@ -321,7 +321,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				GenericTSVAnnotationOptions dbNsfpAnnotationOptions = new GenericTSVAnnotationOptions(true, false,
 						options.getPrefixDbNsfp(), MultipleMatchBehaviour.BEST_ONLY, new File(options.getPathDbNsfp()),
 						GenericTSVAnnotationTarget.VARIANT, true, options.getDbNsfpColContig(),
-						options.getDbNsfpColPosition(), options.getDbNsfpColPosition(), 3, 4, true,
+						options.getDbNsfpColPosition(), options.getDbNsfpColPosition(), 3, 4, false, 
 						options.getColumnsDbNsfp(), descriptions);
 				dbNsfpAnnotator = new GenericTSVAnnotationDriver(options.getPathFASTARef(), dbNsfpAnnotationOptions);
 				dbNsfpAnnotator.constructVCFHeaderExtender().addHeaders(vcfHeader);

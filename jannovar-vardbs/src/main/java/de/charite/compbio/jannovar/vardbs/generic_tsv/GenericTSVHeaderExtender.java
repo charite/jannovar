@@ -52,7 +52,11 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 			final VCFHeaderLineCount count;
 			if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0
 					&& options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
-				count = VCFHeaderLineCount.R;
+				if (tsvOptions.isRefAlleleAnnotated()) {
+					count = VCFHeaderLineCount.R;
+				} else {
+					count = VCFHeaderLineCount.A;
+				}
 			} else {
 				count = VCFHeaderLineCount.UNBOUNDED;
 			}
