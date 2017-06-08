@@ -17,6 +17,10 @@
 * Adding experimental support for annotating with VCF files
 * Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 
+### jannovar-filter
+
+* Fixing bug that ignored variant filters for recessive annotation
+
 ## v0.22
 
 ### jannovar-htsjdk

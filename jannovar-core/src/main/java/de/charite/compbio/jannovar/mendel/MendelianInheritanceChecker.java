@@ -57,21 +57,36 @@ public final class MendelianInheritanceChecker {
 	 * Perform checking for compatible mode of inheritance
 	 * 
 	 * @param calls
-	 *            {@link Collection} of {@link GenotypeCalls} objects to perform the mode of inheritance check for
+	 *            {@link Collection} of {@link GenotypeCalls} objects to perform the mode of inheritance check for in
+	 *            case of non-recessive mode of inheritance
+	 * @param recessiveCalls
+	 * 			  {@link Collection} of {@link GenotypeCalls} objects to perform the mode of
+	 *            inheritance check for in case of recessive mode of inheritance
 	 * @return {@link Map} that, for each {@link ModeOfInheritance}, contains the {@link Collection} of compatible
 	 *         {@link GenotypeCalls} from <code>list</code>
 	 * @throws IncompatiblePedigreeException
 	 *             if the individuals in <code>calls</code> do not fit to the pedigree
 	 */
 	public ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkMendelianInheritance(
-			Collection<GenotypeCalls> calls) throws IncompatiblePedigreeException {
+			Collection<GenotypeCalls> calls, Collection<GenotypeCalls> recessiveCalls) throws IncompatiblePedigreeException {
 		ImmutableMap.Builder<ModeOfInheritance, ImmutableList<GenotypeCalls>> builder = new ImmutableMap.Builder<>();
-		for (ModeOfInheritance mode : ModeOfInheritance.values())
-			if (mode != ModeOfInheritance.ANY)
-				builder.put(mode, filterCompatibleRecords(calls, mode));
-			else
+		for (ModeOfInheritance mode : ModeOfInheritance.values()) {
+			if (mode == ModeOfInheritance.ANY) {
 				builder.put(mode, ImmutableList.copyOf(calls));
+			} else {
+				if (mode == ModeOfInheritance.AUTOSOMAL_RECESSIVE || mode == ModeOfInheritance.X_RECESSIVE) {
+					builder.put(mode, filterCompatibleRecords(recessiveCalls, mode));
+				} else {
+					builder.put(mode, filterCompatibleRecords(calls, mode));
+				}
+			}
+		}
 		return builder.build();
+	}
+
+	public ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkMendelianInheritance(
+			Collection<GenotypeCalls> calls) throws IncompatiblePedigreeException {
+		return checkMendelianInheritance(calls, calls);
 	}
 
 
@@ -80,20 +95,34 @@ public final class MendelianInheritanceChecker {
 	 * 
 	 * @param calls
 	 *            {@link Collection} of {@link GenotypeCalls} objects to perform the mode of inheritance check for
+	 * @param compHetRecessiveCalls
+	 * 			  {@link Collection} of {@link GenotypeCalls} objects to perform the mode of
+	 *            inheritance check for in case of compound het. recessive mode of inheritance
 	 * @return {@link Map} that, for each {@link SubModeOfInheritance}, contains the {@link Collection} of compatible
 	 *         {@link GenotypeCalls} from <code>list</code>
 	 * @throws IncompatiblePedigreeException
 	 *             if the individuals in <code>calls</code> do not fit to the pedigree
 	 */
 	public ImmutableMap<SubModeOfInheritance, ImmutableList<GenotypeCalls>> checkMendelianInheritanceSub(
-			Collection<GenotypeCalls> calls) throws IncompatiblePedigreeException {
+			Collection<GenotypeCalls> calls, Collection<GenotypeCalls> compHetRecessiveCalls) throws IncompatiblePedigreeException {
 		ImmutableMap.Builder<SubModeOfInheritance, ImmutableList<GenotypeCalls>> builder = new ImmutableMap.Builder<>();
-		for (SubModeOfInheritance mode : SubModeOfInheritance.values())
-			if (mode != SubModeOfInheritance.ANY)
-				builder.put(mode, filterCompatibleRecordsSub(calls, mode));
-			else
+		for (SubModeOfInheritance mode : SubModeOfInheritance.values()) {
+			if (mode == SubModeOfInheritance.ANY) {
 				builder.put(mode, ImmutableList.copyOf(calls));
+			} else {
+				if (mode == SubModeOfInheritance.AUTOSOMAL_RECESSIVE_COMP_HET || mode == SubModeOfInheritance.X_RECESSIVE_COMP_HET) {
+					builder.put(mode, filterCompatibleRecordsSub(compHetRecessiveCalls, mode));
+				} else {
+					builder.put(mode, filterCompatibleRecordsSub(calls, mode));
+				}
+			}
+		}
 		return builder.build();
+	}
+
+	public ImmutableMap<SubModeOfInheritance, ImmutableList<GenotypeCalls>> checkMendelianInheritanceSub(
+			Collection<GenotypeCalls> calls) throws IncompatiblePedigreeException {
+		return checkMendelianInheritanceSub(calls, calls);
 	}
 
 	/**
