@@ -305,7 +305,7 @@ public class VariantContextMendelianAnnotator {
 							GT_FILTERS, GT_FILTERS_HOM_REF))
 						isFiltered = true;
 				} else { // hom-alt or two overlapping hets, treated the same
-							// for filtration
+						 // for filtration
 					if (interpretGenotypeFilters && isFiltered(gtFilters,
 							GT_FILTERS, GT_FILTERS_HOM_ALT))
 						isFiltered = true;

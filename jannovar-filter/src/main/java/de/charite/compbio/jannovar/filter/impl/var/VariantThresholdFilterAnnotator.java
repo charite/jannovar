@@ -1,25 +1,24 @@
 package de.charite.compbio.jannovar.filter.impl.var;
 
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
+import htsjdk.variant.variantcontext.Genotype;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.VariantContextBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
-import htsjdk.variant.variantcontext.Genotype;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
-
 /**
- * Class for pushing genotype-based filters to the variant level
+ * Class for pushing genotype-based filters to the variant level, also consider population
+ * frequencies.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class VariantFilterAnnotator {
+public class VariantThresholdFilterAnnotator {
 
 	/** Configuration for threshold-based filter */
 	private final ThresholdFilterOptions options;
@@ -30,30 +29,28 @@ public class VariantFilterAnnotator {
 	 */
 	private final ImmutableList<String> affecteds;
 
-	public VariantFilterAnnotator(ThresholdFilterOptions options, ImmutableList<String> affecteds) {
+	public VariantThresholdFilterAnnotator(ThresholdFilterOptions options,
+			List<String> affecteds) {
 		this.options = options;
-		this.affecteds = affecteds;
+		this.affecteds = ImmutableList.copyOf(affecteds);
 	}
 
 	/**
 	 * Annotate FILTER of <code>vc</code> with genotype-based filters and based on the list of
 	 * affected samples
 	 * 
-	 * @param builder
-	 *            {@link VariantContextBuilder} to create new variant context for
-	 * @param vc
-	 *            {@link VariantContext} to annotate
-	 * @param gts
-	 *            Updated genotypes with filter annotation
+	 * @param builder {@link VariantContextBuilder} to create new variant context for
+	 * @param vc {@link VariantContext} to annotate
 	 * @return reference to <code>builder</code> after the update
 	 */
-	public VariantContextBuilder annotateVariant(VariantContextBuilder builder, VariantContext vc,
-			List<Genotype> gts) {
+	public VariantContext annotateVariantContext(VariantContext vc) {
+		VariantContextBuilder builder = new VariantContextBuilder(vc);
+		
 		// If all genotype calls are filtered out then add filter to variant-level FILTER column
 		HashSet<String> filters = new HashSet<String>(vc.getFilters());
 		if (!affecteds.isEmpty()) {
 			HashSet<String> unfilteredAffecteds = new HashSet<>(affecteds);
-			for (Genotype gt : gts)
+			for (Genotype gt : vc.getGenotypes())
 				if (affecteds.contains(gt.getSampleName()) && gt.isFiltered())
 					unfilteredAffecteds.remove(gt.getSampleName());
 			if (unfilteredAffecteds.isEmpty())
@@ -101,7 +98,7 @@ public class VariantFilterAnnotator {
 		}
 
 		builder.filters(filters);
-		return builder;
+		return builder.make();
 	}
 
 }

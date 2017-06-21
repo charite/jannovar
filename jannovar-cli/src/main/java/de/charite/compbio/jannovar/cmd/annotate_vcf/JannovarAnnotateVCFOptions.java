@@ -159,6 +159,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	 */
 	private boolean inheritanceAnnoUseFilters;
 
+	/** Whether or not to enable the "parent GT is filtered" GT filter, default is true. */
+	private boolean useParentGtIsFiltered;
+
 	/** Maximal support of alternative allele in parent for de novo variant. */
 	private Integer threshDeNovoParentAd2;
 
@@ -189,8 +192,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/**
 	 * Setup {@link ArgumentParser}
 	 * 
-	 * @param subParsers
-	 *            {@link Subparsers} to setup
+	 * @param subParsers {@link Subparsers} to setup
 	 */
 	public static void setupParser(Subparsers subParsers) {
 		BiFunction<String[], Namespace, AnnotateVCFCommand> handler = (argv, args) -> {
@@ -213,8 +215,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file")
 				.required(true);
 
-		ArgumentGroup annotationGroup = subParser
-				.addArgumentGroup("Annotation Arguments (optional)");
+		ArgumentGroup annotationGroup =
+				subParser.addArgumentGroup("Annotation Arguments (optional)");
 		requiredGroup.addArgument("--interval").help("Interval with regions to annotate (optional)")
 				.required(false).setDefault("");
 		annotationGroup.addArgument("--pedigree-file")
@@ -260,8 +262,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.help("Use filters in inheritance mode annotation").setDefault(false)
 				.action(Arguments.storeTrue());
 
-		ArgumentGroup dbNsfpAnnotationGroup = subParser
-				.addArgumentGroup("Annotation with dbNSFP (experimental; optional)");
+		ArgumentGroup dbNsfpAnnotationGroup =
+				subParser.addArgumentGroup("Annotation with dbNSFP (experimental; optional)");
 		dbNsfpAnnotationGroup.addArgument("--dbnsfp-tsv").help("Patht to dbNSFP TSV file")
 				.required(false);
 		dbNsfpAnnotationGroup.addArgument("--dbnsfp-col-contig").type(Integer.class)
@@ -273,22 +275,22 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		dbNsfpAnnotationGroup.addArgument("--dbnsfp-columns")
 				.help("Columns from dbDSFP file to use for annotation").action(Arguments.append());
 
-		ArgumentGroup bedAnnotationGroup = subParser
-				.addArgumentGroup("BED-based Annotation (experimental; optional)");
+		ArgumentGroup bedAnnotationGroup =
+				subParser.addArgumentGroup("BED-based Annotation (experimental; optional)");
 		bedAnnotationGroup.addArgument("--bed-annotation")
 				.help("Add BED file to use for annotating. The value must be of the format "
 						+ "\"pathToBed:infoField:description[:colNo]\".")
 				.action(Arguments.append());
 
-		ArgumentGroup vcfAnnotationGroup = subParser
-				.addArgumentGroup("Generic VCF-based Annotation (experimental; optional)");
+		ArgumentGroup vcfAnnotationGroup =
+				subParser.addArgumentGroup("Generic VCF-based Annotation (experimental; optional)");
 		vcfAnnotationGroup.addArgument("--vcf-annotation")
 				.help("Add VCF file to use for annotating. The value must be of the format "
 						+ "\"pathToVfFile:prefix:field1,field2,field3\".")
 				.action(Arguments.append());
 
-		ArgumentGroup tsvAnnotationGroup = subParser
-				.addArgumentGroup("TSV-based Annotation (experimental; optional)");
+		ArgumentGroup tsvAnnotationGroup =
+				subParser.addArgumentGroup("TSV-based Annotation (experimental; optional)");
 		tsvAnnotationGroup.addArgument("--tsv-annotation")
 				.help("Add TSV file to use for annotating. The value must be of the format "
 						+ "\"pathToTsvFile:oneBasedOffset:colContig:colStart:colEnd:colRef(or=0):"
@@ -296,8 +298,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 						+ "accumulationStrategy\".")
 				.action(Arguments.append());
 
-		ArgumentGroup threshFilterGroup = subParser
-				.addArgumentGroup("Threshold-filter related arguments");
+		ArgumentGroup threshFilterGroup =
+				subParser.addArgumentGroup("Threshold-filter related arguments");
 		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters")
 				.setDefault(false).action(Arguments.storeTrue());
 		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
@@ -362,6 +364,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		optionalGroup.addArgument("--3-letter-amino-acids")
 				.help("Enable usage of 3 letter amino acid codes").setDefault(false)
 				.action(Arguments.storeTrue());
+		optionalGroup.addArgument("--disable-parent-gt-is-filtered").setDefault(true)
+				.dest("use_parent_gt_is_filtered").action(Arguments.storeFalse());
 
 		JannovarBaseOptions.setupParser(subParser);
 	}
@@ -393,6 +397,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathCosmic = args.getString("cosmic_vcf");
 		prefixCosmic = args.getString("cosmic_prefix");
 		inheritanceAnnoUseFilters = args.getBoolean("inheritance_anno_use_filters");
+		useParentGtIsFiltered = args.getBoolean("use_parent_gt_is_filtered");
 
 		dbNsfpColContig = args.getInt("dbnsfp_col_contig");
 		dbNsfpColPosition = args.getInt("dbnsfp_col_position");
@@ -836,6 +841,14 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.vcfAnnotationOptions = vcfAnnotationOptions;
 	}
 
+	public boolean isUseParentGtIsFiltered() {
+		return useParentGtIsFiltered;
+	}
+
+	public void setUseParentGtIsFiltered(boolean useParentGtIsFiltered) {
+		this.useParentGtIsFiltered = useParentGtIsFiltered;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF="
@@ -862,10 +875,11 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
 				+ ", offTargetFilterIntronicSpliceIsOffTarget="
 				+ offTargetFilterIntronicSpliceIsOffTarget + ", inheritanceAnnoUseFilters="
-				+ inheritanceAnnoUseFilters + ", threshDeNovoParentAd2=" + threshDeNovoParentAd2
-				+ ", bedAnnotationOptions=" + bedAnnotationOptions + ", dbNsfpColContig="
-				+ dbNsfpColContig + ", dbNsfpColPosition=" + dbNsfpColPosition + ", prefixDbNsfp="
-				+ prefixDbNsfp + ", pathDbNsfp=" + pathDbNsfp + ", columnsDbNsfp=" + columnsDbNsfp
+				+ inheritanceAnnoUseFilters + ", useParentGtIsFiltered=" + useParentGtIsFiltered
+				+ ", threshDeNovoParentAd2=" + threshDeNovoParentAd2 + ", bedAnnotationOptions="
+				+ bedAnnotationOptions + ", dbNsfpColContig=" + dbNsfpColContig
+				+ ", dbNsfpColPosition=" + dbNsfpColPosition + ", prefixDbNsfp=" + prefixDbNsfp
+				+ ", pathDbNsfp=" + pathDbNsfp + ", columnsDbNsfp=" + columnsDbNsfp
 				+ ", tsvAnnotationOptions=" + tsvAnnotationOptions + ", vcfAnnotationOptions="
 				+ vcfAnnotationOptions + "]";
 	}
@@ -882,8 +896,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		 * The value must have the format: <code>pathToBed:infoField:description[:colNo]</code>
 		 * </p>
 		 * 
-		 * @param strValue
-		 *            String to parse from
+		 * @param strValue String to parse from
 		 * @return Constructed {@link BedAnnotationOptions} from the given string value.
 		 */
 		public static BedAnnotationOptions parseFrom(String strValue) {

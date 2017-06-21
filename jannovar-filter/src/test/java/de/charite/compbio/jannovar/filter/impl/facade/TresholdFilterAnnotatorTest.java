@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
+import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
@@ -20,12 +20,12 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
  */
 public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
-	ThresholdFilterAnnotator annotator;
+	GenotypeThresholdFilterAnnotator annotator;
 
 	@Before
 	public void setUp() {
 		ArrayList<String> affected = Lists.newArrayList("individual");
-		annotator = new ThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions(), affected);
+		annotator = new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions(), affected);
 	}
 
 	/**

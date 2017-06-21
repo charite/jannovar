@@ -11,8 +11,10 @@ import htsjdk.variant.variantcontext.GenotypeBuilder;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Set;
  * </p>
  *
  * <p>
- * Note that this filter has to be applied <b>after</b> {@link ThresholdFilterAnnotator} because the
+ * Note that this filter has to be applied <b>after</b> {@link GenotypeThresholdFilterAnnotator} because the
  * de novo filtration settings would otherwise conflict with the "all affected individuals filtered"
  * variant filter.
  * </p>
@@ -47,8 +49,7 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Annotate VariantContext with the pedigree-based filters
 	 *
-	 * @param vc
-	 *            the {@link VariantContext} to annotate
+	 * @param vc the {@link VariantContext} to annotate
 	 * @return copy of <code>vc</code> with applied annotations
 	 */
 	public VariantContext annotateVariantContext(VariantContext vc) {
@@ -61,10 +62,13 @@ public class PedigreeFilterAnnotator {
 	private List<Genotype> annotateGenotypes(VariantContextBuilder builder, VariantContext vc) {
 		ArrayList<Genotype> gts = new ArrayList<>();
 
+		// First, collect extra FT entries without "is parent filtered"
+		Map<String, List<String>> extraFts = new HashMap<>();
 		for (Genotype gt : vc.getGenotypes()) {
-			GenotypeBuilder gtBuilder = new GenotypeBuilder(gt);
+			// Enforce registration of samples in extraFts.
+			extraFts.put(gt.getSampleName(), new ArrayList<>());
 
-			List<String> extraFts = new ArrayList<>();
+			GenotypeBuilder gtBuilder = new GenotypeBuilder(gt);
 
 			// Get de novo allele, null if not de novo
 			final Allele deNovoAllele = getDeNovoAllele(vc, gt.getSampleName());
@@ -72,33 +76,85 @@ public class PedigreeFilterAnnotator {
 					(deNovoAllele != null) ? "Y" : "N");
 
 			if (deNovoAllele != null) {
+				final List<String> sampleFts = extraFts.get(gt.getSampleName());
+
 				// Add flag for support in parent above threshold
 				if (deNovoGtSharedWithSibling(vc, gt.getSampleName(), deNovoAllele)) {
-					extraFts.add(PedigreeFilterHeaderExtender.FILTER_GT_DE_NOVO_IN_SIBLING);
+					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_DE_NOVO_IN_SIBLING);
 				}
 
 				// Add flag with support in parents
-				final int maxCountInParent = getMaxCountInParents(vc, gt.getSampleName(),
-						deNovoAllele);
+				final int maxCountInParent =
+						getMaxCountInParents(vc, gt.getSampleName(), deNovoAllele);
 				if (maxCountInParent > options.getDeNovoMaxParentAd2()) {
-					extraFts.add(PedigreeFilterHeaderExtender.FILTER_GT_DE_NOVO_PARENT_AD2);
+					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_DE_NOVO_PARENT_AD2);
 				}
 			}
 
-			if (!extraFts.isEmpty()) {
+		}
+
+		// Then, add "is parent filtered" if enabled.
+		if (options.isApplyParentGtFilteredFilters()) {
+			for (Genotype gt : vc.getGenotypes()) {
+				final int count = filteredParentGtCount(vc, extraFts, gt.getSampleName());
+				final List<String> sampleFts = extraFts.get(gt.getSampleName());
+				if (count == 1) {
+					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_ONE_PARENT_FILTERED);
+				} else if (count == 2) {
+					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_BOTH_PARENTS_FILTERED);
+				}
+			}
+		}
+
+		// Build final Genotype objects, also incorporating existing genotype filters.
+		for (Genotype gt : vc.getGenotypes()) {
+			GenotypeBuilder gtBuilder = new GenotypeBuilder(gt);
+			if (!extraFts.get(gt.getSampleName()).isEmpty()) {
 				if (gt.isFiltered()) {
-					extraFts.add(0, gt.getFilters());
+					extraFts.get(gt.getSampleName()).add(0, gt.getFilters());
 				}
-				gtBuilder.filters(extraFts);
+				gtBuilder.filters(extraFts.get(gt.getSampleName()));
 			}
-
 			gts.add(gtBuilder.make());
 		}
 
 		return gts;
 	}
 
-	// TODO(holtgrewe): right now, only works for GATK
+	/**
+	 * Return number of filtered genotypes in parents of {@code sampleName}.
+	 *
+	 * @param vc {@link VariantContext} with the variant.
+	 * @param extraFts Additional filters to add for each sample name.
+	 * @param sampleName The name of the child to consider.
+	 * @return The number of parents with filtered VC.
+	 */
+	private int filteredParentGtCount(VariantContext vc, Map<String, List<String>> extraFts,
+			String sampleName) {
+		final Person person = this.pedigree.getNameToMember().get(sampleName).getPerson();
+
+		final int valFather;
+		if (person.getFather() != null) {
+			final String fatherName = person.getFather().getName();
+			final Genotype gtFather = vc.getGenotype(fatherName);
+			valFather = (gtFather.isFiltered() || !extraFts.get(fatherName).isEmpty()) ? 1 : 0;
+		} else {
+			valFather = 0;
+		}
+
+		final int valMother;
+		if (person.getMother() != null) {
+			final String motherName = person.getMother().getName();
+			final Genotype gtMother = vc.getGenotype(motherName);
+			valMother = (gtMother.isFiltered() || !extraFts.get(motherName).isEmpty()) ? 1 : 0;
+		} else {
+			valMother = 0;
+		}
+
+		return valFather + valMother;
+	}
+
+	// TODO(holtgrewe): right now only works for GATK
 	private int getMaxCountInParents(VariantContext vc, String sampleName, Allele deNovoAllele) {
 		final int alleleIdx = vc.getAlleleIndex(deNovoAllele);
 
@@ -111,7 +167,7 @@ public class PedigreeFilterAnnotator {
 
 		int result = 0;
 
-		for (int[] ad : new int[][] { adFather, adMother }) {
+		for (int[] ad : new int[][] {adFather, adMother}) {
 			if (ad != null && ad.length > alleleIdx) {
 				result = Math.max(result, ad[alleleIdx]);
 			}
@@ -126,8 +182,8 @@ public class PedigreeFilterAnnotator {
 		final Person index = this.pedigree.getNameToMember().get(sampleName).getPerson();
 
 		final PedigreeQueryDecorator pedigreeDecorator = new PedigreeQueryDecorator(pedigree);
-		final ImmutableMap<Person, ImmutableList<Person>> siblings = pedigreeDecorator
-				.buildSiblings();
+		final ImmutableMap<Person, ImmutableList<Person>> siblings =
+				pedigreeDecorator.buildSiblings();
 		for (Person sibling : siblings.get(index)) {
 			final Genotype gtSibling = vc.getGenotype(sibling.getName());
 			if (gtSibling.countAllele(deNovoAllele) != 0) {
@@ -141,23 +197,22 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Get de novo allele in <code>sampleName</code> or <code>null</code> if there is none
 	 *
-	 * @param vc
-	 *            {@link VarianContext} to query
-	 * @param sampleName
-	 *            Name of the sample
+	 * @param vc {@link VarianContext} to query
+	 * @param sampleName Name of the sample
 	 * @return De novo allele
 	 */
 	private Allele getDeNovoAllele(VariantContext vc, String sampleName) {
 		final Person person = this.pedigree.getNameToMember().get(sampleName).getPerson();
-		if (person.getFather() == null || person.getMother() == null)
-			return null; // cannot make any judgement
+		if (person.getFather() == null || person.getMother() == null) return null; // cannot make
+																					// any judgement
 		final Genotype gtPerson = vc.getGenotype(sampleName);
 		final Genotype gtFather = vc.getGenotype(person.getFather().getName());
 		final Genotype gtMother = vc.getGenotype(person.getMother().getName());
-		if (gtPerson.isNoCall() || gtFather.isNoCall() || gtMother.isNoCall())
-			return null; // cannot make any judgement
-		if (!gtPerson.isHet())
-			return null; // impossible or too unlikely
+		if (gtPerson.isNoCall() || gtFather.isNoCall() || gtMother.isNoCall()) return null; // cannot
+																							// make
+																							// any
+																							// judgement
+		if (!gtPerson.isHet()) return null; // impossible or too unlikely
 		// Count non-reference alleles not yet seen in parents. Should be exactly one.
 		final Set<Allele> personAlleles = new HashSet<>(gtPerson.getAlleles());
 		personAlleles.remove(vc.getReference());

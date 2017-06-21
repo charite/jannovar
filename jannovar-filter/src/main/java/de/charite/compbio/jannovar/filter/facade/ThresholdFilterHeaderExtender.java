@@ -31,6 +31,11 @@ public class ThresholdFilterHeaderExtender {
 	/** Minimal alternative allele fraction for hom ref */
 	public static String FILTER_GT_MAX_AAF_HOM_REF = "MaxAafHomRef";
 
+	/** One parent was filtered out. */
+	public static String FILTER_GT_ONE_PARENT_FILTERED = "OneParentGtFiltered";
+	/** Both parents were filtered out. */
+	public static String FILTER_GT_BOTH_PARENTS_FILTERED = "BothParentsGtFiltered";
+
 	// Variant-wise filter strings
 
 	/** All affected individual's genotypes are filtered */

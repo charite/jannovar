@@ -10,9 +10,10 @@ import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions.B
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.PedigreeFilterOptions;
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
+import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
+import de.charite.compbio.jannovar.filter.impl.var.VariantThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
 import de.charite.compbio.jannovar.htsjdk.VariantContextWriterConstructionHelper;
 import de.charite.compbio.jannovar.htsjdk.VariantEffectHeaderExtender;
@@ -224,8 +225,21 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(cosmicAnno::annotateVariantContext);
 			}
 
+			// Add step for annotating with variant effect
+			VariantEffectHeaderExtender extender = new VariantEffectHeaderExtender();
+			extender.addHeaders(vcfHeader);
+			VariantContextAnnotator variantEffectAnnotator =
+					new VariantContextAnnotator(refDict, chromosomeMap,
+							new VariantContextAnnotator.Options(!options.isShowAll(),
+									options.isEscapeAnnField(), options.isNt3PrimeShifting(),
+									options.isOffTargetFilterEnabled(),
+									options.isOffTargetFilterUtrIsOffTarget(),
+									options.isOffTargetFilterIntronicSpliceIsOffTarget()));
+			stream = stream.map(variantEffectAnnotator::annotateVariantContext);
+
 			// If configured, use threshold-based annotation (extend header to
 			// use for writing out)
+			ArrayList<String> affecteds = new ArrayList<>();
 			if (options.useThresholdFilters) {
 				// Build options object for threshold filter
 				ThresholdFilterOptions thresholdFilterOptions = new ThresholdFilterOptions(
@@ -241,7 +255,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				// Build list of affecteds; take from pedigree file if given.
 				// Otherwise, assume one single individual is always affected and otherwise warn
 				// about missing pedigree.
-				ArrayList<String> affecteds = new ArrayList<>();
 				if (options.pathPedFile == null) {
 					if (vcfHeader.getNGenotypeSamples() == 1) {
 						System.err.println(
@@ -271,16 +284,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 										+ "only genotype FT");
 					}
 				}
-				ThresholdFilterAnnotator thresholdFilterAnno = new ThresholdFilterAnnotator(thresholdFilterOptions,
-						affecteds);
-				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
+				GenotypeThresholdFilterAnnotator gtThresholdFilterAnno =
+						new GenotypeThresholdFilterAnnotator(thresholdFilterOptions);
+				stream = stream.map(gtThresholdFilterAnno::annotateVariantContext);
 
 				// When configured to use advanced pedigree filters (must come
 				// after threshold-based filtration)
 				if (options.useAdvancedPedigreeFilters) {
 					// Build options object from configuration and extend headers
 					PedigreeFilterOptions pedFilterOptions = new PedigreeFilterOptions(
-							options.getThreshDeNovoParentAd2());
+							options.getThreshDeNovoParentAd2(), options.isUseParentGtIsFiltered());
 					new PedigreeFilterHeaderExtender(pedFilterOptions).addHeaders(vcfHeader);
 
 					// Load pedigree
@@ -299,6 +312,12 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					PedigreeFilterAnnotator pedFilterAnnotator = new PedigreeFilterAnnotator(pedFilterOptions,
 							pedigree);
 					stream = stream.map(pedFilterAnnotator::annotateVariantContext);
+				}
+
+				if (options.useThresholdFilters) {
+					VariantThresholdFilterAnnotator varThresholdFilterAnno =
+							new VariantThresholdFilterAnnotator(thresholdFilterOptions, affecteds);
+					stream = stream.map(varThresholdFilterAnno::annotateVariantContext);
 				}
 			}
 
@@ -347,16 +366,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				annotator.constructVCFHeaderExtender().addHeaders(vcfHeader);
 				stream = stream.map(annotator::annotateVariantContext);
 			}
-
-			// Add step for annotating with variant effect
-			VariantEffectHeaderExtender extender = new VariantEffectHeaderExtender();
-			extender.addHeaders(vcfHeader);
-			VariantContextAnnotator annotator = new VariantContextAnnotator(refDict, chromosomeMap,
-					new VariantContextAnnotator.Options(!options.isShowAll(), options.isEscapeAnnField(),
-							options.isNt3PrimeShifting(), options.isOffTargetFilterEnabled(),
-							options.isOffTargetFilterUtrIsOffTarget(),
-							options.isOffTargetFilterIntronicSpliceIsOffTarget()));
-			stream = stream.map(annotator::annotateVariantContext);
 
 			// Extend header with INHERITANCE filter
 			if (options.pathPedFile != null || options.annotateAsSingletonPedigree) {
@@ -413,11 +422,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	/**
 	 * Load pedigree from file given in configuration or construct singleton pedigree
 	 * 
-	 * @param vcfHeader
-	 *            {@link VCFHeader}, for checking compatibility and getting sample name in case of
-	 *            singleton pedigree construction
-	 * @throws PedParseException
-	 *             in the case of problems with parsing pedigrees
+	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in
+	 *        case of singleton pedigree construction
+	 * @throws PedParseException in the case of problems with parsing pedigrees
 	 */
 	private Pedigree loadPedigree(VCFHeader vcfHeader)
 			throws PedParseException, IOException, IncompatiblePedigreeException {
@@ -430,8 +437,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				throw new IncompatiblePedigreeException(
 						"VCF file does not have exactly one sample but required for singleton pedigree construction");
 			final String sampleName = vcfHeader.getSampleNamesInOrder().get(0);
-			final PedPerson pedPerson = new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN, Disease.AFFECTED);
-			final PedFileContents pedContents = new PedFileContents(ImmutableList.of(), ImmutableList.of(pedPerson));
+			final PedPerson pedPerson =
+					new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN, Disease.AFFECTED);
+			final PedFileContents pedContents =
+					new PedFileContents(ImmutableList.of(), ImmutableList.of(pedPerson));
 			return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
 		}
 	}
@@ -439,25 +448,22 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	/**
 	 * Construct the mendelian inheritance annotation processors
 	 * 
-	 * @param writer
-	 *            the place to put put the VariantContext to after filtration
-	 * @param vcfHeader
-	 *            {@link VCFHeader}, for checking compatibility and getting sample name in case of
-	 *            singleton pedigree construction
-	 * @throws IOException
-	 *             in case of problems with opening the pedigree file
-	 * @throws PedParseException
-	 *             in the case of problems with parsing pedigrees
-	 * @throws IncompatiblePedigreeException
-	 *             If the pedigree is incompatible with the VCF file
+	 * @param writer the place to put put the VariantContext to after filtration
+	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in
+	 *        case of singleton pedigree construction
+	 * @throws IOException in case of problems with opening the pedigree file
+	 * @throws PedParseException in the case of problems with parsing pedigrees
+	 * @throws IncompatiblePedigreeException If the pedigree is incompatible with the VCF file
 	 */
-	private VariantContextProcessor buildMendelianProcessors(VariantContextWriter writer, VCFHeader vcfHeader)
+	private VariantContextProcessor buildMendelianProcessors(VariantContextWriter writer,
+			VCFHeader vcfHeader)
 			throws PedParseException, IOException, IncompatiblePedigreeException {
 		if (options.pathPedFile != null || options.annotateAsSingletonPedigree) {
 			final Pedigree pedigree = loadPedigree(vcfHeader);
 			checkPedigreeCompatibility(pedigree, vcfHeader);
-			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
-					pedigree, jannovarData, vc -> writer.add(vc), options.isInheritanceAnnoUseFilters());
+			final GeneWiseMendelianAnnotationProcessor mendelProcessor =
+					new GeneWiseMendelianAnnotationProcessor(pedigree, jannovarData,
+							vc -> writer.add(vc), options.isInheritanceAnnoUseFilters());
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
 			return new ConsumerProcessor(vc -> writer.add(vc));
@@ -467,21 +473,17 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	/**
 	 * Check pedigree for compatibility
 	 * 
-	 * @param pedigree
-	 *            {@link Pedigree} to check for compatibility
-	 * @param vcfHeader
-	 *            {@link VCFHeader} to check for compatibility
-	 * @throws IncompatiblePedigreeException
-	 *             if the VCF file is not compatible with the pedigree
+	 * @param pedigree {@link Pedigree} to check for compatibility
+	 * @param vcfHeader {@link VCFHeader} to check for compatibility
+	 * @throws IncompatiblePedigreeException if the VCF file is not compatible with the pedigree
 	 */
 	private void checkPedigreeCompatibility(Pedigree pedigree, VCFHeader vcfHeader)
 			throws IncompatiblePedigreeException {
-		List<String> missing = vcfHeader.getGenotypeSamples().stream().filter(x -> !pedigree.getNames().contains(x))
-				.collect(Collectors.toList());
-		if (!missing.isEmpty())
-			throw new IncompatiblePedigreeException(
-					"The VCF file has the following sample names not present in Pedigree: "
-							+ Joiner.on(", ").join(missing));
+		List<String> missing = vcfHeader.getGenotypeSamples().stream()
+				.filter(x -> !pedigree.getNames().contains(x)).collect(Collectors.toList());
+		if (!missing.isEmpty()) throw new IncompatiblePedigreeException(
+				"The VCF file has the following sample names not present in Pedigree: "
+						+ Joiner.on(", ").join(missing));
 	}
 
 }
