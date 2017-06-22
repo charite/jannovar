@@ -1,17 +1,11 @@
 package de.charite.compbio.jannovar.filter.impl.facade;
 
-import java.util.ArrayList;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test for ThresholdFilterAnnotator
@@ -24,8 +18,8 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
 	@Before
 	public void setUp() {
-		ArrayList<String> affected = Lists.newArrayList("individual");
-		annotator = new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions(), affected);
+		annotator =
+				new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
 	}
 
 	/**
