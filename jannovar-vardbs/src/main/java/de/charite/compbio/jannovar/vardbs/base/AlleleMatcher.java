@@ -54,7 +54,7 @@ public final class AlleleMatcher {
 			int j = 1; // excludes reference allele
 			for (VariantDescription dbVar : dbVars) {
 				if (dbVar.equals(obsVar))
-					result.add(new GenotypeMatch(i, j, obsVC, dbVC));
+					result.add(new GenotypeMatch(i, j, obsVC, dbVC, true));
 				j += 1;
 			}
 
@@ -88,8 +88,11 @@ public final class AlleleMatcher {
 		for (VariantDescription obsVar : obsVars) {
 			int j = 1; // excludes reference allele
 			for (VariantDescription dbVar : dbVars) {
-				if (dbVar.overlapsWith(obsVar))
-					result.add(new GenotypeMatch(i, j, obsVC, dbVC));
+				if (dbVar.equals(obsVar)) {
+					result.add(new GenotypeMatch(i, j, obsVC, dbVC, true));
+				} else if (dbVar.overlapsWith(obsVar)) {
+					result.add(new GenotypeMatch(i, j, obsVC, dbVC, false));
+				}
 				j += 1;
 			}
 

@@ -35,16 +35,23 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 	protected HashMap<Integer, AnnotatingRecord<VariantContext>> pickAnnotatingDBRecords(
 			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
 			HashMap<GenotypeMatch, AnnotatingRecord<VariantContext>> matchToRecord, boolean isMatch) {
-		// Pick best annotation for each alternative allele
+		// Pick annotation for each alternative allele.
 		//
-		// TODO(holtgrewe): Implement better accumulation strategy, compare to handling TSV
+		// Note that no smart allele picking has been implemented. Rather, the one from the first
+		// record is returned. In case of {@code !isMatch} (overlaps) and there is a match, this
+		// will be the first and thus used for annotation.
+		//
+		// TODO(holtgrewe): Implement better accumulation strategy? compare to handling TSV
 		HashMap<Integer, AnnotatingRecord<VariantContext>> annotatingRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
 			final int alleleNo = entry.getKey();
 			for (GenotypeMatch m : entry.getValue()) {
-				if (!annotatingRecord.containsKey(alleleNo)) {
+				// Select first or match. 
+				if (!annotatingRecord.containsKey(alleleNo) || m.isMatch()) {
 					annotatingRecord.put(alleleNo, matchToRecord.get(m));
-					break;
+					if (m.isMatch()) { // stop looking forward in case of match
+						break;
+					}
 				}
 			}
 		}
