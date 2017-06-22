@@ -25,9 +25,9 @@ import java.util.Set;
  * </p>
  *
  * <p>
- * Note that this filter has to be applied <b>after</b> {@link GenotypeThresholdFilterAnnotator} because the
- * de novo filtration settings would otherwise conflict with the "all affected individuals filtered"
- * variant filter.
+ * Note that this filter has to be applied <b>after</b> {@link GenotypeThresholdFilterAnnotator}
+ * because the de novo filtration settings would otherwise conflict with the "all affected
+ * individuals filtered" variant filter.
  * </p>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
@@ -72,9 +72,6 @@ public class PedigreeFilterAnnotator {
 
 			// Get de novo allele, null if not de novo
 			final Allele deNovoAllele = getDeNovoAllele(vc, gt.getSampleName());
-			gtBuilder.attribute(PedigreeFilterHeaderExtender.FORMAT_GT_DE_NOVO,
-					(deNovoAllele != null) ? "Y" : "N");
-
 			if (deNovoAllele != null) {
 				final List<String> sampleFts = extraFts.get(gt.getSampleName());
 
@@ -115,10 +112,48 @@ public class PedigreeFilterAnnotator {
 				}
 				gtBuilder.filters(extraFts.get(gt.getSampleName()));
 			}
+
+			final Allele deNovoAllele = getDeNovoAllele(vc, gt.getSampleName());
+			gtBuilder.attribute(PedigreeFilterHeaderExtender.FORMAT_GT_DE_NOVO,
+					(deNovoAllele != null) ? "Y" : "N");
+
+			if (areParentsRef(vc, gt.getSampleName())) {
+				gtBuilder.attribute(PedigreeFilterHeaderExtender.FORMAT_PARENTS_REF, "Y");
+			}
+
 			gts.add(gtBuilder.make());
 		}
 
 		return gts;
+	}
+
+	/**
+	 * Query whether parents show reference allele.
+	 *
+	 * @param vc {@link VariantContext} to check.
+	 * @param sampleName Name of the sample to check.
+	 * @return {@code true} if the parents are reference homozygous, {@code false} otherwise.
+	 */
+	private boolean areParentsRef(VariantContext vc, String sampleName) {
+		final Person person = this.pedigree.getNameToMember().get(sampleName).getPerson();
+
+		if (person.getFather() == null) {
+			return false;
+		}
+		final Genotype gtFather = vc.getGenotype(person.getFather().getName());
+		if (gtFather == null || !gtFather.isHomRef()) {
+			return false;
+		}
+
+		if (person.getMother() == null) {
+			return false;
+		}
+		final Genotype gtMother = vc.getGenotype(person.getMother().getName());
+		if (gtMother == null || !gtMother.isHomRef()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -137,7 +172,8 @@ public class PedigreeFilterAnnotator {
 		if (person.getFather() != null) {
 			final String fatherName = person.getFather().getName();
 			final Genotype gtFather = vc.getGenotype(fatherName);
-			valFather = (gtFather.isFiltered() || !extraFts.get(fatherName).isEmpty()) ? 1 : 0;
+			valFather = (gtFather != null
+					&& (gtFather.isFiltered() || !extraFts.get(fatherName).isEmpty())) ? 1 : 0;
 		} else {
 			valFather = 0;
 		}
@@ -146,7 +182,8 @@ public class PedigreeFilterAnnotator {
 		if (person.getMother() != null) {
 			final String motherName = person.getMother().getName();
 			final Genotype gtMother = vc.getGenotype(motherName);
-			valMother = (gtMother.isFiltered() || !extraFts.get(motherName).isEmpty()) ? 1 : 0;
+			valMother = (gtMother != null
+					&& (gtMother.isFiltered() || !extraFts.get(motherName).isEmpty())) ? 1 : 0;
 		} else {
 			valMother = 0;
 		}

@@ -21,6 +21,9 @@ public class PedigreeFilterHeaderExtender {
 	/** Whether or not a genotype look de novo */
 	public static String FORMAT_GT_DE_NOVO = "DN";
 
+	/** Whether or not parents are reference */
+	public static String FORMAT_PARENTS_REF = "PR";
+
 	/** One parent was filtered out. */
 	public static String FILTER_GT_ONE_PARENT_FILTERED = "OneParentGtFiltered";
 
@@ -49,6 +52,9 @@ public class PedigreeFilterHeaderExtender {
 		header.addMetaDataLine(
 				new VCFFormatHeaderLine(FORMAT_GT_DE_NOVO, 1, VCFHeaderLineType.Character,
 						"Whether the variant looks de novo by genotype, one of {'Y', 'N'}."));
+		header.addMetaDataLine(
+				new VCFFormatHeaderLine(FORMAT_PARENTS_REF, 1, VCFHeaderLineType.Character,
+						"Whether both parent's genotype is reference, one of {'Y', 'N'}."));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_ONE_PARENT_FILTERED,
 				"One parent was filtered or no-call, filter child as well, important for inheritance "
