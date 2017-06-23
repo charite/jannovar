@@ -42,7 +42,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript
-	 *            {@link TranscriptInfo} to build the annotation for
+	 *            {@link TranscriptModel} to build the annotation for
 	 * @param change
 	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options

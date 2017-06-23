@@ -38,7 +38,7 @@ public final class VariantAnnotator {
 	/** {@link ReferenceDictionary} to use for genome information. */
 	final private ReferenceDictionary refDict;
 
-	/** {@link Chromosome}s with their {@link TranscriptInfo} objects. */
+	/** {@link Chromosome}s with their {@link TranscriptModel} objects. */
 	final private ImmutableMap<Integer, Chromosome> chromosomeMap;
 
 	/**

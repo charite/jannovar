@@ -10,11 +10,11 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
- * Tests for the TranscriptInfo class.
+ * Tests for the {@link TranscriptModel} class.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
-public class TranscriptInfoTest {
+public class TranscriptModelTest {
 
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();

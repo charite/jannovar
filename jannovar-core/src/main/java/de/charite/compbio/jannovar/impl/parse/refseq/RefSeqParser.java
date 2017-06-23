@@ -103,7 +103,7 @@ public class RefSeqParser implements TranscriptParser {
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
 		loadFASTA(builders, pathFASTA);
 
-		// Create final list of TranscriptInfos.
+		// Create final list of TranscriptModels.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
 		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
 			result.add(entry.getValue().build());

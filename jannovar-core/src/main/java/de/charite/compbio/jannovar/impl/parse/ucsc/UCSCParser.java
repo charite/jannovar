@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -160,15 +159,15 @@ public class UCSCParser implements TranscriptParser {
 						new Object[] { entry.getValue().getGeneID(), entry.getValue().getAccession() });
 				entry.getValue().getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entry.getValue().getGeneID());
 			}
-			TranscriptModel info = entry.getValue().build();
-			if (checkTranscriptInfo(info))
-				result.add(info);
+			TranscriptModel model = entry.getValue().build();
+			if (checkTranscriptModel(model))
+				result.add(model);
 		}
 		return result.build();
 	}
 
 	/**
-	 * Check whether the <code>info</code> has problems or not.
+	 * Check whether the <code>model</code> has problems or not.
 	 *
 	 * Known problems that is checked for:
 	 *
@@ -176,13 +175,13 @@ public class UCSCParser implements TranscriptParser {
 	 * <li>mRNA sequence is shorter than the sum of the exon lengths</li>
 	 * </ul>
 	 *
-	 * @param info
-	 *            {@link TranscriptInfo} to check for consistency
+	 * @param model
+	 *            {@link TranscriptModel} to check for consistency
 	 * @return <code>false</code> if known problems have been found
 	 */
-	private boolean checkTranscriptInfo(TranscriptModel info) {
-		if (info.transcriptLength() > info.getSequence().length()) {
-			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.getAccession());
+	private boolean checkTranscriptModel(TranscriptModel model) {
+		if (model.transcriptLength() > model.getSequence().length()) {
+			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", model.getAccession());
 			return false;
 		}
 		return true;
@@ -378,7 +377,7 @@ public class UCSCParser implements TranscriptParser {
 
 	/**
 	 * Parses the ucsc knownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
-	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
+	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptModelBuilder} objects.
 	 */
 	private void parseKnown2LocusLink(String locusPath) throws TranscriptParseException {
 		try {
@@ -471,7 +470,7 @@ public class UCSCParser implements TranscriptParser {
 	/**
 	 * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt} Note that the UCSC sequences are all in
 	 * lower case, but we convert them here to all upper case letters to simplify processing in other places of this
-	 * program. The sequences are then added to the corresponding {@link TranscriptInfoBuilder} objects.
+	 * program. The sequences are then added to the corresponding {@link TranscriptModelBuilder} objects.
 	 */
 	private void parseKnownGeneMrna(String mRNAPath) throws TranscriptParseException {
 		try {
@@ -519,7 +518,7 @@ public class UCSCParser implements TranscriptParser {
 
 	/**
 	 * Input xref information for the known genes. This method parses the ucsc xref table to get the gene symbol that
-	 * corresponds to the ucsc kgID. The information is then added to the corresponding {@link TranscriptInfoBuilder}
+	 * corresponds to the ucsc kgID. The information is then added to the corresponding {@link TranscriptModelBuilder}
 	 * object.
 	 * <P>
 	 * Note that some of the fields are empty, which can cause a problem for Java's split function, which then conflates
