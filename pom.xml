@@ -14,7 +14,7 @@
         <log4j.version>2.8.2</log4j.version>
 
         <junit.version>4.12</junit.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.24</slf4j.version>
     </properties>
 
     <modules>
