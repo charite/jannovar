@@ -964,7 +964,6 @@ public enum VariantEffect {
 		case DIRECT_TANDEM_DUPLICATION:
 		case DISRUPTIVE_INFRAME_DELETION:
 		case DISRUPTIVE_INFRAME_INSERTION:
-		case DOWNSTREAM_GENE_VARIANT:
 		case EXON_LOSS_VARIANT:
 		case EXON_VARIANT:
 		case FEATURE_TRUNCATION:
@@ -990,7 +989,6 @@ public enum VariantEffect {
 		case SYNONYMOUS_VARIANT:
 		case TF_BINDING_SITE_VARIANT:
 		case TRANSCRIPT_ABLATION:
-		case UPSTREAM_GENE_VARIANT:
 			return false;
 		default:
 			return true;

@@ -8,6 +8,10 @@
 * Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
 * Integrating the advanced pedigree-based filters (useful for filtration to de novo variants).
 
+### jannovar-core
+
+* Upstream and downstream variant were considered "not off exome". They now are.
+
 ### jannovar-filter
 
 * Adding code for performing more advanced filtration/annotation filtering to de novo variants.
