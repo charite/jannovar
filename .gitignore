@@ -34,3 +34,4 @@ manual/_build
 # Java Mission Control flight recorder files
 *.jfr
 .attach_pid*
+.idea
