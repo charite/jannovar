@@ -35,7 +35,7 @@ public abstract class VCFHeaderExtender {
 	 * Add headers with default prefix
 	 */
 	public void addHeaders(VCFHeader header) {
-		addHeaders(header, getDefaultPrefix());
+		addHeaders(header, options.getVCFIdentifierPrefix());
 	}
 
 }

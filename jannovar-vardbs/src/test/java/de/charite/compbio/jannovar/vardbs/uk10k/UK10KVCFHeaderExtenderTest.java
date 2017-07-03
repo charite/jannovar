@@ -28,6 +28,7 @@ public class UK10KVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("UK10K_");
 
 		new UK10KVCFHeaderExtender(options).addHeaders(header);
 

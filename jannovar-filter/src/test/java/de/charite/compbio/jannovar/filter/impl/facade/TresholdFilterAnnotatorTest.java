@@ -1,17 +1,11 @@
 package de.charite.compbio.jannovar.filter.impl.facade;
 
-import java.util.ArrayList;
-
+import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotator;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
+import htsjdk.variant.variantcontext.VariantContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 /**
  * Test for ThresholdFilterAnnotator
@@ -20,12 +14,12 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
  */
 public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
-	ThresholdFilterAnnotator annotator;
+	GenotypeThresholdFilterAnnotator annotator;
 
 	@Before
 	public void setUp() {
-		ArrayList<String> affected = Lists.newArrayList("individual");
-		annotator = new ThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions(), affected);
+		annotator =
+				new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
 	}
 
 	/**
@@ -39,7 +33,7 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
 		VariantContext updatedVC = annotator.annotateVariantContext(variant);
 
-		Assert.assertEquals("[AllAffGtFiltered]", updatedVC.getFilters().toString());
+		Assert.assertEquals("[]", updatedVC.getFilters().toString());
 		Assert.assertEquals(
 				"[VC Unknown @ 1:17452 Q35.74 of type=SNP alleles=[G*, A] attr={} "
 						+ "GT=[[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]]",

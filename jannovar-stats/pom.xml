@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.12</version>
+            <version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.samtools</groupId>
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>19.0</version>
+			<version>${guava.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ini4j</groupId>

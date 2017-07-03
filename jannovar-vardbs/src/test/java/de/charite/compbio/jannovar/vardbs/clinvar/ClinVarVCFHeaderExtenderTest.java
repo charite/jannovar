@@ -1,11 +1,9 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ClinVarVCFHeaderExtenderTest {
 
@@ -23,6 +21,7 @@ public class ClinVarVCFHeaderExtenderTest {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("CLINVAR_");
 
 		new ClinVarVCFHeaderExtender(options).addHeaders(header);
 

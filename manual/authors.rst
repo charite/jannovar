@@ -8,3 +8,9 @@ in alphabetical order
 - Marten Jaeger
 - Max Schubach
 - Peter N. Robinson
+
+------------
+Contributors
+------------
+
+- Roland Ewald

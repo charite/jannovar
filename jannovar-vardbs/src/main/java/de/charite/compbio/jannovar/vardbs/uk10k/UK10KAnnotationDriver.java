@@ -10,6 +10,7 @@ import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
+import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
@@ -22,7 +23,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 
 	public UK10KAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
 			throws JannovarVarDBException {
-		super(vcfPath, fastaPath, options, new UK10KVariantContextToRecordConverter());
+		super(new VCFReaderVariantProvider(vcfPath), fastaPath, options, new UK10KVariantContextToRecordConverter());
 	}
 
 	@Override

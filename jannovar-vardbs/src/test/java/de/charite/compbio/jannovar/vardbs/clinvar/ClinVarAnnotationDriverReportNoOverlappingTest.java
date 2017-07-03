@@ -29,6 +29,7 @@ public class ClinVarAnnotationDriverReportNoOverlappingTest extends ClinVarAnnot
 
     @Test
     public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("CLINVAR_");
         ClinVarAnnotationDriver driver = new ClinVarAnnotationDriver(dbClinVarVCFPath, fastaPath, options);
 
         VCFHeader header = vcfReader.getFileHeader();

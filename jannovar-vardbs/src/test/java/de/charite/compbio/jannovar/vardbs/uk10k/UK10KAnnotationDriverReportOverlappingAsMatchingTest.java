@@ -29,6 +29,7 @@ public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KA
 
 	@Test
 	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("UK10K_");
 		UK10KAnnotationDriver driver = new UK10KAnnotationDriver(dbUK10KVCFPath, fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();

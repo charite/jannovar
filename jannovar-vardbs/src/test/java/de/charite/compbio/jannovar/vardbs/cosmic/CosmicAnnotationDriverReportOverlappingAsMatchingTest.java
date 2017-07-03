@@ -29,6 +29,7 @@ public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends Cosmi
 
 	@Test
 	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("COSMIC_");
 		CosmicAnnotationDriver driver = new CosmicAnnotationDriver(cosmicVCFPath, fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();

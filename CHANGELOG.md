@@ -2,13 +2,39 @@
 
 ## develop (unreleased)
 
+### overall
+
+* Changing Guava version to 0.22
+* Changing slf4j version to 1.7.24
+* Changing log4j version to 2.8.2
+
 ### jannovar-cli
 
+* Adding experimental support for annotating with VCF files.
+* Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP.
 * Integrating the advanced pedigree-based filters (useful for filtration to de novo variants).
+* Making it possible to override database INI settings using user-specified INI files.
+
+### jannovar-core
+
+* Fixing stop loss annotation (#351).
+* Finishing renaming of TranscriptInfo to TranscriptModel (#348).
+* Upstream and downstream variant were considered "not off exome". They now are.
 
 ### jannovar-filter
 
 * Adding code for performing more advanced filtration/annotation filtering to de novo variants.
+* Improving documentation of `MaxFreqAr` and `MaxFreqAd` in header.
+
+
+### jannovar-vardbs
+
+* Adding experimental support for annotating with VCF files
+* Adding experimental support for annotating with tabix-indexed TSV files and dbNSFP
+
+### jannovar-filter
+
+* Fixing bug that ignored variant filters for recessive annotation
 
 ## v0.22
 

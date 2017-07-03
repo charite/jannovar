@@ -30,6 +30,7 @@ public class ExacAnnotationDriverReportAlsoOverlappingTest extends ExacAnnotatio
 
 	@Test
 	public void testAnnotateExtendHeaderWithDefaultPrefix() throws JannovarVarDBException {
+		options.setIdentifierPrefix("EXAC_");
 		ExacAnnotationDriver driver = new ExacAnnotationDriver(dbExacVCFPath, fastaPath, options);
 
 		VCFHeader header = vcfReader.getFileHeader();

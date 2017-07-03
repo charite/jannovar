@@ -31,6 +31,11 @@ public class ThresholdFilterHeaderExtender {
 	/** Minimal alternative allele fraction for hom ref */
 	public static String FILTER_GT_MAX_AAF_HOM_REF = "MaxAafHomRef";
 
+	/** One parent was filtered out. */
+	public static String FILTER_GT_ONE_PARENT_FILTERED = "OneParentGtFiltered";
+	/** Both parents were filtered out. */
+	public static String FILTER_GT_BOTH_PARENTS_FILTERED = "BothParentsGtFiltered";
+
 	// Variant-wise filter strings
 
 	/** All affected individual's genotypes are filtered */
@@ -52,28 +57,27 @@ public class ThresholdFilterHeaderExtender {
 	/**
 	 * Add header entries.
 	 * 
-	 * @param header
-	 *            The {@link VCFHeader} to extend.
+	 * @param header The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
-		if (!header.hasFormatLine("FT"))
-			header.addMetaDataLine(
-					new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.String, "Filters applied to genotype call"));
+		if (!header.hasFormatLine("FT")) header.addMetaDataLine(new VCFFormatHeaderLine("FT", 1,
+				VCFHeaderLineType.String, "Filters applied to genotype call"));
 
-		header.addMetaDataLine(
-				new VCFFilterHeaderLine(FILTER_GT_MAX_COV, "Genotype has coverage >" + options.getMaxCov()));
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_COV,
+				"Genotype has coverage >" + options.getMaxCov()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HET,
 				"Het. genotype call has coverage <" + options.getMinGtCovHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HOM_ALT,
 				"Hom. alt genotype call has coverage <" + options.getMinGtCovHomAlt()));
-		header.addMetaDataLine(
-				new VCFFilterHeaderLine(FILTER_GT_MIN_GQ, "Genotype has quality (GQ) <" + options.getMinGtGq()));
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_GQ,
+				"Genotype has quality (GQ) <" + options.getMinGtGq()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_AAF_HET,
 				"Het. genotype has alternative allele fraction <" + options.getMinGtAafHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HET,
 				"Het. genotype has alternative allele fraction >" + options.getMaxGtAafHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_AAF_HOM_ALT,
-				"Hom. alt genotype has alternative allele fraction <" + options.getMinGtAafHomAlt()));
+				"Hom. alt genotype has alternative allele fraction <"
+						+ options.getMinGtAafHomAlt()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HOM_REF,
 				"Wild-type genotype has AAF >" + options.getMaxGtAafHomRef()));
 
@@ -81,9 +85,14 @@ public class ThresholdFilterHeaderExtender {
 				"The genotype calls of all affected individuals have been filtered for this variant."));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AD,
-				"Variant frequency >" + options.getMaxAlleleFrequencyAd() + " (threshold for AD inheritance)"));
+				"Variant frequency >" + options.getMaxAlleleFrequencyAd()
+						+ " (threshold for AD inheritance), variant will be annotated with "
+						+ "compatibility with dominant inheritance regardlessly"));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AR,
-				"Variant frequency >" + options.getMaxAlleleFrequencyAd() + " (threshold for AR inheritance)"));
+				"Variant frequency >" + options.getMaxAlleleFrequencyAd()
+						+ " (threshold for AR inheritance), variant will not be considered for "
+						+ "composite recessive inheritance but for homozygous recessive inheritance "
+						+ "regardlessly"));
 	}
 
 }

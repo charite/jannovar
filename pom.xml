@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.charite.compbio</groupId>
     <artifactId>Jannovar</artifactId>
@@ -10,7 +11,12 @@
     <properties>
         <htsjdk.version>2.8.1</htsjdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4j.version>2.5</log4j.version>
+        <log4j.version>2.8.2</log4j.version>
+
+        <junit.version>4.12</junit.version>
+        <slf4j.version>1.7.24</slf4j.version>
+        <guava.version>22.0</guava.version>
+        <antlr.version>4.7</antlr.version>
     </properties>
 
     <modules>
@@ -80,7 +86,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <!-- Logging implementation for test only. -->
         <dependency>
@@ -99,7 +105,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -115,7 +121,8 @@
                     <skipTests>false</skipTests>
                     <forkCount>3</forkCount>
                     <reuseForks>true</reuseForks>
-                    <argLine>${argLine} -Xms512m -Xmx1024m -Duser.language=en -Duser.region=US</argLine>
+                    <argLine>${argLine} -Xms512m -Xmx1024m
+                        -Duser.language=en -Duser.region=US</argLine>
                     <systemPropertyVariables>
                         <user.language>en</user.language>
                         <user.region>US</user.region>

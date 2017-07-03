@@ -26,6 +26,7 @@ public class CosmicAnnotationDriverReportAlsoOverlappingTest extends CosmicAnnot
 		super.setUpClass();
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
+		options.setIdentifierPrefix("COSMIC_");
 	}
 
 	@Test
