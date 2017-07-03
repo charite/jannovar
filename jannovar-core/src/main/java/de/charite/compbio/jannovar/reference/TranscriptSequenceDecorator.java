@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class TranscriptSequenceDecorator {
 
-	/** The wrapped {@link TranscriptInfo}. */
+	/** The wrapped {@link TranscriptModel}. */
 	private final TranscriptModel transcript;
 
 	public TranscriptSequenceDecorator(TranscriptModel transcript) {

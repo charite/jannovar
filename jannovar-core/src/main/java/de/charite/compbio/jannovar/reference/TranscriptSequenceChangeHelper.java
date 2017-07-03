@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class TranscriptSequenceChangeHelper {
 
-	/** The {@link TranscriptInfo} with the sequence and position infos. */
+	/** The {@link TranscriptModel} with the sequence and position infos. */
 	private final TranscriptModel transcript;
 
 	/**

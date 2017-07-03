@@ -72,7 +72,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	private static final long serialVersionUID = 3L;
 
 	/**
-	 * Initialize the TranscriptInfo object from the given parameters.
+	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
@@ -81,7 +81,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
-	 * Initialize the TranscriptInfo object from the given parameters.
+	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,

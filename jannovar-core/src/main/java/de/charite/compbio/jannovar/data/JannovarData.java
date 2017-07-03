@@ -43,14 +43,14 @@ public final class JannovarData implements Serializable {
 	 *
 	 * @param refDict
 	 *            the {@link ReferenceDictionary} to use in this object
-	 * @param transcriptInfos
+	 * @param transcriptModels
 	 *            the list of {@link TranscriptModel} objects to use in this object
 	 */
-	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
+	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptModels) {
 		this.refDict = refDict;
-		this.chromosomes = makeChromsomes(refDict, transcriptInfos);
-		this.tmByAccession = makeTMByAccession(transcriptInfos);
-		this.tmByGeneSymbol = makeTMByGeneSymbol(transcriptInfos);
+		this.chromosomes = makeChromsomes(refDict, transcriptModels);
+		this.tmByAccession = makeTMByAccession(transcriptModels);
+		this.tmByGeneSymbol = makeTMByGeneSymbol(transcriptModels);
 	}
 
 	/** @return map from chromosome ID to {@link Chromosome} */
@@ -74,53 +74,53 @@ public final class JannovarData implements Serializable {
 	}
 
 	/**
-	 * @param transcriptInfos
+	 * @param transcriptModels
 	 *            set of {@link TranscriptModel}s to build multi-mapping for
 	 * @return multi-mapping from gene symbol to {@link TranscriptModel}
 	 */
 	private static ImmutableMultimap<String, TranscriptModel> makeTMByGeneSymbol(
-			ImmutableList<TranscriptModel> transcriptInfos) {
+			ImmutableList<TranscriptModel> transcriptModels) {
 		ImmutableMultimap.Builder<String, TranscriptModel> builder = new ImmutableMultimap.Builder<String, TranscriptModel>();
-		for (TranscriptModel tm : transcriptInfos)
+		for (TranscriptModel tm : transcriptModels)
 			builder.put(tm.getGeneSymbol(), tm);
 		return builder.build();
 	}
 
 	/**
-	 * @param transcriptInfos
+	 * @param transcriptModels
 	 *            set of {@link TranscriptModel}s to build mapping for
 	 * @return mapping from gene symbol to {@link TranscriptModel}
 	 */
 	private static ImmutableMap<String, TranscriptModel> makeTMByAccession(
-			ImmutableList<TranscriptModel> transcriptInfos) {
+			ImmutableList<TranscriptModel> transcriptModels) {
 		ImmutableMap.Builder<String, TranscriptModel> builder = new ImmutableMap.Builder<String, TranscriptModel>();
-		for (TranscriptModel tm : transcriptInfos)
+		for (TranscriptModel tm : transcriptModels)
 			builder.put(tm.getAccession(), tm);
 		return builder.build();
 	}
 
 	/**
-	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptInfo}
+	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptModel}
 	 * objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
 	 *
 	 * @param refDict
 	 *            the {@link ReferenceDictionary} to use for the construction
-	 * @param transcriptInfos
-	 *            list of {@link TranscriptInfo} objects with the transcripts of all chromosomes
+	 * @param transcriptModels
+	 *            list of {@link TranscriptModel} objects with the transcripts of all chromosomes
 	 * @return a mapping from numeric chromsome ID to {@link Chromosome} object
 	 */
 	private static ImmutableMap<Integer, Chromosome> makeChromsomes(ReferenceDictionary refDict,
-			ImmutableList<TranscriptModel> transcriptInfos) {
+			ImmutableList<TranscriptModel> transcriptModels) {
 		ImmutableMap.Builder<Integer, Chromosome> builder = new ImmutableMap.Builder<Integer, Chromosome>();
 
-		// First, factorize the TranscriptInfo objects by chromosome ID.
+		// First, factorize the TranscriptModel objects by chromosome ID.
 
 		// create hash map for this
 		HashMap<Integer, ArrayList<TranscriptModel>> transcripts = new HashMap<Integer, ArrayList<TranscriptModel>>();
 		for (Integer chrID : refDict.getContigIDToName().keySet())
 			transcripts.put(chrID, new ArrayList<TranscriptModel>());
-		// distribute TranscriptInfo lists
-		for (TranscriptModel transcript : transcriptInfos)
+		// distribute TranscriptModel lists
+		for (TranscriptModel transcript : transcriptModels)
 			transcripts.get(transcript.getChr()).add(transcript);
 
 		// Then, construct an interval tree for each chromosome and add the lists of intervals.

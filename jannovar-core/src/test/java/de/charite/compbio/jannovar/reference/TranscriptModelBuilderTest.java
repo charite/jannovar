@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
-public class TranscriptInfoBuilderTest {
+public class TranscriptModelBuilderTest {
 
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();

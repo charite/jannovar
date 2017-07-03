@@ -84,7 +84,7 @@ public class FlatBEDParser implements TranscriptParser {
 		LOGGER.info("Found {} transcript models from flat BED resource, {} of which had sequences", params);
 		*/
 
-		// Create final list of TranscriptInfos.
+		// Create final list of TranscriptModels.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
 		for (TranscriptModelBuilder builder : builders)
 			result.add(builder.build());

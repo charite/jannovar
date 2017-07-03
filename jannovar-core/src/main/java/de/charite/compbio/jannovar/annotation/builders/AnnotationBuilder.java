@@ -337,7 +337,7 @@ abstract class AnnotationBuilder {
 
 	/**
 	 * @param transcript
-	 *            {@link TranscriptInfo} to build annotation for
+	 *            {@link TranscriptModel} to build annotation for
 	 * @param change
 	 *            {@link GenomeVariant} to build annotation for
 	 * @return AnnotationLocation with location annotation
@@ -414,7 +414,7 @@ abstract class AnnotationBuilder {
 
 	/**
 	 * @param transcript
-	 *            {@link TranscriptInfo} to build annotation for
+	 *            {@link TranscriptModel} to build annotation for
 	 * @param change
 	 *            {@link GenomeVariant} to build annotation for
 	 * @return {@link NucleotideRange} describing the CDS-level position of the change (or transcript-level in the case
