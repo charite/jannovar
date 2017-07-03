@@ -17,6 +17,8 @@
 
 ### jannovar-core
 
+* Fixing stop loss annotation (#351).
+* Finishing renaming of TranscriptInfo to TranscriptModel (#348).
 * Upstream and downstream variant were considered "not off exome". They now are.
 
 ### jannovar-filter
