@@ -6,7 +6,9 @@
 
 * Changing HTSJDK version to 2.11.0
 
+### jannovar-vardbs
 
+* Fixed problem with interpretation of Clinvar annotation origin.
 
 ## v0.23
 

@@ -72,27 +72,27 @@ public enum ClinVarOrigin {
         if (i == 0)
             return Lists.newArrayList(UNKNOWN);
 	    List<ClinVarOrigin> result = new ArrayList<>();
-	    if (i % 1 != 0)
+	    if ((i & 1) != 0)
 	        result.add(GERMLINE);
-        else if (i % 2 != 0)
+	    if ((i & 2) != 0)
             result.add(SOMATIC);
-        else if (i % 4 != 0)
+	    if ((i & 4) != 0)
             result.add(INHERITED);
-        else if (i % 8 != 0)
+	    if ((i & 8) != 0)
             result.add(PATERNAL);
-        else if (i % 16 != 0)
+	    if ((i & 16) != 0)
             result.add(MATERNAL);
-        else if (i % 32 != 0)
+	    if ((i & 32) != 0)
             result.add(DE_NOVO);
-        else if (i % 64 != 0)
+	    if ((i & 64) != 0)
             result.add(BIPARENTAL);
-        else if (i % 128 != 0)
+	    if ((i & 128) != 0)
             result.add(UNIPARENTAL);
-        else if (i % 256 != 0)
+	    if ((i & 256) != 0)
             result.add(NOT_TESTED);
-        else if (i % 512 != 0)
+	    if ((i & 512) != 0)
             result.add(TESTED_INCONCLUSIVE);
-        else if (i % 1073741824 != 0)
+        if ((i & 1073741824) != 0)
             result.add(OTHER);
 	    return result;
 	}
