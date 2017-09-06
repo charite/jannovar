@@ -2,6 +2,12 @@
 
 ## develop (unreleased)
 
+### overall
+
+* Changing HTSJDK version to 2.11.0
+
+
+
 ## v0.23
 
 ### overall
