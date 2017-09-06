@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b12f94e30404667997f8ae264a97bd6)](https://www.codacy.com/app/visze/jannovar?utm_source=github.com&utm_medium=referral&utm_content=charite/jannovar&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
 [![API Docs](https://img.shields.io/badge/api-v0.23-blue.svg?style=flat)](http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.23)
