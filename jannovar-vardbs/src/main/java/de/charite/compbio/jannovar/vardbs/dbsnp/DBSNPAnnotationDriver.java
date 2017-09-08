@@ -45,7 +45,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 		this.dbSNPInfo = new DBSNPInfoFactory().build(vcfProvider.getVcfReader().getFileHeader());
 		if (dbSNPInfo.dbSNPBuildID != 147)
 			throw new JannovarVarDBException(
-					"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b174");
+					"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b147");
 	}
 
 	@Override

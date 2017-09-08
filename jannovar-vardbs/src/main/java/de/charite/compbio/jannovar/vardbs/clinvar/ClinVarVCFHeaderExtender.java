@@ -39,7 +39,7 @@ public class ClinVarVCFHeaderExtender extends VCFHeaderExtender {
 
         VCFInfoHeaderLine infoClinVarVarInfo = new VCFInfoHeaderLine(prefix + infix + "VAR_INFO",
                 VCFHeaderLineCount.UNBOUNDED, VCFHeaderLineType.String,
-                "Annotation of variant source information of the form 'allele | db name | id in db'" + note);
+                "Annotation of variant source information of the form 'allele | db name | id in db | origins'" + note);
         header.addMetaDataLine(infoClinVarVarInfo);
         
         VCFInfoHeaderLine infoClinVarDiseaseInfo = new VCFInfoHeaderLine(prefix + infix + "DISEASE_INFO",
