@@ -2,6 +2,10 @@
 
 ## develop (unreleased)
 
+### jannovar-cli
+
+* Fixing annotation with Polyphen prediction (data type)
+
 ### overall
 
 * Changing HTSJDK version to 2.11.0

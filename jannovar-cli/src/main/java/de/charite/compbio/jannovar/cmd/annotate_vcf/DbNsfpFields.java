@@ -168,9 +168,9 @@ public class DbNsfpFields {
 						"Value of dbNSFP column 'Polyphen2_HDIV_rankscore'",
 						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HDIV_pred",
-				new GenericTSVValueColumnDescription(32, VCFHeaderLineType.Integer,
+				new GenericTSVValueColumnDescription(32, VCFHeaderLineType.String,
 						"Polyphen2_HDIV_pred", "Value of dbNSFP column 'Polyphen2_HDIV_pred'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_pred"));
 		builder.put("Polyphen2_HVAR_score",
 				new GenericTSVValueColumnDescription(33, VCFHeaderLineType.Integer,
 						"Polyphen2_HVAR_score", "Value of dbNSFP column 'Polyphen2_HVAR_score'",
