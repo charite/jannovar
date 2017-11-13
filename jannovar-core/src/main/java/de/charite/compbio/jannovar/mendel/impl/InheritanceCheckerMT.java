@@ -64,31 +64,32 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) );
 	}
 
+	/**
+	 * All affecteds should carry the disease-causing variant. Because of heteroplasmy,
+	 * affecteds may carry different proportions of variant mtDNA, and thus we do not
+	 * demand that affecteds are called with a heterozyogus or homozygous ALT genotype.
+	 * However, if an affected is homozygous for the wildtype sequence, we rule out the
+	 * candidate variant. Variant calling on the mito doesnot currently assess heteroplasmy, but any amount
+	 // of called mutation will be assessed as potentially disease causing here.
+	 * @param calls
+	 * @return true if no affected is homozygous wildtype
+	 */
 	private boolean affectedsAreCompatible(GenotypeCalls calls) {
 		for (Person p : pedigree.getMembers()) {
 			final String name = p.getName();
 			final Genotype gt = calls.getGenotypeForSample(name);
 			if (p.getDisease() == Disease.AFFECTED) {
-				if (gt.isHomRef()) {
-					// Cannot be disease-causing mutation, an affected male or female does not have it
-					return false;
-				} else {
-					// Return true for HET  or HOM-ALT call
-					// Variant calling on the mito doesnot currently assess heteroplasmy, but any amount
-					// of called mutation will be assessed as potentially disease causing here.
-					return true;
-				}
-
+				if ( gt.isHomRef()) return false;
 			}
 		}
-		return false; // should never happen--this would mean nobody in the pedigree has Disease.AFFECTED
+		return true; // no affected is homozygous wildtype
 	}
 
 	/**
 	 * Fathers do not transmit mitochondria to offspring, and so any apparent transmission of a
 	 * mutation from father to offspring would not be compatible with mitochondrial inheritance
-	 * (Should never happen actually).
-	 * @param calls Collection of calledvariants
+	 * (Should never happen actually). If a mother of an affected is affected, the we return
+	 * false if the mother has a homozygous wildtype genotype.
 	 * @return true unless we observe father to child inheritance of a called variant
 	 */
 	private boolean parentsAreCompatible(GenotypeCalls calls) {
@@ -96,6 +97,10 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 			if (p.getDisease() == Disease.AFFECTED) {
 				if (p.getFather() != null && p.getFather().isAffected()) {
 					return false;
+				} else if (p.getMother() != null && p.getMother().isAffected()) {
+					final String name = p.getMother().getName();
+					final Genotype gt = calls.getGenotypeForSample(name);
+					if (gt.isHomRef()) return false;
 				}
 			}
 		}

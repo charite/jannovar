@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibilityCheckerTestBase {
 
-	MendelianInheritanceChecker checker;
-	List<GenotypeCalls> gcList;
-	ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> result;
+	private MendelianInheritanceChecker checker;
+	private List<GenotypeCalls> gcList;
+	private ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> result;
 
 	@Before
 	public void setUp() throws Exception {
@@ -55,6 +55,8 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 				case UKN:
 					entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.NO_CALL, Genotype.NO_CALL)));
 					break;
+				default:
+					break; // no-op
 			}
 		}
 
