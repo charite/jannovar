@@ -1,15 +1,19 @@
 package de.charite.compbio.jannovar.mendel;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import de.charite.compbio.jannovar.pedigree.*;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.PedFileContents;
+import de.charite.compbio.jannovar.pedigree.PedPerson;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Sex;
 
 public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -38,67 +42,9 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
-	protected List<GenotypeCalls> getMitochondrialGenotypeCallsList(ImmutableList<SimpleGenotype> genotypes,
-																	boolean isMitochondrial) {
-		HashMap<String, Genotype> entries = new HashMap<String, Genotype>();
-		for (int i = 0; i < names.size(); ++i) {
-			switch (genotypes.get(i)) {
-				case HET:
-					entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.REF_CALL, 1)));
-					break;
-				case REF:
-					entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.REF_CALL, Genotype.REF_CALL)));
-					break;
-				case ALT:
-					entries.put(names.get(i), new Genotype(ImmutableList.of(1, 1)));
-					break;
-				case UKN:
-					entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.NO_CALL, Genotype.NO_CALL)));
-					break;
-				default:
-					break; // no-op
-			}
-		}
-
-		List<GenotypeCalls> gcs = new ArrayList<GenotypeCalls>();
-		gcs.add(new GenotypeCalls(isMitochondrial ? ChromosomeType.MITOCHONDRIAL : ChromosomeType.AUTOSOMAL,
-			entries.entrySet()));
-		return gcs;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	protected List<GenotypeCalls> getMitochondrialGenotypeCallsList(ImmutableList<SimpleGenotype> genotypes1,
-													   ImmutableList<SimpleGenotype> genotypes2) {
-		List<GenotypeCalls> gcs = new ArrayList<GenotypeCalls>();
-		for (Object obj : new Object[] { genotypes1, genotypes2 }) {
-			ImmutableList<SimpleGenotype> genotypes = (ImmutableList<SimpleGenotype>) obj;
-			HashMap<String, Genotype> entries = new HashMap<String, Genotype>();
-			for (int i = 0; i < names.size(); ++i) {
-				switch (genotypes.get(i)) {
-					case HET:
-						entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.REF_CALL, 1)));
-						break;
-					case REF:
-						entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.REF_CALL, Genotype.REF_CALL)));
-						break;
-					case ALT:
-						entries.put(names.get(i), new Genotype(ImmutableList.of(1, 1)));
-						break;
-					case UKN:
-						entries.put(names.get(i), new Genotype(ImmutableList.of(Genotype.NO_CALL, Genotype.NO_CALL)));
-						break;
-				}
-			}
-
-			gcs.add(new GenotypeCalls(ChromosomeType.MITOCHONDRIAL,entries.entrySet()));
-		}
-		return gcs;
-	}
-
 	@Test
 	public void testCaseNegativesOneMitochondrialVariant1() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(HET), true);
+		gcList = getGenotypeCallsList(lst(HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -112,7 +58,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 
 	@Test
 	public void testCaseNegativesOneMitochondrialVariant2() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(UKN), true);
+		gcList = getGenotypeCallsList(lst(UKN), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -125,7 +71,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 
 	@Test
 	public void testCasePositivesOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -138,7 +84,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 
 	@Test
 	public void testCasePositivesOneVariant2() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(HET), true);
+		gcList = getGenotypeCallsList(lst(HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -150,7 +96,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 	}
 	@Test
 	public void testCasePositivesTwoVariants1() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(REF), lst(ALT));
+		gcList = getGenotypeCallsList(lst(REF), lst(ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -163,7 +109,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 
 	@Test
 	public void testCasePositivesTwoVariants2() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(UKN), lst(ALT));
+		gcList = getGenotypeCallsList(lst(UKN), lst(ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
