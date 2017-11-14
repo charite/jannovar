@@ -44,14 +44,14 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 
 	@Test
 	public void testCaseNegativesOneMitochondrialVariant1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET), ChromosomeType.MITOCHONDRIAL);
+		gcList = getGenotypeCallsList(lst(REF), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -65,7 +65,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -78,7 +78,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -91,9 +91,50 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+	
+	@Test
+	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(REF), lst(REF), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	
+	@Test
+	public void testCaseNegativesTwoVariants2() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(UKN), lst(REF), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	@Test
+	public void testCaseNegativesTwoVariants3() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(UKN), lst(UKN), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
 	@Test
 	public void testCasePositivesTwoVariants1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF), lst(ALT), ChromosomeType.MITOCHONDRIAL);
@@ -103,7 +144,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -116,7 +157,59 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2,result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	@Test
+	public void testCasePositivesTwoVariants3() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(UKN), lst(HET), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	@Test
+	public void testCasePositivesTwoVariants4() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(HET), lst(ALT), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	@Test
+	public void testCasePositivesTwoVariants5() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(ALT), lst(ALT), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+	}
+	
+	@Test
+	public void testCasePositivesTwoVariants6() throws IncompatiblePedigreeException {
+		gcList = getGenotypeCallsList(lst(ALT), lst(HET), ChromosomeType.MITOCHONDRIAL);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
