@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.1
-##description=This file contains a few variants for inheritance testing. 
+##description=This file contains a few variants for inheritance testing.
 ##description=The gene DDX11L1 matches AUTOSOMAL_DOMINANT and AUTOSOMAL_RECESSIVE
 ##description=The gene FAM138A matches AUTOSOMAL_RECESSIVE
 ##description=The gene FGFR2 matches AUTOSOMAL_RECESSIVE but is not included in hg19_small.ser
