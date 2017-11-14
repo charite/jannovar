@@ -126,16 +126,23 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	/** The checker object has a pedigree with an affected mother, son, and daughter as well as
+	 * an unaffected father in the order father, mother, son, daughter. Adding REF, HET, ALT, REF
+	 * means that the pedigree should be judged compatible with mitochondrial inheritance, because the
+	 * unaffected father is REF, the affected mother and her affected daughter are HET, and her affected
+	 * son is ALT (OK because he might have a higher degree of heteroplasmy).
+ 	 * @throws IncompatiblePedigreeException
+	 */
 	@Test
 	public void testCasePositiveOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getMitochondrialGenotypeCallsList(lst(REF, HET, ALT, REF));
+		gcList = getMitochondrialGenotypeCallsList(lst(REF, HET, ALT, HET));
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-//		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
