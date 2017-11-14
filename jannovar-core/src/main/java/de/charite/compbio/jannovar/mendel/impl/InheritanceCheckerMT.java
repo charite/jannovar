@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.mendel.impl;
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.mendel.*;
 import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 
 import java.util.Collection;
@@ -68,7 +69,7 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 *         individuals in the pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
-		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) );
+		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) && unaffectedAreCompatible(calls));
 	}
 
 	/**
@@ -82,10 +83,25 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * @return true if no affected is homozygous wildtype
 	 */
 	private boolean affectedsAreCompatible(GenotypeCalls calls) {
+		int numHetOrHomAlt = 0;
+		
+		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
+			if (entry.getPerson().getDisease() == Disease.AFFECTED) {
+				final Genotype gt = calls.getGenotypeForSample(entry.getPerson().getName());
+				if (gt.isHomRef())
+					return false;
+				else if (gt.isHomAlt() || gt.isHet())
+					numHetOrHomAlt += 1;
+			}
+		}
+		return (numHetOrHomAlt > 0); // no affected is homozygous wildtype and at least one has a call
+	}
+	
+	private boolean unaffectedAreCompatible(GenotypeCalls calls) {
 		for (Person p : pedigree.getMembers()) {
 			final String name = p.getName();
 			final Genotype gt = calls.getGenotypeForSample(name);
-			if (p.getDisease() == Disease.AFFECTED && gt.isHomRef())
+			if (p.getDisease() == Disease.UNAFFECTED && (gt.isHomAlt() || gt.isHet()))
 				return false;
 		}
 		return true; // no affected is homozygous wildtype
