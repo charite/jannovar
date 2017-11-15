@@ -73,6 +73,8 @@ public enum SubModeOfInheritance {
 		case X_RECESSIVE_COMP_HET:
 		case X_RECESSIVE_HOM_ALT:
 			return ModeOfInheritance.X_RECESSIVE;
+		case MITOCHONDRIAL:
+			return ModeOfInheritance.MITOCHONDRIAL;
 		case ANY:
 		default:
 			return ModeOfInheritance.ANY;

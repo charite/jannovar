@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.mendel.impl;
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.mendel.*;
 import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 
 import java.util.Collection;
@@ -10,22 +11,29 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/** Helper class for checking a {@link GenotypeCalls} for compatibility with a pedigree and mitochondrial inheritance
-	*
-	* <h2>Compatibility Check</h2>
-	*
-	* In the case of a single individual, we require merely that a variant is located on the mitochondrion.
-	*
-	* In the case of multiple individuals, we require that all affecteds have the called variant and that there is
- 	* is no transmission from an affected father to children (this would mean that the case is definitely not related
- 	* to a mitochondrial mutation, whatever the distribution of variants may be!).
+/**
+ * Helper class for checking a {@link GenotypeCalls} for compatibility with a
+ * pedigree and mitochondrial inheritance
+ *
+ * <h2>Compatibility Check</h2>
+ *
+ * In the case of a single individual, we require merely that a variant is
+ * located on the mitochondrion.
+ *
+ * In the case of multiple individuals, we require that all affecteds have the
+ * called variant and that there is is no transmission from an affected father
+ * to children (this would mean that the case is definitely not related to a
+ * mitochondrial mutation, whatever the distribution of variants may be!).
  * <P>
- *     Note that mitochondrial inheritance is considered to be Nonmendelian, so that this class is named
- *     {@code InheritanceCheckerMT} rather than {@code MendelianCheckerMT} as the other classes in this package.
+ * Note that mitochondrial inheritance is considered to be Nonmendelian, so that
+ * this class is named {@code InheritanceCheckerMT} rather than
+ * {@code MendelianCheckerMT} as the other classes in this package.
  * </P>
-	*
-	* @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
-	* @version 0.23 (September 15, 2017)
+ *
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
+ * @author <a href="mailto:max.schubach@bihealth.de">Max Schubach</a>
+ * 
+ * @since version 0.24 (September 15, 2017)
  */
 public class InheritanceCheckerMT extends AbstractMendelianChecker {
 
@@ -61,7 +69,7 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 *         individuals in the pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
-		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) );
+		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) && unaffectedAreCompatible(calls));
 	}
 
 	/**
@@ -75,12 +83,26 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * @return true if no affected is homozygous wildtype
 	 */
 	private boolean affectedsAreCompatible(GenotypeCalls calls) {
+		int numHetOrHomAlt = 0;
+		
+		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
+			if (entry.getPerson().getDisease() == Disease.AFFECTED) {
+				final Genotype gt = calls.getGenotypeForSample(entry.getPerson().getName());
+				if (gt.isHomRef())
+					return false;
+				else if (gt.isHomAlt() || gt.isHet())
+					numHetOrHomAlt += 1;
+			}
+		}
+		return (numHetOrHomAlt > 0); // no affected is homozygous wildtype and at least one has a call
+	}
+	
+	private boolean unaffectedAreCompatible(GenotypeCalls calls) {
 		for (Person p : pedigree.getMembers()) {
 			final String name = p.getName();
 			final Genotype gt = calls.getGenotypeForSample(name);
-			if (p.getDisease() == Disease.AFFECTED) {
-				if ( gt.isHomRef()) return false;
-			}
+			if (p.getDisease() == Disease.UNAFFECTED && (gt.isHomAlt() || gt.isHet()))
+				return false;
 		}
 		return true; // no affected is homozygous wildtype
 	}
@@ -100,7 +122,8 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 				} else if (p.getMother() != null && p.getMother().isAffected()) {
 					final String name = p.getMother().getName();
 					final Genotype gt = calls.getGenotypeForSample(name);
-					if (gt.isHomRef()) return false;
+					if (gt.isHomRef()) 
+						return false;
 				}
 			}
 		}
@@ -117,7 +140,10 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 *         individual in the pedigree
 	 */
 	private boolean isCompatibleSingleton(GenotypeCalls calls) {
-		return calls.getNSamples()>0; // return true if there is at least one called variant.
+		if (calls.getNSamples() == 0)
+			return false; // no calls!
+		
+		return calls.getGenotypeBySampleNo(0).isHet() || calls.getGenotypeBySampleNo(0).isHomAlt();
 	}
 
 }
