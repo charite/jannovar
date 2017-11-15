@@ -101,10 +101,10 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 		for (Person p : pedigree.getMembers()) {
 			final String name = p.getName();
 			final Genotype gt = calls.getGenotypeForSample(name);
-			if (p.getDisease() == Disease.UNAFFECTED && (gt.isHomAlt() || gt.isHet()))
+			if (p.getDisease() == Disease.UNAFFECTED && gt.isHomAlt())
 				return false;
 		}
-		return true; // no affected is homozygous wildtype
+		return true; // no unaffected is homozygous alternative
 	}
 
 	/**
@@ -117,9 +117,7 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	private boolean parentsAreCompatible(GenotypeCalls calls) {
 		for (Person p : pedigree.getMembers()) {
 			if (p.getDisease() == Disease.AFFECTED) {
-				if (p.getFather() != null && p.getFather().isAffected()) {
-					return false;
-				} else if (p.getMother() != null && p.getMother().isAffected()) {
+				if (p.getMother() != null && p.getMother().isAffected()) {
 					final String name = p.getMother().getName();
 					final Genotype gt = calls.getGenotypeForSample(name);
 					if (gt.isHomRef()) 

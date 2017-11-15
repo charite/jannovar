@@ -155,13 +155,13 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 	}
 
 	/**
-	 * Affected Okay but one unaffected has it HET
-	 * TODO Should we really filter that or should we leave it?
+	 * Affected Okay but one unaffected has it HET. We allow this because of
+	 * heteroplasmie in unaffected
 	 * 
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
-	public void testCaseNegativesOneVariant6() throws IncompatiblePedigreeException {
+	public void testCasePositivesOneVariantHeteroplasmie1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
@@ -169,7 +169,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -208,7 +208,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	/**
 	 * One affected is REF
 	 * 
@@ -226,14 +226,16 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	/**
-	 * One unaffected dis also HET
+	 * Affected Okay but one unaffected has it HET. We allow this because of
+	 * heteroplasmie in unaffected. This is in general difficult an can only be
+	 * figured out by using the exact "allele balances".
 	 * 
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
-	public void testCaseNegativesOneVariant10() throws IncompatiblePedigreeException {
+	public void testCasePositivesOneVariantHeteroplasmie2() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
@@ -241,7 +243,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
@@ -267,7 +269,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositiveOneVariant2() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
@@ -280,7 +282,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositiveOneVariant3() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
@@ -293,6 +295,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+
 	@Test
 	public void testCasePositiveOneVariant4() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
@@ -305,7 +308,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositiveOneVariant5() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN, ALT, HET, HET), ChromosomeType.MITOCHONDRIAL);
@@ -318,6 +321,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+
 	@Test
 	public void testCasePositiveOneVariant6() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, UKN, HET), ChromosomeType.MITOCHONDRIAL);
@@ -330,6 +334,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+
 	@Test
 	public void testCasePositiveOneVariant7() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN, UKN, UKN, ALT), ChromosomeType.MITOCHONDRIAL);
@@ -342,6 +347,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+
 	@Test
 	public void testCasePositiveOneVariant8() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
@@ -355,20 +361,24 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
-//	@Test
-//	public void testInconsistentCase() throws IncompatiblePedigreeException {
-//		gcList = getGenotypeCallsList(lst(REF, HET, ALT, REF), ChromosomeType.MITOCHONDRIAL);
-//		MendelianInheritanceChecker checkerForInconsistentCase = new MendelianInheritanceChecker(
-//				this.inconsistentMTpedigree);
-//
-//		result = checkerForInconsistentCase.checkMendelianInheritance(gcList);
-//
-//		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-//		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-//		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-//		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-//		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-//		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
-//	}
+	// @Test
+	// public void testInconsistentCase() throws IncompatiblePedigreeException {
+	// gcList = getGenotypeCallsList(lst(REF, HET, ALT, REF),
+	// ChromosomeType.MITOCHONDRIAL);
+	// MendelianInheritanceChecker checkerForInconsistentCase = new
+	// MendelianInheritanceChecker(
+	// this.inconsistentMTpedigree);
+	//
+	// result = checkerForInconsistentCase.checkMendelianInheritance(gcList);
+	//
+	// Assert.assertEquals(0,
+	// result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+	// Assert.assertEquals(0,
+	// result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+	// Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+	// Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+	// Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+	// Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+	// }
 
 }
