@@ -117,11 +117,8 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	private boolean parentsAreCompatible(GenotypeCalls calls) {
 		for (Person p : pedigree.getMembers()) {
 			if (p.getDisease() == Disease.AFFECTED) {
-				if (p.getMother() != null && p.getMother().isAffected()) {
-					final String name = p.getMother().getName();
-					final Genotype gt = calls.getGenotypeForSample(name);
-					if (gt.isHomRef()) 
-						return false;
+				if (p.getMother() != null && p.getMother().isUnaffected()) {
+					return false;
 				}
 			}
 		}
