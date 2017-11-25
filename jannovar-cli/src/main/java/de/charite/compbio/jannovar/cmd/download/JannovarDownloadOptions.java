@@ -1,11 +1,5 @@
 package de.charite.compbio.jannovar.cmd.download;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
-
-import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarBaseOptions;
@@ -16,6 +10,10 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Configuration for the <tt>download</tt> command
@@ -55,7 +53,7 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Optional Arguments");
 		optionalGroup.addArgument("-s", "--data-source-list").help("INI file with data source list")
-				.setDefault(Lists.newArrayList("bundle:///default_sources.ini")).action(Arguments.append());
+				.setDefault("bundle:///default_sources.ini").action(Arguments.append());
 		optionalGroup.addArgument("--download-dir").help("Path to download directory").setDefault("data");
 
 		JannovarBaseOptions.setupParser(subParser);
