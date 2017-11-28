@@ -1,5 +1,9 @@
 # Jannovar Changelog
 
+## HEAD (unreleased)
+
+* Support for prioritizing RefSeq transcript on the PAR of chrX over those of chrY
+
 ## v0.27
 
 ### jannovar-cli
