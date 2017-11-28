@@ -168,6 +168,11 @@ You can do this by setting ``onlyCurated`` to ``true``:
     gff=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/GFF/ref_GRCh37.p13_top_level.gff3.gz
     rna=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/RNA/rna.fa.gz
 
+RefSeq transcripts for genes in the pseudo-autosomal regions on chromosome X and Y may have more than one location.
+Per default, the last entry in the downloaded GFF file (typically, transcripts on chromosome Y) will be preferred over
+those on chromosome X. To change this behavior (e.g. because the underlying data were aligned against
+a reference genome with a hard-masked PAR on chromosome Y), use ``preferPARTranscriptsOnChrX=true`` (default is ``false``).
+
 UCSC Data Sources
 -----------------
 

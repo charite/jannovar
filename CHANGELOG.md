@@ -5,6 +5,7 @@
 ### jannovar-cli
 
 * Fixing annotation with Polyphen prediction (data type)
+* Support for prioritizing RefSeq transcript on the PAR of chrX over those of chrY
 
 ### overall
 

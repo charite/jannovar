@@ -1,25 +1,10 @@
 package de.charite.compbio.jannovar.impl.parse.refseq;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.ini4j.Profile.Section;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -36,6 +21,19 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Parsing of RefSeq GFF3 files
@@ -101,10 +99,10 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
-		loadFASTA(builders, pathFASTA);
+		loadFASTA(builders, pathFASTA, preferPARTranscriptsOnChrX());
 
 		// Create final list of TranscriptModels.
-		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
+		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<>();
 		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
 			result.add(entry.getValue().build());
 		return result.build();
@@ -116,12 +114,10 @@ public class RefSeqParser implements TranscriptParser {
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the FASTA
 	 */
-	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA)
-			throws TranscriptParseException {
+	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA,
+												 boolean preferPARTranscriptsOnChrX) throws TranscriptParseException {
 		// First, build mapping from RNA accession to builder
-		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
-		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
-			txMap.put(entry.getValue().getSequence(), entry.getValue());
+		Map<String, TranscriptModelBuilder> txMap = mapFromAccessionToBuilder(builders, preferPARTranscriptsOnChrX);
 
 		// We must remove variants for which we did not find any sequence;
 		Set<String> missingSequence = new HashSet<>();
@@ -171,6 +167,33 @@ public class RefSeqParser implements TranscriptParser {
 		LOGGER.info("Successfully processed {} transcripts with sequence.", new Object[] { builders.size() });
 	}
 
+	private static Map<String, TranscriptModelBuilder> mapFromAccessionToBuilder(Map<String, TranscriptModelBuilder> builders,
+																																				boolean preferPARTranscriptsOnChrX) {
+		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
+		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
+			if (entry.getValue().getSequence() == null) {
+				continue;
+			}
+			TranscriptModelBuilder existingTranscriptBuilder = txMap.get(entry.getValue().getSequence());
+			if (existingTranscriptBuilder != null) {
+				int newChromosome = entry.getValue().getTXRegion().getChr();
+				int currentChromosome = existingTranscriptBuilder.getTXRegion().getChr();
+				if (preferPARTranscriptsOnChrX && currentChromosome == 23 && newChromosome == 24) {
+					LOGGER.warn(
+							"PAR transcripts on chrX are configured to be preferable, so ignoring entry for chromosome '{}' in favor of entry for chromosome '{}' for '{}'",
+							newChromosome, currentChromosome, entry.getValue().getSequence());
+					continue;
+				} else {
+					LOGGER.warn(
+							"Found two locations for '{}', now using entry for chromosome '{}' and discarding the entry for chromosome '{}'",
+							entry.getValue().getSequence(), newChromosome, currentChromosome);
+				}
+			}
+			txMap.put(entry.getValue().getSequence(), entry.getValue());
+		}
+		return txMap;
+	}
+
 	/**
 	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
 	 * 
@@ -180,10 +203,9 @@ public class RefSeqParser implements TranscriptParser {
 	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
-	private Map<String, TranscriptModelBuilder> recordsToBuilders(
-			HashMap<String, ArrayList<FeatureRecord>> recordsByGene) {
+	private Map<String, TranscriptModelBuilder> recordsToBuilders(Map<String, List<FeatureRecord>> recordsByGene) {
 		Map<String, TranscriptModelBuilder> result = new HashMap<>();
-		for (Entry<String, ArrayList<FeatureRecord>> entry : recordsByGene.entrySet())
+		for (Entry<String, List<FeatureRecord>> entry : recordsByGene.entrySet())
 			result.putAll(processGeneGFFRecords(entry.getValue()));
 		return result;
 	}
@@ -191,21 +213,21 @@ public class RefSeqParser implements TranscriptParser {
 	/**
 	 * Process the GFFRecord objects for one gene.
 	 */
-	private Map<String, TranscriptModelBuilder> processGeneGFFRecords(ArrayList<FeatureRecord> records) {
+	private Map<String, TranscriptModelBuilder> processGeneGFFRecords(List<FeatureRecord> records) {
 		final Map<String, TranscriptModelBuilder> result = new HashMap<>();
 
 		assert records.get(0).getType().equals("gene");
 		final FeatureRecord geneRecord = records.get(0);
 
 		// Get IDs of the transcripts and create a list of GFFRecord objects for each
-		final HashMap<String, FeatureRecord> mrnaRecords = new HashMap<>();
-		final HashMap<String, ArrayList<FeatureRecord>> recordsForMRNA = new HashMap<>();
+		final Map<String, FeatureRecord> mrnaRecords = new HashMap<>();
+		final Map<String, List<FeatureRecord>> recordsForMRNA = new HashMap<>();
 		for (FeatureRecord record : records) {
 			// We will later assign exons and CDS features to tx level features, but exons can also be part of a gene
 			// only
 			if (TX_LEVEL_FEATURE_TYPES.contains(record.getType()) || "gene".equals(record.getType())) {
 				mrnaRecords.put(record.getAttributes().get("ID"), record);
-				recordsForMRNA.put(record.getAttributes().get("ID"), new ArrayList<FeatureRecord>());
+				recordsForMRNA.put(record.getAttributes().get("ID"), new ArrayList<>());
 			}
 		}
 
@@ -319,8 +341,8 @@ public class RefSeqParser implements TranscriptParser {
 	 * @throws TranscriptParseException
 	 *             on problems with handling the transcript file
 	 */
-	private HashMap<String, ArrayList<FeatureRecord>> loadRecords(String pathGFF) throws TranscriptParseException {
-		HashMap<String, ArrayList<FeatureRecord>> result = new HashMap<String, ArrayList<FeatureRecord>>();
+	private Map<String, List<FeatureRecord>> loadRecords(String pathGFF) throws TranscriptParseException {
+		Map<String, List<FeatureRecord>> result = new HashMap<>();
 
 		// Open file using GFFParser
 		GFFParser parser;
@@ -331,7 +353,7 @@ public class RefSeqParser implements TranscriptParser {
 		}
 
 		// Map a feature to its gene
-		HashMap<String, String> featureToGene = new HashMap<>();
+		Map<String, String> featureToGene = new HashMap<>();
 
 		// Read file record by record, mapping features to genes
 		//
@@ -377,7 +399,17 @@ public class RefSeqParser implements TranscriptParser {
 	 * @return <code>true</code> if only curated entries are to be returned
 	 */
 	private boolean onlyCurated() {
-		String value = iniSection.fetch("onlyCurated");
+		return checkFlagInSection(iniSection.fetch("onlyCurated"));
+	}
+
+	/**
+	 * @return <code>true</code> if only curated entries are to be returned
+	 */
+	private boolean preferPARTranscriptsOnChrX() {
+		return checkFlagInSection(iniSection.fetch("preferPARTranscriptsOnChrX"));
+	}
+
+	private static boolean checkFlagInSection(String value) {
 		if (value == null)
 			return false;
 		value = value.toLowerCase();
