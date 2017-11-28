@@ -63,6 +63,7 @@ public enum RefSeqFastaRecordIdFormat {
 			return of(tokens.get(DEFAULT_FORMAT_ACCESSION_INDEX));
 		case INTERIM_RELEASE_201701_FORMAT:
 			return of(recordId);
+		default:
 		case UNKNOWN_FORMAT:
 			LOGGER.error("ID {} in FASTA did not have any of the expected formats.", recordId);
 		}
