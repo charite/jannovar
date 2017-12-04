@@ -166,3 +166,12 @@ For XR compound heterozygous, the following checks are performed.
    * For each unaffected person in the pedigree, neither the maternal nor the paternal call list from the candidate can contain a ``HOM`` or for males also a ``HET`` call for the unaffected person.
    * If the call for the unaffected persons is ``HET`` in both the paternal and the maternal call list. Then, the father's and mother's genotype are checked in the maternal call list of the candidate their genotypes in the paternal call list are considered.
    
+   Mitochondrial Filter
+----------------------------
+The mitochondrion is a closed circular molecule that contain 16,569 base pairs. Mitochondrial DNA 9mtDNA) is transmitted through the mother's oocyte, and so disease-causing mitochondrial mutations can be transmitted only from the mother, however, both sons and daughters can be affected. Mitochondrial inheritance is thus non-Mendelian. Note that numerous nuclear genes encode proteins that are imported to the mitochondrion, and mitochondrial diseases may be caused by mutations in mitochondrial DNA, or by mutation s in nuclear DNA coding for mitochondrial components. Another complication is heteroplasmy: cells have multiple mitochondria and different mitochondria in the same cell can have different mtDNA variants. Clinical symptoms may ensue if cells in a certain tissue exceed a certain threshold ratio of mutant vs. wildtype mtDNA.
+
+Jannovar's filter therefore uses the following rules.
+
+* Males and females can be affected by mitochrondial mutations, and so if there is any call from a variant on the mitochondrion, a singleton sample is compatible with mitochondrial inheritance.
+* For analyses of mulitple family members, Jannovar calls a variant as compatible with mitochondrial inheritance if all affecteds have the mutation and if the mutation was not found to be transmitted by a male to an affected. If an affected person is homozygous reference, then mitochondrial inheritance is ruled out. At least one affected must be called heterozygous or homozygous ALT. Jannovar has no requirement for a certain genotype because current variant callers do not reliably report levels of heteroplasmy. If an affected father transmits a candidate variant to offspring, the variant is ruled out.
+   
