@@ -10,6 +10,10 @@
 
 * Changing HTSJDK version to 2.11.0
 
+### jannovar-core
+
+*  Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+
 ### jannovar-vardbs
 
 * Fixed problem with interpretation of Clinvar annotation origin.

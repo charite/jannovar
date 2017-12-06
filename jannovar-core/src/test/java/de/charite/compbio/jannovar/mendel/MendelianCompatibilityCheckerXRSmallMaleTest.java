@@ -345,6 +345,21 @@ public class MendelianCompatibilityCheckerXRSmallMaleTest extends MendelianCompa
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
+	
+	// to catch a bug in jannovar 0.23 (issue #363)
+	@Test
+	public void testCaseNegativesOneVariant26() throws IncompatiblePedigreeException {
+		// At least one hom_alt
+		gcList = getGenotypeCallsList(lst(REF, ALT, ALT, HET), true);
+		result = checker.checkMendelianInheritance(gcList);
+
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+	}
+
 
 	@Test
 	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
