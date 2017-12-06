@@ -44,7 +44,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET, HET), false);
+		gcList = getGenotypeCallsList(lst(HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -55,7 +55,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF, REF), false);
+		gcList = getGenotypeCallsList(lst(REF, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -66,7 +66,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT, ALT), false);
+		gcList = getGenotypeCallsList(lst(ALT, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -77,7 +77,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant4() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN, UKN), false);
+		gcList = getGenotypeCallsList(lst(UKN, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -88,7 +88,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant5() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF, ALT), false);
+		gcList = getGenotypeCallsList(lst(REF, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -99,7 +99,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant6() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET, ALT), false);
+		gcList = getGenotypeCallsList(lst(HET, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -110,7 +110,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant7() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN, ALT), false);
+		gcList = getGenotypeCallsList(lst(UKN, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -121,7 +121,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant8() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT, HET), false);
+		gcList = getGenotypeCallsList(lst(ALT, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -132,7 +132,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 	}
 
 	public void testCaseNegativesOneVariant9() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF, UKN), false);
+		gcList = getGenotypeCallsList(lst(REF, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -144,7 +144,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET, HET), lst(HET, HET), false);
+		gcList = getGenotypeCallsList(lst(HET, HET), lst(HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -156,7 +156,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCaseNegativesTwoVariants2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT, HET), lst(HET, HET), false);
+		gcList = getGenotypeCallsList(lst(ALT, HET), lst(HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -168,7 +168,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCaseNegativesTwoVariants3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT, HET), lst(REF, UKN), false);
+		gcList = getGenotypeCallsList(lst(ALT, HET), lst(REF, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -180,7 +180,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCasePositiveOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF, HET), false);
+		gcList = getGenotypeCallsList(lst(REF, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -192,7 +192,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCasePositiveOneVariant2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN, HET), false);
+		gcList = getGenotypeCallsList(lst(UKN, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -204,7 +204,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCasePositiveTwoVariants1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT, HET), lst(REF, HET), false);
+		gcList = getGenotypeCallsList(lst(ALT, HET), lst(REF, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -216,7 +216,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCasePositiveTwoVariants2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN, HET), lst(UKN, HET), false);
+		gcList = getGenotypeCallsList(lst(UKN, HET), lst(UKN, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(2, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -228,7 +228,7 @@ public class MendelianCompatibilityCheckerADVerySmallTest extends MendelianCompa
 
 	@Test
 	public void testCasePositiveTwoVariants3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET, HET), lst(REF, HET), false);
+		gcList = getGenotypeCallsList(lst(HET, HET), lst(REF, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());

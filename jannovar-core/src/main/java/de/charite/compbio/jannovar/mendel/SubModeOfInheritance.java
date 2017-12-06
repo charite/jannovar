@@ -4,10 +4,10 @@ package de.charite.compbio.jannovar.mendel;
 
 /**
  * Enum for refined representation of {@link ModeOfInheritance}
- * 
+ *
  * In contrast to {@link ModeOfInheritance}, this type can reflect whether autosomal recessive inheritance is compound
  * heterozygous or homozygous alternative.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum SubModeOfInheritance {
@@ -24,9 +24,11 @@ public enum SubModeOfInheritance {
 	X_RECESSIVE_HOM_ALT,
 	/** dominant inheritance on X chromosome */
 	X_DOMINANT,
+	/** mitochondrial inheritance */
+	MITOCHONDRIAL,
 	/** value for encoding uninitialized values */
 	ANY;
-	
+
 	public boolean isRecessive() {
 		return toModeOfInheritance().isRecessive();
 	}
@@ -50,12 +52,14 @@ public enum SubModeOfInheritance {
 			return "XR_COMP_HET";
 		case X_RECESSIVE_HOM_ALT:
 			return "XR_HOM_ALT";
+		case MITOCHONDRIAL:
+			return "MT";
 		case ANY:
 		default:
 			return null;
 		}
 	}
-	
+
 	/** @return coarsened value from {@link ModeOfInheritance} */
 	public ModeOfInheritance toModeOfInheritance() {
 		switch (this) {
@@ -69,6 +73,8 @@ public enum SubModeOfInheritance {
 		case X_RECESSIVE_COMP_HET:
 		case X_RECESSIVE_HOM_ALT:
 			return ModeOfInheritance.X_RECESSIVE;
+		case MITOCHONDRIAL:
+			return ModeOfInheritance.MITOCHONDRIAL;
 		case ANY:
 		default:
 			return ModeOfInheritance.ANY;

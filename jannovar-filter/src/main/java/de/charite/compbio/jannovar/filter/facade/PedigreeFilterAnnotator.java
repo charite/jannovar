@@ -234,7 +234,7 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Get de novo allele in <code>sampleName</code> or <code>null</code> if there is none
 	 *
-	 * @param vc {@link VarianContext} to query
+	 * @param vc {@link VariantContext} to query
 	 * @param sampleName Name of the sample
 	 * @return De novo allele
 	 */

@@ -7,7 +7,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending VCF header for mendelian inheritance annotation
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class MendelVCFHeaderExtender {
@@ -20,6 +20,8 @@ public class MendelVCFHeaderExtender {
 	public static String XD = "XD";
 	/** Constant for X recessive */
 	public static String XR = "XR";
+	/** Constant for mitochondrial */
+	public static final String MT = "MT";
 
 	/** Constant for autosomal recessive hom. alt. */
 	public static String AR_HOM_ALT = "AR_HOM_ALT";
@@ -52,7 +54,7 @@ public class MendelVCFHeaderExtender {
 
 	public void extendHeader(VCFHeader vcfHeader, String prefix) {
 		VCFInfoHeaderLine inheritanceLine = new VCFInfoHeaderLine(key(prefix), VCFHeaderLineCount.UNBOUNDED,
-				VCFHeaderLineType.String, "Compatible Mendelian inheritance modes (AD, AR, XD, XR)");
+				VCFHeaderLineType.String, "Compatible inheritance modes (AD, AR, XD, XR, MT)");
 		vcfHeader.addMetaDataLine(inheritanceLine);
 		VCFInfoHeaderLine subInheritanceLine = new VCFInfoHeaderLine(keySub(prefix), VCFHeaderLineCount.UNBOUNDED,
 				VCFHeaderLineType.String,
