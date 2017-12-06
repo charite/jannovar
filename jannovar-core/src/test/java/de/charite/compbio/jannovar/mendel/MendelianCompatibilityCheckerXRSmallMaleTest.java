@@ -350,7 +350,7 @@ public class MendelianCompatibilityCheckerXRSmallMaleTest extends MendelianCompa
 	@Test
 	public void testCaseNegativesOneVariant26() throws IncompatiblePedigreeException {
 		// At least one hom_alt
-		gcList = getGenotypeCallsList(lst(REF, ALT, ALT, HET), true);
+		gcList = getGenotypeCallsList(lst(REF, ALT, ALT, HET), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
