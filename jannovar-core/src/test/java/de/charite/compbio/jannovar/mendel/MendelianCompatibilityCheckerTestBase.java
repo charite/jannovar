@@ -47,7 +47,7 @@ public class MendelianCompatibilityCheckerTestBase {
 	}
 
 	protected List<GenotypeCalls> getGenotypeCallsList(ImmutableList<SimpleGenotype> genotypes,
-			boolean isXchromosomal) {
+			ChromosomeType chromosomeType) {
 		HashMap<String, Genotype> entries = new HashMap<String, Genotype>();
 		for (int i = 0; i < names.size(); ++i) {
 			switch (genotypes.get(i)) {
@@ -67,14 +67,13 @@ public class MendelianCompatibilityCheckerTestBase {
 		}
 
 		List<GenotypeCalls> gcs = new ArrayList<GenotypeCalls>();
-		gcs.add(new GenotypeCalls(isXchromosomal ? ChromosomeType.X_CHROMOSOMAL : ChromosomeType.AUTOSOMAL,
-				entries.entrySet()));
+		gcs.add(new GenotypeCalls(chromosomeType, entries.entrySet()));
 		return gcs;
 	}
 
 	@SuppressWarnings("unchecked")
 	protected List<GenotypeCalls> getGenotypeCallsList(ImmutableList<SimpleGenotype> genotypes1,
-			ImmutableList<SimpleGenotype> genotypes2, boolean isXchromosomal) {
+			ImmutableList<SimpleGenotype> genotypes2, ChromosomeType chromosomeType) {
 		List<GenotypeCalls> gcs = new ArrayList<GenotypeCalls>();
 		for (Object obj : new Object[] { genotypes1, genotypes2 }) {
 			ImmutableList<SimpleGenotype> genotypes = (ImmutableList<SimpleGenotype>) obj;
@@ -96,8 +95,7 @@ public class MendelianCompatibilityCheckerTestBase {
 				}
 			}
 
-			gcs.add(new GenotypeCalls(isXchromosomal ? ChromosomeType.X_CHROMOSOMAL : ChromosomeType.AUTOSOMAL,
-					entries.entrySet()));
+			gcs.add(new GenotypeCalls(chromosomeType, entries.entrySet()));
 		}
 		return gcs;
 	}

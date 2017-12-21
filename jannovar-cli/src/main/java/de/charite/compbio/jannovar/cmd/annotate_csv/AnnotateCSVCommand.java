@@ -51,11 +51,8 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	}
 
 	/**
-	 * This function will simply annotate a csv file wehere positions are set
+	 * This function will simply annotate a csv file where positions are set
 	 *
-	 *
-	 * @param options
-	 *            configuration for the command
 	 * @throws AnnotationException
 	 *             on problems in the annotation process
 	 */

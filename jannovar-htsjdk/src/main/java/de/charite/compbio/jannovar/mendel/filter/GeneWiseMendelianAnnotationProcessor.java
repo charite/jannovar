@@ -38,9 +38,9 @@ import htsjdk.variant.vcf.VCFHeader;
 
 /**
  * Process {@link VariantContext} objects and annotate them with mendelian inheritance compatibility
- * 
+ *
  * The variants put into the processor must be clustered by contig name and sorted by begin position
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GeneWiseMendelianAnnotationProcessor implements VariantContextProcessor {
@@ -73,7 +73,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
 	/**
 	 * Construct processor with the path to the PED file to use
-	 * 
+	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} object to use
 	 * @param jannovarData
@@ -110,7 +110,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		} else {
 			// Contig already known, check that variants are sorted by contig
 			if (!contigInfoProvider.isContigKnown(vc.getContig()))
-				throw new UncheckedJannovarException("Variants are not sorted by chromome, seeing contig "
+				throw new UncheckedJannovarException("Variants are not sorted by chromosome, seeing contig "
 						+ vc.getContig() + " the second time with contig " + contigInfoProvider.getCurrentContig()
 						+ " before the second time");
 		}
@@ -283,7 +283,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	/**
 	 * Builds genotype call lists for variants in currently active genes, checks for compatibility, and in case of
 	 * compatibility, marks variants in <code>gene</code> as compatible.
-	 * 
+	 *
 	 * @throws VariantContextFilterException
 	 *             in case of problems with processing the variant
 	 * @throws CannotAnnotateMendelianInheritance
@@ -420,7 +420,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
 		/**
 		 * Register new contig, returning ID of it
-		 * 
+		 *
 		 * Also update {@link currentContig} to <code>name</code>
 		 */
 		int registerContig(String name) {

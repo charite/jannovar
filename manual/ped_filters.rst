@@ -71,7 +71,7 @@ For AR compound heterozygous, the following checks are performed.
 
 * Each candidate pair is then check for compatibility with affected persons.
   The following is performed as described below and also with a role swap of the paternal and maternal variant call list.
-  
+
   * For each affected person, the maternal and paternal variant call list is performed for compatibility. For this, each of the following must be checked:
 
     * If the maternal list is not empty then the genotype of the person in the paternal list must not be ``REF`` or ``HOM``.
@@ -87,12 +87,12 @@ For AR compound heterozygous, the following checks are performed.
    * If the call for the unaffected persons is ``HET`` in both the paternal and the maternal call list. Then, the father's and mother's genotype are checked in the maternal call list of the candidate their genotypes in the paternal call list are considered.
 
      * Let the first two genotypes be ``pp`` and ``mp`` and the second two genotypes be ``pm`` and ``mm``.
-     * In the case of ``pp == HET and mp == REF and pm == REF and mm == HET`` and the case of ``pp == REF and mp == HET and pm == HET and mm == REF``, the candidate pairs incompatible and compatible otherwise.  
+     * In the case of ``pp == HET and mp == REF and pm == REF and mm == HET`` and the case of ``pp == REF and mp == HET and pm == HET and mm == REF``, the candidate pairs incompatible and compatible otherwise.
 
 X-Dominant Filter
 ---------------------------
-* First of all variants must be X-Chromosomal. 
- * If the pedigree only contains one person then we decide if 
+* First of all variants must be X-Chromosomal.
+ * If the pedigree only contains one person then we decide if
    * the person is female then the variant call list must contain one ``HET`` call.
    * else the variant call list must contain a ``HET`` or a ``HOM`` call.
  * If there is more than one person in the pedigree then there must be at least one compatible call, meaning:
@@ -116,9 +116,9 @@ For XR homozygous, the following checks are performed.
    * at least one affected male has a ``HET`` or ``HOM`` call or a affected female a ``HOM`` call for this variant,
    * no affected person has a ``REF`` or no affected female person has a ``HET`` call.
    * For the parents of affected femals
-      * the father must be affected and 
+      * the father must be affected and
       * the mother cannot have it ``REF`` or ``HOM``
-    * For the parents of affected males 
+    * For the parents of affected males
       * the unaffected father cannot have the variant ``HET`` or ``HOM``
       * the mother cannot be ``HOM``
    * There is no unaffected person that has a ``HOM`` call.
@@ -143,7 +143,7 @@ For XR compound heterozygous, the following checks are performed.
    * A variant is compatible regarding the maternal side if:
 
       * the person has calls ``HET``, ``NOCALL``, or if not female ``HOM``,
-      * the person has no mother or the mother has calls ``HET`` or ``NOCALL``, and 
+      * the person has no mother or the mother has calls ``HET`` or ``NOCALL``, and
       * no restrcition to the father because he must be affected. See ckecks later.
 
    * Further, no candidate pair may contain the same call for both the maternal and the paternal side, and
@@ -151,7 +151,7 @@ For XR compound heterozygous, the following checks are performed.
 
 * Each candidate pair is then check for compatibility with affected persons.
   The following is performed as described below and also with a role swap of the paternal and maternal variant call list.
-  
+
   * For each affected person, the maternal and paternal variant call list is performed for compatibility. For this, each of the following must be checked:
 
     * If the maternal list is not empty then the genotype of a female person in the paternal list must not be ``REF`` or ``HOM``.
@@ -165,4 +165,12 @@ For XR compound heterozygous, the following checks are performed.
 
    * For each unaffected person in the pedigree, neither the maternal nor the paternal call list from the candidate can contain a ``HOM`` or for males also a ``HET`` call for the unaffected person.
    * If the call for the unaffected persons is ``HET`` in both the paternal and the maternal call list. Then, the father's and mother's genotype are checked in the maternal call list of the candidate their genotypes in the paternal call list are considered.
-   
+
+   Mitochondrial Filter
+----------------------------
+The mitochondrion is a closed circular molecule that contain 16,569 base pairs. Mitochondrial DNA (mtDNA) is transmitted through the mother's oocyte, and so disease-causing mitochondrial mutations can be transmitted only from the mother, however, both sons and daughters can be affected. Mitochondrial inheritance is thus non-Mendelian. Note that numerous nuclear genes encode proteins that are imported to the mitochondrion, and mitochondrial diseases may be caused by mutations in mitochondrial DNA, or by mutation s in nuclear DNA coding for mitochondrial components. Another complication is heteroplasmy: cells have multiple mitochondria and different mitochondria in the same cell can have different mtDNA variants. Clinical symptoms may ensue if cells in a certain tissue exceed a certain threshold ratio of mutant vs. wildtype mtDNA.
+
+Jannovar's filter therefore uses the following rules.
+
+* Males and females can be affected by mitochrondial mutations, and so if there is any call from a variant on the mitochondrion, a singleton sample is compatible with mitochondrial inheritance.
+* For analyses of mulitple family members, Jannovar calls a variant as compatible with mitochondrial inheritance if all affecteds have the mutation and if the mutation was transmitted by the mother. If an affected person is homozygous reference, then mitochondrial inheritance is ruled out. At least one affected must be called heterozygous or homozygous ALT. Jannovar has no requirement for a certain genotype because current variant callers do not reliably report levels of heteroplasmy.

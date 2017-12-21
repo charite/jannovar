@@ -1,9 +1,10 @@
 package de.charite.compbio.jannovar.mendel;
 
 /**
- * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data
+ * An enumeration of the main Mendelian modes of inheritance for prioritizing exome data
  *
  * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
+ * @version 0.1.2 (September 15, 2017)
  */
 public enum ModeOfInheritance {
 	/** autosomal dominant inheritance */
@@ -14,6 +15,8 @@ public enum ModeOfInheritance {
 	X_RECESSIVE,
 	/** dominant inheritance on X chromosome */
 	X_DOMINANT,
+	/** Mitochondrial inheritance */
+	MITOCHONDRIAL,
 	/** value for encoding uninitialized values */
 	ANY;
 
@@ -39,20 +42,24 @@ public enum ModeOfInheritance {
 		}
 	}
 
-	/** @return two-letter shortcut for the ModeOfInheritance */
+	/**
+	 * @return two-letter shortcut for the ModeOfInheritance
+	 */
 	public String getAbbreviation() {
 		switch (this) {
-		case AUTOSOMAL_DOMINANT:
-			return "AD";
-		case AUTOSOMAL_RECESSIVE:
-			return "AR";
-		case X_DOMINANT:
-			return "XD";
-		case X_RECESSIVE:
-			return "XR";
-		case ANY:
-		default:
-			return null;
+			case AUTOSOMAL_DOMINANT:
+				return "AD";
+			case AUTOSOMAL_RECESSIVE:
+				return "AR";
+			case X_DOMINANT:
+				return "XD";
+			case X_RECESSIVE:
+				return "XR";
+			case MITOCHONDRIAL:
+				return "MT";
+			case ANY:
+			default:
+				return null;
 		}
 	}
 
