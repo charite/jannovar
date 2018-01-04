@@ -17,6 +17,7 @@
 ### jannovar-vardbs
 
 * Fixed problem with interpretation of Clinvar annotation origin.
+* Clinvar `BEST_AC` and `BEST_AF` are now named `AC_POPMAX` and `AF_POPMAX` to be consitent with gnomAD
 
 ## v0.23
 
