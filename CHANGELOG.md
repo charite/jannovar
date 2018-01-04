@@ -8,7 +8,7 @@
 
 ### overall
 
-* Changing HTSJDK version to 2.11.0
+* Changing HTSJDK version to 2.14.0
 
 ### jannovar-core
 
