@@ -12,7 +12,8 @@
 
 ### jannovar-core
 
-*  Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* New inheritance mode: mitochondrial
 
 ### jannovar-vardbs
 
