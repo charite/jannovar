@@ -1,14 +1,9 @@
 package de.charite.compbio.jannovar.impl.parse;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class FASTARecordTest {
-
-	@Before
-	public void setUp() throws Exception {
-	}
 
 	@Test
 	public void test() {
