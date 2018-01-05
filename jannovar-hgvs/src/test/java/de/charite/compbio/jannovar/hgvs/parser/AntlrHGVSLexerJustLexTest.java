@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CodePointCharStream;
 import org.junit.Test;
 
 /**
@@ -13,7 +14,7 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	@Test
 	public void testLexingOnNTStrings() {
 		for (String ntString : NT_STRINGS) {
-			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
+			CodePointCharStream inputStream = CharStreams.fromString(ntString);
 			HGVSLexer l = new HGVSLexer(inputStream);
 			l.mode(HGVSLexer.CHANGE_BRANCH);
 			l.getAllTokens();
@@ -23,7 +24,7 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	@Test
 	public void testLexingOnLegacyStrings() {
 		for (String ntString : LEGACY_STRINGS) {
-			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
+			CodePointCharStream inputStream = CharStreams.fromString(ntString);
 			HGVSLexer l = new HGVSLexer(inputStream);
 			l.mode(HGVSLexer.CHANGE_BRANCH);
 			l.getAllTokens();
@@ -33,7 +34,7 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	@Test
 	public void testLexingOnProteinStrings() {
 		for (String proteinString : PROTEIN_STRINGS) {
-			ANTLRInputStream inputStream = new ANTLRInputStream(proteinString);
+			CodePointCharStream inputStream = CharStreams.fromString(proteinString);
 			HGVSLexer l = new HGVSLexer(inputStream);
 			l.mode(HGVSLexer.AMINO_ACID_CHANGE);
 			l.getAllTokens();

@@ -373,15 +373,4 @@ public class VariantContextMendelianAnnotator {
 		filterIntersection.retainAll(vcFilters);
 		return !filterIntersection.isEmpty();
 	}
-
-	/**
-	 * Helper function for filtered variants/genotypes
-	 *
-	 * @return whether or not variant is filtered based on filters
-	 */
-	private boolean isFiltered(Collection<String> vcFilters,
-			Collection<String> filtersA) {
-		return isFiltered(vcFilters, filtersA, ImmutableList.<String> of());
-	}
-
 }

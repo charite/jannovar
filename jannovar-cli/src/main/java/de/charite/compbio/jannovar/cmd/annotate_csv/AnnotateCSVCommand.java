@@ -132,11 +132,9 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(changeStr);
 
-		if (!match.matches()) {
-			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
+		if (!match.matches())
+			throw new JannovarException("[ERROR] Input string for the chromosomal change " + changeStr
 					+ " does not fit the regular expression ... :(");
-			System.exit(3);
-		}
 
 		int chr = refDict.getContigNameToID().get(match.group(1));
 		int pos = Integer.parseInt(match.group(2));
