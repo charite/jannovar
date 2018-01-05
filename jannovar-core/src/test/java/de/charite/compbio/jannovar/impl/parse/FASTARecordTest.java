@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
