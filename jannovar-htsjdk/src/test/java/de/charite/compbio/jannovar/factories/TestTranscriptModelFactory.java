@@ -42,10 +42,10 @@ public class TestTranscriptModelFactory {
         int chr = refDict.getContigNameToID().get(fields[1].substring(3));
 
         result.setStrand(valueOf(fields[2].charAt(0)));
-        GenomeInterval txRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[3]) + 1,
+        GenomeInterval txRegion = new GenomeInterval(refDict, FWD, chr, Integer.parseInt(fields[3]) + 1,
                 Integer.parseInt(fields[4]), PositionType.ONE_BASED);
         result.setTXRegion(txRegion);
-        GenomeInterval cdsRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[5]) + 1,
+        GenomeInterval cdsRegion = new GenomeInterval(refDict, FWD, chr, Integer.parseInt(fields[5]) + 1,
                 Integer.parseInt(fields[6]), PositionType.ONE_BASED);
         result.setCDSRegion(cdsRegion);
 
@@ -53,7 +53,7 @@ public class TestTranscriptModelFactory {
         String[] startFields = fields[8].split(",");
         String[] endFields = fields[9].split(",");
         for (int i = 0; i < exonCount; ++i) {
-            GenomeInterval exonRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(startFields[i]) + 1,
+            GenomeInterval exonRegion = new GenomeInterval(refDict, FWD, chr, Integer.parseInt(startFields[i]) + 1,
                     Integer.parseInt(endFields[i]), PositionType.ONE_BASED);
             result.addExonRegion(exonRegion);
         }
