@@ -243,13 +243,15 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
 			// short-circuit.
+			// == is correct even if getPos() is zero based 
+			// because getPos points to the stop position which is one base after the AA sequence
 			if (varTypes.contains(VariantEffect.STOP_LOST) && aaChange.getPos() == varAASeq.length()) {
 				// Note: used to be "p.*${pos}del?"
 				proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
 				return;
 			}
 			// Handle the case of deleting up to the end of the sequence.
-			if (aaChange.getPos() >= varAASeq.length()) {
+			if (aaChange.getLastPos() >= varAASeq.length()) {
 				final String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
 				final String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
 				if (aaChange.getRef().length() == 1)
