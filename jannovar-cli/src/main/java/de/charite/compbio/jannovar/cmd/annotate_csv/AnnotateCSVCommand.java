@@ -45,7 +45,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	 * @param args
 	 * @throws CommandLineParsingException
 	 */
-	public AnnotateCSVCommand(String argv[], Namespace args) throws CommandLineParsingException {
+	public AnnotateCSVCommand(Namespace args) throws CommandLineParsingException {
 		this.options = new JannovarAnnotateCSVOptions();
 		this.options.setFromArgs(args);
 	}

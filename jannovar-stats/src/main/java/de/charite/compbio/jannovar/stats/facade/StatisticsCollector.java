@@ -60,9 +60,9 @@ public class StatisticsCollector {
 		// register per-allele counts
 		if (alleleAnnotations != null)
 			for (int i = 1; i < vc.getNAlleles(); ++i) {
-				putPutativeImpact(vc, null, alleleAnnotations.get(i - 1));
-				putVariantEffect(vc, null, alleleAnnotations.get(i - 1));
-				putGenomeRegion(vc, null, alleleAnnotations.get(i - 1));
+				putPutativeImpact(null, alleleAnnotations.get(i - 1));
+				putVariantEffect(null, alleleAnnotations.get(i - 1));
+				putGenomeRegion(null, alleleAnnotations.get(i - 1));
 				putTsTv(vc, null, i - 1);
 			}
 
@@ -85,9 +85,9 @@ public class StatisticsCollector {
 				// ignore wild-type allele, count each variant allele only once
 				if (alleleAnnotations != null)
 					if (aIdx != 0 && !seen.contains(aIdx)) {
-						putPutativeImpact(vc, sampleName, alleleAnnotations.get(aIdx - 1));
-						putVariantEffect(vc, sampleName, alleleAnnotations.get(aIdx - 1));
-						putGenomeRegion(vc, sampleName, alleleAnnotations.get(aIdx - 1));
+						putPutativeImpact(sampleName, alleleAnnotations.get(aIdx - 1));
+						putVariantEffect(sampleName, alleleAnnotations.get(aIdx - 1));
+						putGenomeRegion(sampleName, alleleAnnotations.get(aIdx - 1));
 						putTsTv(vc, sampleName, aIdx);
 					}
 				seen.add(aIdx);
@@ -130,14 +130,14 @@ public class StatisticsCollector {
 			stats.putFilter(ft);
 	}
 
-	private void putVariantEffect(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
+	private void putVariantEffect(String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
 		if (alleleAnno != null && alleleAnno.getHighestImpactAnnotation() != null
 				&& alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType() != null)
 			stats.putVariantEffect(alleleAnno.getHighestImpactAnnotation().getMostPathogenicVarType());
 	}
 
-	private void putGenomeRegion(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
+	private void putGenomeRegion(String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
 		if (alleleAnno.getHighestImpactAnnotation() == null
 				|| alleleAnno.getHighestImpactAnnotation().getEffects() == null)
@@ -240,7 +240,7 @@ public class StatisticsCollector {
 		}
 	}
 
-	private void putPutativeImpact(VariantContext vc, String sampleName, VariantAnnotations alleleAnno) {
+	private void putPutativeImpact(String sampleName, VariantAnnotations alleleAnno) {
 		final Statistics stats = perSampleStats.get(sampleName);
 		if (alleleAnno != null && alleleAnno.getHighestImpactAnnotation() != null
 				&& alleleAnno.getHighestImpactAnnotation().getPutativeImpact() != null)

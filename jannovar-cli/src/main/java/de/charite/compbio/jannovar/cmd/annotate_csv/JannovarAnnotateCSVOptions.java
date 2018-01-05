@@ -39,7 +39,7 @@ public class JannovarAnnotateCSVOptions extends JannovarAnnotationOptions {
 	public static void setupParser(Subparsers subParsers) {
 		BiFunction<String[], Namespace, AnnotateCSVCommand> handler = (argv, args) -> {
 			try {
-				return new AnnotateCSVCommand(argv, args);
+				return new AnnotateCSVCommand(args);
 			} catch (CommandLineParsingException e) {
 				throw new UncheckedJannovarException("Could not parse command line", e);
 			}

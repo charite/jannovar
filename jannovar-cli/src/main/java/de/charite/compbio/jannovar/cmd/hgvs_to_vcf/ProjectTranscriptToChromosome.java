@@ -57,7 +57,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 	/** Translation of variants */
 	NucleotideChangeToGenomeVariantTranslator translator;
 
-	public ProjectTranscriptToChromosome(String argv[], Namespace args) throws CommandLineParsingException {
+	public ProjectTranscriptToChromosome(Namespace args) throws CommandLineParsingException {
 		this.options = new ProjectTranscriptToChromosomeOptions();
 		this.options.setFromArgs(args);
 	}
