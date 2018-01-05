@@ -270,9 +270,7 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
 			return false;
 		if (chr != other.chr)
 			return false;
-		if (pos != other.pos)
-			return false;
-		return true;
+		return pos == other.pos;
 	}
 
 	public int compareTo(GenomePosition other) {

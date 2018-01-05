@@ -179,9 +179,7 @@ public final class PedPerson {
 				return false;
 		} else if (!pedigree.equals(other.pedigree))
 			return false;
-		if (sex != other.sex)
-			return false;
-		return true;
+		return sex == other.sex;
 	}
 
 }
