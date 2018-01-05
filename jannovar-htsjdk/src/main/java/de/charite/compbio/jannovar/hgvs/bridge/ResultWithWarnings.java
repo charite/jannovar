@@ -9,22 +9,22 @@ import com.google.common.collect.ImmutableList;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-class ResultWithWarnings<Value> {
+class ResultWithWarnings<V> {
 
 	/** wrapped value */
-	private final Value value;
+	private final V value;
 	/** list of warning messages */
 	private final ImmutableList<String> warnings;
 
-	public static <Value> ResultWithWarnings<Value> construct(Value value) {
-		return new ResultWithWarnings<Value>(value, ImmutableList.<String> of());
+	public static <V> ResultWithWarnings<V> construct(V value) {
+		return new ResultWithWarnings<V>(value, ImmutableList.<String> of());
 	}
 
-	public static <Value> ResultWithWarnings<Value> construct(Value value, String... warnings) {
-		return new ResultWithWarnings<Value>(value, ImmutableList.copyOf(warnings));
+	public static <V> ResultWithWarnings<V> construct(V value, String... warnings) {
+		return new ResultWithWarnings<V>(value, ImmutableList.copyOf(warnings));
 	}
 
-	public ResultWithWarnings(Value value, Collection<String> warnings) {
+	public ResultWithWarnings(V value, Collection<String> warnings) {
 		super();
 		this.value = value;
 		this.warnings = ImmutableList.copyOf(warnings);
@@ -34,7 +34,7 @@ class ResultWithWarnings<Value> {
 		return warnings;
 	}
 
-	public Value getValue() {
+	public V getValue() {
 		return value;
 	}
 
