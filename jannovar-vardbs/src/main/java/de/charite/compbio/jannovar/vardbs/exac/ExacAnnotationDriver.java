@@ -109,8 +109,8 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 			}
 		}
 
-		builder.attribute(options.getVCFIdentifierPrefix() + infix + "BEST_AC", acs);
-		builder.attribute(options.getVCFIdentifierPrefix() + infix + "BEST_AF", afs);
+		builder.attribute(options.getVCFIdentifierPrefix() + infix + "AC_POPMAX", acs);
+		builder.attribute(options.getVCFIdentifierPrefix() + infix + "AF_POPMAX", afs);
 	}
 
 	private void annotateChromosomeCounts(VariantContext vc, String infix,
