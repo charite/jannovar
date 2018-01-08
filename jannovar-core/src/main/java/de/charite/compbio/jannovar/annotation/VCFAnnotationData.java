@@ -161,7 +161,7 @@ class VCFAnnotationData {
 	private String getCDSPosString() {
 		if (cdsPos == -1)
 			return null;
-		if (!featureBioType.equals("Coding"))
+		if (!"Coding".equals(featureBioType))
 			return null;
 		return Joiner.on('/').join(cdsPos + 1, cdsLength);
 	}
@@ -169,7 +169,7 @@ class VCFAnnotationData {
 	private String getAminoAcidPosString() {
 		if (cdsPos == -1)
 			return null;
-		if (!featureBioType.equals("Coding"))
+		if (!"Coding".equals(featureBioType))
 			return null;
 		return Joiner.on('/').join(cdsPos / 3 + 1, cdsLength / 3);
 	}

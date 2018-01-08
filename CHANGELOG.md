@@ -9,14 +9,18 @@
 ### overall
 
 * Changing HTSJDK version to 2.14.0
+* Codestyle approvements
 
 ### jannovar-core
 
-*  Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* New inheritance mode: mitochondrial
+* Bugfix ProgressBar (doPrint was always true)
 
 ### jannovar-vardbs
 
 * Fixed problem with interpretation of Clinvar annotation origin.
+* Clinvar `BEST_AC` and `BEST_AF` are now named `AC_POPMAX` and `AF_POPMAX` to be consitent with gnomAD
 
 ## v0.23
 

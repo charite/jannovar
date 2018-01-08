@@ -7,7 +7,6 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
-import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
@@ -49,7 +48,6 @@ public final class StructuralVariantAnnotationBuilder {
 	 */
 	public Annotation build() {
 		// Obtain shortcuts.
-		GenomePosition position = change.getGenomePos();
 		final String ref = change.getRef();
 		final String alt = change.getAlt();
 

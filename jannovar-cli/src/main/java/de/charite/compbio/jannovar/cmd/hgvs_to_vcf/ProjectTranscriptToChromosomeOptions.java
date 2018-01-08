@@ -47,7 +47,7 @@ public class ProjectTranscriptToChromosomeOptions extends JannovarAnnotationOpti
 	public static void setupParser(Subparsers subParsers) {
 		BiFunction<String[], Namespace, ProjectTranscriptToChromosome> handler = (argv, args) -> {
 			try {
-				return new ProjectTranscriptToChromosome(argv, args);
+				return new ProjectTranscriptToChromosome(args);
 			} catch (CommandLineParsingException e) {
 				throw new UncheckedJannovarException("Could not parse command line", e);
 			}

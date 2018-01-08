@@ -39,7 +39,7 @@ public class PedFileWriterTest {
 		PedFileWriter writer = new PedFileWriter(tmpFile);
 		writer.write(pedFileContents);
 
-		String fileContents = Files.toString(tmpFile, Charsets.UTF_8);
+		String fileContents = Files.asCharSource(tmpFile, Charsets.UTF_8).read();
 		StringBuilder expectedContents = new StringBuilder();
 		expectedContents.append("#PEDIGREE\tNAME\tFATHER\tMOTHER\tSEX\tDISEASE\n");
 		expectedContents.append("fam\tfather\t0\t0\t1\t0\n");

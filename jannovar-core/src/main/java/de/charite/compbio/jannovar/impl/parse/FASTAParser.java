@@ -13,8 +13,6 @@ import java.util.zip.GZIPInputStream;
 
 import com.google.common.base.Joiner;
 
-import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser.GFFVersion;
-
 /**
  * Generic FASTA parser that allow record-wise loading of FASTA files
  * 

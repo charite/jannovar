@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.mendel.GenotypeCalls;
+
 public class GenotypeListTest {
 
 	String geneName;

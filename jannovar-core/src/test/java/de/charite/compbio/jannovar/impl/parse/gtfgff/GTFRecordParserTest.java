@@ -1,13 +1,8 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
-import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecordParser;
-import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFRecordParser;
-
-import org.junit.Assert;
 
 public class GTFRecordParserTest {
 
