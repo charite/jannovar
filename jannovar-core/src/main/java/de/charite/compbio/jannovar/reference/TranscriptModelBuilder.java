@@ -2,11 +2,9 @@ package de.charite.compbio.jannovar.reference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.ImmutableSortedSet.Builder;
 
 /**
  * Class for building immutable {@link TranscriptModel} objects field-by-field.

@@ -72,7 +72,7 @@ public final class ReferenceDictParser {
 		if (chrToAccessionsFormat == null)
 			chrToAccessionsFormat = "chr_accessions";
 		int chrID = 1; // always start at 1 to get natural mapping of chr1 <-> 1
-		if (chrToAccessionsFormat.equals("chr_accessions")) {
+		if ("chr_accessions".equals(chrToAccessionsFormat)) {
 			final int CA_CHROMOSOME = 0;
 			final int CA_REFSEQ_ACCESSION = 1;
 			final int CA_GENBANK_ACCESSION = 3;

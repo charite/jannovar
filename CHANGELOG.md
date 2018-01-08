@@ -9,11 +9,13 @@
 ### overall
 
 * Changing HTSJDK version to 2.11.0
+* Codestyle approvements
 
 ### jannovar-core
 
 * Fixing mendelian "bug" #393 (has no affect because check was not necessary)
 * New inheritance mode: mitochondrial
+* Bugfix ProgressBar (doPrint was always true)
 
 ### jannovar-vardbs
 

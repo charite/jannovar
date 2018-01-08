@@ -1,10 +1,7 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Splitter;
 
 /**
  * Parse a line of GTF and return a FeatureRecord from this

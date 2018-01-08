@@ -3,11 +3,7 @@ package de.charite.compbio.jannovar.impl.intervals;
 import java.util.ArrayList;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.impl.intervals.IntervalEndExtractor;
 
 public class IntervalArrayTest {
 
@@ -145,10 +141,6 @@ public class IntervalArrayTest {
 		lst.add(new Triple(15, 36, "b"));
 
 		return lst;
-	}
-
-	@Before
-	public void setUp() throws Exception {
 	}
 
 	@Test

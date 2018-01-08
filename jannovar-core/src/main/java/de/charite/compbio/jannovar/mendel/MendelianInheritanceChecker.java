@@ -137,7 +137,8 @@ public final class MendelianInheritanceChecker {
 		if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c)))
 			throw new IncompatiblePedigreeException("GenotypeCalls not compatible with pedigree");
 		// Filter down to the compatible records
-		ImmutableSet<GenotypeCalls> calls1, calls2;
+		ImmutableSet<GenotypeCalls> calls1;
+		ImmutableSet<GenotypeCalls> calls2;
 		ImmutableList.Builder<GenotypeCalls> builder;
 		switch (mode) {
 		case AUTOSOMAL_DOMINANT:

@@ -1,13 +1,16 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions.BedAnnotationOptions;
 import htsjdk.samtools.util.Interval;
-import htsjdk.tribble.AbstractFeatureReader;
 import htsjdk.tribble.TabixFeatureReader;
 import htsjdk.tribble.bed.BEDCodec;
 import htsjdk.tribble.bed.BEDFeature;
-import htsjdk.tribble.index.Index;
-import htsjdk.tribble.index.IndexFactory;
 import htsjdk.tribble.readers.LineIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
@@ -15,11 +18,6 @@ import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Perform annotation of {@link VariantContext}s using BED files.

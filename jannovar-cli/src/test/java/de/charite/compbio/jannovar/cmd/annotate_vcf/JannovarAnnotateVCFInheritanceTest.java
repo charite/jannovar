@@ -49,8 +49,8 @@ public class JannovarAnnotateVCFInheritanceTest {
 		Assert.assertTrue(f.exists());
 
 		final File expectedFile = new File(this.getClass().getResource("/pedigree_vars.jv_ar.vcf").toURI().getPath());
-		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand")
+		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
+		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
 				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
@@ -70,8 +70,8 @@ public class JannovarAnnotateVCFInheritanceTest {
 		Assert.assertTrue(f.exists());
 
 		final File expectedFile = new File(this.getClass().getResource("/pedigree_vars.jv_ad.vcf").toURI().getPath());
-		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand")
+		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
+		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
 				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
