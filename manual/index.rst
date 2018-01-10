@@ -43,7 +43,7 @@ Features
 
 - annotation of VCF files for functional impact, supporting different transcript databases (RefSeq, ENSEMBL, UCSC)
 - annotation with information from dbSNP, ExAC, UK10K, ...
-- use `Sequence Ontology <http://charite.github.io/jannovar/api/0.17/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_ for variant effect annotation
+- use `Sequence Ontology <http://charite.github.io/jannovar/api/0.24/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_ for variant effect annotation
 - API Javadoc for the library is here: |api_url|.
 - ... and more
 
