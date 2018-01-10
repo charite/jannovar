@@ -1264,6 +1264,7 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testRealWorldCase_uc001sbo_3() throws InvalidGenomeVariant {
+		// TODO This test is not so well defined because the transcript has no real stop codog (AGG follows a Serin...)
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
