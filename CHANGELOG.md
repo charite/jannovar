@@ -10,7 +10,7 @@
 
 ### overall
 
-* Changing HTSJDK version to 2.14.0
+* Changing HTSJDK version to 2.14.3
 * Codestyle approvements
 
 ### jannovar-htsjdk
