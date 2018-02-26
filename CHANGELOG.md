@@ -13,6 +13,10 @@
 * Changing HTSJDK version to 2.14.3
 * Codestyle approvements
 
+### jannovar-htsjdk
+
+* Fixing bug in GenomeRegionSequenceExtraction. Error reports always sequences from the first contig in the referebnce file and not the requested contig. Affects only the cli command hgvs-to-vcf.
+
 ### jannovar-core
 
 * Fixing mendelian "bug" #393 (has no affect because check was not necessary)
