@@ -56,7 +56,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			dbRecordsMatch = pickDBRecords(vc, true);
 			dbRecordsOverlap = pickDBRecords(vc, false);
 		}
-		
+
 		// Annotate with records with genotype matches
 		for (int i = 0; i < options.getValueColumnDescriptions().size(); i++) {
 			final String colName = options.getColumnNames().get(i);
@@ -323,7 +323,8 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
 			// Only pick first available
 			for (int j = 0; j < vc.getNAlleles(); ++j) {
 				if (!labeledValues.get(j).isEmpty()) {
-					annotations.set(j, labeledValues.get(j).get(0).getValue());
+					annotations.set(j,
+							labeledValues.get(j).get(0).getValue().toString().replaceAll(" ", "_"));
 				}
 			}
 			break;
