@@ -32,7 +32,7 @@ public class ProteinSubstitutionTest {
 	public void testToHGVSString() {
 		Assert.assertEquals("(A124G)", sub1.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("(Ala124Gly)", sub1.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("(Ala124Gly)", sub1.toHGVSString());
+		Assert.assertEquals("(A124G)", sub1.toHGVSString());
 	}
 
 	@Test

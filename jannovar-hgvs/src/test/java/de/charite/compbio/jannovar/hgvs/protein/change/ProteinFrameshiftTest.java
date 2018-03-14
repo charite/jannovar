@@ -39,21 +39,21 @@ public class ProteinFrameshiftTest {
 
 	@Test
 	public void testFullFrameshiftToHGVSString() {
-		Assert.assertEquals("Ala124Thrfs*23", fullFrameshift.toHGVSString());
+		Assert.assertEquals("A124Tfs*23", fullFrameshift.toHGVSString());
 		Assert.assertEquals("Ala124Thrfs*23", fullFrameshift.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("A124Tfs*23", fullFrameshift.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testNoTerFrameshiftToHGVSString() {
-		Assert.assertEquals("Ala124Thrfs*?", noTerFrameshift.toHGVSString());
+		Assert.assertEquals("A124Tfs*?", noTerFrameshift.toHGVSString());
 		Assert.assertEquals("Ala124Thrfs*?", noTerFrameshift.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("A124Tfs*?", noTerFrameshift.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testShortFrameshiftToHGVSString() {
-		Assert.assertEquals("Ala124fs", shortFrameshift.toHGVSString());
+		Assert.assertEquals("A124fs", shortFrameshift.toHGVSString());
 		Assert.assertEquals("Ala124fs", shortFrameshift.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("A124fs", shortFrameshift.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
