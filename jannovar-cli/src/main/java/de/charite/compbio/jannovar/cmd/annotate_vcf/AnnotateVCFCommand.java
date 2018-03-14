@@ -14,6 +14,7 @@ import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotato
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import de.charite.compbio.jannovar.filter.impl.var.VariantThresholdFilterAnnotator;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
 import de.charite.compbio.jannovar.htsjdk.VariantContextWriterConstructionHelper;
 import de.charite.compbio.jannovar.htsjdk.VariantEffectHeaderExtender;
@@ -230,7 +231,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			extender.addHeaders(vcfHeader);
 			VariantContextAnnotator variantEffectAnnotator =
 					new VariantContextAnnotator(refDict, chromosomeMap,
-							new VariantContextAnnotator.Options(!options.isShowAll(),
+							new VariantContextAnnotator.Options(!options.isShowAll(), 
+									(options.isUseThreeLetterAminoAcidCode() ? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER),
 									options.isEscapeAnnField(), options.isNt3PrimeShifting(),
 									options.isOffTargetFilterEnabled(),
 									options.isOffTargetFilterUtrIsOffTarget(),
