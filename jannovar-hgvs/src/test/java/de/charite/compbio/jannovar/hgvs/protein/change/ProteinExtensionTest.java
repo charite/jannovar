@@ -32,14 +32,14 @@ public class ProteinExtensionTest {
 
 	@Test
 	public void testNormalExtensionToHGVSString() {
-		Assert.assertEquals("Ala124Thrext*23", normalExtension.toHGVSString());
+		Assert.assertEquals("A124Text*23", normalExtension.toHGVSString());
 		Assert.assertEquals("Ala124Thrext*23", normalExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("A124Text*23", normalExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testNoTerExtensionToHGVSString() {
-		Assert.assertEquals("Ala124Thrext*?", noTerExtension.toHGVSString());
+		Assert.assertEquals("A124Text*?", noTerExtension.toHGVSString());
 		Assert.assertEquals("Ala124Thrext*?", noTerExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("A124Text*?", noTerExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
