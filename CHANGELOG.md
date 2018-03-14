@@ -6,9 +6,13 @@
 
 * Changing HTSJDK version to 2.14.3
 
+### jannovar-vardbs
+
+* Replacing whitespace with string when annotating from TSV file.
+
 ### jannovar-htsjdk
 
-* Fixing bug in GenomeRegionSequenceExtraction. Error reports always sequences from the first contig in the referebnce file and not the requested contig. Affects only the cli command hgvs-to-vcf.
+* Fixing bug in GenomeRegionSequenceExtraction. Error reports always sequences from the first contig in the referebnce file and not the requested contig. Affects only the cli command `hgvs-to-vcf`.
 
 ## v0.24
 
@@ -19,7 +23,7 @@
 ### overall
 
 * Changing HTSJDK version to 2.14.0
-* Codestyle approvements
+* Codestyle improvements
 
 ### jannovar-core
 
