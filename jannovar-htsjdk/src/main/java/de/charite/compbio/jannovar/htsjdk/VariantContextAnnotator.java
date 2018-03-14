@@ -23,6 +23,7 @@ import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -55,6 +56,11 @@ public final class VariantContextAnnotator {
 		 * <code>true</code>
 		 */
 		private final boolean oneAnnotationOnly;
+		
+		/**
+		 * HGVS protein output in three or one letter
+		 */
+		private final AminoAcidCode aminoAcidCode;
 
 		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
 		private final boolean escapeAnnField;
@@ -76,6 +82,7 @@ public final class VariantContextAnnotator {
 		 */
 		public Options() {
 			oneAnnotationOnly = true;
+			aminoAcidCode = AminoAcidCode.ONE_LETTER;
 			escapeAnnField = true;
 			nt3PrimeShifting = true;
 			offTargetFilterEnabled = false;
@@ -88,24 +95,29 @@ public final class VariantContextAnnotator {
 		 * constructor using fields
 		 * 
 		 * @param oneAnnotationOnly
-		 *            Whether or not to trim each annotation list to the first (one with highest putative impact),
-		 *            defaults to <code>true</code>
+		 *            Whether or not to trim each annotation list to the first (one with
+		 *            highest putative impact), defaults to <code>true</code>
+		 * @param code
+		 *            HGVS protein output in three or one letter
 		 * @param escapeAnnField
-		 *            whether or not to escape values in the ANN field (defaults to <code>true</code>)
-		 * @param nt3PrimeShifting
-		 *            whether or not to perform shifting towards the 3' end of the transcript (defaults to
+		 *            whether or not to escape values in the ANN field (defaults to
 		 *            <code>true</code>)
+		 * @param nt3PrimeShifting
+		 *            whether or not to perform shifting towards the 3' end of the
+		 *            transcript (defaults to <code>true</code>)
 		 * @param offTargetFilterEnabled
 		 *            whether or not off target filter application is abled
 		 * @param offTargetFilterUtrIsOffTarget
 		 *            whether or not to count UTR as off-target
 		 * @param offTargetFilterIntronicSpliceIsOffTarget
-		 *            whether or not to to count non-consensus intronic splicing as off-target
+		 *            whether or not to to count non-consensus intronic splicing as
+		 *            off-target
 		 */
-		public Options(boolean oneAnnotationOnly, boolean escapeAnnField, boolean nt3PrimeShifting,
+		public Options(boolean oneAnnotationOnly, AminoAcidCode code, boolean escapeAnnField, boolean nt3PrimeShifting,
 				boolean offTargetFilterEnabled, boolean offTargetFilterUtrIsOffTarget,
 				boolean offTargetFilterIntronicSpliceIsOffTarget) {
 			this.oneAnnotationOnly = oneAnnotationOnly;
+			this.aminoAcidCode = code;
 			this.escapeAnnField = escapeAnnField;
 			this.nt3PrimeShifting = nt3PrimeShifting;
 			this.offTargetFilterEnabled = offTargetFilterEnabled;
@@ -344,7 +356,7 @@ public final class VariantContextAnnotator {
 
 					if (!options.oneAnnotationOnly || annotations.isEmpty()) {
 						final String alt = vc.getAlternateAllele(alleleID).getBaseString();
-						annotations.add(ann.toVCFAnnoString(alt));
+						annotations.add(ann.toVCFAnnoString(alt, options.aminoAcidCode));
 					}
 				}
 			}

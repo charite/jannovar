@@ -5,6 +5,7 @@
 ### overall
 
 * Changing HTSJDK version to 2.14.3
+* Using the one letter amino acid code in HGVS representation as default (changes in core, hgvs, htsjdk and cli). Now the cli option `--3-letter-amino-acids` works as expected.
 
 ### jannovar-vardbs
 

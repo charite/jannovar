@@ -213,7 +213,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
 	/**
 	 * @param code
-	 *            the protein change code to use.
+	 *            Three ore one letter amino acid code
 	 * @return protein change String, including the "p." prefix or the empty string if there is no annotation.
 	 */
 	public String getProteinChangeStr(AminoAcidCode code) {
@@ -260,11 +260,13 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * 
 	 * @param alt
 	 *            alt allele
+	 * @param code
+	 *            Three or one letter amino acid code
 	 * @param escape
 	 *            whether or not to escape the invalid VCF characters, e.g. <code>'='</code>.
 	 * @return VCF annotation string
 	 */
-	public String toVCFAnnoString(String alt, boolean escape) {
+	public String toVCFAnnoString(String alt, boolean escape, AminoAcidCode code) {
 		VCFAnnotationData data = new VCFAnnotationData();
 		data.effects = effects;
 		data.impact = getPutativeImpact();
@@ -275,20 +277,23 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		data.proteinChange = proteinChange;
 		data.messages = messages;
 		if (escape)
-			return data.toString(alt);
+			return data.toString(alt, code);
 		else
-			return data.toUnescapedString(alt);
+			return data.toUnescapedString(alt, code);
 	}
 
 	/**
-	 * Forward to {@link #toVCFAnnoString(String, boolean) toVCFAnnoString(alt, true)}.
+	 * Forward to {@link #toVCFAnnoString(String, boolean, AminoAcidCode)
+	 * toVCFAnnoString(alt, true, code)}.
 	 * 
 	 * @param alt
 	 *            alternateve allele
+	 * @param code
+	 *            Three ore one letter amino acid code
 	 * @return vcf annotation string
 	 */
-	public String toVCFAnnoString(String alt) {
-		return toVCFAnnoString(alt, true);
+	public String toVCFAnnoString(String alt, AminoAcidCode code) {
+		return toVCFAnnoString(alt, true, code);
 	}
 
 	/**
@@ -310,7 +315,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * string, e.g., <code>"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"</code>.
 	 * 
 	 * @param code
-	 *            the amino acid code
+	 *            Three ore one letter amino acid code
 	 *
 	 * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
 	 */
