@@ -30,7 +30,7 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 
 	@Override
 	public String toHGVSString() {
-		return toHGVSString(AminoAcidCode.THREE_LETTER);
+		return toHGVSString(AminoAcidCode.ONE_LETTER);
 	}
 
 	/** @return <code>s</code> wrapped in parantheses if not {@link #onlyPredicted} and plain <code>s</code> otherwise. */

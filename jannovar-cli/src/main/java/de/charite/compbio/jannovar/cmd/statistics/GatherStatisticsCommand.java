@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.htsjdk.InvalidCoordinatesException;
 import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
 import de.charite.compbio.jannovar.stats.facade.StatisticsCollector;
@@ -45,7 +46,7 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
 		final boolean isUtrOffTarget = false;
 		final boolean isIntronicSpliceOffTarget = false;
 		VariantContextAnnotator annotator = new VariantContextAnnotator(refDict, chromosomeMap,
-				new VariantContextAnnotator.Options(false, false, false, false, isUtrOffTarget,
+				new VariantContextAnnotator.Options(false, AminoAcidCode.ONE_LETTER, false, false, false, isUtrOffTarget,
 						isIntronicSpliceOffTarget));
 
 		Map<String, Integer> errorMsgs = new TreeMap<>();
