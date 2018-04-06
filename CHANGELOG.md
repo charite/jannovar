@@ -20,6 +20,7 @@
 ### jannovar-cli
 
 * Fixing annotation with Polyphen prediction (data type)
+* Support for [RefSeq GRCh37.p13 interim release](https://www.ncbi.nlm.nih.gov/books/NBK430989/#_news_02-14-2017-interim-annotation-update-human_)
 
 ### overall
 

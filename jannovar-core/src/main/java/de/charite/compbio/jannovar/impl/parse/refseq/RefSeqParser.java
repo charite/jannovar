@@ -1,25 +1,10 @@
 package de.charite.compbio.jannovar.impl.parse.refseq;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.ini4j.Profile.Section;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -36,6 +21,20 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Parsing of RefSeq GFF3 files
@@ -137,13 +136,11 @@ public class RefSeqParser implements TranscriptParser {
 		FASTARecord record;
 		try {
 			while ((record = fastaParser.next()) != null) {
-				final List<String> tokens = Splitter.on('|').splitToList(record.getID());
-				if (tokens.size() != 5) {
-					LOGGER.error("ID {} in FASTA did not have 4 fields", new Object[] { record.getID() });
+				Optional<String> accessionOpt = RefSeqFastaRecordIdFormat.extractAccession(record.getID());
+				if(!accessionOpt.isPresent()) {
 					continue;
 				}
-
-				final String accession = tokens.get(3);
+				String accession = accessionOpt.get();
 				final TranscriptModelBuilder builder = txMap.get(accession);
 				if (builder == null) {
 					// This is not a warning as we observed this for some records regularly
