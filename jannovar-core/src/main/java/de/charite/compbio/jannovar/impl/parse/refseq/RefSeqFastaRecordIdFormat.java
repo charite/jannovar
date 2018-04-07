@@ -16,57 +16,60 @@ import static java.util.Optional.of;
  */
 public enum RefSeqFastaRecordIdFormat {
 
-	DEFAULT_FORMAT,
+	GI_REF_FORMAT("gi|", 3, 5),
 
-	INTERIM_RELEASE_201701_FORMAT,
+	REF_FORMAT("ref|", 1, 3),
 
-	UNKNOWN_FORMAT;
+	ACCESSION_FORMAT("", 0, 1),
+
+	UNKNOWN_FORMAT(null, -1, -1);
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RefSeqFastaRecordIdFormat.class);
-
-	private static final String EXPECTED_PREFIX_DEFAULT_FORMAT = "gi|";
-
-	private static final int DEFAULT_FORMAT_ACCESSION_INDEX = 3;
-
-	private static final int DEFAULT_FORMAT_EXPECTED_RECORD_ID_ELEMENTS = 5;
 
 	/**
 	 * Number of digits depends on the prefix (here we allow 'NM_' and 'NR_', as well as non-curated 'XM_' and 'X_R').
 	 *
 	 * @see <a href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">NCBI documentation</a>
 	 */
-	private static final String NCBI_ID_REGEXP = "[NX][MR]_([0-9]+)\\.[0-9]+";
+	private static final Pattern NCBI_ID = Pattern.compile("[NX][MR]_([0-9]+)\\.[0-9]+");
 
-	private static final Pattern NCBI_ID = Pattern.compile(NCBI_ID_REGEXP);
+	private final String expectedPrefix;
+	private final int accessionIndex, expectedIdElementCount;
+
+	RefSeqFastaRecordIdFormat(String expectedPrefix, int accessionIndex, int expectedIdElementCount) {
+		this.expectedPrefix = expectedPrefix;
+		this.accessionIndex = accessionIndex;
+		this.expectedIdElementCount = expectedIdElementCount;
+	}
+
 
 	public static RefSeqFastaRecordIdFormat detect(String recordId) {
 		if (recordId == null) {
 			return UNKNOWN_FORMAT;
 		}
-		if (recordId.startsWith(EXPECTED_PREFIX_DEFAULT_FORMAT)) {
-			return DEFAULT_FORMAT;
+		if (recordId.startsWith(GI_REF_FORMAT.expectedPrefix)) {
+			return GI_REF_FORMAT;
+		}
+		if (recordId.startsWith(REF_FORMAT.expectedPrefix)) {
+			return REF_FORMAT;
 		}
 		if (NCBI_ID.matcher(recordId).matches()) {
-			return INTERIM_RELEASE_201701_FORMAT;
+			return ACCESSION_FORMAT;
 		}
 		return UNKNOWN_FORMAT;
 	}
 
 	public static Optional<String> extractAccession(String recordId) {
-		switch (detect(recordId)) {
-		case DEFAULT_FORMAT:
-			final List<String> tokens = Splitter.on('|').splitToList(recordId);
-			if (tokens.size() != DEFAULT_FORMAT_EXPECTED_RECORD_ID_ELEMENTS) {
-				LOGGER.error("ID {} in FASTA did not have 4 fields", recordId);
-				return empty();
-			}
-			return of(tokens.get(DEFAULT_FORMAT_ACCESSION_INDEX));
-		case INTERIM_RELEASE_201701_FORMAT:
-			return of(recordId);
-		default:
-		case UNKNOWN_FORMAT:
+		RefSeqFastaRecordIdFormat format = detect(recordId);
+		if (format.equals(UNKNOWN_FORMAT)) {
 			LOGGER.error("ID {} in FASTA did not have any of the expected formats.", recordId);
+			return empty();
 		}
-		return empty();
+		final List<String> tokens = Splitter.on('|').splitToList(recordId);
+		if (tokens.size() != format.expectedIdElementCount) {
+			LOGGER.error("ID {} in FASTA did not have {} fields", recordId, format.expectedIdElementCount);
+			return empty();
+		}
+		return of(tokens.get(format.accessionIndex));
 	}
 }
