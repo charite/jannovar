@@ -12,12 +12,13 @@ import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 
 /**
  * Configuration for the <tt>download</tt> command
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class JannovarDownloadOptions extends JannovarDBOptions {
@@ -30,7 +31,7 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 
 	/**
 	 * Setup {@link ArgumentParser}
-	 * 
+	 *
 	 * @param subParsers
 	 *            {@link Subparsers} to setup
 	 */
@@ -42,18 +43,18 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 				throw new UncheckedJannovarException("Could not parse command line", e);
 			}
 		};
-		
+
 		Subparser subParser = subParsers.addParser("download", true).help("download transcript databases")
 				.setDefault("cmd", handler);
 		subParser.description("Download transcript database");
-		
+
 		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
 		requiredGroup.addArgument("-d", "--database").help("Name of database to download, can be given multiple times")
 				.setDefault(new ArrayList<String>()).action(Arguments.append()).required(true);
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Optional Arguments");
 		optionalGroup.addArgument("-s", "--data-source-list").help("INI file with data source list")
-				.setDefault("bundle:///default_sources.ini").action(Arguments.append());
+				.setDefault(new ArrayList<String>(Arrays.asList("bundle:///default_sources.ini"))).action(Arguments.append());
 		optionalGroup.addArgument("--download-dir").help("Path to download directory").setDefault("data");
 
 		JannovarBaseOptions.setupParser(subParser);
