@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
  * Parsing of RefSeq GFF3 files
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class RefSeqParser implements TranscriptParser {
@@ -112,7 +114,7 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Load FASTA from pathFASTA and set the sequence into builders.
-	 * 
+	 *
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the FASTA
 	 */
@@ -134,16 +136,19 @@ public class RefSeqParser implements TranscriptParser {
 		} catch (IOException e) {
 			throw new TranscriptParseException("Problem with opening FASTA file", e);
 		}
+		// We can re-use the matcher (with reset() since we will be working in a single thread
+		final Matcher accessionMatcher = Pattern.compile(
+			"(?:(?:gi\\|\\d+\\|)?ref\\|)?([NX][MR]_(\\d+)\\.\\d+)\\|?").matcher("");
 		FASTARecord record;
 		try {
 			while ((record = fastaParser.next()) != null) {
-				final List<String> tokens = Splitter.on('|').splitToList(record.getID());
-				if (tokens.size() != 5) {
-					LOGGER.error("ID {} in FASTA did not have 4 fields", new Object[] { record.getID() });
+				accessionMatcher.reset(record.getID());
+				if (!accessionMatcher.matches()) {
+					LOGGER.error("ID {} in FASTA did not have recognizable RefSeq accession", new Object[] { record.getID() });
 					continue;
 				}
 
-				final String accession = tokens.get(3);
+				final String accession = accessionMatcher.group(1);
 				final TranscriptModelBuilder builder = txMap.get(accession);
 				if (builder == null) {
 					// This is not a warning as we observed this for some records regularly
@@ -173,10 +178,10 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
-	 * 
+	 *
 	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the appropriate
 	 * TranscriptModel objects.
-	 * 
+	 *
 	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
@@ -295,7 +300,7 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Parse out entrez gene ID
-	 * 
+	 *
 	 * @param builder
 	 *            The {@link TranscriptModelBuilder} to put the alternative geneIDs to
 	 * @param geneRecord
@@ -315,7 +320,7 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Load GFF records, cluster by gene and return
-	 * 
+	 *
 	 * @throws TranscriptParseException
 	 *             on problems with handling the transcript file
 	 */
