@@ -33,8 +33,8 @@ public enum RefSeqFastaRecordIdFormat {
 	 */
 	private static final Pattern NCBI_ID = Pattern.compile("[NX][MR]_([0-9]+)\\.[0-9]+");
 
-	private final String expectedPrefix;
-	private final int accessionIndex, expectedIdElementCount;
+	private String expectedPrefix;
+	private int accessionIndex, expectedIdElementCount;
 
 	RefSeqFastaRecordIdFormat(String expectedPrefix, int accessionIndex, int expectedIdElementCount) {
 		this.expectedPrefix = expectedPrefix;

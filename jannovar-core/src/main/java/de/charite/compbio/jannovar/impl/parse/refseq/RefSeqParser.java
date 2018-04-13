@@ -53,13 +53,13 @@ public class RefSeqParser implements TranscriptParser {
 	/**
 	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
 	 */
-	private final ReferenceDictionary refDict;
+	private ReferenceDictionary refDict;
 
 	/** Path to directory where the to-be-parsed files live */
-	private final String basePath;
+	private String basePath;
 
 	/** INI {@link Section} from the configuration. */
-	private final Section iniSection;
+	private Section iniSection;
 
 	/**
 	 * @param refDict
