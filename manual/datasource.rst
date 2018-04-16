@@ -137,8 +137,8 @@ Below is an example for the Ensemble data source for human release hg19.
 RefSeq Data Sources
 -------------------
 
-When selecting the ``ensembl`` data source type then you have to pass the transcript definition GFF URL to ``gff`` and the RNA FASTA file to ``rna``.
-Below is an example for the RefSeqe data source for human release hg19.
+When selecting the ``refseq`` data source type then you have to pass the transcript definition GFF URL to ``gff`` and the RNA FASTA file to ``rna``.
+Below is an example for the RefSeq data source for human release hg19.
 
 .. code-block:: ini
     :emphasize-lines: 7-8
@@ -167,6 +167,21 @@ You can do this by setting ``onlyCurated`` to ``true``:
     chrToAccessions.format=chr_accessions
     gff=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/GFF/ref_GRCh37.p13_top_level.gff3.gz
     rna=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/RNA/rna.fa.gz
+
+Additionally, ``hg19/refseq_interim`` defines the URLS for the
+`GRCh37.p13 interim release of the RefSeq data <https://www.ncbi.nlm.nih.gov/books/NBK430989/#_news_02-14-2017-interim-annotation-update-human_>`:
+
+.. code-block:: ini
+    :emphasize-lines: 4
+
+    [hg19/refseq_interim]
+    type=refseq
+    alias=MT,M,chrM
+    chromInfo=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromInfo.txt.gz
+    chrToAccessions=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/Assembled_chromosomes/chr_accessions_GRCh37.p13
+    chrToAccessions.format=chr_accessions
+    gff=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GRCh37.p13_interim_annotation/interim_GRCh37.p13_top_level_2017-01-13.gff3.gz
+    rna=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GRCh37.p13_interim_annotation/interim_GRCh37.p13_rna.fa.gz
 
 UCSC Data Sources
 -----------------

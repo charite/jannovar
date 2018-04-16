@@ -7,6 +7,12 @@
 * Changing HTSJDK version to 2.14.3
 * Using the one letter amino acid code in HGVS representation as default (changes in core, hgvs, htsjdk and cli). Now the cli option `--3-letter-amino-acids` works as expected.
 
+### jannovar-cli
+
+* Support for [RefSeq GRCh37.p13 interim release](https://www.ncbi.nlm.nih.gov/books/NBK430989/#_news_02-14-2017-interim-annotation-update-human_)
+* Support of new RefSeq headers
+* Using RefSeq GRCh38.p12 annotation instead of GRCh38.p7
+
 ### jannovar-vardbs
 
 * Replacing whitespace with string when annotating from TSV file.
