@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## develop (unreleased)
+## v0.25
 
 ### overall
 

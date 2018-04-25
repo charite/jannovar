@@ -18,7 +18,7 @@ in the Jannovar manual.
 
 - **Language/Platform:** Java >=8
 - **License:** BSD 3-Clause
-- **Version:** 0.24
+- **Version:** 0.25
 - **Availability:**
     - Java command line tool `jannovar-cli`
     - Java libraries exposing most of `jannovar-cli`'s functionality.

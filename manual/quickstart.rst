@@ -37,7 +37,7 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
    .. note::
 
-        The variant effect codes in the output and their mapping to sequence ontology is described `in the Jannovar API documentation <http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.24/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_.
+        The variant effect codes in the output and their mapping to sequence ontology is described `in the Jannovar API documentation <http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.25/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_.
 
    The following excerpt shows the first three variants of the ``small.vcf`` file with their effect and HGVS annotation.
 
