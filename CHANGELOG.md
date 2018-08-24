@@ -2,6 +2,10 @@
 
 ## HEAD (unreleased)
 
+### jannovar-hgvs
+
+* Fixing parser issue for nucleotide indels (#408).
+
 ### jannovar-htsjdk
 
 * Obey the `options.escapeAnnField` parameter for escaping the variant effect in the `ANN` field.
