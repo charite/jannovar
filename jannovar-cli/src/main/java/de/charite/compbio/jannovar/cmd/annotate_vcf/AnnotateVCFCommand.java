@@ -295,7 +295,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				if (options.useAdvancedPedigreeFilters) {
 					// Build options object from configuration and extend headers
 					PedigreeFilterOptions pedFilterOptions = new PedigreeFilterOptions(
-							options.getThreshDeNovoParentAd2(), options.isUseParentGtIsFiltered());
+							options.getThreshDeNovoParentAd2(), options.isUseParentGtIsFiltered(),
+							options.isOneParentGtFilteredFiltersAffected());
 					new PedigreeFilterHeaderExtender(pedFilterOptions).addHeaders(vcfHeader);
 
 					// Load pedigree

@@ -2,6 +2,10 @@
 
 ## HEAD (unreleased)
 
+### jannovar-cli
+
+* Making `OneParentGtFiltered` filter optional. The default setting to `false` (specify `--one-parent-gt-filtered-filters-affected` to enable).
+
 ### jannovar-core
 
 * **Moving variants in non-coding transcripts after UTR variants.**
