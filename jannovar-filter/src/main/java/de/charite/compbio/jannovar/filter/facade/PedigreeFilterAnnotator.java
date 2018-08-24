@@ -95,7 +95,7 @@ public class PedigreeFilterAnnotator {
 			for (Genotype gt : vc.getGenotypes()) {
 				final int count = filteredParentGtCount(vc, extraFts, gt.getSampleName());
 				final List<String> sampleFts = extraFts.get(gt.getSampleName());
-				if (count == 1) {
+				if (count == 1 && options.isOneParentGtFilteredFiltersAffected()) {
 					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_ONE_PARENT_FILTERED);
 				} else if (count == 2) {
 					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_BOTH_PARENTS_FILTERED);
