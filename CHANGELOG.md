@@ -2,6 +2,10 @@
 
 ## HEAD (unreleased)
 
+### jannovar-core
+
+* **Moving variants in non-coding transcripts after UTR variants.**
+
 ### jannovar-hgvs
 
 * Fixing parser issue for nucleotide indels (#408).
