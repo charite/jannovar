@@ -23,8 +23,9 @@ public class HGVSParserDriverNucleotideIndelTest {
 
 	@Test
 	public void testPredictedOnly() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.(247_248del)", "NM_000138.4:c.(247+1_247+3del)",
-				"NM_000138.4:c.(247-3_247-1del)", "NM_000138.4:c.(*247_*247+3del)", "NM_000138.4:c.(-247_-247-3del)" };
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.(247_248delinsA)",
+				"NM_000138.4:c.(247+1_247+3delinsA)", "NM_000138.4:c.(247-3_247-1delinsA)",
+				"NM_000138.4:c.(*247_*247+3delinsA)", "NM_000138.4:c.(-247_-247-3delinsA)" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -35,9 +36,10 @@ public class HGVSParserDriverNucleotideIndelTest {
 	}
 
 	@Test
-	public void testWithoutSequence() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del", "NM_000138.4:c.247+1_247+3del",
-				"NM_000138.4:c.247-3_247-1del", "NM_000138.4:c.*247_*247+3del", "NM_000138.4:c.-247_-247-3del" };
+	public void testWithoutDeletionSequence() {
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delinsAT",
+				"NM_000138.4:c.247+1_247+3delinsAT", "NM_000138.4:c.247-3_247-1delinsAT",
+				"NM_000138.4:c.*247_*247+3delinsAT", "NM_000138.4:c.-247_-247-3delinsAT" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -48,10 +50,10 @@ public class HGVSParserDriverNucleotideIndelTest {
 	}
 
 	@Test
-	public void testWithSequence() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delAT", "NM_000138.4:c.247+1_247+3delATA",
-				"NM_000138.4:c.247-3_247-1delATA", "NM_000138.4:c.*247_*247+3delATAT",
-				"NM_000138.4:c.-247_-247-3delATAT" };
+	public void testWithDeletionSequence() {
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delATinsCG",
+				"NM_000138.4:c.247+1_247+3delATAinsCG", "NM_000138.4:c.247-3_247-1delATAinsCG",
+				"NM_000138.4:c.*247_*247+3delATATinsCG", "NM_000138.4:c.-247_-247-3delATATinsCG" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -63,8 +65,9 @@ public class HGVSParserDriverNucleotideIndelTest {
 
 	@Test
 	public void testWithSequenceLength() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del2", "NM_000138.4:c.247+1_247+3del3",
-				"NM_000138.4:c.247-3_247-1del3", "NM_000138.4:c.*247_*247+3del4", "NM_000138.4:c.-247_-247-3del4" };
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del2ins4",
+				"NM_000138.4:c.247+1_247+3del3ins4", "NM_000138.4:c.247-3_247-1del3ins4",
+				"NM_000138.4:c.*247_*247+3del4ins4", "NM_000138.4:c.-247_-247-3del4ins4" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
