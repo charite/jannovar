@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## HEAD (unreleased)
+
+### jannovar-htsjdk
+
+* Obey the `options.escapeAnnField` parameter for escaping the variant effect in the `ANN` field.
+
 ## v0.25
 
 ### overall

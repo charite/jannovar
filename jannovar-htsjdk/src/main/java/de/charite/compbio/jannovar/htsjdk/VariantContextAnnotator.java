@@ -356,7 +356,7 @@ public final class VariantContextAnnotator {
 
 					if (!options.oneAnnotationOnly || annotations.isEmpty()) {
 						final String alt = vc.getAlternateAllele(alleleID).getBaseString();
-						annotations.add(ann.toVCFAnnoString(alt, options.aminoAcidCode));
+						annotations.add(ann.toVCFAnnoString(alt, options.escapeAnnField, options.aminoAcidCode));
 					}
 				}
 			}
