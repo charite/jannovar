@@ -1,5 +1,20 @@
 # Jannovar Changelog
 
+## HEAD (unrealeased)
+
+### jannovar-cli
+
+* Integrating support for thousand genomes VCF
+* Integrating thousand genomes/ExAc count limits into inheritance filter
+
+### jannovar-vardbs
+
+* Adding support for thousand genomes VCF
+
+### jannovar-htsjdk
+
+* Adding support for limiting genomes/ExAc counts into inheritance filter
+
 ## v0.26
 
 ### jannovar-cli

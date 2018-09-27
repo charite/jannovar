@@ -72,6 +72,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Prefix to use for UK10K VCF INFO Fields */
 	public String prefixUK10K;
 
+	/** Path to thousand genomes VCF file to use for the annotation */
+	public String pathThousandGenomes;
+
+	/** Prefix to use for thousand genomes VCF INFO Fields */
+	public String prefixThousandGenomes;
+
 	/** Path to ClinVar VCF file to use for the annotation */
 	public String pathClinVar;
 
@@ -132,6 +138,17 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	 * Threshold filter: maximal alternative allele fraction for homozygous ref calls
 	 */
 	private double threshFiltMaxGtAafHomRef;
+
+	/**
+	 * Threshold filter: ignore variants that have more than this number of hom. occurences in ExAC
+	 */
+	private int threshFiltMaxExacHomAlt;
+
+	/**
+	 * Threshold filter: ignore variants that have more than this number of hom. occurences in
+	 * thousand genomes.
+	 */
+	private int threshFiltMaxThousandGenomesHomAlt;
 
 	/**
 	 * Threshold filter: maximal allele frequency for autosomal dominant inheritance mode
@@ -258,6 +275,11 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.help("Path to UK10K VCF file, activates UK10K annotation").required(false);
 		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations")
 				.setDefault("UK10K_").required(false);
+		annotationGroup.addArgument("--g1k-vcf")
+				.help("Path to thousand genomes VCF file, activates thousand genomes annotation")
+				.required(false);
+		annotationGroup.addArgument("--g1k-prefix").help("Prefix for thousand genomes annotations")
+				.setDefault("G1K_").required(false);
 		annotationGroup.addArgument("--clinvar-vcf")
 				.help("Path to ClinVar file, activates ClinVar annotation").required(false);
 		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations")
@@ -344,6 +366,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ar")
 				.help("Maximal allele fraction for autosomal recessive inheritance mode")
 				.setDefault(threshDefaults.getMaxAlleleFrequencyAr()).type(Double.class);
+		threshFilterGroup.addArgument("--var-thresh-max-hom-alt-exac")
+				.help("Maximal count in homozygous state in ExAC before ignoring")
+				.setDefault(threshDefaults.getMaxExacHomState()).type(Integer.class);
+		threshFilterGroup.addArgument("--var-thresh-max-hom-alt-g1k")
+				.help("Maximal count in homozygous state in ExAC before ignoring")
+				.setDefault(threshDefaults.getMaxG1kHomState()).type(Integer.class);
 		PedigreeFilterOptions pedDefaults = PedigreeFilterOptions.buildDefaultOptions();
 		threshFilterGroup.addArgument("--use-advanced-pedigree-filters")
 				.help("Use advanced pedigree-based filters (mainly useful for de novo variants)")
@@ -401,6 +429,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixGnomadExomes = args.getString("gnomad_exomes_prefix");
 		pathVCFGnomadGenomes = args.getString("gnomad_genomes_vcf");
 		prefixGnomadGenomes = args.getString("gnomad_genomes_prefix");
+		pathThousandGenomes = args.getString("g1k_vcf");
+		prefixThousandGenomes = args.getString("g1k_prefix");
 		pathVCFUK10K = args.getString("uk10k_vcf");
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");
@@ -462,6 +492,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFiltMaxGtAafHomRef = args.getDouble("gt_thresh_filt_max_aaf_hom_ref");
 		threshFiltMaxAlleleFrequencyAd = args.getDouble("var_thresh_max_allele_freq_ad");
 		threshFiltMaxAlleleFrequencyAr = args.getDouble("var_thresh_max_allele_freq_ar");
+		threshFiltMaxExacHomAlt = args.getInt("var_thresh_max_hom_alt_exac");
+		threshFiltMaxThousandGenomesHomAlt = args.getInt("var_thresh_max_hom_alt_g1k");
 		useAdvancedPedigreeFilters = args.getBoolean("use_advanced_pedigree_filters");
 		setThreshDeNovoParentAd2(args.getInt("de_novo_max_parent_ad2"));
 
@@ -870,6 +902,38 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.useParentGtIsFiltered = useParentGtIsFiltered;
 	}
 
+	public String getPathThousandGenomes() {
+		return pathThousandGenomes;
+	}
+
+	public void setPathThousandGenomes(String pathThousandGenomes) {
+		this.pathThousandGenomes = pathThousandGenomes;
+	}
+
+	public String getPrefixThousandGenomes() {
+		return prefixThousandGenomes;
+	}
+
+	public void setPrefixThousandGenomes(String prefixThousandGenomes) {
+		this.prefixThousandGenomes = prefixThousandGenomes;
+	}
+
+	public int getThreshFiltMaxExacHomAlt() {
+		return threshFiltMaxExacHomAlt;
+	}
+
+	public void setThreshFiltMaxExacHomAlt(int threshFiltMaxExacHomAlt) {
+		this.threshFiltMaxExacHomAlt = threshFiltMaxExacHomAlt;
+	}
+
+	public int getThreshFiltMaxThousandGenomesHomAlt() {
+		return threshFiltMaxThousandGenomesHomAlt;
+	}
+
+	public void setThreshFiltMaxThousandGenomesHomAlt(int threshFiltMaxThousandGenomesHomAlt) {
+		this.threshFiltMaxThousandGenomesHomAlt = threshFiltMaxThousandGenomesHomAlt;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF="
@@ -880,16 +944,20 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", prefixGnomadExomes=" + prefixGnomadExomes + ", pathVCFGnomadGenomes="
 				+ pathVCFGnomadGenomes + ", prefixGnomadGenomes=" + prefixGnomadGenomes
 				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K
-				+ ", pathClinVar=" + pathClinVar + ", prefixClinVar=" + prefixClinVar
-				+ ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic + ", pathPedFile="
-				+ pathPedFile + ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree
-				+ ", useThresholdFilters=" + useThresholdFilters + ", useAdvancedPedigreeFilters="
-				+ useAdvancedPedigreeFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
-				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov="
-				+ threshFiltMaxCov + ", threshFiltMinGtGq=" + threshFiltMinGtGq
-				+ ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet + ", threshFiltMaxGtAafHet="
-				+ threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt=" + threshFiltMinGtAafHomAlt
+				+ ", pathThousandGenomes=" + pathThousandGenomes + ", prefixThousandGenomes="
+				+ prefixThousandGenomes + ", pathClinVar=" + pathClinVar + ", prefixClinVar="
+				+ prefixClinVar + ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic
+				+ ", pathPedFile=" + pathPedFile + ", annotateAsSingletonPedigree="
+				+ annotateAsSingletonPedigree + ", useThresholdFilters=" + useThresholdFilters
+				+ ", useAdvancedPedigreeFilters=" + useAdvancedPedigreeFilters
+				+ ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet + ", threshFiltMinGtCovHomAlt="
+				+ threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
+				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet="
+				+ threshFiltMinGtAafHet + ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet
+				+ ", threshFiltMinGtAafHomAlt=" + threshFiltMinGtAafHomAlt
 				+ ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
+				+ ", threshFiltMaxExacHomAlt=" + threshFiltMaxExacHomAlt
+				+ ", threshFiltMaxThousandGenomesHomAlt=" + threshFiltMaxThousandGenomesHomAlt
 				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
 				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr
 				+ ", offTargetFilterEnabled=" + offTargetFilterEnabled
