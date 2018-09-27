@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## HEAD (unrealeased)
+## v0.27
 
 ### jannovar-cli
 
