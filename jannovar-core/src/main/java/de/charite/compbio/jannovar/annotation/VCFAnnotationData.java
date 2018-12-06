@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.annotation;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
@@ -23,7 +24,7 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 class VCFAnnotationData {
 
 	/** predicted effects */
-	public ImmutableSortedSet<VariantEffect> effects = ImmutableSortedSet.<VariantEffect> of();
+	public ImmutableSet<VariantEffect> effects = ImmutableSortedSet.<VariantEffect> of();
 	/** predicted impact */
 	public PutativeImpact impact = null;
 	/** symbol of affected gene */
@@ -57,7 +58,7 @@ class VCFAnnotationData {
 	/** distance */
 	public int distance = -1;
 	/** additional messages for the annotation */
-	public ImmutableSortedSet<AnnotationMessage> messages = ImmutableSortedSet.<AnnotationMessage> of();
+	public ImmutableSet<AnnotationMessage> messages = ImmutableSortedSet.<AnnotationMessage> of();
 
 	public void setAnnoLoc(AnnotationLocation annoLoc) {
 		if (annoLoc == null)

@@ -1,10 +1,8 @@
 package de.charite.compbio.jannovar.annotation;
 
-import java.util.Collection;
-
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableSortedSet;
-
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
@@ -13,6 +11,8 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.VariantDescription;
+import java.util.Collection;
+import java.util.EnumSet;
 
 // TODO(holtgrem): Test me!
 
@@ -26,6 +26,9 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
  */
 @Immutable
 public final class Annotation implements VariantDescription, Comparable<Annotation> {
+
+	private static final ImmutableSet<VariantEffect> EMPTY_VARIANT_EFFECTS = Sets.immutableEnumSet(EnumSet.noneOf(VariantEffect.class));
+	private static final ImmutableSet<AnnotationMessage> EMPTY_ANNOTATION_MESSAGES = Sets.immutableEnumSet(EnumSet.noneOf(AnnotationMessage.class));
 
 	/**
 	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
@@ -52,10 +55,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	private final GenomeVariant change;
 
 	/** variant types, sorted by internal pathogenicity score */
-	private final ImmutableSortedSet<VariantEffect> effects;
+	private final ImmutableSet<VariantEffect> effects;
 
 	/** errors and warnings */
-	private final ImmutableSortedSet<AnnotationMessage> messages;
+	private final ImmutableSet<AnnotationMessage> messages;
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	private final AnnotationLocation annoLoc;
@@ -109,7 +112,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
 			ProteinChange proteinChange) {
 		this(transcript, change, effects, annoLoc, genomicNTChange, cdsNTChange, proteinChange,
-				ImmutableSortedSet.<AnnotationMessage> of());
+			EMPTY_ANNOTATION_MESSAGES);
 	}
 
 	/**
@@ -137,19 +140,15 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
 			ProteinChange proteinChange, Collection<AnnotationMessage> messages) {
-		if (change != null)
-			change = change.withStrand(Strand.FWD); // enforce forward strand
-		this.change = change;
-		if (varTypes == null)
-			this.effects = ImmutableSortedSet.<VariantEffect> of();
-		else
-			this.effects = ImmutableSortedSet.copyOf(varTypes);
+		// enforce forward strand
+		this.change = change == null ? null : change.withStrand(Strand.FWD);
+		this.effects = varTypes == null ? EMPTY_VARIANT_EFFECTS : Sets.immutableEnumSet(varTypes);
 		this.annoLoc = annoLoc;
 		this.genomicNTChange = genomicNTChange;
 		this.cdsNTChange = cdsNTChange;
 		this.proteinChange = proteinChange;
 		this.transcript = transcript;
-		this.messages = ImmutableSortedSet.copyOf(messages);
+		this.messages = Sets.immutableEnumSet(messages);
 	}
 
 	/** @return the annotated {@link GenomeVariant} */
@@ -158,12 +157,12 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	}
 
 	/** @return variant types, sorted by internal pathogenicity score */
-	public ImmutableSortedSet<VariantEffect> getEffects() {
+	public ImmutableSet<VariantEffect> getEffects() {
 		return effects;
 	}
 
 	/** @return errors and warnings */
-	public ImmutableSortedSet<AnnotationMessage> getMessages() {
+	public ImmutableSet<AnnotationMessage> getMessages() {
 		return messages;
 	}
 
@@ -245,7 +244,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public PutativeImpact getPutativeImpact() {
 		if (effects.isEmpty())
 			return null;
-		VariantEffect worst = effects.first();
+		VariantEffect worst = effects.iterator().next();
 		for (VariantEffect vt : effects)
 			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
 				worst = vt;
@@ -333,7 +332,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public VariantEffect getMostPathogenicVarType() {
 		if (effects.isEmpty())
 			return null;
-		return effects.first();
+		return effects.iterator().next();
 	}
 
 	@Override

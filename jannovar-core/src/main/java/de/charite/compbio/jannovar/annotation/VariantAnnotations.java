@@ -95,7 +95,7 @@ public final class VariantAnnotations implements VariantDescription {
 		if (anno == null || anno.getEffects().isEmpty())
 			return VariantEffect.SEQUENCE_VARIANT;
 		else
-			return anno.getEffects().first();
+			return anno.getEffects().iterator().next();
 	}
 
 	@Override

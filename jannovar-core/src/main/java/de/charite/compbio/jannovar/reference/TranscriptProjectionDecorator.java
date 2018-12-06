@@ -278,10 +278,11 @@ public final class TranscriptProjectionDecorator {
 		int currEndPos = 0; // current end position of exon in transcript
 		int i = 0;
 		for (GenomeInterval region : transcript.getExonRegions()) {
-			if (pos.getPos() < currEndPos + region.length())
+			int regionLength = region.length();
+			if (pos.getPos() < currEndPos + regionLength)
 				return i;
 			++i;
-			currEndPos += region.length();
+			currEndPos += regionLength;
 		}
 
 		// if pos was a valid transcript position then we should not reach here
