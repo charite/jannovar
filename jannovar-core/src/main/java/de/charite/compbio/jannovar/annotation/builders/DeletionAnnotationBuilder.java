@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
@@ -119,7 +120,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		// Java.
 
 		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		Set<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the predicted protein change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -170,11 +171,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check whether the variant overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varTypes.add(VariantEffect.STOP_LOST);
@@ -219,11 +220,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check whether the variant overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varTypes.add(VariantEffect.STOP_LOST);

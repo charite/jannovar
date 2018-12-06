@@ -1,9 +1,11 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
+import com.google.common.collect.Sets;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
@@ -37,6 +39,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
+
+	private static final Set<VariantEffect> TRANSCRIPT_ABLATION = Sets.immutableEnumSet(EnumSet.of(VariantEffect.TRANSCRIPT_ABLATION));
+	private static final Set<VariantEffect> START_LOST = Sets.immutableEnumSet(EnumSet.of(VariantEffect.START_LOST));
 
 	/**
 	 * @param transcript
@@ -89,12 +94,12 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
+		return new Annotation(transcript, change, TRANSCRIPT_ABLATION, locAnno,
 				getGenomicNTChange(), getCDSNTChange(), null, messages);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
+		return new Annotation(transcript, change, START_LOST, locAnno,
 				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN),
 				messages);
 	}
@@ -129,7 +134,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		// Java.
 
 		// the variant types, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		Set<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the predicted protein change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -187,15 +192,15 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varTypes.add(VariantEffect.STOP_LOST);
 			else if (change.getAlt().length() > change.getRef().length())
-				varTypes.addAll(ImmutableList.of(VariantEffect.INTERNAL_FEATURE_ELONGATION));
+				varTypes.add(VariantEffect.INTERNAL_FEATURE_ELONGATION);
 			else if (change.getAlt().length() < change.getRef().length())
 				varTypes.addAll(ImmutableList.of(VariantEffect.FEATURE_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION));
 			else
@@ -264,11 +269,11 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check whether it overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varTypes.add(VariantEffect.STOP_LOST);

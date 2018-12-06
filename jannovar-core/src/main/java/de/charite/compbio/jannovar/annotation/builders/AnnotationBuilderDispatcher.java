@@ -1,9 +1,11 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
@@ -19,6 +21,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 public final class AnnotationBuilderDispatcher {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationBuilderDispatcher.class);
+	private static final Set<VariantEffect> INTERGENIC_VARIANT = Sets.immutableEnumSet(EnumSet.of(VariantEffect.INTERGENIC_VARIANT));
 
 	/** transcript to build annotation for */
 	private final TranscriptModel transcript;
@@ -27,8 +30,7 @@ public final class AnnotationBuilderDispatcher {
 	/** configuration to use */
 	private final AnnotationBuilderOptions options;
 
-	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeVariant change,
-			AnnotationBuilderOptions options) {
+	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options) {
 		this.transcript = transcript;
 		this.change = change;
 		this.options = options;
@@ -42,22 +44,22 @@ public final class AnnotationBuilderDispatcher {
 	 */
 	public Annotation build() throws InvalidGenomeVariant {
 		if (transcript == null)
-			return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null,
+			return new Annotation(null, change, INTERGENIC_VARIANT, null,
 					new GenomicNucleotideChangeBuilder(change).build(), null, null);
 
 		switch (change.getType()) {
 		case SNV:
-			LOGGER.debug("Annotating SNV {}", new Object[] { change });
+			LOGGER.debug("Annotating SNV {}", change);
 			return new SNVAnnotationBuilder(transcript, change, options).build();
 		case DELETION:
-			LOGGER.debug("Annotating deletion {}", new Object[] { change });
+			LOGGER.debug("Annotating deletion {}", change);
 			return new DeletionAnnotationBuilder(transcript, change, options).build();
 		case INSERTION:
-			LOGGER.debug("Annotating insertion {}", new Object[] { change });
+			LOGGER.debug("Annotating insertion {}", change);
 			return new InsertionAnnotationBuilder(transcript, change, options).build();
 		case BLOCK_SUBSTITUTION:
 		default:
-			LOGGER.debug("Annotating block substitution {}", new Object[] { change });
+			LOGGER.debug("Annotating block substitution {}", change);
 			return new BlockSubstitutionAnnotationBuilder(transcript, change, options).build();
 		}
 	}

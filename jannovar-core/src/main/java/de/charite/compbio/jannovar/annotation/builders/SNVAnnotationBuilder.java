@@ -1,8 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.ArrayList;
-
-import com.google.common.collect.ImmutableList;
+import java.util.EnumSet;
+import java.util.Set;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
@@ -108,9 +107,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
 		} catch (InvalidCodonException e) {
 			// Bail out in the case of invalid codon from sequence
-			return new Annotation(transcript, change, new ArrayList<VariantEffect>(), locAnno, getGenomicNTChange(),
+			return new Annotation(transcript, change, EnumSet.noneOf(VariantEffect.class), locAnno, getGenomicNTChange(),
 					getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT),
-					ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
+				EnumSet.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
 		}
 		String wtCodon = transcriptCodon;
 		if (options.isOverrideTxSeqWithGenomeVariantRef())
@@ -133,7 +132,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
 
 		// Compute variant type.
-		ArrayList<VariantEffect> varTypes = computeVariantTypes(wtAA, varAA);
+		Set<VariantEffect> varTypes = computeVariantTypes(wtAA, varAA);
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
 			varTypes.add(VariantEffect.START_LOST);
@@ -152,11 +151,11 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 		if (so.overlapsWithSpliceDonorSite(changeInterval))
-			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+			varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 		else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+			varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 		else if (so.overlapsWithSpliceRegion(changeInterval))
-			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+			varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
@@ -178,8 +177,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *            variant amino acid
 	 * @return variant types described by single nucleotide change
 	 */
-	private ArrayList<VariantEffect> computeVariantTypes(String wtAA, String varAA) {
-		ArrayList<VariantEffect> result = new ArrayList<VariantEffect>();
+	private Set<VariantEffect> computeVariantTypes(String wtAA, String varAA) {
+		Set<VariantEffect> result = EnumSet.noneOf(VariantEffect.class);
 		if (wtAA.equals(varAA))
 			result.add(VariantEffect.SYNONYMOUS_VARIANT);
 		else if (wtAA.equals("*"))
