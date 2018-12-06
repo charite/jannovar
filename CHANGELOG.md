@@ -2,7 +2,10 @@
 
 ## HEAD (unreleased)
 
+### jannovar-core
+
 * Support for prioritizing RefSeq transcript on the PAR of chrX over those of chrY
+* Refactorizations to improve performace using `EnumSet`.
 
 ## v0.27
 

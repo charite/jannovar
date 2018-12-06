@@ -1,21 +1,18 @@
 package de.charite.compbio.jannovar.stats.facade;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
-
 import de.charite.compbio.jannovar.annotation.VariantAnnotations;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Facade class for collecting statistics from a {@link VariantContext} and a list of {@link VariantAnnotations}
@@ -67,7 +64,7 @@ public class StatisticsCollector {
 			}
 
 		// Counts for the variants for each sample
-		Set<Integer> seen = new HashSet<>();
+		HashSet<Integer> seen = new HashSet<>();
 		for (String sampleName : sampleNames) {
 			seen.clear();
 			Genotype gt = vc.getGenotype(sampleName);
@@ -113,7 +110,7 @@ public class StatisticsCollector {
 		} else {
 			final Genotype gt = vc.getGenotype(sampleName);
 			int count = 0;
-			Set<Integer> seen = new HashSet<>();
+			HashSet<Integer> seen = new HashSet<>();
 			for (Allele a : gt.getAlleles()) {
 				final int idx = vc.getAlleleIndex(a);
 				if (!seen.contains(idx) && idx != 0)
@@ -142,7 +139,7 @@ public class StatisticsCollector {
 		if (alleleAnno.getHighestImpactAnnotation() == null
 				|| alleleAnno.getHighestImpactAnnotation().getEffects() == null)
 			return;
-		final SortedSet<VariantEffect> effects = alleleAnno.getHighestImpactAnnotation().getEffects();
+		final ImmutableSet<VariantEffect> effects = alleleAnno.getHighestImpactAnnotation().getEffects();
 		final ImmutableSortedSet<VariantEffect> codingEffects = ImmutableSortedSet.of(
 				VariantEffect.FRAMESHIFT_ELONGATION, VariantEffect.FRAMESHIFT_TRUNCATION,
 				VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.INTERNAL_FEATURE_ELONGATION,

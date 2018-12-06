@@ -1,10 +1,8 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.ArrayList;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.EnumSet;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
@@ -48,6 +46,12 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  */
 abstract class AnnotationBuilder {
 
+	private static final ImmutableSet<VariantEffect> SPLICE_VARIANT_EFFECTS = Sets.immutableEnumSet(VariantEffect.SPLICE_DONOR_VARIANT,
+		VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT);
+	private static final ImmutableSet<VariantEffect> UPSTREAM_GENE_VARIANT = Sets.immutableEnumSet(VariantEffect.UPSTREAM_GENE_VARIANT);
+	private static final ImmutableSet<VariantEffect> DOWNSTREAM_GENE_VARIANT = Sets.immutableEnumSet(VariantEffect.DOWNSTREAM_GENE_VARIANT);
+	private static final ImmutableSet<VariantEffect> INTERGENIC_VARIANT = Sets.immutableEnumSet(VariantEffect.INTERGENIC_VARIANT);
+
 	/** configuration */
 	protected final AnnotationBuilderOptions options;
 
@@ -70,7 +74,7 @@ abstract class AnnotationBuilder {
 	/** locus of the change, length() == 1 in case of point changes */
 	protected NucleotideRange ntChangeRange;
 	/** warnings and messages occuring during annotation process */
-	protected SortedSet<AnnotationMessage> messages = new TreeSet<AnnotationMessage>();
+	protected EnumSet<AnnotationMessage> messages = EnumSet.noneOf(AnnotationMessage.class);
 
 	/**
 	 * Initialize the helper object with the given <code>transcript</code> and <code>change</code>.
@@ -153,16 +157,16 @@ abstract class AnnotationBuilder {
 		// Project genome to CDS position.
 		GenomePosition pos = changeInterval.getGenomeBeginPos();
 
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		EnumSet<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		if (changeInterval.length() == 0) {
 			final GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.liesInSpliceRegion(pos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check for being in intron/exon.
 			if (so.liesInExon(lPos) && so.liesInExon(pos))
 				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
@@ -171,26 +175,26 @@ abstract class AnnotationBuilder {
 		} else {
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check for being in intron/exon.
 			if (so.overlapsWithExon(changeInterval))
 				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
 			else
 				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 		}
-		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(), null,
-				messages);
+		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
+				null, messages);
 	}
 
 	/** @return intronic anotation */
 	protected Annotation buildIntronicAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		EnumSet<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		if (transcript.isCoding()) // always include intronic as variant type
 			varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
 		else
@@ -199,26 +203,25 @@ abstract class AnnotationBuilder {
 			final GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.liesInSpliceRegion(pos))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 		}
 		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
 		// annotation, as in Mutalyzer.
 		ProteinChange proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
-		if (!Sets.intersection(ImmutableSet.copyOf(varTypes), ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
-				VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
+		if (!Sets.intersection(Sets.immutableEnumSet(varTypes), SPLICE_VARIANT_EFFECTS).isEmpty())
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
 				proteinChange, messages);
@@ -230,16 +233,16 @@ abstract class AnnotationBuilder {
 	protected Annotation buildUTRAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		EnumSet<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		if (change.getGenomeInterval().length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check for being in 5' or 3' UTR.
 			if (so.liesInFivePrimeUTR(lPos)) {
 				// Check if variant overlaps really with an UTR
@@ -268,11 +271,11 @@ abstract class AnnotationBuilder {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 			// Check for being in 5' or 3' UTR.
 			if (so.overlapsWithFivePrimeUTR(changeInterval)) {
 				// Check if variant overlaps really with an UTR
@@ -310,28 +313,28 @@ abstract class AnnotationBuilder {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.UPSTREAM_GENE_VARIANT), null,
+				return new Annotation(transcript, change, UPSTREAM_GENE_VARIANT, null,
 						null, null, null, messages);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+				return new Annotation(transcript, change, DOWNSTREAM_GENE_VARIANT, null,
 						null, null, null, messages);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.UPSTREAM_GENE_VARIANT), null,
+				return new Annotation(transcript, change, UPSTREAM_GENE_VARIANT, null,
 						null, null, null, messages);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+				return new Annotation(transcript, change, DOWNSTREAM_GENE_VARIANT, null,
 						null, null, null, messages);
 		}
 	}
 
 	/** @return intergenic anotation */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null, null, null,
+		return new Annotation(transcript, change, INTERGENIC_VARIANT, null, null, null,
 				null, messages);
 	}
 
