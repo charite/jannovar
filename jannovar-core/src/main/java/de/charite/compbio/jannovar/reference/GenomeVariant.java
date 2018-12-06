@@ -180,6 +180,9 @@ public final class GenomeVariant implements VariantDescription {
 	 * @return the GenomeChange on the given strand
 	 */
 	public GenomeVariant withStrand(Strand strand) {
+		if (pos.getStrand() == strand) {
+			return this;
+		}
 		return new GenomeVariant(this, strand);
 	}
 

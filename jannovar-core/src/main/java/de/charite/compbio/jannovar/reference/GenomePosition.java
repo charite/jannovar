@@ -103,6 +103,9 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
 
 	/** convert into GenomePosition of the given strand */
 	public GenomePosition withStrand(Strand strand) {
+		if (this.strand == strand) {
+			return this;
+		}
 		return new GenomePosition(this, strand);
 	}
 

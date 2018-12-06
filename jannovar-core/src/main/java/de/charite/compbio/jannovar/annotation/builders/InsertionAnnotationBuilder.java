@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Set;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
@@ -170,7 +171,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		// Java.
 
 		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		Set<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the predicted protein change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
