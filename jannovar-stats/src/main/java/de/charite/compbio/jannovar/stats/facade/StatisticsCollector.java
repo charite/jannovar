@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -142,7 +141,7 @@ public class StatisticsCollector {
 		if (alleleAnno.getHighestImpactAnnotation() == null
 				|| alleleAnno.getHighestImpactAnnotation().getEffects() == null)
 			return;
-		final SortedSet<VariantEffect> effects = alleleAnno.getHighestImpactAnnotation().getEffects();
+		final Set<VariantEffect> effects = alleleAnno.getHighestImpactAnnotation().getEffects();
 		final ImmutableSortedSet<VariantEffect> codingEffects = ImmutableSortedSet.of(
 				VariantEffect.FRAMESHIFT_ELONGATION, VariantEffect.FRAMESHIFT_TRUNCATION,
 				VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.INTERNAL_FEATURE_ELONGATION,
