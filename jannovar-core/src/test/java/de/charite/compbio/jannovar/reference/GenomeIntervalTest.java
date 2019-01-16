@@ -51,7 +51,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructForwardToReverseOneBased() {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ONE_BASED);
-		GenomeInterval revInterval = new GenomeInterval(fwdInterval, Strand.REV);
+		GenomeInterval revInterval = fwdInterval.withStrand(Strand.REV);
 
 		Assert.assertEquals(revInterval.getStrand(), Strand.REV);
 		Assert.assertEquals(revInterval.getChr(), 1);
@@ -73,7 +73,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructForwardToForwardOneBased() {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ONE_BASED);
-		GenomeInterval fwdInterval2 = new GenomeInterval(fwdInterval, Strand.FWD);
+		GenomeInterval fwdInterval2 = fwdInterval.withStrand(Strand.FWD);
 
 		Assert.assertEquals(fwdInterval2.getStrand(), Strand.FWD);
 		Assert.assertEquals(fwdInterval2.getChr(), 1);
@@ -85,7 +85,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructReverseToForwardOneBased() {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ONE_BASED);
-		GenomeInterval fwdInterval = new GenomeInterval(revInterval, Strand.FWD);
+		GenomeInterval fwdInterval = revInterval.withStrand(Strand.FWD);
 
 		Assert.assertEquals(fwdInterval.getStrand(), Strand.FWD);
 		Assert.assertEquals(fwdInterval.getChr(), 1);
@@ -107,7 +107,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructReverseToReverseOneBased() {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ONE_BASED);
-		GenomeInterval revInterval2 = new GenomeInterval(revInterval, Strand.REV);
+		GenomeInterval revInterval2 = revInterval.withStrand(Strand.REV);
 
 		Assert.assertEquals(revInterval2.getStrand(), Strand.REV);
 		Assert.assertEquals(revInterval2.getChr(), 1);
@@ -119,7 +119,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructForwardToReverseZeroBased() {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ZERO_BASED);
-		GenomeInterval revInterval = new GenomeInterval(fwdInterval, Strand.REV);
+		GenomeInterval revInterval = fwdInterval.withStrand(Strand.REV);
 
 		Assert.assertEquals(revInterval.getStrand(), Strand.REV);
 		Assert.assertEquals(revInterval.getChr(), 1);
@@ -141,7 +141,7 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructReverseToForwardZeroBased() {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ZERO_BASED);
-		GenomeInterval fwdInterval = new GenomeInterval(revInterval, Strand.FWD);
+		GenomeInterval fwdInterval = revInterval.withStrand(Strand.FWD);
 
 		Assert.assertEquals(fwdInterval.getStrand(), Strand.FWD);
 		Assert.assertEquals(fwdInterval.getChr(), 1);

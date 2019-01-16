@@ -138,27 +138,6 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * Construct object and enforce strand.
-	 */
-	public GenomeVariant(GenomeVariant other, Strand strand) {
-		if (strand == other.pos.getStrand()) {
-			this.ref = other.ref;
-			this.alt = other.alt;
-		} else {
-			this.ref = DNAUtils.reverseComplement(other.ref);
-			this.alt = DNAUtils.reverseComplement(other.alt);
-		}
-
-		// Get position as 0-based position.
-
-		if (strand == other.pos.getStrand()) {
-			this.pos = other.pos;
-		} else {
-			this.pos = other.pos.shifted(this.ref.length() - 1).withStrand(strand);
-		}
-	}
-
-	/**
 	 * @return numeric ID of chromosome this change is on
 	 */
 	@Override
@@ -170,6 +149,7 @@ public final class GenomeVariant implements VariantDescription {
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {
+		// note - it is not worth caching this as an instance field as this leads to worse GC performance
 		if (isSymbolic())
 			return new GenomeInterval(pos, 1);
 
@@ -183,7 +163,13 @@ public final class GenomeVariant implements VariantDescription {
 		if (pos.getStrand() == strand) {
 			return this;
 		}
-		return new GenomeVariant(this, strand);
+
+		String oppositeRef = DNAUtils.reverseComplement(ref);
+		String oppositeAlt = DNAUtils.reverseComplement(alt);
+
+		// Get position as 0-based position.
+		GenomePosition oppositePos = pos.shifted(this.ref.length() - 1).withStrand(strand);
+		return new GenomeVariant(oppositePos, oppositeRef, oppositeAlt, strand);
 	}
 
 	/**
