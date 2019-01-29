@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import java.util.EnumSet;
 
 // TODO(holtgrew): For now, only insert most specific variants by default, add switch that adds transitive changes
-// TODO(holtgrew): structural variants need more refinement
 
 /**
  * These codes reflect the possible types of variants that we call for an exome.
@@ -36,16 +36,12 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001893">SO:0001893</a> A feature ablation
 	 * whereby the deleted region includes a transcript feature (is a: feature_ablation)
-	 *
-	 * <b>Not</b> used in Jannovar annotations.
 	 */
 	TRANSCRIPT_ABLATION,
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001572">SO:0001572</a> A sequence variant
 	 * whereby an exon is lost from the transcript (is a (is a: {@link #SPLICING_VARIANT}), {@link #TRANSCRIPT_VARIANT}
 	 * ).
-	 *
-	 * <b>Not</b> used in Jannovar annotations.
 	 */
 	EXON_LOSS_VARIANT,
 
@@ -139,6 +135,12 @@ public enum VariantEffect {
 	 * that changes the 2 base pair region at the 5' end of an intron (is a {@link #SPLICE_REGION_VARIANT}).
 	 */
 	SPLICE_DONOR_VARIANT,
+
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001889">SO:0001889</a> A sequence variant
+	 * that is an amplification of a region containing a transcriptt.
+	 */
+	TRANSCRIPT_AMPLIFICATION,
 
 	// change in rare amino acids, exotic variant
 	/**
@@ -340,6 +342,20 @@ public enum VariantEffect {
 
 	// regulatory / TFBS variants
 	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001895">SO:0001895</a> An ablation
+	 * whereby the deleted region includes a transcription factor binding site.
+	 *
+	 * <b>Not</b> used in Jannovar annotations.
+	 */
+	TFBS_ABLATION,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001892">SO:0001892</a> An amplification
+	 * of a region containing a transcription factor binding site.
+	 *
+	 * <b>Not</b> used in Jannovar annotations.
+	 */
+	TFBS_AMPLIFICATION,
+	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001782">SO:0001782</a> A sequence variant
 	 * located within a transcription factor binding site (is a: {@link #REGULATORY_REGION_VARIANT}).
 	 *
@@ -353,6 +369,20 @@ public enum VariantEffect {
 	 * <b>Not</b> used in Jannovar annotations.
 	 */
 	REGULATORY_REGION_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001894">SO:0001894</a> A feature ablation
+	 * whereby the deleted region includes a regulatory region.
+	 *
+	 * <b>Not</b> used in Jannovar annotations.
+	 */
+	REGULATORY_REGION_ABLATION,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001891">SO:0001891</a>  Amplification of
+	 * a region containing a regulatory region.
+	 *
+	 * <b>Not</b> used in Jannovar annotations.
+	 */
+	REGULATORY_REGION_AMPLIFICATION,
 
 	// variant in intronic regions
 	/**
@@ -362,6 +392,18 @@ public enum VariantEffect {
 	 * <b>Not</b> used in Jannovar annotations.
 	 */
 	CONSERVED_INTRON_VARIANT,
+
+	// balanced structural variant types
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:1000036">SO:1000036</a> A continuous
+	 * nucleotide sequence is inverted in the same position.
+	 */
+	INVERSION,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0000199">SO:0000199</a> A region of
+	 * nucleotide sequence that has translocated to a new position. The observed adjacency of two previously separated regions.
+	 */
+	TRANSLOCATION,
 
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002011">SO:0002011</a> A variant that
@@ -700,8 +742,16 @@ public enum VariantEffect {
 			return "intergenic_region";
 		case INTERGENIC_VARIANT:
 			return "intergenic_variant";
+		case TFBS_ABLATION:
+			return "tfbs_ablation";
+		case TFBS_AMPLIFICATION:
+			return "tfbs_amplification";
 		case INTERNAL_FEATURE_ELONGATION:
 			return "internal_feature_elongation";
+		case TRANSLOCATION:
+			return "translocation";
+		case INVERSION:
+			return "inversion";
 		case INTRAGENIC_VARIANT:
 			return "intragenic_variant";
 		case INTRON_VARIANT:
@@ -722,6 +772,10 @@ public enum VariantEffect {
 			return "rare_amino_acid_variant";
 		case REGULATORY_REGION_VARIANT:
 			return "regulatory_region_variant";
+		case REGULATORY_REGION_ABLATION:
+			return "regulatory_region_ablation";
+		case REGULATORY_REGION_AMPLIFICATION:
+			return "regulatory_region_amplification";
 		case SEQUENCE_VARIANT:
 			return "sequence_variant";
 		case SPLICE_ACCEPTOR_VARIANT:
@@ -754,6 +808,8 @@ public enum VariantEffect {
 			return "3_prime_UTR_intron_variant";
 		case TRANSCRIPT_ABLATION:
 			return "transcript_ablation";
+		case TRANSCRIPT_AMPLIFICATION:
+			return "transcript_amplification";
 		case TRANSCRIPT_VARIANT:
 			return "transcript_variant";
 		case UPSTREAM_GENE_VARIANT:
@@ -832,6 +888,10 @@ public enum VariantEffect {
 			return "SO:0001628";
 		case INTERNAL_FEATURE_ELONGATION:
 			return "SO:0001908";
+		case TRANSLOCATION:
+			return "SO:0000199";
+		case INVERSION:
+			return "SO:1000036";
 		case INTRAGENIC_VARIANT:
 			return "SO:0002011";
 		case INTRON_VARIANT:
@@ -852,6 +912,10 @@ public enum VariantEffect {
 			return "SO:0002008";
 		case REGULATORY_REGION_VARIANT:
 			return "SO:0001566";
+		case REGULATORY_REGION_ABLATION:
+			return "SO:0001894";
+		case REGULATORY_REGION_AMPLIFICATION:
+			return "SO:0001891";
 		case SEQUENCE_VARIANT:
 			return "SO:0001060";
 		case SPLICE_ACCEPTOR_VARIANT:
@@ -874,6 +938,10 @@ public enum VariantEffect {
 			return "SO:0001537";
 		case SYNONYMOUS_VARIANT:
 			return "SO:0001819";
+		case TFBS_ABLATION:
+			return "SO:0001895";
+		case TFBS_AMPLIFICATION:
+			return "SO:0001892";
 		case TF_BINDING_SITE_VARIANT:
 			return "SO:0001782";
 		case THREE_PRIME_UTR_TRUNCATION:
@@ -884,6 +952,8 @@ public enum VariantEffect {
 			return "SO:0002090";
 		case TRANSCRIPT_ABLATION:
 			return "SO:0001893";
+		case TRANSCRIPT_AMPLIFICATION:
+			return "SO:0001889";
 		case TRANSCRIPT_VARIANT:
 			return "SO:0001576";
 		case UPSTREAM_GENE_VARIANT:
@@ -911,7 +981,10 @@ public enum VariantEffect {
 	 * @return <code>true</code> if this {@link VariantEffect} annotates structural variants.
 	 */
 	public boolean isStructural() {
-		return (this == STRUCTURAL_VARIANT);
+		return EnumSet
+				.of(STRUCTURAL_VARIANT, TRANSCRIPT_ABLATION, TRANSCRIPT_AMPLIFICATION, REGULATORY_REGION_ABLATION,
+						REGULATORY_REGION_AMPLIFICATION, TFBS_ABLATION, TFBS_AMPLIFICATION, INVERSION, TRANSLOCATION)
+				.contains(this);
 	}
 
 	/**
