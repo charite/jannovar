@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.refseq.RefSeqParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import java.util.List;
 
 // TODO(holtgrem): Report longest transcript as primary one for RefSeq.
 
@@ -33,9 +34,10 @@ final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 	}
 
 	@Override
-	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
+	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
+			List<String> geneIdentifiers)
 			throws TranscriptParseException {
-		return new RefSeqParser(refDict, targetDir, iniSection).run();
+		return new RefSeqParser(refDict, targetDir, geneIdentifiers, iniSection).run();
 	}
 
 }

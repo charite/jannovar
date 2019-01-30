@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.ucsc.UCSCParser;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import java.util.List;
 
 /**
  * Creation of {@link JannovarData} objects from a {@link UCSCDataSource}.
@@ -31,9 +32,9 @@ final class UCSCJannovarDataFactory extends JannovarDataFactory {
 	}
 
 	@Override
-	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
-			throws TranscriptParseException {
-		return new UCSCParser(refDict, targetDir, iniSection).run();
+	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
+			List<String> geneIdentifiers) throws TranscriptParseException {
+		return new UCSCParser(refDict, targetDir, geneIdentifiers, iniSection).run();
 	}
 
 }

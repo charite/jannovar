@@ -40,10 +40,15 @@ public final class DownloadCommand extends JannovarCommand {
 				new DataSourceFactory(dsOptions, Lists.reverse(options.dataSourceFiles));
 		for (String name : options.getDatabaseNames()) {
 			System.err.println("Downloading/parsing for data source \"" + name + "\"");
-			JannovarData data = factory.getDataSource(name).getDataFactory()
-					.build(options.getDownloadDir(), options.isReportProgress());
-			String filename = PathUtil.join(options.getDownloadDir(),
-					name.replace('/', '_').replace('\\', '_') + ".ser");
+			JannovarData data = factory.getDataSource(name).getDataFactory().build(options.getDownloadDir(),
+					options.isReportProgress(), options.getGeneIdentifiers());
+			final String filename;
+			if (options.getOutputFile()  == null || options.getOutputFile().isEmpty()) {
+				filename = PathUtil.join(options.getDownloadDir(),
+						name.replace('/', '_').replace('\\', '_') + ".ser");
+			} else {
+				filename = options.getOutputFile();
+			}
 			JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
 			serializer.save(data);
 		}

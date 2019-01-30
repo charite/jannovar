@@ -29,6 +29,12 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 	/** Names of the databases to download */
 	private List<String> databaseNames = new ArrayList<>();
 
+	/** List of gene identifiers to limit creation of database to. */
+	private List<String> geneIdentifiers = new ArrayList<>();
+
+	/** Path to output file (if it should not be generated from download name). */
+	private String outputFile = "";
+
 	/**
 	 * Setup {@link ArgumentParser}
 	 *
@@ -57,6 +63,10 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 				.setDefault(new ArrayList<String>(Arrays.asList("bundle:///default_sources.ini"))).action(Arguments.append());
 		optionalGroup.addArgument("--download-dir").help("Path to download directory").setDefault("data");
 
+		optionalGroup.addArgument("--gene-ids").help("Optional list of genes to limit creation of database to")
+				.setDefault(new ArrayList<String>()).nargs("+");
+		optionalGroup.addArgument("-o", "--output-file").help("Optional path to output file").setDefault("");
+
 		JannovarBaseOptions.setupParser(subParser);
 	}
 
@@ -66,6 +76,8 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 
 		downloadDir = args.getString("download_dir");
 		databaseNames = args.getList("database");
+		geneIdentifiers = args.getList("gene_ids");
+		outputFile = args.getString("output_file");
 	}
 
 	public String getDownloadDir() {
@@ -84,11 +96,28 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 		this.databaseNames = databaseNames;
 	}
 
+	public List<String> getGeneIdentifiers() {
+		return geneIdentifiers;
+	}
+
+	public void setGeneIdentifiers(List<String> geneIdentifiers) {
+		this.geneIdentifiers = geneIdentifiers;
+	}
+
+	public String getOutputFile() {
+		return outputFile;
+	}
+
+	public void setOutputFile(String outputFile) {
+		this.outputFile = outputFile;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarDownloadOptions [downloadDir=" + downloadDir + ", getDataSourceFiles()=" + getDataSourceFiles()
 				+ ", isReportProgress()=" + isReportProgress() + ", getHttpProxy()=" + getHttpProxy()
-				+ ", getHttpsProxy()=" + getHttpsProxy() + ", getFtpProxy()=" + getFtpProxy() + "]";
+				+ ", getHttpsProxy()=" + getHttpsProxy() + ", getFtpProxy()=" + getFtpProxy() + ", geneIdentifiers="
+				+ geneIdentifiers + ", outputFile=" + outputFile + "]";
 	}
 
 }
