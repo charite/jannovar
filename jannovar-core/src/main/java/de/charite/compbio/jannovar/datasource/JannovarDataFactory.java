@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.ini4j.Profile.Section;
@@ -62,6 +63,8 @@ public abstract class JannovarDataFactory {
 	 *            path of directory to download files to
 	 * @param printProgressBars
 	 *            whether or not to print progress bars
+	 * @param geneIdentifiers
+	 *            List of gene identifiers to limit to
 	 * @return {@link JannovarData} object for the factory's state.
 	 * @throws InvalidDataSourceException
 	 *             on problems with the data source or data source file
@@ -70,7 +73,7 @@ public abstract class JannovarDataFactory {
 	 * @throws FileDownloadException
 	 *             on problems while downloading files.
 	 */
-	public final JannovarData build(String downloadDir, boolean printProgressBars)
+	public final JannovarData build(String downloadDir, boolean printProgressBars, List<String> geneIdentifiers)
 			throws InvalidDataSourceException, TranscriptParseException, FileDownloadException {
 		String targetDir = PathUtil.join(downloadDir, dataSource.getName());
 
@@ -107,7 +110,7 @@ public abstract class JannovarDataFactory {
 
 		// Parse transcript files.
 		LOGGER.info("Parsing transcripts...");
-		ImmutableList<TranscriptModel> transcripts = parseTranscripts(refDict, targetDir);
+		ImmutableList<TranscriptModel> transcripts = parseTranscripts(refDict, targetDir, geneIdentifiers);
 
 		return new JannovarData(refDict, transcripts);
 	}
@@ -171,11 +174,14 @@ public abstract class JannovarDataFactory {
 	 *            {@link ReferenceDictionary} to use
 	 * @param targetDir
 	 *            path where the downloaded files are
-	 * @return list of {@link TranscriptModel} objects that are parsed from the files in <code>targetDir</code>
+	 * @param geneIdentifiers
+	 *            List of gene identifiers to extract data for
+	 * @return list of {@link TranscriptModel} objects that are parsed from the files in
+	 *         <code>targetDir</code>
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the transcript database
 	 */
-	protected abstract ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
-			throws TranscriptParseException;
+	protected abstract ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
+			List<String> geneIdentifiers) throws TranscriptParseException;
 
 }

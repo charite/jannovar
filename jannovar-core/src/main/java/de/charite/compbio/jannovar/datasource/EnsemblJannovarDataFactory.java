@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.ensembl.EnsemblParser;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import java.util.List;
 
 /**
  * Creation of {@link JannovarData} objects from a {@link EnsemblDataSource}.
@@ -32,9 +33,9 @@ final class EnsemblJannovarDataFactory extends JannovarDataFactory {
 	}
 
 	@Override
-	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
-			throws TranscriptParseException {
-		return new EnsemblParser(refDict, targetDir, iniSection).run();
+	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
+			List<String> geneIdentifiers) throws TranscriptParseException {
+		return new EnsemblParser(refDict, targetDir, geneIdentifiers, iniSection).run();
 	}
 
 }

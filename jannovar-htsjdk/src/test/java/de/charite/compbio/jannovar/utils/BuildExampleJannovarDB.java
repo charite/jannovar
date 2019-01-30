@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.util.ArrayList;
 import org.ini4j.Ini;
 
 import com.google.common.collect.ImmutableList;
@@ -45,7 +45,7 @@ public class BuildExampleJannovarDB {
 		// parse TranscriptModel
 		Ini ini = new Ini();
 		ini.load(new File(tmpDir + "/data.ini"));
-		RefSeqParser parser = new RefSeqParser(refDict, tmpDir.toString(), ini.get("dummy"));
+		RefSeqParser parser = new RefSeqParser(refDict, tmpDir.toString(), new ArrayList<String>(), ini.get("dummy"));
 		ImmutableList<TranscriptModel> tms = parser.run();
 		JannovarData data = new JannovarData(refDict, tms);
 		// write out file

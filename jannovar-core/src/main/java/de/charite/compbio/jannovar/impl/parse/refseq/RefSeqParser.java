@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -38,7 +39,7 @@ import java.util.Set;
 
 /**
  * Parsing of RefSeq GFF3 files
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class RefSeqParser implements TranscriptParser {
@@ -61,6 +62,9 @@ public class RefSeqParser implements TranscriptParser {
 	/** INI {@link Section} from the configuration. */
 	private Section iniSection;
 
+	/** List of gene identifiers of genes to include, if non-empty. */
+	private final List<String> geneIdentifiers;
+
 	/**
 	 * @param refDict
 	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
@@ -68,11 +72,14 @@ public class RefSeqParser implements TranscriptParser {
 	 *            path to where the to-be-parsed files live
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
+	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
-	public RefSeqParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
+	public RefSeqParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers,
+			Section iniSection) {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
+		this.geneIdentifiers = geneIdentifiers;
 	}
 
 	@Override
@@ -104,14 +111,26 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Create final list of TranscriptModels.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<>();
-		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
-			result.add(entry.getValue().build());
+		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
+			TranscriptModelBuilder builder = entry.getValue();
+			if (geneIdentifiers == null || geneIdentifiers.isEmpty()) {
+				result.add(builder.build());
+			} else {
+				if (geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID())
+						|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
+								ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
+
+				) {
+					result.add(builder.build());
+				}
+			}
+		}
 		return result.build();
 	}
 
 	/**
 	 * Load FASTA from pathFASTA and set the sequence into builders.
-	 * 
+	 *
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the FASTA
 	 */
@@ -195,10 +214,10 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
-	 * 
+	 *
 	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the appropriate
 	 * TranscriptModel objects.
-	 * 
+	 *
 	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
@@ -316,7 +335,7 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Parse out entrez gene ID
-	 * 
+	 *
 	 * @param builder
 	 *            The {@link TranscriptModelBuilder} to put the alternative geneIDs to
 	 * @param geneRecord
@@ -336,7 +355,7 @@ public class RefSeqParser implements TranscriptParser {
 
 	/**
 	 * Load GFF records, cluster by gene and return
-	 * 
+	 *
 	 * @throws TranscriptParseException
 	 *             on problems with handling the transcript file
 	 */

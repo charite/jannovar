@@ -2,6 +2,10 @@
 
 ## HEAD (unreleased)
 
+### jannovar-cli
+
+* Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
+
 ### jannovar-core
 
 * Support for prioritizing RefSeq transcript on the PAR of chrX over those of chrY

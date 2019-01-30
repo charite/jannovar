@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
 import org.ini4j.Profile.Section;
@@ -16,8 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-
+import com.google.common.collect.Sets;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -108,6 +111,9 @@ public class UCSCParser implements TranscriptParser {
 	 */
 	private HashMap<String, TranscriptModelBuilder> knownGeneMap;
 
+	/** List of gene identifiers of genes to include, if non-empty. */
+	private final List<String> geneIdentifiers;
+
 	/**
 	 * @param refDict
 	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
@@ -115,12 +121,14 @@ public class UCSCParser implements TranscriptParser {
 	 *            path to where the to-be-parsed files live
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
+	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
-	public UCSCParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
+	public UCSCParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers,
+			Section iniSection) {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
-		this.knownGeneMap = new HashMap<String, TranscriptModelBuilder>();
+		this.geneIdentifiers = geneIdentifiers;
 	}
 
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
@@ -160,8 +168,20 @@ public class UCSCParser implements TranscriptParser {
 				entry.getValue().getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entry.getValue().getGeneID());
 			}
 			TranscriptModel model = entry.getValue().build();
-			if (checkTranscriptModel(model))
-				result.add(model);
+			if (checkTranscriptModel(model)) {
+				TranscriptModelBuilder builder = entry.getValue();
+				if (geneIdentifiers == null || geneIdentifiers.isEmpty()) {
+					result.add(model);
+				} else {
+					if (geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID())
+							|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
+									ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
+
+					) {
+						result.add(model);
+					}
+				}
+			}
 		}
 		return result.build();
 	}
@@ -355,7 +375,7 @@ public class UCSCParser implements TranscriptParser {
 					// exceptionCount++;
 				}
 			}
-			// System.out.println("[INFO] Parsed " + knownGeneMap.size() +
+			// System.out.println("[INFO] Parsed " + knownGeneMap.size()
 			// " transcripts from UCSC knownGene resource");
 		} catch (FileNotFoundException fnfe) {
 			s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", kgPath,

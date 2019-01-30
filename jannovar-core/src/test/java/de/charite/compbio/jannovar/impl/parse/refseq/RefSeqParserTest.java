@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.impl.parse.refseq;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -72,7 +73,8 @@ public class RefSeqParserTest {
 
 	@Test
 	public void testAll() throws TranscriptParseException {
-		RefSeqParser parser = new RefSeqParser(refDict, dataDirectory.getAbsolutePath(), allIniSection);
+		RefSeqParser parser = new RefSeqParser(refDict, dataDirectory.getAbsolutePath(), new ArrayList<String>(),
+				allIniSection);
 		ImmutableList<TranscriptModel> result = parser.run();
 
 		Assert.assertEquals(12, result.size());
@@ -104,7 +106,8 @@ public class RefSeqParserTest {
 
 	@Test
 	public void testOnlyCurated() throws TranscriptParseException {
-		RefSeqParser parser = new RefSeqParser(refDict, dataDirectory.getAbsolutePath(), curatedIniSection);
+		RefSeqParser parser = new RefSeqParser(refDict, dataDirectory.getAbsolutePath(), new ArrayList<>(),
+				curatedIniSection);
 		ImmutableList<TranscriptModel> result = parser.run();
 
 		Assert.assertEquals(6, result.size());
