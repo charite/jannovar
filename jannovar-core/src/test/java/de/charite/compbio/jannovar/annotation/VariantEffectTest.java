@@ -14,16 +14,32 @@ import static org.junit.Assert.assertFalse;
  */
 public class VariantEffectTest {
 
-  @Test
-  public void sequenceOntologyTermsAreUnique() {
-    Set<String> soTerms = new HashSet<String>();
-    for (VariantEffect variantEffect : VariantEffect.values()) {
-      if (variantEffect.getSequenceOID() != null) {
-        assertFalse("SO terms should be unique, but '" + variantEffect + "' defines '" + variantEffect.getSequenceOID()
-            + "', which is already taken.", soTerms.contains(variantEffect.getSequenceOID()));
-        soTerms.add(variantEffect.getSequenceOID());
-      }
-    }
-  }
+	@Test
+	public void sequenceOntologyTermsAreUnique() {
+		Set<String> soTerms = new HashSet<String>();
+		for (VariantEffect variantEffect : VariantEffect.values()) {
+			if (variantEffect.getSequenceOntologyTerm() != null) {
+				assertFalse(
+						"SO terms should be unique, but '" + variantEffect + "' defines '"
+								+ variantEffect.getSequenceOntologyTerm() + "', which is already taken.",
+						soTerms.contains(variantEffect.getSequenceOntologyTerm()));
+				soTerms.add(variantEffect.getSequenceOntologyTerm());
+			}
+		}
+	}
+
+	@Test
+	public void sequenceOIDsAreUnique() {
+		Set<String> soTerms = new HashSet<String>();
+		for (VariantEffect variantEffect : VariantEffect.values()) {
+			if (variantEffect.getSequenceOID() != null) {
+				assertFalse(
+						"SO terms should be unique, but '" + variantEffect + "' defines '"
+								+ variantEffect.getSequenceOID() + "', which is already taken.",
+						soTerms.contains(variantEffect.getSequenceOID()));
+				soTerms.add(variantEffect.getSequenceOID());
+			}
+		}
+	}
 
 }
