@@ -8,19 +8,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.mendel.impl.AbstractMendelianChecker;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerAD;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerARCompoundHet;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerARHom;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerXD;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerXRCompoundHet;
-import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerXRHom;
+import de.charite.compbio.jannovar.mendel.impl.*;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 
 /**
  * Facade class for checking lists of {@link GenotypeCalls} for compatibility with mendelian inheritance
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
@@ -35,7 +29,7 @@ public final class MendelianInheritanceChecker {
 
 	/**
 	 * Construct checker with the pedigree to use
-	 * 
+	 *
 	 * @param pedigree
 	 *            The pedigree to use for the mendelian inheritance checking
 	 */
@@ -50,12 +44,13 @@ public final class MendelianInheritanceChecker {
 		builder.put(SubModeOfInheritance.X_DOMINANT, new MendelianCheckerXD(this));
 		builder.put(SubModeOfInheritance.X_RECESSIVE_COMP_HET, new MendelianCheckerXRCompoundHet(this));
 		builder.put(SubModeOfInheritance.X_RECESSIVE_HOM_ALT, new MendelianCheckerXRHom(this));
+		builder.put(SubModeOfInheritance.MITOCHONDRIAL, new InheritanceCheckerMT(this));
 		this.checkers = builder.build();
 	}
 
 	/**
 	 * Perform checking for compatible mode of inheritance
-	 * 
+	 *
 	 * @param calls
 	 *            {@link Collection} of {@link GenotypeCalls} objects to perform the mode of inheritance check for in
 	 *            case of non-recessive mode of inheritance
@@ -92,7 +87,7 @@ public final class MendelianInheritanceChecker {
 
 	/**
 	 * Perform checking for compatible sub mode of inheritance
-	 * 
+	 *
 	 * @param calls
 	 *            {@link Collection} of {@link GenotypeCalls} objects to perform the mode of inheritance check for
 	 * @param compHetRecessiveCalls
@@ -127,7 +122,7 @@ public final class MendelianInheritanceChecker {
 
 	/**
 	 * Filters records in <code>calls</code> for compatibility with <code>mode</code>
-	 * 
+	 *
 	 * @param calls
 	 *            List of {@link GenotypeCalls} to filter
 	 * @param mode
@@ -142,7 +137,8 @@ public final class MendelianInheritanceChecker {
 		if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c)))
 			throw new IncompatiblePedigreeException("GenotypeCalls not compatible with pedigree");
 		// Filter down to the compatible records
-		ImmutableSet<GenotypeCalls> calls1, calls2;
+		ImmutableSet<GenotypeCalls> calls1;
+		ImmutableSet<GenotypeCalls> calls2;
 		ImmutableList.Builder<GenotypeCalls> builder;
 		switch (mode) {
 		case AUTOSOMAL_DOMINANT:
@@ -169,6 +165,8 @@ public final class MendelianInheritanceChecker {
 				if (calls1.contains(c) || calls2.contains(c))
 					builder.add(c);
 			return builder.build();
+		case MITOCHONDRIAL:
+			return checkers.get(SubModeOfInheritance.MITOCHONDRIAL).filterCompatibleRecords(calls);
 		default:
 		case ANY:
 			return ImmutableList.copyOf(calls);
@@ -177,7 +175,7 @@ public final class MendelianInheritanceChecker {
 
 	/**
 	 * Filters records in <code>calls</code> for compatibility with <code>subMode</code>
-	 * 
+	 *
 	 * @param calls
 	 *            List of {@link GenotypeCalls} to filter
 	 * @param subMode

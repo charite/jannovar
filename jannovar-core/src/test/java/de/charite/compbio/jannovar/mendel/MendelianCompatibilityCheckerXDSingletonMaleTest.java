@@ -44,7 +44,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF), true);
+		gcList = getGenotypeCallsList(lst(REF), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -56,7 +56,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesOneVariant2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN), true);
+		gcList = getGenotypeCallsList(lst(UKN), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -68,7 +68,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesOneVariant3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(ALT), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -80,7 +80,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF), lst(REF), true);
+		gcList = getGenotypeCallsList(lst(REF), lst(REF), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -92,7 +92,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF), lst(UKN), true);
+		gcList = getGenotypeCallsList(lst(REF), lst(UKN), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -104,7 +104,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN), lst(UKN), true);
+		gcList = getGenotypeCallsList(lst(UKN), lst(UKN), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -116,7 +116,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants4() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN), lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(UKN), lst(ALT), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -128,7 +128,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants5() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(REF), lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(REF), lst(ALT), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -140,7 +140,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCaseNegativesTwoVariants6() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT), lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(ALT), lst(ALT), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -152,7 +152,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesOneVariant1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET), true);
+		gcList = getGenotypeCallsList(lst(HET), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -164,7 +164,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesTwoVariants1() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET), lst(REF), true);
+		gcList = getGenotypeCallsList(lst(HET), lst(REF), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -176,7 +176,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesTwoVariants2() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(UKN), lst(HET), true);
+		gcList = getGenotypeCallsList(lst(UKN), lst(HET), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -188,7 +188,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesTwoVariants3() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET), lst(HET), true);
+		gcList = getGenotypeCallsList(lst(HET), lst(HET), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -200,7 +200,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesTwoVariants4() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(HET), lst(ALT), true);
+		gcList = getGenotypeCallsList(lst(HET), lst(ALT), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -212,7 +212,7 @@ public class MendelianCompatibilityCheckerXDSingletonMaleTest extends MendelianC
 
 	@Test
 	public void testCasePositivesTwoVariants5() throws IncompatiblePedigreeException {
-		gcList = getGenotypeCallsList(lst(ALT), lst(HET), true);
+		gcList = getGenotypeCallsList(lst(ALT), lst(HET), ChromosomeType.X_CHROMOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());

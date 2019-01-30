@@ -249,20 +249,7 @@ public enum VariantEffect {
 	 */
 	CODING_TRANSCRIPT_INTRON_VARIANT,
 
-	// changes in non-coding transcripts, exons/introns
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001792">SO:0001792</a> A sequence variant
-	 * that changes non-coding exon sequence in a non-coding transcript (is a: {@link #NON_CODING_TRANSCRIPT_VARIANT},
-	 * {@link #EXON_VARIANT}).
-	 */
-	NON_CODING_TRANSCRIPT_EXON_VARIANT,
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001970">SO:0001970</a> A sequence variant
-	 * that changes non-coding intro sequence in a non-coding transcript (is a: {@link #NON_CODING_TRANSCRIPT_VARIANT},
-	 * {@link #INTRON_VARIANT}).
-	 */
-	NON_CODING_TRANSCRIPT_INTRON_VARIANT,
-
+	// UTR variant
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001983">SO:0001983</a> A 5' UTR variant
 	 * where a premature start codon is introduced, moved or lost (is a: {@link #FIVE_PRIME_UTR_EXON_VARIANT} or
@@ -292,6 +279,20 @@ public enum VariantEffect {
 	 * between 3' UTRs (is a: 3_prime_UTR_variant; is a: UTR_variant).
 	 */
 	THREE_PRIME_UTR_INTRON_VARIANT,
+
+	// changes in non-coding transcripts, exons/introns
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001792">SO:0001792</a> A sequence variant
+	 * that changes non-coding exon sequence in a non-coding transcript (is a: {@link #NON_CODING_TRANSCRIPT_VARIANT},
+	 * {@link #EXON_VARIANT}).
+	 */
+	NON_CODING_TRANSCRIPT_EXON_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001970">SO:0001970</a> A sequence variant
+	 * that changes non-coding intro sequence in a non-coding transcript (is a: {@link #NON_CODING_TRANSCRIPT_VARIANT},
+	 * {@link #INTRON_VARIANT}).
+	 */
+	NON_CODING_TRANSCRIPT_INTRON_VARIANT,
 
 	/**
 	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#LOW} impact.

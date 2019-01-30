@@ -1,7 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
@@ -19,9 +20,6 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Hgvs_variantCont
  */
 public class HGVSParsingTestBase {
 
-	public HGVSParsingTestBase() {
-		super();
-	}
 
 	public static void setLogLevel(Level level) {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -35,11 +33,11 @@ public class HGVSParsingTestBase {
 
 	protected Hgvs_variantContext parseString(String inputString, boolean trace) {
 		if (trace) {
-			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
+			CodePointCharStream inputStream = CharStreams.fromString(inputString);
 			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
-		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
+		CodePointCharStream inputStream = CharStreams.fromString(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(trace);

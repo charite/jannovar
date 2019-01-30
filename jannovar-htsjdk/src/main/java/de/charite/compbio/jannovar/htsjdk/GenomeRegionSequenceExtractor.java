@@ -56,8 +56,12 @@ public class GenomeRegionSequenceExtractor {
 		String nameInFasta = null;
 		for (SAMSequenceRecord record : indexedFile.getSequenceDictionary().getSequences()) {
 			if (jannovarData.getRefDict().getContigNameToID().containsKey(record.getSequenceName())) {
-				nameInFasta = record.getSequenceName();
-				break;
+				String contigInFasta = record.getSequenceName();
+				if (jannovarData.getRefDict().getContigNameToID().get(contigInFasta) == contigID) {
+					nameInFasta = contigInFasta;
+					break;
+				}
+				
 			}
 		}
 		if (nameInFasta == null)

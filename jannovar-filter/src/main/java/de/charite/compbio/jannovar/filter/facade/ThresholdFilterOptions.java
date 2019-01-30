@@ -37,6 +37,9 @@ public class ThresholdFilterOptions {
 	/** Prefix of dbSNP annotation */
 	private final String dbSnpPrefix;
 
+	/** Prefix of thousand genomes annotation */
+	private final String g1kPrefix;
+
 	/** Prefix of gnomAD exomes annotation */
 	private final String gnomAdExomesPrefix;
 
@@ -49,16 +52,23 @@ public class ThresholdFilterOptions {
 	/** Maximal alternative allele's frequency for autosomal recessive inheritance mode */
 	private final double maxAlleleFrequencyAr;
 
+	/** Maximal number of occurences in homozygous state in ExAC. */
+	private final int maxExacHomState;
+
+	/** Maximal number of occurences in homozygous state in thousand genomes. */
+	private final int maxG1kHomState;
+
 	/** @return {@link ThresholdFilterOptions} with conservative default settings */
 	public static ThresholdFilterOptions buildDefaultOptions() {
 		return new ThresholdFilterOptions(8, 4, 10000, 20, 0.2, 0.8, 0.7, 0.3, "EXAC_", "DBSNP_",
-				"GNOMAD_GENOMES_", "GNOMAD_EXOMES_", 0.01, 0.01);
+				"GNOMAD_GENOMES_", "GNOMAD_EXOMES_", "G1K_", 0.01, 0.01, 20, 10);
 	}
 
 	public ThresholdFilterOptions(int minGtCovHet, int minGtCovHomAlt, int maxCov, int minGtGq,
 			double minGtAafHet, double maxGtAafHet, double minGtAafHomAlt, double maxGtAafHomRef,
 			String exacPrefix, String dbSnpPrefix, String gnomAdGenomesPrefix,
-			String gnomAdExomesPrefix, double maxAlleleFrequencyAd, double maxAlleleFrequencyAr) {
+			String gnomAdExomesPrefix, String g1kPrefix, double maxAlleleFrequencyAd,
+			double maxAlleleFrequencyAr, int maxExacHomState, int maxG1kHomState) {
 		super();
 		this.minGtCovHet = minGtCovHet;
 		this.minGtCovHomAlt = minGtCovHomAlt;
@@ -72,8 +82,11 @@ public class ThresholdFilterOptions {
 		this.dbSnpPrefix = dbSnpPrefix;
 		this.gnomAdExomesPrefix = gnomAdExomesPrefix;
 		this.gnomAdGenomesPrefix = gnomAdGenomesPrefix;
+		this.g1kPrefix = g1kPrefix;
 		this.maxAlleleFrequencyAd = maxAlleleFrequencyAd;
 		this.maxAlleleFrequencyAr = maxAlleleFrequencyAr;
+		this.maxExacHomState = maxExacHomState;
+		this.maxG1kHomState = maxG1kHomState;
 	}
 
 	public int getMinGtCovHet() {
@@ -116,6 +129,10 @@ public class ThresholdFilterOptions {
 		return dbSnpPrefix;
 	}
 
+	public String getG1kPrefix() {
+		return g1kPrefix;
+	}
+
 	public double getMaxAlleleFrequencyAd() {
 		return maxAlleleFrequencyAd;
 	}
@@ -132,6 +149,14 @@ public class ThresholdFilterOptions {
 		return gnomAdGenomesPrefix;
 	}
 
+	public int getMaxExacHomState() {
+		return maxExacHomState;
+	}
+
+	public int getMaxG1kHomState() {
+		return maxG1kHomState;
+	}
+
 	@Override
 	public String toString() {
 		return "ThresholdFilterOptions [minGtCovHet=" + minGtCovHet + ", minGtCovHomAlt="
@@ -141,7 +166,8 @@ public class ThresholdFilterOptions {
 				+ exacPrefix + ", dbSnpPrefix=" + dbSnpPrefix + ", gnomAdExomesPrefix="
 				+ gnomAdExomesPrefix + ", gnomAdGenomesPrefix=" + gnomAdGenomesPrefix
 				+ ", maxAlleleFrequencyAd=" + maxAlleleFrequencyAd + ", maxAlleleFrequencyAr="
-				+ maxAlleleFrequencyAr + "]";
+				+ maxAlleleFrequencyAr + ", maxExacHomState=" + maxExacHomState
+				+ ", maxG1kHomState=" + maxG1kHomState + "]";
 	}
 
 	@Override
@@ -160,6 +186,8 @@ public class ThresholdFilterOptions {
 		temp = Double.doubleToLongBits(maxAlleleFrequencyAr);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + maxCov;
+		result = prime * result + maxExacHomState;
+		result = prime * result + maxG1kHomState;
 		temp = Double.doubleToLongBits(maxGtAafHet);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(maxGtAafHomRef);
@@ -210,6 +238,10 @@ public class ThresholdFilterOptions {
 				.doubleToLongBits(other.maxAlleleFrequencyAr))
 			return false;
 		if (maxCov != other.maxCov)
+			return false;
+		if (maxExacHomState != other.maxExacHomState)
+			return false;
+		if (maxG1kHomState != other.maxG1kHomState)
 			return false;
 		if (Double.doubleToLongBits(maxGtAafHet) != Double.doubleToLongBits(other.maxGtAafHet))
 			return false;

@@ -35,7 +35,7 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 /**
  * Helper class for annotating one {@link VariantContext} or a
  * {@link Collection} thereof for compatibility with Mendelian inheritance
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class VariantContextMendelianAnnotator {
@@ -77,7 +77,7 @@ public class VariantContextMendelianAnnotator {
 	/**
 	 * Annotate {@link VariantContext} with compatibility for Mendelian
 	 * inheritance
-	 * 
+	 *
 	 * @param vc
 	 *            {@link VariantContext} to check for compatibility and to
 	 *            annotate
@@ -93,12 +93,12 @@ public class VariantContextMendelianAnnotator {
 
 	/**
 	 * Annotate {@link List} of {@link VariantContext} objects
-	 * 
+	 *
 	 * If <code>self.interpretVariantFilters</code> then the variant contexts to
 	 * be considered for compound heterozygous will be prefiltered to those with
 	 * appropriately high frequency and not being annotated as synonymous
 	 * variant.
-	 * 
+	 *
 	 * @param vcs
 	 *            {@link VariantContext} objects to annotate
 	 * @return An {@link ImmutableList} of {@link VariantContext} copies of
@@ -152,6 +152,9 @@ public class VariantContextMendelianAnnotator {
 					subMap.get(key).add(MendelVCFHeaderExtender.XR_HOM_ALT);
 					map.get(key).add("XR");
 					break;
+				case MITOCHONDRIAL:
+					subMap.get(key).add(MendelVCFHeaderExtender.MT);
+					map.get(key).add("MT");
 				default:
 					break; // ignore
 				}
@@ -181,7 +184,7 @@ public class VariantContextMendelianAnnotator {
 	/**
 	 * Compute compatible modes of inheritance for a list of
 	 * {@link VariantContext} objects
-	 * 
+	 *
 	 * @param vcs
 	 *            {@link VariantContext} objects to check for compatibility
 	 * @return A {@link Map} from {@link ModeOfInheritance} to the list of
@@ -222,7 +225,7 @@ public class VariantContextMendelianAnnotator {
 	/**
 	 * Compute compatible modes of inheritance for a list of
 	 * {@link VariantContext} objects
-	 * 
+	 *
 	 * @param vcs
 	 *            {@link VariantContext} objects to check for compatibility
 	 * @return A {@link Map} from {@link ModeOfInheritance} to the list of
@@ -263,7 +266,7 @@ public class VariantContextMendelianAnnotator {
 	/**
 	 * Convert a {@link List} of {@link VariantContext} objects into a list of
 	 * {@link GenotypeCalls} objects
-	 * 
+	 *
 	 * @param vcs
 	 *            input {@link Collection} of {@link VariantContext} objects
 	 * @return {@link List} of corresponding {@link GenotypeCalls} objects
@@ -360,7 +363,7 @@ public class VariantContextMendelianAnnotator {
 
 	/**
 	 * Helper function for filtered variants/genotypes
-	 * 
+	 *
 	 * @return whether or not variant is filtered based on filters
 	 */
 	private boolean isFiltered(Collection<String> vcFilters,
@@ -370,15 +373,4 @@ public class VariantContextMendelianAnnotator {
 		filterIntersection.retainAll(vcFilters);
 		return !filterIntersection.isEmpty();
 	}
-
-	/**
-	 * Helper function for filtered variants/genotypes
-	 * 
-	 * @return whether or not variant is filtered based on filters
-	 */
-	private boolean isFiltered(Collection<String> vcFilters,
-			Collection<String> filtersA) {
-		return isFiltered(vcFilters, filtersA, ImmutableList.<String> of());
-	}
-
 }

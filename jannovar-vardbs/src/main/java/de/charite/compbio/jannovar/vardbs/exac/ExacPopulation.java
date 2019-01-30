@@ -28,7 +28,7 @@ public enum ExacPopulation {
 		case AFR:
 			return "African/African American";
 		case AMR:
-			return "East Asian";
+			return "American";
 		case FIN:
 			return "Finnish";
 		case NFE:

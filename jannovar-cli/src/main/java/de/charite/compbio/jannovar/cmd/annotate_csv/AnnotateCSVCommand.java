@@ -45,17 +45,14 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	 * @param args
 	 * @throws CommandLineParsingException
 	 */
-	public AnnotateCSVCommand(String argv[], Namespace args) throws CommandLineParsingException {
+	public AnnotateCSVCommand(Namespace args) throws CommandLineParsingException {
 		this.options = new JannovarAnnotateCSVOptions();
 		this.options.setFromArgs(args);
 	}
 
 	/**
-	 * This function will simply annotate a csv file wehere positions are set
+	 * This function will simply annotate a csv file where positions are set
 	 *
-	 *
-	 * @param options
-	 *            configuration for the command
 	 * @throws AnnotationException
 	 *             on problems in the annotation process
 	 */
@@ -135,11 +132,9 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(changeStr);
 
-		if (!match.matches()) {
-			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
+		if (!match.matches())
+			throw new JannovarException("[ERROR] Input string for the chromosomal change " + changeStr
 					+ " does not fit the regular expression ... :(");
-			System.exit(3);
-		}
 
 		int chr = refDict.getContigNameToID().get(match.group(1));
 		int pos = Integer.parseInt(match.group(2));

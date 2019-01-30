@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Represents on entry in the Clinvar VCF database file

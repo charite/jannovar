@@ -25,7 +25,7 @@ public final class ProgressBar {
 	public ProgressBar(long min, long max, boolean doPrint) {
 		this.min = min;
 		this.max = max;
-		this.doPrint = true;
+		this.doPrint = doPrint;
 	}
 
 	/** @return smallest value to represent */

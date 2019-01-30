@@ -6,6 +6,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -108,20 +109,22 @@ class VCFAnnotationData {
 	/**
 	 * @param allele
 	 *            String with the allele value to prepend to the returned array
+	 * @param code
+	 *            Three ore one letter amino acid code
 	 * @return array of objects to be converted to string and joined, the alternative allele is given by
 	 */
-	public Object[] toArray(String allele) {
+	public Object[] toArray(String allele, AminoAcidCode code) {
 		final Joiner joiner = Joiner.on('&').useForNull("");
 		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
 		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
 				featureBioType, getRankString(),
 				(cdsNTChange == null) ? cdsNTChange : ((isCoding ? "c." : "n.") + cdsNTChange.toHGVSString()),
-				(proteinChange == null) ? proteinChange : ("p." + proteinChange.toHGVSString()), getTXPosString(),
+				(proteinChange == null) ? proteinChange : ("p." + proteinChange.toHGVSString(code)), getTXPosString(),
 				getCDSPosString(), getAminoAcidPosString(), getDistanceString(), joiner.join(messages) };
 	}
 
-	public String toUnescapedString(String allele) {
-		return Joiner.on('|').useForNull("").join(toArray(allele));
+	public String toUnescapedString(String allele, AminoAcidCode code) {
+		return Joiner.on('|').useForNull("").join(toArray(allele, code));
 	}
 
 	private String escape(String str) {
@@ -140,10 +143,12 @@ class VCFAnnotationData {
 	/**
 	 * @param allele
 	 *            alternative allele value to prepend
+ 	 * @param code
+	 *            Three ore one letter amino acid code
 	 * @return String for putting into the "ANN" field of the VCF file
 	 */
-	public String toString(String allele) {
-		return escape(toUnescapedString(allele));
+	public String toString(String allele, AminoAcidCode code) {
+		return escape(toUnescapedString(allele, code));
 	}
 
 	private String getRankString() {
@@ -161,7 +166,7 @@ class VCFAnnotationData {
 	private String getCDSPosString() {
 		if (cdsPos == -1)
 			return null;
-		if (!featureBioType.equals("Coding"))
+		if (!"Coding".equals(featureBioType))
 			return null;
 		return Joiner.on('/').join(cdsPos + 1, cdsLength);
 	}
@@ -169,7 +174,7 @@ class VCFAnnotationData {
 	private String getAminoAcidPosString() {
 		if (cdsPos == -1)
 			return null;
-		if (!featureBioType.equals("Coding"))
+		if (!"Coding".equals(featureBioType))
 			return null;
 		return Joiner.on('/').join(cdsPos / 3 + 1, cdsLength / 3);
 	}

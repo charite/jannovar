@@ -20,7 +20,7 @@ public class InvalidDataSourceException extends JannovarException {
 	}
 
 	public InvalidDataSourceException(String msg, Throwable cause) {
-		super(msg);
+		super(msg, cause);
 	}
 
 }

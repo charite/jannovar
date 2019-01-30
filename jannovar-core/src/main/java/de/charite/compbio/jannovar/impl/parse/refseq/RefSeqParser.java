@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -52,13 +53,13 @@ public class RefSeqParser implements TranscriptParser {
 	/**
 	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
 	 */
-	private final ReferenceDictionary refDict;
+	private ReferenceDictionary refDict;
 
 	/** Path to directory where the to-be-parsed files live */
-	private final String basePath;
+	private String basePath;
 
 	/** INI {@link Section} from the configuration. */
-	private final Section iniSection;
+	private Section iniSection;
 
 	/**
 	 * @param refDict
@@ -133,13 +134,11 @@ public class RefSeqParser implements TranscriptParser {
 		FASTARecord record;
 		try {
 			while ((record = fastaParser.next()) != null) {
-				final List<String> tokens = Splitter.on('|').splitToList(record.getID());
-				if (tokens.size() != 5) {
-					LOGGER.error("ID {} in FASTA did not have 4 fields", new Object[] { record.getID() });
+				Optional<String> accessionOpt = RefSeqFastaRecordIdFormat.extractAccession(record.getID());
+				if(!accessionOpt.isPresent()) {
 					continue;
 				}
-
-				final String accession = tokens.get(3);
+				String accession = accessionOpt.get();
 				final TranscriptModelBuilder builder = txMap.get(accession);
 				if (builder == null) {
 					// This is not a warning as we observed this for some records regularly

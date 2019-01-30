@@ -1,6 +1,60 @@
 # Jannovar Changelog
 
-## develop (unreleased)
+## v0.27
+
+### jannovar-cli
+
+* Integrating support for thousand genomes VCF
+* Integrating thousand genomes/ExAc count limits into inheritance filter
+
+### jannovar-vardbs
+
+* Adding support for thousand genomes VCF
+
+### jannovar-htsjdk
+
+* Adding support for limiting genomes/ExAc counts into inheritance filter
+
+## v0.26
+
+### jannovar-cli
+
+* Making `OneParentGtFiltered` filter optional. The default setting to `false` (specify `--one-parent-gt-filtered-filters-affected` to enable).
+
+### jannovar-core
+
+* **Moving variants in non-coding transcripts after UTR variants.**
+
+### jannovar-hgvs
+
+* Fixing parser issue for nucleotide indels (#408).
+
+### jannovar-htsjdk
+
+* Obey the `options.escapeAnnField` parameter for escaping the variant effect in the `ANN` field.
+
+## v0.25
+
+### overall
+
+* Changing HTSJDK version to 2.14.3
+* Using the one letter amino acid code in HGVS representation as default (changes in core, hgvs, htsjdk and cli). Now the cli option `--3-letter-amino-acids` works as expected.
+
+### jannovar-cli
+
+* Support for [RefSeq GRCh37.p13 interim release](https://www.ncbi.nlm.nih.gov/books/NBK430989/#_news_02-14-2017-interim-annotation-update-human_)
+* Support of new RefSeq headers
+* Using RefSeq GRCh38.p12 annotation instead of GRCh38.p7
+
+### jannovar-vardbs
+
+* Replacing whitespace with string when annotating from TSV file.
+
+### jannovar-htsjdk
+
+* Fixing bug in GenomeRegionSequenceExtraction. Error reports always sequences from the first contig in the referebnce file and not the requested contig. Affects only the cli command `hgvs-to-vcf`.
+
+## v0.24
 
 ### jannovar-cli
 
@@ -9,15 +63,19 @@
 
 ### overall
 
-* Changing HTSJDK version to 2.11.0
+* Changing HTSJDK version to 2.14.0
+* Codestyle improvements
 
 ### jannovar-core
 
-*  Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* Fixing mendelian "bug" #393 (has no affect because check was not necessary)
+* New inheritance mode: mitochondrial
+* Bugfix ProgressBar (doPrint was always true)
 
 ### jannovar-vardbs
 
 * Fixed problem with interpretation of Clinvar annotation origin.
+* Clinvar `BEST_AC` and `BEST_AF` are now named `AC_POPMAX` and `AF_POPMAX` to be consitent with gnomAD
 
 ## v0.23
 
@@ -39,6 +97,7 @@
 * Fixing stop loss annotation (#351).
 * Finishing renaming of TranscriptInfo to TranscriptModel (#348).
 * Upstream and downstream variant were considered "not off exome". They now are.
+* Adding mitochondrial filtering function (#362).
 
 ### jannovar-filter
 

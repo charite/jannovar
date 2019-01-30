@@ -47,6 +47,12 @@ public class ThresholdFilterHeaderExtender {
 	/** Highest frequency in any population higher than threshold for AR */
 	public static String FILTER_VAR_MAX_FREQUENCY_AR = "MaxFreqAr";
 
+	/** Too many variants in homozygous state in ExAC */
+	public static String FILTER_VAR_MAX_HOM_EXAC = "MaxHomExac";
+
+	/** Too many variants in homozygous state in thousand genomes */
+	public static String FILTER_VAR_MAX_HOM_THOUSAND_GENOMES = "MaxHomG1k";
+
 	/** Configuration */
 	private final ThresholdFilterOptions options;
 
@@ -57,11 +63,13 @@ public class ThresholdFilterHeaderExtender {
 	/**
 	 * Add header entries.
 	 * 
-	 * @param header The {@link VCFHeader} to extend.
+	 * @param header
+	 *            The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
-		if (!header.hasFormatLine("FT")) header.addMetaDataLine(new VCFFormatHeaderLine("FT", 1,
-				VCFHeaderLineType.String, "Filters applied to genotype call"));
+		if (!header.hasFormatLine("FT"))
+			header.addMetaDataLine(new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.String,
+					"Filters applied to genotype call"));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_COV,
 				"Genotype has coverage >" + options.getMaxCov()));
@@ -93,6 +101,13 @@ public class ThresholdFilterHeaderExtender {
 						+ " (threshold for AR inheritance), variant will not be considered for "
 						+ "composite recessive inheritance but for homozygous recessive inheritance "
 						+ "regardlessly"));
+
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_HOM_EXAC, "Seen >"
+				+ options.getMaxExacHomState() + " times in ExAC data in homozygous state"));
+
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_HOM_THOUSAND_GENOMES,
+				"Seen >" + options.getMaxG1kHomState()
+						+ " times in thousand genomes data in homozygous state"));
 	}
 
 }

@@ -96,6 +96,24 @@ public class VariantThresholdFilterAnnotator {
 			if (highestAf > options.getMaxAlleleFrequencyAr())
 				filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR);
 		}
+		// Check total homozygous state in ExAC.
+		final String exacHoms = options.getExacPrefix() + "HOM_ALL";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Integer> exacHomCounts =
+				((ArrayList<Integer>) vc.getAttribute(exacHoms));
+		final int exacHom = (exacHomCounts == null) ? 0 : Collections.min(exacHomCounts);
+		if (exacHom > options.getMaxExacHomState()) {
+			filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_EXAC);
+		}
+		// Check total homozygous state in thousand genomes.
+		final String keyG1kHoms = options.getG1kPrefix() + "Hom_ALL";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Integer> g1kHomCounts =
+				((ArrayList<Integer>) vc.getAttribute(keyG1kHoms));
+		final int g1kHom = (g1kHomCounts == null) ? 0 : Collections.min(g1kHomCounts);
+		if (g1kHom > options.getMaxG1kHomState()) {
+			filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_THOUSAND_GENOMES);
+		}
 
 		builder.filters(filters);
 		return builder.make();

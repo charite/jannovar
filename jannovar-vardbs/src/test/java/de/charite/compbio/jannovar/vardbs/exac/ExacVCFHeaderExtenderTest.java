@@ -87,8 +87,8 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_ALL"));
 		
-		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AC"));
-		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_POPMAX"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_POPMAX"));
 
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AN_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AC_AFR"));
@@ -138,8 +138,8 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_ALL"));
 		
-		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_BEST_AC"));
-		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_BEST_AF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AC_POPMAX"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AF_POPMAX"));
 	}
 
 }

@@ -48,7 +48,7 @@ public final class FeatureRecord implements Comparable<FeatureRecord> {
 	private final int phase;
 
 	/** Record's attributes */
-	private ImmutableMap<String, String> attributes;
+	private final ImmutableMap<String, String> attributes;
 
 	/**
 	 * Initialize the <code>GFFRecord</code>
@@ -68,10 +68,6 @@ public final class FeatureRecord implements Comparable<FeatureRecord> {
 
 	public ImmutableMap<String, String> getAttributes() {
 		return attributes;
-	}
-
-	public void setAttributes(ImmutableMap<String, String> attributes) {
-		this.attributes = attributes;
 	}
 
 	public String getSeqID() {

@@ -26,7 +26,6 @@ final class ClinVarVariantContextToRecordConverter implements VariantContextToRe
 			return lst.get(idx);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ClinVarRecord convert(VariantContext vc) {
 		ClinVarRecordBuilder builder = new ClinVarRecordBuilder();

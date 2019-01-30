@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.hgnc;
 
 import java.util.Collection;
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Immutable;
