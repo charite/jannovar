@@ -1,14 +1,12 @@
 package de.charite.compbio.jannovar.datasource;
 
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.ensembl.EnsemblParser;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import java.util.List;
+import org.ini4j.Profile.Section;
 
 /**
  * Creation of {@link JannovarData} objects from a {@link EnsemblDataSource}.
@@ -17,25 +15,25 @@ import java.util.List;
  */
 final class EnsemblJannovarDataFactory extends JannovarDataFactory {
 
-	/**
-	 * Construct the factory with the given {@link EnsemblDataSource}.
-	 *
-	 * @param options
-	 *            configuration for proxy settings
-	 * @param dataSource
-	 *            the data source to use.
-	 * @param iniSection
-	 *            {@link Section} with configuration from INI file
-	 */
-	public EnsemblJannovarDataFactory(DatasourceOptions options, EnsemblDataSource dataSource, Section iniSection,
-			boolean printProgressBars) {
-		super(options, dataSource, iniSection);
-	}
+  /**
+   * Construct the factory with the given {@link EnsemblDataSource}.
+   *
+   * @param options configuration for proxy settings
+   * @param dataSource the data source to use.
+   * @param iniSection {@link Section} with configuration from INI file
+   */
+  public EnsemblJannovarDataFactory(
+      DatasourceOptions options,
+      EnsemblDataSource dataSource,
+      Section iniSection,
+      boolean printProgressBars) {
+    super(options, dataSource, iniSection);
+  }
 
-	@Override
-	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
-			List<String> geneIdentifiers) throws TranscriptParseException {
-		return new EnsemblParser(refDict, targetDir, geneIdentifiers, iniSection).run();
-	}
-
+  @Override
+  protected ImmutableList<TranscriptModel> parseTranscripts(
+      ReferenceDictionary refDict, String targetDir, List<String> geneIdentifiers)
+      throws TranscriptParseException {
+    return new EnsemblParser(refDict, targetDir, geneIdentifiers, iniSection).run();
+  }
 }

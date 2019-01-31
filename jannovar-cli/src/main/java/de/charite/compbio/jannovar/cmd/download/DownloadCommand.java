@@ -18,40 +18,48 @@ import net.sourceforge.argparse4j.inf.Namespace;
  */
 public final class DownloadCommand extends JannovarCommand {
 
-	private JannovarDownloadOptions options;
+  private JannovarDownloadOptions options;
 
-	public DownloadCommand(String argv[], Namespace args) throws CommandLineParsingException {
-		this.options = new JannovarDownloadOptions();
-		this.options.setFromArgs(args);
-	}
+  public DownloadCommand(String argv[], Namespace args) throws CommandLineParsingException {
+    this.options = new JannovarDownloadOptions();
+    this.options.setFromArgs(args);
+  }
 
-	/**
-	 * Perform the downloading.
-	 */
-	@Override
-	public void run() throws JannovarException {
-		System.err.println("Options");
-		System.err.println(options.toString());
+  /** Perform the downloading. */
+  @Override
+  public void run() throws JannovarException {
+    System.err.println("Options");
+    System.err.println(options.toString());
 
-		DatasourceOptions dsOptions = new DatasourceOptions(options.getHttpProxy(),
-				options.getHttpsProxy(), options.getFtpProxy(), options.isReportProgress());
+    DatasourceOptions dsOptions =
+        new DatasourceOptions(
+            options.getHttpProxy(),
+            options.getHttpsProxy(),
+            options.getFtpProxy(),
+            options.isReportProgress());
 
-		DataSourceFactory factory =
-				new DataSourceFactory(dsOptions, Lists.reverse(options.dataSourceFiles));
-		for (String name : options.getDatabaseNames()) {
-			System.err.println("Downloading/parsing for data source \"" + name + "\"");
-			JannovarData data = factory.getDataSource(name).getDataFactory().build(options.getDownloadDir(),
-					options.isReportProgress(), options.getGeneIdentifiers());
-			final String filename;
-			if (options.getOutputFile()  == null || options.getOutputFile().isEmpty()) {
-				filename = PathUtil.join(options.getDownloadDir(),
-						name.replace('/', '_').replace('\\', '_') + ".ser");
-			} else {
-				filename = options.getOutputFile();
-			}
-			JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
-			serializer.save(data);
-		}
-	}
-
+    DataSourceFactory factory =
+        new DataSourceFactory(dsOptions, Lists.reverse(options.dataSourceFiles));
+    for (String name : options.getDatabaseNames()) {
+      System.err.println("Downloading/parsing for data source \"" + name + "\"");
+      JannovarData data =
+          factory
+              .getDataSource(name)
+              .getDataFactory()
+              .build(
+                  options.getDownloadDir(),
+                  options.isReportProgress(),
+                  options.getGeneIdentifiers());
+      final String filename;
+      if (options.getOutputFile() == null || options.getOutputFile().isEmpty()) {
+        filename =
+            PathUtil.join(
+                options.getDownloadDir(), name.replace('/', '_').replace('\\', '_') + ".ser");
+      } else {
+        filename = options.getOutputFile();
+      }
+      JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
+      serializer.save(data);
+    }
+  }
 }

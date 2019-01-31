@@ -11,34 +11,33 @@ import org.junit.Test;
  */
 public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 
-	@Test
-	public void testLexingOnNTStrings() {
-		for (String ntString : NT_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(ntString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			l.mode(HGVSLexer.CHANGE_BRANCH);
-			l.getAllTokens();
-		}
-	}
+  @Test
+  public void testLexingOnNTStrings() {
+    for (String ntString : NT_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(ntString);
+      HGVSLexer l = new HGVSLexer(inputStream);
+      l.mode(HGVSLexer.CHANGE_BRANCH);
+      l.getAllTokens();
+    }
+  }
 
-	@Test
-	public void testLexingOnLegacyStrings() {
-		for (String ntString : LEGACY_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(ntString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			l.mode(HGVSLexer.CHANGE_BRANCH);
-			l.getAllTokens();
-		}
-	}
+  @Test
+  public void testLexingOnLegacyStrings() {
+    for (String ntString : LEGACY_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(ntString);
+      HGVSLexer l = new HGVSLexer(inputStream);
+      l.mode(HGVSLexer.CHANGE_BRANCH);
+      l.getAllTokens();
+    }
+  }
 
-	@Test
-	public void testLexingOnProteinStrings() {
-		for (String proteinString : PROTEIN_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(proteinString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			l.mode(HGVSLexer.AMINO_ACID_CHANGE);
-			l.getAllTokens();
-		}
-	}
-
+  @Test
+  public void testLexingOnProteinStrings() {
+    for (String proteinString : PROTEIN_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(proteinString);
+      HGVSLexer l = new HGVSLexer(inputStream);
+      l.mode(HGVSLexer.AMINO_ACID_CHANGE);
+      l.getAllTokens();
+    }
+  }
 }

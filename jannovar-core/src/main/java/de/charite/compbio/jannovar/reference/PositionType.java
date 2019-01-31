@@ -6,8 +6,8 @@ package de.charite.compbio.jannovar.reference;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum PositionType {
-	/** positions start at zero and intervals are half-opened <tt>[begin, end)</tt>. */
-	ZERO_BASED,
-	/** positions start at zero and intervals are closed <tt>[begin, end]</tt>. */
-	ONE_BASED
+  /** positions start at zero and intervals are half-opened <tt>[begin, end)</tt>. */
+  ZERO_BASED,
+  /** positions start at zero and intervals are closed <tt>[begin, end]</tt>. */
+  ONE_BASED
 }

@@ -9,14 +9,13 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class InvalidCodonException extends JannovarException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InvalidCodonException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+  public InvalidCodonException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 
-	public InvalidCodonException(String msg) {
-		super(msg);
-	}
-
+  public InvalidCodonException(String msg) {
+    super(msg);
+  }
 }

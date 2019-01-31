@@ -9,18 +9,17 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class PedParseException extends JannovarException {
 
-	public static final long serialVersionUID = 2L;
+  public static final long serialVersionUID = 2L;
 
-	public PedParseException() {
-		super();
-	}
+  public PedParseException() {
+    super();
+  }
 
-	public PedParseException(String msg) {
-		super(msg);
-	}
+  public PedParseException(String msg) {
+    super(msg);
+  }
 
-	public PedParseException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
+  public PedParseException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar;
 
-import java.util.function.BiFunction;
-
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
 import de.charite.compbio.jannovar.cmd.annotate_csv.JannovarAnnotateCSVOptions;
 import de.charite.compbio.jannovar.cmd.annotate_pos.JannovarAnnotatePosOptions;
@@ -10,6 +8,7 @@ import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
 import de.charite.compbio.jannovar.cmd.download.JannovarDownloadOptions;
 import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosomeOptions;
 import de.charite.compbio.jannovar.cmd.statistics.JannovarGatherStatisticsOptions;
+import java.util.function.BiFunction;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -27,49 +26,49 @@ import net.sourceforge.argparse4j.inf.Subparsers;
  */
 public final class Jannovar {
 
-	public static void main(String argv[]) {
-		// Setup command line parser
-		ArgumentParser parser = ArgumentParsers.newArgumentParser("jannovar-cli");
-		parser.version(getVersion());
-		parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
-		parser.description("Jannovar CLI performs a series of VCF annotation tasks, including predicted "
-				+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
-		Subparsers subParsers = parser.addSubparsers();
-		JannovarAnnotatePosOptions.setupParser(subParsers);
-		JannovarAnnotateCSVOptions.setupParser(subParsers);
-		JannovarAnnotateVCFOptions.setupParser(subParsers);
-		JannovarDBListOptions.setupParser(subParsers);
-		JannovarDownloadOptions.setupParser(subParsers);
-		JannovarGatherStatisticsOptions.setupParser(subParsers);
-		ProjectTranscriptToChromosomeOptions.setupParser(subParsers);
-		parser.defaultHelp(true);
-		parser.epilog("You can find out more at http://jannovar.rtfd.org");
+  public static void main(String argv[]) {
+    // Setup command line parser
+    ArgumentParser parser = ArgumentParsers.newArgumentParser("jannovar-cli");
+    parser.version(getVersion());
+    parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
+    parser.description(
+        "Jannovar CLI performs a series of VCF annotation tasks, including predicted "
+            + "molecular impact of variants and annotation of compatible Mendelian inheritance.");
+    Subparsers subParsers = parser.addSubparsers();
+    JannovarAnnotatePosOptions.setupParser(subParsers);
+    JannovarAnnotateCSVOptions.setupParser(subParsers);
+    JannovarAnnotateVCFOptions.setupParser(subParsers);
+    JannovarDBListOptions.setupParser(subParsers);
+    JannovarDownloadOptions.setupParser(subParsers);
+    JannovarGatherStatisticsOptions.setupParser(subParsers);
+    ProjectTranscriptToChromosomeOptions.setupParser(subParsers);
+    parser.defaultHelp(true);
+    parser.epilog("You can find out more at http://jannovar.rtfd.org");
 
-		// Parse command line arguments
-		Namespace args = null;
-		try {
-			args = parser.parseArgs(argv);
-		} catch (ArgumentParserException e) {
-			parser.handleError(e);
-			System.exit(1);
-		}
+    // Parse command line arguments
+    Namespace args = null;
+    try {
+      args = parser.parseArgs(argv);
+    } catch (ArgumentParserException e) {
+      parser.handleError(e);
+      System.exit(1);
+    }
 
-		BiFunction<String[], Namespace, JannovarCommand> factory = args.get("cmd");
-		JannovarCommand cmd = factory.apply(argv, args);
-		if (cmd == null)
-			System.exit(1);
+    BiFunction<String[], Namespace, JannovarCommand> factory = args.get("cmd");
+    JannovarCommand cmd = factory.apply(argv, args);
+    if (cmd == null) System.exit(1);
 
-		// Execute the command.
-		try {
-			cmd.run();
-		} catch (JannovarException e) {
-			System.err.println("ERROR: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
+    // Execute the command.
+    try {
+      cmd.run();
+    } catch (JannovarException e) {
+      System.err.println("ERROR: " + e.getMessage());
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
 
-	public static String getVersion() {
-		return Jannovar.class.getPackage().getSpecificationVersion();
-	}
+  public static String getVersion() {
+    return Jannovar.class.getPackage().getSpecificationVersion();
+  }
 }

@@ -16,53 +16,58 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-class NucleotideInversionToGenomeVariantTranslationImpl extends NucleotideChangeToGenomeVariantTranslationImplBase {
+class NucleotideInversionToGenomeVariantTranslationImpl
+    extends NucleotideChangeToGenomeVariantTranslationImplBase {
 
-	public NucleotideInversionToGenomeVariantTranslationImpl(GenomeRegionSequenceExtractor seqExtractor) {
-		super(seqExtractor);
-	}
+  public NucleotideInversionToGenomeVariantTranslationImpl(
+      GenomeRegionSequenceExtractor seqExtractor) {
+    super(seqExtractor);
+  }
 
-	/**
-	 * Implementation of translation for {@link NucleotideInversion} objects
-	 *
-	 * @param tm
-	 *            {@link TranscriptModel} that <code>ntSub</code> is for
-	 * @param sequenceType
-	 *            {@link SequenceType} that <code>ntSub</code> is for
-	 * @param ntInv
-	 *            {@link NucleotideInversion} to convert
-	 * @return {@link GenomeVariant} with the translation result, possibly annotated with warning messages
-	 * @throws CannotTranslateHGVSVariant
-	 *             in case of translation problems
-	 */
-	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
-			NucleotideInversion ntInv) throws CannotTranslateHGVSVariant {
-		final NucleotideRange range = ntInv.getRange();
-		final NucleotideSeqDescription invertedNTDesc = ntInv.getSeq();
-		final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
+  /**
+   * Implementation of translation for {@link NucleotideInversion} objects
+   *
+   * @param tm {@link TranscriptModel} that <code>ntSub</code> is for
+   * @param sequenceType {@link SequenceType} that <code>ntSub</code> is for
+   * @param ntInv {@link NucleotideInversion} to convert
+   * @return {@link GenomeVariant} with the translation result, possibly annotated with warning
+   *     messages
+   * @throws CannotTranslateHGVSVariant in case of translation problems
+   */
+  public ResultWithWarnings<GenomeVariant> run(
+      TranscriptModel tm, SequenceType sequenceType, NucleotideInversion ntInv)
+      throws CannotTranslateHGVSVariant {
+    final NucleotideRange range = ntInv.getRange();
+    final NucleotideSeqDescription invertedNTDesc = ntInv.getSeq();
+    final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
 
-		// obtain deleted sequence, setting inconsistency warnings into warningMsg, if any
-		String warningMsg = null;
-		String invertedNTs = invertedNTDesc.getNucleotides();
-		if (invertedNTs == null) {
-			invertedNTs = getGenomeSeq(tm.getStrand(), gItv);
-			if (invertedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-					&& invertedNTDesc.length() != invertedNTs.length())
-				warningMsg = "Invalid nucleotide count in " + ntInv.toHGVSString() + ", expected "
-						+ invertedNTs.length();
-		} else {
-			final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-			if (!refSeq.equals(invertedNTs))
-				warningMsg = "Invalid nucleotides in " + ntInv.toHGVSString() + ", expected " + refSeq;
-			invertedNTs = refSeq;
-		}
+    // obtain deleted sequence, setting inconsistency warnings into warningMsg, if any
+    String warningMsg = null;
+    String invertedNTs = invertedNTDesc.getNucleotides();
+    if (invertedNTs == null) {
+      invertedNTs = getGenomeSeq(tm.getStrand(), gItv);
+      if (invertedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
+          && invertedNTDesc.length() != invertedNTs.length())
+        warningMsg =
+            "Invalid nucleotide count in "
+                + ntInv.toHGVSString()
+                + ", expected "
+                + invertedNTs.length();
+    } else {
+      final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
+      if (!refSeq.equals(invertedNTs))
+        warningMsg = "Invalid nucleotides in " + ntInv.toHGVSString() + ", expected " + refSeq;
+      invertedNTs = refSeq;
+    }
 
-		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos(),
-				invertedNTs, DNAUtils.reverseComplement(invertedNTs), tm.getStrand()).withStrand(Strand.FWD);
-		if (warningMsg != null)
-			return ResultWithWarnings.construct(result, warningMsg);
-		else
-			return ResultWithWarnings.construct(result);
-	}
-
+    final GenomeVariant result =
+        new GenomeVariant(
+                gItv.withStrand(tm.getStrand()).getGenomeBeginPos(),
+                invertedNTs,
+                DNAUtils.reverseComplement(invertedNTs),
+                tm.getStrand())
+            .withStrand(Strand.FWD);
+    if (warningMsg != null) return ResultWithWarnings.construct(result, warningMsg);
+    else return ResultWithWarnings.construct(result);
+  }
 }

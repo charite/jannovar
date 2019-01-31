@@ -17,69 +17,90 @@ import org.junit.Test;
  */
 public class AntlrHGVSParserJustParseTest extends AntlrHGVSJustParseAndLexBase {
 
-	public static String PREFIX = "NM_000109.3:";
+  public static String PREFIX = "NM_000109.3:";
 
-	@Test
-	public void testParsingOnNTStrings() throws Exception {
-		for (String ntString : NT_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(PREFIX + ntString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
-			p.addErrorListener(new BaseErrorListener() {
-				@Override
-				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
-					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
-				}
-			});
-			try {
-				p.hgvs_variant();
-			} catch (IllegalStateException e) {
-				throw new Exception("Problem parsing \"" + PREFIX + ntString + "\"", e);
-			}
-		}
-	}
+  @Test
+  public void testParsingOnNTStrings() throws Exception {
+    for (String ntString : NT_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(PREFIX + ntString);
+      HGVSLexer l = new HGVSLexer(inputStream);
+      Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
+      p.addErrorListener(
+          new BaseErrorListener() {
+            @Override
+            public void syntaxError(
+                Recognizer<?, ?> recognizer,
+                Object offendingSymbol,
+                int line,
+                int charPositionInLine,
+                String msg,
+                RecognitionException e) {
+              throw new IllegalStateException(
+                  "failed to parse at line " + line + " due to " + msg, e);
+            }
+          });
+      try {
+        p.hgvs_variant();
+      } catch (IllegalStateException e) {
+        throw new Exception("Problem parsing \"" + PREFIX + ntString + "\"", e);
+      }
+    }
+  }
 
-	@Test
-	public void testParsingOnLegacyStrings() throws Exception {
-		for (String ntString : LEGACY_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(PREFIX + ntString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
-			Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
-			p.addErrorListener(new BaseErrorListener() {
-				@Override
-				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
-					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
-				}
-			});
-			try {
-				p.legacy_variant();
-			} catch (IllegalStateException e) {
-				throw new Exception("Problem parsing \"" + PREFIX + ntString + "\"", e);
-			}
-		}
-	}
+  @Test
+  public void testParsingOnLegacyStrings() throws Exception {
+    for (String ntString : LEGACY_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(PREFIX + ntString);
+      Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+      Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
+      p.addErrorListener(
+          new BaseErrorListener() {
+            @Override
+            public void syntaxError(
+                Recognizer<?, ?> recognizer,
+                Object offendingSymbol,
+                int line,
+                int charPositionInLine,
+                String msg,
+                RecognitionException e) {
+              throw new IllegalStateException(
+                  "failed to parse at line " + line + " due to " + msg, e);
+            }
+          });
+      try {
+        p.legacy_variant();
+      } catch (IllegalStateException e) {
+        throw new Exception("Problem parsing \"" + PREFIX + ntString + "\"", e);
+      }
+    }
+  }
 
-	@Test
-	public void testParsingOnProteinStrings() throws Exception {
-		// for (String proteinString : new String[] { "p.Met1" }) {
-		for (String proteinString : PROTEIN_STRINGS) {
-			CodePointCharStream inputStream = CharStreams.fromString(PREFIX + proteinString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
-			Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
-			p.addErrorListener(new BaseErrorListener() {
-				@Override
-				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
-					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
-				}
-			});
-			try {
-				p.hgvs_variant();
-			} catch (IllegalStateException e) {
-				throw new Exception("Problem parsing \"" + PREFIX + proteinString + "\"", e);
-			}
-		}
-	}
+  @Test
+  public void testParsingOnProteinStrings() throws Exception {
+    // for (String proteinString : new String[] { "p.Met1" }) {
+    for (String proteinString : PROTEIN_STRINGS) {
+      CodePointCharStream inputStream = CharStreams.fromString(PREFIX + proteinString);
+      Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+      Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
+      p.addErrorListener(
+          new BaseErrorListener() {
+            @Override
+            public void syntaxError(
+                Recognizer<?, ?> recognizer,
+                Object offendingSymbol,
+                int line,
+                int charPositionInLine,
+                String msg,
+                RecognitionException e) {
+              throw new IllegalStateException(
+                  "failed to parse at line " + line + " due to " + msg, e);
+            }
+          });
+      try {
+        p.hgvs_variant();
+      } catch (IllegalStateException e) {
+        throw new Exception("Problem parsing \"" + PREFIX + proteinString + "\"", e);
+      }
+    }
+  }
 }

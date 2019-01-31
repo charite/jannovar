@@ -8,18 +8,17 @@ package de.charite.compbio.jannovar;
  */
 public class JannovarException extends Exception {
 
-	public static final long serialVersionUID = 2L;
+  public static final long serialVersionUID = 2L;
 
-	public JannovarException() {
-		super();
-	}
+  public JannovarException() {
+    super();
+  }
 
-	public JannovarException(String msg) {
-		super(msg);
-	}
+  public JannovarException(String msg) {
+    super(msg);
+  }
 
-	public JannovarException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
+  public JannovarException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

@@ -1,14 +1,12 @@
 package de.charite.compbio.jannovar.datasource;
 
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.impl.parse.refseq.RefSeqParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.refseq.RefSeqParser;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import java.util.List;
+import org.ini4j.Profile.Section;
 
 // TODO(holtgrem): Report longest transcript as primary one for RefSeq.
 
@@ -19,25 +17,22 @@ import java.util.List;
  */
 final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 
-	/**
-	 * Construct the factory with the given {@link RefSeqDataSource}.
-	 *
-	 * @param options
-	 *            configuration for proxy settings
-	 * @param dataSource
-	 *            the data source to use.
-	 * @param iniSection
-	 *            {@link Section} with configuration from INI file
-	 */
-	public RefSeqJannovarDataFactory(DatasourceOptions options, RefSeqDataSource dataSource, Section iniSection) {
-		super(options, dataSource, iniSection);
-	}
+  /**
+   * Construct the factory with the given {@link RefSeqDataSource}.
+   *
+   * @param options configuration for proxy settings
+   * @param dataSource the data source to use.
+   * @param iniSection {@link Section} with configuration from INI file
+   */
+  public RefSeqJannovarDataFactory(
+      DatasourceOptions options, RefSeqDataSource dataSource, Section iniSection) {
+    super(options, dataSource, iniSection);
+  }
 
-	@Override
-	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir,
-			List<String> geneIdentifiers)
-			throws TranscriptParseException {
-		return new RefSeqParser(refDict, targetDir, geneIdentifiers, iniSection).run();
-	}
-
+  @Override
+  protected ImmutableList<TranscriptModel> parseTranscripts(
+      ReferenceDictionary refDict, String targetDir, List<String> geneIdentifiers)
+      throws TranscriptParseException {
+    return new RefSeqParser(refDict, targetDir, geneIdentifiers, iniSection).run();
+  }
 }

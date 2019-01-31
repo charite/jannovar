@@ -14,40 +14,38 @@ import java.util.ArrayList;
  */
 public class GenotypeThresholdFilterAnnotator {
 
-	/** Configuration for the threshold-based filter */
-	private final ThresholdFilterOptions options;
+  /** Configuration for the threshold-based filter */
+  private final ThresholdFilterOptions options;
 
-	/** Helper for genotype-wide application of filters */
-	private final GenotypeFilterAnnotator gtAnnotator;
+  /** Helper for genotype-wide application of filters */
+  private final GenotypeFilterAnnotator gtAnnotator;
 
-	public GenotypeThresholdFilterAnnotator(ThresholdFilterOptions options) {
-		this.options = options;
-		this.gtAnnotator = new GenotypeFilterAnnotator(this.options);
-	}
+  public GenotypeThresholdFilterAnnotator(ThresholdFilterOptions options) {
+    this.options = options;
+    this.gtAnnotator = new GenotypeFilterAnnotator(this.options);
+  }
 
-	/**
-	 * Annotate VariantContext with the threshold-based filters.
-	 *
-	 * @param vc the {@link VariantContext} to annotate
-	 * @return copy of <code>vc</code> with applied annotations
-	 */
-	public VariantContext annotateVariantContext(VariantContext vc) {
-		VariantContextBuilder builder = new VariantContextBuilder(vc);
-		annotateGenotypes(builder, vc);
-		return builder.make();
-	}
+  /**
+   * Annotate VariantContext with the threshold-based filters.
+   *
+   * @param vc the {@link VariantContext} to annotate
+   * @return copy of <code>vc</code> with applied annotations
+   */
+  public VariantContext annotateVariantContext(VariantContext vc) {
+    VariantContextBuilder builder = new VariantContextBuilder(vc);
+    annotateGenotypes(builder, vc);
+    return builder.make();
+  }
 
-	/**
-	 * Annotate genotypes individually in <code>vc</code>
-	 * 
-	 * @param builder the {@link VariantContextBuilder} used for building variant
-	 * @param vc {@link VariantContext} to annotate
-	 */
-	private void annotateGenotypes(VariantContextBuilder builder, VariantContext vc) {
-		ArrayList<Genotype> gts = new ArrayList<>();
-		for (Genotype gt : vc.getGenotypes())
-			gts.add(gtAnnotator.gtWithAppliedFilters(gt));
-		builder.genotypes(gts);
-	}
-
+  /**
+   * Annotate genotypes individually in <code>vc</code>
+   *
+   * @param builder the {@link VariantContextBuilder} used for building variant
+   * @param vc {@link VariantContext} to annotate
+   */
+  private void annotateGenotypes(VariantContextBuilder builder, VariantContext vc) {
+    ArrayList<Genotype> gts = new ArrayList<>();
+    for (Genotype gt : vc.getGenotypes()) gts.add(gtAnnotator.gtWithAppliedFilters(gt));
+    builder.genotypes(gts);
+  }
 }

@@ -12,20 +12,19 @@ import java.io.File;
  */
 public class VCFReaderVariantProvider implements DatabaseVariantContextProvider {
 
-	/** VCFReader to use for loading the VCF records */
-	private final VCFFileReader vcfReader;
+  /** VCFReader to use for loading the VCF records */
+  private final VCFFileReader vcfReader;
 
-	public VCFReaderVariantProvider(String vcfPath) {
-		this.vcfReader = new VCFFileReader(new File(vcfPath), true);
-	}
+  public VCFReaderVariantProvider(String vcfPath) {
+    this.vcfReader = new VCFFileReader(new File(vcfPath), true);
+  }
 
-	public VCFFileReader getVcfReader() {
-		return vcfReader;
-	}
+  public VCFFileReader getVcfReader() {
+    return vcfReader;
+  }
 
-	@Override
-	public CloseableIterator<VariantContext> query(String contig, int beginPos, int endPos) {
-		return vcfReader.query(contig, beginPos, endPos);
-	}
-
+  @Override
+  public CloseableIterator<VariantContext> query(String contig, int beginPos, int endPos) {
+    return vcfReader.query(contig, beginPos, endPos);
+  }
 }

@@ -9,14 +9,13 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class JannovarVarDBException extends JannovarException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public JannovarVarDBException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public JannovarVarDBException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-	public JannovarVarDBException(String message) {
-		super(message);
-	}
-	
+  public JannovarVarDBException(String message) {
+    super(message);
+  }
 }

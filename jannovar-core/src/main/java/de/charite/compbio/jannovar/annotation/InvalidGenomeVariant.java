@@ -9,13 +9,11 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  */
 public class InvalidGenomeVariant extends AnnotationException {
 
-	private static final long serialVersionUID = -6983204936815945929L;
+  private static final long serialVersionUID = -6983204936815945929L;
 
-	public InvalidGenomeVariant() {
-	}
+  public InvalidGenomeVariant() {}
 
-	public InvalidGenomeVariant(String msg) {
-		super(msg);
-	}
-
+  public InvalidGenomeVariant(String msg) {
+    super(msg);
+  }
 }

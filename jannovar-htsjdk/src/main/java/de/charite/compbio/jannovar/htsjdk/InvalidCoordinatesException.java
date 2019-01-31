@@ -9,27 +9,27 @@ import de.charite.compbio.jannovar.annotation.AnnotationMessage;
  */
 public class InvalidCoordinatesException extends Exception {
 
-	final private AnnotationMessage annotationMessage;
+  private final AnnotationMessage annotationMessage;
 
-	public InvalidCoordinatesException(AnnotationMessage annotationMessage) {
-		super();
-		this.annotationMessage = annotationMessage;
-	}
+  public InvalidCoordinatesException(AnnotationMessage annotationMessage) {
+    super();
+    this.annotationMessage = annotationMessage;
+  }
 
-	public InvalidCoordinatesException(String msg, AnnotationMessage annotationMessage) {
-		super(msg);
-		this.annotationMessage = annotationMessage;
-	}
+  public InvalidCoordinatesException(String msg, AnnotationMessage annotationMessage) {
+    super(msg);
+    this.annotationMessage = annotationMessage;
+  }
 
-	public InvalidCoordinatesException(String msg, Throwable other, AnnotationMessage annotationMessage) {
-		super(msg, other);
-		this.annotationMessage = annotationMessage;
-	}
+  public InvalidCoordinatesException(
+      String msg, Throwable other, AnnotationMessage annotationMessage) {
+    super(msg, other);
+    this.annotationMessage = annotationMessage;
+  }
 
-	public AnnotationMessage getAnnotationMessage() {
-		return annotationMessage;
-	}
+  public AnnotationMessage getAnnotationMessage() {
+    return annotationMessage;
+  }
 
-	private static final long serialVersionUID = 1L;
-
+  private static final long serialVersionUID = 1L;
 }

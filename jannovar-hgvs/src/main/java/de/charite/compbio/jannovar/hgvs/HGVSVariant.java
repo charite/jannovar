@@ -5,5 +5,4 @@ package de.charite.compbio.jannovar.hgvs;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public abstract class HGVSVariant implements ConvertibleToHGVSString {
-}
+public abstract class HGVSVariant implements ConvertibleToHGVSString {}

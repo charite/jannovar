@@ -8,18 +8,17 @@ package de.charite.compbio.jannovar;
  */
 public class UncheckedJannovarException extends RuntimeException {
 
-	public static final long serialVersionUID = 2L;
+  public static final long serialVersionUID = 2L;
 
-	public UncheckedJannovarException() {
-		super();
-	}
+  public UncheckedJannovarException() {
+    super();
+  }
 
-	public UncheckedJannovarException(String msg) {
-		super(msg);
-	}
+  public UncheckedJannovarException(String msg) {
+    super(msg);
+  }
 
-	public UncheckedJannovarException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
+  public UncheckedJannovarException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

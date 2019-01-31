@@ -9,18 +9,17 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class TranscriptParseException extends JannovarException {
 
-	public static final long serialVersionUID = 2L;
+  public static final long serialVersionUID = 2L;
 
-	public TranscriptParseException() {
-		super();
-	}
+  public TranscriptParseException() {
+    super();
+  }
 
-	public TranscriptParseException(String msg) {
-		super(msg);
-	}
+  public TranscriptParseException(String msg) {
+    super(msg);
+  }
 
-	public TranscriptParseException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
+  public TranscriptParseException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

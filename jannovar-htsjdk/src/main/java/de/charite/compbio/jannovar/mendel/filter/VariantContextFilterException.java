@@ -9,14 +9,13 @@ import de.charite.compbio.jannovar.UncheckedJannovarException;
  */
 public class VariantContextFilterException extends UncheckedJannovarException {
 
-	public VariantContextFilterException(String string) {
-		super(string);
-	}
+  public VariantContextFilterException(String string) {
+    super(string);
+  }
 
-	public VariantContextFilterException(String string, Throwable cause) {
-		super(string, cause);
-	}
+  public VariantContextFilterException(String string, Throwable cause) {
+    super(string, cause);
+  }
 
-	private static final long serialVersionUID = 1L;
-
+  private static final long serialVersionUID = 1L;
 }

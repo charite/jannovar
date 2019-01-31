@@ -9,18 +9,17 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class InvalidDataSourceException extends JannovarException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InvalidDataSourceException() {
-		super();
-	}
+  public InvalidDataSourceException() {
+    super();
+  }
 
-	public InvalidDataSourceException(String msg) {
-		super(msg);
-	}
+  public InvalidDataSourceException(String msg) {
+    super(msg);
+  }
 
-	public InvalidDataSourceException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
+  public InvalidDataSourceException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

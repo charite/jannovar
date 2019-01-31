@@ -9,29 +9,28 @@ import htsjdk.variant.variantcontext.Genotype;
  */
 public class BcftoolsGenotypeFilterImpl implements GenotypeFilterImpl {
 
-	@Override
-	public int getCoverage(Genotype gt) {
-		return gt.getDP();
-	}
+  @Override
+  public int getCoverage(Genotype gt) {
+    return gt.getDP();
+  }
 
-	@Override
-	public int getGenotypeQuality(Genotype gt) {
-		return gt.getGQ();
-	}
+  @Override
+  public int getGenotypeQuality(Genotype gt) {
+    return gt.getGQ();
+  }
 
-	@Override
-	public double getAlternativeAlleleFraction(Genotype gt) {
-		String strValue = (String) gt.getExtendedAttribute("DPR");
-		String[] arr = strValue.split(",");
-		return (getCoverage(gt) - Integer.parseInt(arr[0])) / (double) getCoverage(gt);
-	}
+  @Override
+  public double getAlternativeAlleleFraction(Genotype gt) {
+    String strValue = (String) gt.getExtendedAttribute("DPR");
+    String[] arr = strValue.split(",");
+    return (getCoverage(gt) - Integer.parseInt(arr[0])) / (double) getCoverage(gt);
+  }
 
-	@Override
-	public double getAlleleFraction(Genotype gt, int alleleNo) {
-		String strValue = (String) gt.getExtendedAttribute("DPR");
-		String[] arr = strValue.split(",");
-		double countAllele = Integer.parseInt(arr[alleleNo]);
-		return countAllele / (double) getCoverage(gt);
-	}
-
+  @Override
+  public double getAlleleFraction(Genotype gt, int alleleNo) {
+    String strValue = (String) gt.getExtendedAttribute("DPR");
+    String[] arr = strValue.split(",");
+    double countAllele = Integer.parseInt(arr[alleleNo]);
+    return countAllele / (double) getCoverage(gt);
+  }
 }

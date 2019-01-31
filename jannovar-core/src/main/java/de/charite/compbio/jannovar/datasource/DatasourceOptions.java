@@ -4,76 +4,75 @@ import java.net.URL;
 
 /**
  * Configuration for data sources.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class DatasourceOptions {
 
-	/** proxy for HTTP */
-	private URL httpProxy = null;
+  /** proxy for HTTP */
+  private URL httpProxy = null;
 
-	/** proxy for HTTPS */
-	private URL httpsProxy = null;
+  /** proxy for HTTPS */
+  private URL httpsProxy = null;
 
-	/** proxy for FTP */
-	private URL ftpProxy = null;
+  /** proxy for FTP */
+  private URL ftpProxy = null;
 
-	/** whether to print progress bars to stderr or not */
-	private boolean printProgressBars = false;
+  /** whether to print progress bars to stderr or not */
+  private boolean printProgressBars = false;
 
-	/**
-	 * Initialize with default settings.
-	 * 
-	 * Proxy URLs are set to <code>null</code>, {@link #printProgressBars} is set to <code>false</code>.
-	 */
-	public DatasourceOptions() {
-	}
-	
-	public DatasourceOptions(URL httpProxy, URL httpsProxy, URL ftpProxy, boolean printProgressBars) {
-		this.httpProxy = httpProxy;
-		this.httpsProxy = httpsProxy;
-		this.ftpProxy = ftpProxy;
-		this.printProgressBars = printProgressBars;
-	}
+  /**
+   * Initialize with default settings.
+   *
+   * <p>Proxy URLs are set to <code>null</code>, {@link #printProgressBars} is set to <code>false
+   * </code>.
+   */
+  public DatasourceOptions() {}
 
-	/** @return HTTP proxy URL */
-	public URL getHTTPProxy() {
-		return httpProxy;
-	}
+  public DatasourceOptions(URL httpProxy, URL httpsProxy, URL ftpProxy, boolean printProgressBars) {
+    this.httpProxy = httpProxy;
+    this.httpsProxy = httpsProxy;
+    this.ftpProxy = ftpProxy;
+    this.printProgressBars = printProgressBars;
+  }
 
-	/** Set HTTP proxy URL */
-	public void setHTTPProxy(URL httpProxy) {
-		this.httpProxy = httpProxy;
-	}
+  /** @return HTTP proxy URL */
+  public URL getHTTPProxy() {
+    return httpProxy;
+  }
 
-	/** @return HTTPS proxy URL */
-	public URL getHTTPSProxy() {
-		return httpsProxy;
-	}
+  /** Set HTTP proxy URL */
+  public void setHTTPProxy(URL httpProxy) {
+    this.httpProxy = httpProxy;
+  }
 
-	/** Set HTTPS proxy URL */
-	public void setHTTPSProxy(URL httpsProxy) {
-		this.httpsProxy = httpsProxy;
-	}
+  /** @return HTTPS proxy URL */
+  public URL getHTTPSProxy() {
+    return httpsProxy;
+  }
 
-	/** @return FTP proxy URL */
-	public URL getFTPProxy() {
-		return ftpProxy;
-	}
+  /** Set HTTPS proxy URL */
+  public void setHTTPSProxy(URL httpsProxy) {
+    this.httpsProxy = httpsProxy;
+  }
 
-	/** Set FTP proxy URL */
-	public void setFTPProxy(URL ftpProxy) {
-		this.ftpProxy = ftpProxy;
-	}
+  /** @return FTP proxy URL */
+  public URL getFTPProxy() {
+    return ftpProxy;
+  }
 
-	/** @return whether to print progress bars or not */
-	public boolean doPrintProgressBars() {
-		return printProgressBars;
-	}
+  /** Set FTP proxy URL */
+  public void setFTPProxy(URL ftpProxy) {
+    this.ftpProxy = ftpProxy;
+  }
 
-	/** Set whether to print progress bars or not */
-	public void setPrintProgressBars(boolean printProgressBars) {
-		this.printProgressBars = printProgressBars;
-	}
+  /** @return whether to print progress bars or not */
+  public boolean doPrintProgressBars() {
+    return printProgressBars;
+  }
 
+  /** Set whether to print progress bars or not */
+  public void setPrintProgressBars(boolean printProgressBars) {
+    this.printProgressBars = printProgressBars;
+  }
 }

@@ -10,18 +10,17 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  */
 public class CannotTranslateHGVSVariant extends Exception {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CannotTranslateHGVSVariant() {
-		super();
-	}
+  public CannotTranslateHGVSVariant() {
+    super();
+  }
 
-	public CannotTranslateHGVSVariant(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public CannotTranslateHGVSVariant(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-	public CannotTranslateHGVSVariant(String message) {
-		super(message);
-	}
-
+  public CannotTranslateHGVSVariant(String message) {
+    super(message);
+  }
 }

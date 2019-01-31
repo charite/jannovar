@@ -7,13 +7,11 @@ package de.charite.compbio.jannovar.reference;
  */
 public class InvalidCoordinateException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InvalidCoordinateException() {
-	}
+  public InvalidCoordinateException() {}
 
-	public InvalidCoordinateException(String msg) {
-		super(msg);
-	}
-
+  public InvalidCoordinateException(String msg) {
+    super(msg);
+  }
 }

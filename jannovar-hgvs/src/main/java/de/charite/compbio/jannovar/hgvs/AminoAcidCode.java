@@ -6,5 +6,6 @@ package de.charite.compbio.jannovar.hgvs;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum AminoAcidCode {
-	ONE_LETTER, THREE_LETTER
+  ONE_LETTER,
+  THREE_LETTER
 }
