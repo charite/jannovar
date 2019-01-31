@@ -18,5 +18,5 @@ public class JannovarVarDBException extends JannovarException {
 	public JannovarVarDBException(String message) {
 		super(message);
 	}
-	
+
 }

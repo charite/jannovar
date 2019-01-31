@@ -12,20 +12,23 @@ import java.util.HashSet;
  */
 public class VariantAnnotationsContentDecorator {
 
-	/** the decorated {@link VariantAnnotations} */
+	/**
+	 * the decorated {@link VariantAnnotations}
+	 */
 	private final VariantAnnotations annotations;
 
 	/**
 	 * Initialize the decorator.
 	 *
-	 * @param annotations
-	 *            {@link VariantAnnotations} of {@link Annotation} objects
+	 * @param annotations {@link VariantAnnotations} of {@link Annotation} objects
 	 */
 	public VariantAnnotationsContentDecorator(VariantAnnotations annotations) {
 		this.annotations = annotations;
 	}
 
-	/** @return the decorated {@link VariantAnnotations} */
+	/**
+	 * @return the decorated {@link VariantAnnotations}
+	 */
 	public VariantAnnotations getAnnotations() {
 		return annotations;
 	}
@@ -42,7 +45,7 @@ public class VariantAnnotationsContentDecorator {
 
 	/**
 	 * @return <code>true</code> if the list contains a variant where {@link VariantEffect#isStructural()} returns
-	 *         <code>true</code>
+	 * <code>true</code>
 	 */
 	public boolean hasStructuralVariant() {
 		for (Annotation entry : annotations.getAnnotations())
@@ -53,7 +56,7 @@ public class VariantAnnotationsContentDecorator {
 
 	/**
 	 * @return the gene symbol of the annotation with highest priority or <code>null</code> if {@link #annotations} is
-	 *         empty
+	 * empty
 	 */
 	public String getGeneSymbol() {
 		if (annotations.getAnnotations().size() == 0)
@@ -74,7 +77,7 @@ public class VariantAnnotationsContentDecorator {
 
 	/**
 	 * @return the {@link VariantEffect} of the variant with highest priority or <code>null</code> if no such variant
-	 *         exists
+	 * exists
 	 */
 	public VariantEffect getVariantType() {
 		if (annotations.getAnnotations().size() == 0)

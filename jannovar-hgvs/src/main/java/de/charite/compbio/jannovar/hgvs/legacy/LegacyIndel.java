@@ -1,35 +1,44 @@
 package de.charite.compbio.jannovar.hgvs.legacy;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 /**
  * Representation of a legacy notation substitution.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyIndel extends LegacyChange {
 
-	/** deleted string */
+	/**
+	 * deleted string
+	 */
 	private final NucleotideSeqDescription deletedSeq;
-	/** inserted string */
+	/**
+	 * inserted string
+	 */
 	private final NucleotideSeqDescription insertedSeq;
 
-	/** Construct new legacy substitution with the given values */
+	/**
+	 * Construct new legacy substitution with the given values
+	 */
 	public LegacyIndel(LegacyLocation location, NucleotideSeqDescription deletedSeq,
-			NucleotideSeqDescription insertedSeq) {
+					   NucleotideSeqDescription insertedSeq) {
 		super(location);
 		this.deletedSeq = deletedSeq;
 		this.insertedSeq = insertedSeq;
 	}
 
-	/** @return replaced sequence */
+	/**
+	 * @return replaced sequence
+	 */
 	public NucleotideSeqDescription getDeletedSeq() {
 		return deletedSeq;
 	}
 
-	/** @return sequence to replace with */
+	/**
+	 * @return sequence to replace with
+	 */
 	public NucleotideSeqDescription getInsertedSeq() {
 		return insertedSeq;
 	}
@@ -37,7 +46,7 @@ public class LegacyIndel extends LegacyChange {
 	@Override
 	public String toLegacyString() {
 		return Joiner.on("").join(location.toLegacyString(), "del", deletedSeq.toHGVSString(), "ins",
-				insertedSeq.toHGVSString());
+			insertedSeq.toHGVSString());
 	}
 
 	@Override

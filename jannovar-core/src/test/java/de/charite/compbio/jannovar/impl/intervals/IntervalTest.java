@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.impl.intervals.Interval;
-
 public class IntervalTest {
 
 	Interval<String> interval;

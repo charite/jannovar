@@ -5,9 +5,13 @@ package de.charite.compbio.jannovar.vardbs.base;
  */
 public class AnnotatingRecord<RecordType> {
 
-	/** The annotating record */
+	/**
+	 * The annotating record
+	 */
 	private final RecordType record;
-	/** Allele number in the record */
+	/**
+	 * Allele number in the record
+	 */
 	private final int allelNo;
 
 	public AnnotatingRecord(RecordType record, int allelNo) {

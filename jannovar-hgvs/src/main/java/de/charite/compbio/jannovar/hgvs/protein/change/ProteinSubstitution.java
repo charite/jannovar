@@ -11,9 +11,13 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
  */
 public class ProteinSubstitution extends ProteinChange {
 
-	/** location of the substituted amino acid */
+	/**
+	 * location of the substituted amino acid
+	 */
 	private final ProteinPointLocation location;
-	/** target amino acid */
+	/**
+	 * target amino acid
+	 */
 	private final String targetAA;
 
 	/**
@@ -24,22 +28,20 @@ public class ProteinSubstitution extends ProteinChange {
 	}
 
 	public static ProteinSubstitution buildWithOffset(boolean onlyPredicted, String sourceAA, int pos, int offset,
-			String targetAA) {
+													  String targetAA) {
 		return new ProteinSubstitution(onlyPredicted, ProteinPointLocation.buildWithOffset(sourceAA, pos, offset),
-				targetAA);
+			targetAA);
 	}
 
 	public static ProteinSubstitution buildDownstreamOfTerminal(boolean onlyPredicted, String sourceAA, int pos,
-			String targetAA) {
+																String targetAA) {
 		return new ProteinSubstitution(onlyPredicted, ProteinPointLocation.buildDownstreamOfTerminal(sourceAA, pos),
-				targetAA);
+			targetAA);
 	}
 
 	/**
-	 * @param location
-	 *            location of the changed AA
-	 * @param targetAA
-	 *            amino acid to change to
+	 * @param location location of the changed AA
+	 * @param targetAA amino acid to change to
 	 */
 	public ProteinSubstitution(boolean onlyPredicted, ProteinPointLocation location, String targetAA) {
 		super(onlyPredicted);
@@ -47,12 +49,16 @@ public class ProteinSubstitution extends ProteinChange {
 		this.targetAA = targetAA;
 	}
 
-	/** @return location of the changed protein */
+	/**
+	 * @return location of the changed protein
+	 */
 	public ProteinPointLocation getLocation() {
 		return location;
 	}
 
-	/** @return amino acid to change to */
+	/**
+	 * @return amino acid to change to
+	 */
 	public String getTargetAA() {
 		return targetAA;
 	}

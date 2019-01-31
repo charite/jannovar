@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 public class LegacyMutationParserDeletionTest {
 
@@ -17,8 +16,8 @@ public class LegacyMutationParserDeletionTest {
 
 	@Test
 	public void testIntronic() {
-		String legacyVariantStrings[] = new String[] { "XXX:IVS3+3ins", "XXX:IVS3-3insT", "XXX:IVS3-3insTCT",
-				"XXX:IVS3-3ins3" };
+		String legacyVariantStrings[] = new String[]{"XXX:IVS3+3ins", "XXX:IVS3-3insT", "XXX:IVS3-3insTCT",
+			"XXX:IVS3-3ins3"};
 
 		for (String legacyVariantString : legacyVariantStrings) {
 			LegacyVariant variant = driver.parseLegacyChangeString(legacyVariantString);
@@ -29,8 +28,8 @@ public class LegacyMutationParserDeletionTest {
 
 	@Test
 	public void testExonic() {
-		String legacyVariantStrings[] = new String[] { "XXX:EX3+3ins", "XXX:EX3-3insT", "XXX:EX3-3insTCT",
-				"XXX:EX3-3ins3" };
+		String legacyVariantStrings[] = new String[]{"XXX:EX3+3ins", "XXX:EX3-3insT", "XXX:EX3-3insTCT",
+			"XXX:EX3-3ins3"};
 
 		for (String legacyVariantString : legacyVariantStrings) {
 			LegacyVariant variant = driver.parseLegacyChangeString(legacyVariantString);

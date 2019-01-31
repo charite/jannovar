@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TranscriptSequenceDecoratorTest {
 
-	private static final String[] CODONS = { "ATG", "ATC", "AGA", "GCT", "TGA" };
+	private static final String[] CODONS = {"ATG", "ATC", "AGA", "GCT", "TGA"};
 
 	private static final int START_LAST_CODON = 12;
 
@@ -28,14 +28,14 @@ public class TranscriptSequenceDecoratorTest {
 		TranscriptSequenceDecorator decorator = new TranscriptSequenceDecorator(MODEL);
 		Assert.assertEquals(CODONS[0] + CODONS[1], decorator.getCodonsStartingFrom(tx(0), cds(0), 2));
 		Assert.assertEquals(CODONS[CODONS.length - 2] + CODONS[CODONS.length - 1],
-				decorator.getCodonsStartingFrom(tx(9), cds(9), 2));
+			decorator.getCodonsStartingFrom(tx(9), cds(9), 2));
 	}
 
 	private static TranscriptModel getTestTranscriptModel() {
 		String sequence = Joiner.on("").join(CODONS);
 		return new TranscriptModel("TEST", "TEST", new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()),
-				new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()), ImmutableList.<GenomeInterval>builder().build(),
-				sequence, "TEST", 1);
+			new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()), ImmutableList.<GenomeInterval>builder().build(),
+			sequence, "TEST", 1);
 	}
 
 	private static TranscriptPosition tx(int pos) {

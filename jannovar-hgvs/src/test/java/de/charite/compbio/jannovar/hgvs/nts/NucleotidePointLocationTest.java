@@ -1,9 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import org.junit.Assert;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 
 public class NucleotidePointLocationTest {
 

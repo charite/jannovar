@@ -1,18 +1,11 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.Token;
+import de.charite.compbio.jannovar.hgvs.HGVSVariant;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.charite.compbio.jannovar.hgvs.HGVSVariant;
-import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 /**
  * Driver code for parsing HGVS strings into HGVSVariant objects.
@@ -34,12 +27,10 @@ public class HGVSParser {
 
 	/**
 	 * Parse HGVS change string
-	 * 
-	 * @param inputString
-	 *            with the legacy mutation to parse
+	 *
+	 * @param inputString with the legacy mutation to parse
 	 * @return {@link LegacyVariant} representing <code>inputString</code>
-	 * @throws HGVSParsingException
-	 *             if the parsing failed (note that this is an unchecked Exception)
+	 * @throws HGVSParsingException if the parsing failed (note that this is an unchecked Exception)
 	 */
 	public HGVSVariant parseHGVSString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
@@ -76,7 +67,7 @@ public class HGVSParser {
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-					int charPositionInLine, String msg, RecognitionException e) {
+									int charPositionInLine, String msg, RecognitionException e) {
 				throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 			}
 		});

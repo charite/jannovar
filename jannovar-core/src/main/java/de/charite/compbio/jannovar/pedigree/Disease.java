@@ -7,11 +7,17 @@ package de.charite.compbio.jannovar.pedigree;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum Disease {
-	/** corresponds to 0 = unknown disease status in the PED file. */
+	/**
+	 * corresponds to 0 = unknown disease status in the PED file.
+	 */
 	UNKNOWN,
-	/** corresponds to 1 = unaffected in the PED file. */
+	/**
+	 * corresponds to 1 = unaffected in the PED file.
+	 */
 	UNAFFECTED,
-	/** corresponds to 2 = affected in the PED file. */
+	/**
+	 * corresponds to 2 = affected in the PED file.
+	 */
 	AFFECTED;
 
 	/**
@@ -19,23 +25,21 @@ public enum Disease {
 	 */
 	public int toInt() {
 		switch (this) {
-		case AFFECTED:
-			return 2;
-		case UNAFFECTED:
-			return 1;
-		default:
-			return 0;
+			case AFFECTED:
+				return 2;
+			case UNAFFECTED:
+				return 1;
+			default:
+				return 0;
 		}
 	}
 
 	/**
 	 * Parse {@link String} into a <code>Disease</code> value.
 	 *
-	 * @param s
-	 *            String to parse
+	 * @param s String to parse
 	 * @return resulting <code>Disease</code> object
-	 * @throws PedParseException
-	 *             if <code>s</code> was not equal to <code>"0"</code>, <code>"1"</code>, or <code>"2"</code>.
+	 * @throws PedParseException if <code>s</code> was not equal to <code>"0"</code>, <code>"1"</code>, or <code>"2"</code>.
 	 */
 	public static Disease toDisease(String s) throws PedParseException {
 		if (s.equals("0"))

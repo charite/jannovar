@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -9,7 +8,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * Simple representation of a gene.
- *
+ * <p>
  * Genes are identified by their name, {@link #equals} and {@link #hashCode} only consider the field {@link #name}!
  */
 class Gene {
@@ -56,13 +55,13 @@ class Gene {
 
 	/**
 	 * @return {@link GenomeInterval} from the smaller begin to the larger end position of <code>lhs</code> and
-	 *         <code>rhs</code>.
+	 * <code>rhs</code>.
 	 */
 	private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
 		lhs = lhs.withStrand(Strand.FWD);
 		rhs = rhs.withStrand(Strand.FWD);
 		return new GenomeInterval(lhs.getGenomeBeginPos().getRefDict(), Strand.FWD, lhs.getGenomeBeginPos().getChr(), Math.min(
-lhs.getBeginPos(), rhs.getBeginPos()), Math.max(lhs.getEndPos(), rhs.getEndPos()));
+			lhs.getBeginPos(), rhs.getBeginPos()), Math.max(lhs.getEndPos(), rhs.getEndPos()));
 	}
 
 	@Override

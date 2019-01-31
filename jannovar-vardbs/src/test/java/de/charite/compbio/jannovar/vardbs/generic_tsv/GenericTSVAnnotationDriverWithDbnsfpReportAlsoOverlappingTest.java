@@ -1,25 +1,23 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFHeader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFHeader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with dbNSFP with default options
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVAnnotationDriverWithDbnsfpReportAlsoOverlappingTest
-		extends GenericTSVAnnotationDriverWithDbnsfpBaseTest {
+	extends GenericTSVAnnotationDriverWithDbnsfpBaseTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -77,25 +75,25 @@ public class GenericTSVAnnotationDriverWithDbnsfpReportAlsoOverlappingTest
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
 		Assert.assertEquals("[DBNSFP_AAREF, DBNSFP_HG19POS, DBNSFP_OVL_AAREF, DBNSFP_OVL_HG19POS, "
-				+ "DBNSFP_OVL_RS_DBSNP147, DBNSFP_OVL_SIFT_SCORE, DBNSFP_RS_DBSNP147, "
-				+ "DBNSFP_SIFT_SCORE]", keys.toString());
+			+ "DBNSFP_OVL_RS_DBSNP147, DBNSFP_OVL_SIFT_SCORE, DBNSFP_RS_DBSNP147, "
+			+ "DBNSFP_SIFT_SCORE]", keys.toString());
 
 		Assert.assertEquals("[., L, L, L]", annotated.getAttributeAsString("DBNSFP_AAREF", null));
 		Assert.assertEquals("[., 69119, 69119, 69119]",
-				annotated.getAttributeAsString("DBNSFP_HG19POS", null));
+			annotated.getAttributeAsString("DBNSFP_HG19POS", null));
 		Assert.assertEquals("[., ., ., .]",
-				annotated.getAttributeAsString("DBNSFP_RS_DBSNP147", null));
+			annotated.getAttributeAsString("DBNSFP_RS_DBSNP147", null));
 		Assert.assertEquals("[., 0.0, 0.0, 0.0]",
-				annotated.getAttributeAsString("DBNSFP_SIFT_SCORE", null));
+			annotated.getAttributeAsString("DBNSFP_SIFT_SCORE", null));
 
 		Assert.assertEquals("[., L, L, L]",
-				annotated.getAttributeAsString("DBNSFP_OVL_AAREF", null));
+			annotated.getAttributeAsString("DBNSFP_OVL_AAREF", null));
 		Assert.assertEquals("[., 69119, 69119, 69119]",
-				annotated.getAttributeAsString("DBNSFP_OVL_HG19POS", null));
+			annotated.getAttributeAsString("DBNSFP_OVL_HG19POS", null));
 		Assert.assertEquals("[., ., ., .]",
-				annotated.getAttributeAsString("DBNSFP_OVL_RS_DBSNP147", null));
+			annotated.getAttributeAsString("DBNSFP_OVL_RS_DBSNP147", null));
 		Assert.assertEquals("[., 0.0, 0.0, 0.0]",
-				annotated.getAttributeAsString("DBNSFP_OVL_SIFT_SCORE", null));
+			annotated.getAttributeAsString("DBNSFP_OVL_SIFT_SCORE", null));
 	}
 
 }

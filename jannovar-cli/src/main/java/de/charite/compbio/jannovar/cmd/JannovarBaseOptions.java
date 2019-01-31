@@ -1,42 +1,51 @@
 package de.charite.compbio.jannovar.cmd;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
-
 import de.charite.compbio.jannovar.Jannovar;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 /**
  * Base option class for global Jannovar options
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class JannovarBaseOptions {
 
-	/** Whether or not to print progress */
+	/**
+	 * Whether or not to print progress
+	 */
 	private boolean reportProgress = true;
 
-	/** proxy for HTTP */
+	/**
+	 * proxy for HTTP
+	 */
 	private URL httpProxy = null;
 
-	/** proxy for HTTPS */
+	/**
+	 * proxy for HTTPS
+	 */
 	private URL httpsProxy = null;
 
-	/** proxy for FTP */
+	/**
+	 * proxy for FTP
+	 */
 	private URL ftpProxy = null;
 
-	/** Verbosity */
+	/**
+	 * Verbosity
+	 */
 	private int verbosity = 1;
 
 	/**
 	 * Setup global {@link ArgumentParser}
-	 * 
-	 * @param parser
-	 *            {@link ArgumentParser} to setup
+	 *
+	 * @param parser {@link ArgumentParser} to setup
 	 */
 	public static void setupParser(ArgumentParser parser) {
 		parser.version(Jannovar.getVersion());
@@ -44,15 +53,15 @@ public class JannovarBaseOptions {
 
 		ArgumentGroup verboseGroup = parser.addArgumentGroup("Verbosity Options");
 		verboseGroup.addArgument("--report-no-progress").help("Disable progress report, more quiet mode")
-				.dest("report_progress").setDefault(true).action(Arguments.storeFalse());
+			.dest("report_progress").setDefault(true).action(Arguments.storeFalse());
 		verboseGroup.addArgument("-v", "--verbose").help("Enable verbose mode").dest("verbose").setDefault(false)
-				.action(Arguments.storeTrue());
+			.action(Arguments.storeTrue());
 		verboseGroup.addArgument("-vv", "--very-verbose").help("Enable very verbose mode").dest("very_verbose")
-				.setDefault(false).action(Arguments.storeTrue());
+			.setDefault(false).action(Arguments.storeTrue());
 
 		ArgumentGroup proxyGroup = parser.addArgumentGroup("Proxy Options");
 		proxyGroup.description("Configuration related to Proxy, note that environment variables *_proxy "
-				+ "and *_PROXY are also interpreted");
+			+ "and *_PROXY are also interpreted");
 		proxyGroup.addArgument("--http-proxy").help("Set HTTP proxy to use, if any");
 		proxyGroup.addArgument("--https-proxy").help("Set HTTPS proxy to use, if any");
 		proxyGroup.addArgument("--ftp-proxy").help("Set FTP proxy to use, if any");
@@ -60,11 +69,9 @@ public class JannovarBaseOptions {
 
 	/**
 	 * Get values from {@link Namespace} object
-	 * 
-	 * @param args
-	 *            {@link Namespace} to get the option values from
-	 * @throws CommandLineParsingException
-	 *             on problems parsing a given URL
+	 *
+	 * @param args {@link Namespace} to get the option values from
+	 * @throws CommandLineParsingException on problems parsing a given URL
 	 */
 	public void setFromArgs(Namespace args) throws CommandLineParsingException {
 		if (args.getBoolean("verbose"))
@@ -143,7 +150,7 @@ public class JannovarBaseOptions {
 	@Override
 	public String toString() {
 		return "JannovarBaseOptions [reportProgress=" + reportProgress + ", httpProxy=" + httpProxy + ", httpsProxy="
-				+ httpsProxy + ", ftpProxy=" + ftpProxy + ", verbosity=" + verbosity + "]";
+			+ httpsProxy + ", ftpProxy=" + ftpProxy + ", verbosity=" + verbosity + "]";
 	}
 
 }

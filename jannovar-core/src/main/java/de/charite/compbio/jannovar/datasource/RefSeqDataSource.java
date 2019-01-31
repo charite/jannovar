@@ -1,8 +1,7 @@
 package de.charite.compbio.jannovar.datasource;
 
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
+import org.ini4j.Profile.Section;
 
 /**
  * {@link DataSource} implementation for data from RefSeq.
@@ -11,7 +10,9 @@ import com.google.common.collect.ImmutableList;
  */
 final class RefSeqDataSource extends DataSource {
 
-	/** expected keys in data source configuration file */
+	/**
+	 * expected keys in data source configuration file
+	 */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("gff", "rna", "chromInfo", "chrToAccessions");
 
 	RefSeqDataSource(DatasourceOptions options, Section iniSection) throws InvalidDataSourceException {

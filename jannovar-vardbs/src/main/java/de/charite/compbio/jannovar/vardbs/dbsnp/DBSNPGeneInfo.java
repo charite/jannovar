@@ -4,15 +4,19 @@ import de.charite.compbio.jannovar.Immutable;
 
 /**
  * Information about a gene in DBSNP (name and Entrez ID)
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class DBSNPGeneInfo {
 
-	/** Name of the gene */
+	/**
+	 * Name of the gene
+	 */
 	final private String symbol;
-	/** ID of the gene */
+	/**
+	 * ID of the gene
+	 */
 	final private int id;
 
 	public DBSNPGeneInfo(String symbol, int id) {

@@ -4,11 +4,11 @@ import htsjdk.variant.vcf.VCFHeader;
 
 /**
  * Build {@link DBSNPInfo} from a {@link VCFHeader}
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPInfoFactory {
-	
+
 	public DBSNPInfo build(VCFHeader vcfHeader) {
 		String fileDate = vcfHeader.getMetaDataLine("fileDate").getValue();
 		String source = vcfHeader.getMetaDataLine("source").getValue();

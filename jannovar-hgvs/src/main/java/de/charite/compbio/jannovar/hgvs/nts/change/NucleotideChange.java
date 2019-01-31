@@ -12,7 +12,9 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public abstract class NucleotideChange implements ConvertibleToHGVSString {
 
-	/** change is only predicted and will be kept in parantheses */
+	/**
+	 * change is only predicted and will be kept in parantheses
+	 */
 	private final boolean onlyPredicted;
 
 	/**
@@ -22,10 +24,14 @@ public abstract class NucleotideChange implements ConvertibleToHGVSString {
 		this.onlyPredicted = onlyPredicted;
 	}
 
-	/** @return {@link NucleotideChange} with given <code>onlyPredicted</code> value. */
+	/**
+	 * @return {@link NucleotideChange} with given <code>onlyPredicted</code> value.
+	 */
 	public abstract NucleotideChange withOnlyPredicted(boolean flag);
 
-	/** @return <code>true</code> if the protein change is only predicted */
+	/**
+	 * @return <code>true</code> if the protein change is only predicted
+	 */
 	public boolean isOnlyPredicted() {
 		return onlyPredicted;
 	}

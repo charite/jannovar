@@ -9,7 +9,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending {@link VCFHeader}s for Cosmic annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class CosmicVCFHeaderExtender extends VCFHeaderExtender {
@@ -32,23 +32,23 @@ public class CosmicVCFHeaderExtender extends VCFHeaderExtender {
 
 	public void addHeadersInfixes(VCFHeader header, String prefix, String infix, String note) {
 		VCFInfoHeaderLine cntLine = new VCFInfoHeaderLine(prefix + infix + "CNT", 1, VCFHeaderLineType.Integer,
-				"Number of samples in COSMIC having this mutation" + note);
+			"Number of samples in COSMIC having this mutation" + note);
 		header.addMetaDataLine(cntLine);
 
 		VCFInfoHeaderLine snpLine = new VCFInfoHeaderLine(prefix + infix + "SNP", 0, VCFHeaderLineType.Flag,
-				"Classified as SNP (polymorphism) in COSMIC");
+			"Classified as SNP (polymorphism) in COSMIC");
 		header.addMetaDataLine(snpLine);
 
 		if ("OVL_".equals(infix)) {
 			VCFInfoHeaderLine matchingID = new VCFInfoHeaderLine(prefix + "OVL_IDS", VCFHeaderLineCount.A,
-					VCFHeaderLineType.String, "COSMIC IDs with overlapping alternative positions, "
-							+ "not necessarily matching alleles, for each alternative allele, separated '|'");
+				VCFHeaderLineType.String, "COSMIC IDs with overlapping alternative positions, "
+				+ "not necessarily matching alleles, for each alternative allele, separated '|'");
 			header.addMetaDataLine(matchingID);
 		} else {
 			VCFInfoHeaderLine matchingID = new VCFInfoHeaderLine(prefix + "IDS", VCFHeaderLineCount.A,
-					VCFHeaderLineType.String,
-					"COSMIC IDs with matching alternative positions and alleles, for each "
-							+ "alternative alleles, separated by '|'");
+				VCFHeaderLineType.String,
+				"COSMIC IDs with matching alternative positions and alleles, for each "
+					+ "alternative alleles, separated by '|'");
 			header.addMetaDataLine(matchingID);
 		}
 	}

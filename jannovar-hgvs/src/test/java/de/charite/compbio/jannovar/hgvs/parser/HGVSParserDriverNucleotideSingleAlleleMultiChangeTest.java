@@ -1,17 +1,16 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
+import de.charite.compbio.jannovar.hgvs.HGVSVariant;
+import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.HGVSVariant;
-import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 
 // TODO(holtgrew): Test with onlyPredicted flag ("(...)") once this works
 
 /**
  * Tests for the HGVSParserDriver for parsing nucleotide substitutions.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
@@ -25,7 +24,7 @@ public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 
 	@Test
 	public void testMultiChangeAlleleOnlyPredicted() {
-		String hgvsStrings[] = new String[] { "1:r.[(123C>T),(124T>A)]", "1:r.[(123C>T,124T>A)]" };
+		String hgvsStrings[] = new String[]{"1:r.[(123C>T),(124T>A)]", "1:r.[(123C>T,124T>A)]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -35,10 +34,12 @@ public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 		}
 	}
 
-	/** test with multi-change allele from single origin */
+	/**
+	 * test with multi-change allele from single origin
+	 */
 	@Test
 	public void testMultiChangeAlleleSingleOrigin() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T,124T>A]" };
+		String hgvsStrings[] = new String[]{"1:r.[123C>T,124T>A]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -48,10 +49,12 @@ public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 		}
 	}
 
-	/** test with multi-change allele with chimeric separator */
+	/**
+	 * test with multi-change allele with chimeric separator
+	 */
 	@Test
 	public void testMultiChangeAlleleChimeric() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T//124T>A]" };
+		String hgvsStrings[] = new String[]{"1:r.[123C>T//124T>A]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -61,10 +64,12 @@ public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 		}
 	}
 
-	/** test with multi-change allele with in-cis separator */
+	/**
+	 * test with multi-change allele with in-cis separator
+	 */
 	@Test
 	public void testMultiChangeAlleleInCis() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T;124T>A]" };
+		String hgvsStrings[] = new String[]{"1:r.[123C>T;124T>A]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -74,10 +79,12 @@ public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 		}
 	}
 
-	/** test with multi-change allele with unknown-cis-trans separator */
+	/**
+	 * test with multi-change allele with unknown-cis-trans separator
+	 */
 	@Test
 	public void testMultiChangeAlleleUnknownCisTrans() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T(;)124T>A]" };
+		String hgvsStrings[] = new String[]{"1:r.[123C>T(;)124T>A]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);

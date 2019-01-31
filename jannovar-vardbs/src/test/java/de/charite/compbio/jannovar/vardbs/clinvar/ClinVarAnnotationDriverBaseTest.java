@@ -1,15 +1,13 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
-import java.io.File;
-import java.io.PrintWriter;
-
-import org.junit.Before;
-
 import com.google.common.io.Files;
-
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import htsjdk.variant.vcf.VCFFileReader;
+import org.junit.Before;
+
+import java.io.File;
+import java.io.PrintWriter;
 
 public class ClinVarAnnotationDriverBaseTest {
 
@@ -38,7 +36,7 @@ public class ClinVarAnnotationDriverBaseTest {
 
 		// Header of VCF file
 		String vcfHeader = "##fileformat=VCFv4.0\n"
-				+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
+			+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
 
 		// Write out file to use in the test
 		String testVCFPath = tmpDir + "/test_var_in_exac.vcf";

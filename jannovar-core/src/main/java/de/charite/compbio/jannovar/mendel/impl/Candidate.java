@@ -9,16 +9,20 @@ import de.charite.compbio.jannovar.mendel.GenotypeCalls;
  * Together, the variants referred to by maternal and paternal represent a candidate compound heterozygous pair of variants that
  * were found in one trio. Subsequent code will determine whether the candidate pair is compatible with AR compoound-het
  * inheritance across the entire pedigree.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 class Candidate {
 
-	/** one VCF record compatible with mutation in father */
+	/**
+	 * one VCF record compatible with mutation in father
+	 */
 	private final GenotypeCalls paternal;
-	/** one VCF record compatible with mutation in mother */
+	/**
+	 * one VCF record compatible with mutation in mother
+	 */
 	private final GenotypeCalls maternal;
 
 	public Candidate(GenotypeCalls paternal, GenotypeCalls maternal) {

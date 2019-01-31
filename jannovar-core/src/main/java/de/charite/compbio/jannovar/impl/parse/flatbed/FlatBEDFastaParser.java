@@ -1,12 +1,12 @@
 package de.charite.compbio.jannovar.impl.parse.flatbed;
 
-import java.util.ArrayList;
-
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+
+import java.util.ArrayList;
 
 /**
  * Parser for the FASTA formated files from flat BED files.
- *
+ * <p>
  * An {@link ArrayList} of {@link TranscriptModelBuilder}s is passed to this class together with the path to the
  * corresponding FASTA file, containing the sequence informations for the {@link TranscriptModelBuilder}s.
  *

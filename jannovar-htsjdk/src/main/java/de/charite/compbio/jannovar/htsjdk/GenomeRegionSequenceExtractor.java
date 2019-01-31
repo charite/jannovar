@@ -1,12 +1,12 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import htsjdk.samtools.SAMSequenceRecord;
-import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-import htsjdk.samtools.reference.ReferenceSequence;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
+import htsjdk.samtools.SAMSequenceRecord;
+import htsjdk.samtools.reference.IndexedFastaSequenceFile;
+import htsjdk.samtools.reference.ReferenceSequence;
 
 /**
  * Extract sequence for a {@link GenomeInterval} from a {@link IndexedFastaSequenceFile}.
@@ -15,9 +15,13 @@ import de.charite.compbio.jannovar.reference.Strand;
  */
 public class GenomeRegionSequenceExtractor {
 
-	/** Jannovar database for mapping between canonical name and name in FASTA */
+	/**
+	 * Jannovar database for mapping between canonical name and name in FASTA
+	 */
 	final JannovarData jannovarData;
-	/** object to load sequences from */
+	/**
+	 * object to load sequences from
+	 */
 	IndexedFastaSequenceFile indexedFile;
 
 	public GenomeRegionSequenceExtractor(JannovarData jannovarData, IndexedFastaSequenceFile indexedFile) {
@@ -26,16 +30,15 @@ public class GenomeRegionSequenceExtractor {
 		this.indexedFile = indexedFile;
 		if (this.indexedFile.getSequenceDictionary() == null) {
 			throw new UncheckedJannovarException(
-					"FASTA file has no sequence dictionary. Are you missing the REFERENCE.dict file? "
-							+ "Hint: create with samtools dict (version >=1.2) or Picard.");
+				"FASTA file has no sequence dictionary. Are you missing the REFERENCE.dict file? "
+					+ "Hint: create with samtools dict (version >=1.2) or Picard.");
 		}
 	}
 
 	/**
 	 * Load sequence from the given <code>region</code> from {@link #indexedFile}
 	 *
-	 * @param region
-	 *            {@link GenomeInterval} to load sequence for
+	 * @param region {@link GenomeInterval} to load sequence for
 	 * @return String with the selected sequenced loaded from {@link #indexedFile}.
 	 */
 	public String load(GenomeInterval region) {
@@ -46,7 +49,9 @@ public class GenomeRegionSequenceExtractor {
 		return new String(seq.getBases());
 	}
 
-	/** Map contig name (from genome variant) to contig name in FASTA */
+	/**
+	 * Map contig name (from genome variant) to contig name in FASTA
+	 */
 	private String mapContigToFasta(String contigName) {
 		// Map genome variant's contig to unique ID
 		Integer contigID = jannovarData.getRefDict().getContigNameToID().get(contigName);
@@ -61,7 +66,7 @@ public class GenomeRegionSequenceExtractor {
 					nameInFasta = contigInFasta;
 					break;
 				}
-				
+
 			}
 		}
 		if (nameInFasta == null)

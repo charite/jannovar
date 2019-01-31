@@ -7,16 +7,16 @@ package de.charite.compbio.jannovar.hgvs.nts.change;
  */
 public class NucleotideMiscChange extends NucleotideChange {
 
-	/** type of the misc change */
+	/**
+	 * type of the misc change
+	 */
 	private final NucleotideMiscChangeType changeType;
 
 	/**
 	 * Static factory function that forwards to {@link #NucleotideMiscChange(boolean, NucleotideMiscChangeType)}.
-	 * 
-	 * @param onlyPredicted
-	 *            whether or not to set "only predicted" flag
-	 * @param changeType
-	 *            the {@link NucleotideMiscChangeType} to build for
+	 *
+	 * @param onlyPredicted whether or not to set "only predicted" flag
+	 * @param changeType    the {@link NucleotideMiscChangeType} to build for
 	 * @return resulting {@link NucleotideMiscChange}
 	 */
 	public static NucleotideMiscChange build(boolean onlyPredicted, NucleotideMiscChangeType changeType) {
@@ -25,9 +25,8 @@ public class NucleotideMiscChange extends NucleotideChange {
 
 	/**
 	 * Build from input string.
-	 * 
-	 * @param str
-	 *            <code>String</code> to build from
+	 *
+	 * @param str <code>String</code> to build from
 	 * @return resulting {@link NucleotideMiscChange}
 	 */
 	public static NucleotideMiscChange buildFromString(String str) {
@@ -54,10 +53,8 @@ public class NucleotideMiscChange extends NucleotideChange {
 	/**
 	 * Construct with given <code>changeType</code> and <code>onlyPredicted</code> flag.
 	 *
-	 * @param onlyPredicted
-	 *            whether or not the change is only predicted
-	 * @param changeType
-	 *            type of the change
+	 * @param onlyPredicted whether or not the change is only predicted
+	 * @param changeType    type of the change
 	 */
 	public NucleotideMiscChange(boolean onlyPredicted, NucleotideMiscChangeType changeType) {
 		super(onlyPredicted);
@@ -69,7 +66,9 @@ public class NucleotideMiscChange extends NucleotideChange {
 		return new NucleotideMiscChange(flag, changeType);
 	}
 
-	/** @return type of this {@link NucleotideMiscChangeType} */
+	/**
+	 * @return type of this {@link NucleotideMiscChangeType}
+	 */
 	public NucleotideMiscChangeType getChangeType() {
 		return changeType;
 	}

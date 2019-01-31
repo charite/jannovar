@@ -1,11 +1,6 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideIndel;
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
-import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
+import de.charite.compbio.jannovar.hgvs.nts.change.*;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 
@@ -18,7 +13,9 @@ public class GenomicNucleotideChangeBuilder {
 
 	private final GenomeVariant variant;
 
-	/** Initialize with the given <code>variant</code>. */
+	/**
+	 * Initialize with the given <code>variant</code>.
+	 */
 	public GenomicNucleotideChangeBuilder(GenomeVariant variant) {
 		this.variant = variant;
 	}
@@ -67,7 +64,7 @@ public class GenomicNucleotideChangeBuilder {
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString()))
 			return NucleotideInversion.buildWithoutSeqDescription(false, beginPos, beginPos + ref.length()
-					- 1);
+				- 1);
 		else
 			return NucleotideIndel.buildWithSequence(false, beginPos, beginPos + ref.length() - 1, ref, alt);
 	}

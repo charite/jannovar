@@ -1,16 +1,16 @@
 package de.charite.compbio.jannovar.vardbs.exac;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link ExacRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class ExacVariantContextToRecordConverter implements VariantContextToRecordConverter<ExacRecord> {
@@ -60,7 +60,7 @@ final class ExacVariantContextToRecordConverter implements VariantContextToRecor
 
 			// AC
 			List<Integer> lst = vc.getAttributeAsList("AC_" + pop).stream().map(x -> Integer.parseInt((String) x))
-					.collect(Collectors.toList());
+				.collect(Collectors.toList());
 			if (!lst.isEmpty()) {
 				builder.getAlleleCounts().put(pop, lst);
 				for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
@@ -69,7 +69,7 @@ final class ExacVariantContextToRecordConverter implements VariantContextToRecor
 
 			// Het
 			lst = vc.getAttributeAsList("Het_" + pop).stream().map(x -> Integer.parseInt((String) x))
-					.collect(Collectors.toList());
+				.collect(Collectors.toList());
 			if (!lst.isEmpty()) {
 				builder.getAlleleHetCounts().put(pop, lst);
 				for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
@@ -78,7 +78,7 @@ final class ExacVariantContextToRecordConverter implements VariantContextToRecor
 
 			// Hom
 			lst = vc.getAttributeAsList("Hom_" + pop).stream().map(x -> Integer.parseInt((String) x))
-					.collect(Collectors.toList());
+				.collect(Collectors.toList());
 			if (!lst.isEmpty()) {
 				builder.getAlleleHomCounts().put(pop, lst);
 				for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
@@ -87,7 +87,7 @@ final class ExacVariantContextToRecordConverter implements VariantContextToRecor
 
 			// Hemi
 			lst = vc.getAttributeAsList("Hemi_" + pop).stream().map(x -> Integer.parseInt((String) x))
-					.collect(Collectors.toList());
+				.collect(Collectors.toList());
 			if (!lst.isEmpty()) {
 				builder.getAlleleHemiCounts().put(pop, lst);
 				for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)

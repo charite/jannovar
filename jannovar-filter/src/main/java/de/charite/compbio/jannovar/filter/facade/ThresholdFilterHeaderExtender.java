@@ -14,46 +14,78 @@ public class ThresholdFilterHeaderExtender {
 
 	// Genotype-wise filter strings
 
-	/** Maximal coverage */
+	/**
+	 * Maximal coverage
+	 */
 	public static String FILTER_GT_MAX_COV = "MaxCov";
-	/** Minimal coverage in case of het call */
+	/**
+	 * Minimal coverage in case of het call
+	 */
 	public static String FILTER_GT_MIN_COV_HET = "MinCovHet";
-	/** Minimal coverage in case of hom alt call */
+	/**
+	 * Minimal coverage in case of hom alt call
+	 */
 	public static String FILTER_GT_MIN_COV_HOM_ALT = "MinCovHomAlt";
-	/** Minimal genotyp quality */
+	/**
+	 * Minimal genotyp quality
+	 */
 	public static String FILTER_GT_MIN_GQ = "MinGq";
-	/** Minimal alternative allele fraction for het */
+	/**
+	 * Minimal alternative allele fraction for het
+	 */
 	public static String FILTER_GT_MIN_AAF_HET = "MinAafHet";
-	/** Maximal alternative allele fraction for het */
+	/**
+	 * Maximal alternative allele fraction for het
+	 */
 	public static String FILTER_GT_MAX_AAF_HET = "MaxAafHet";
-	/** Minimal alternative allele fraction for hom alt */
+	/**
+	 * Minimal alternative allele fraction for hom alt
+	 */
 	public static String FILTER_GT_MIN_AAF_HOM_ALT = "MinAafHomAlt";
-	/** Minimal alternative allele fraction for hom ref */
+	/**
+	 * Minimal alternative allele fraction for hom ref
+	 */
 	public static String FILTER_GT_MAX_AAF_HOM_REF = "MaxAafHomRef";
 
-	/** One parent was filtered out. */
+	/**
+	 * One parent was filtered out.
+	 */
 	public static String FILTER_GT_ONE_PARENT_FILTERED = "OneParentGtFiltered";
-	/** Both parents were filtered out. */
+	/**
+	 * Both parents were filtered out.
+	 */
 	public static String FILTER_GT_BOTH_PARENTS_FILTERED = "BothParentsGtFiltered";
 
 	// Variant-wise filter strings
 
-	/** All affected individual's genotypes are filtered */
+	/**
+	 * All affected individual's genotypes are filtered
+	 */
 	public static String FILTER_VAR_ALL_AFFECTED_GTS_FILTERED = "AllAffGtFiltered";
 
-	/** Highest frequency in any population higher than threshold for AD */
+	/**
+	 * Highest frequency in any population higher than threshold for AD
+	 */
 	public static String FILTER_VAR_MAX_FREQUENCY_AD = "MaxFreqAd";
 
-	/** Highest frequency in any population higher than threshold for AR */
+	/**
+	 * Highest frequency in any population higher than threshold for AR
+	 */
 	public static String FILTER_VAR_MAX_FREQUENCY_AR = "MaxFreqAr";
 
-	/** Too many variants in homozygous state in ExAC */
+	/**
+	 * Too many variants in homozygous state in ExAC
+	 */
 	public static String FILTER_VAR_MAX_HOM_EXAC = "MaxHomExac";
 
-	/** Too many variants in homozygous state in thousand genomes */
+	/**
+	 * Too many variants in homozygous state in thousand genomes
+	 */
 	public static String FILTER_VAR_MAX_HOM_THOUSAND_GENOMES = "MaxHomG1k";
 
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	private final ThresholdFilterOptions options;
 
 	public ThresholdFilterHeaderExtender(ThresholdFilterOptions options) {
@@ -62,52 +94,51 @@ public class ThresholdFilterHeaderExtender {
 
 	/**
 	 * Add header entries.
-	 * 
-	 * @param header
-	 *            The {@link VCFHeader} to extend.
+	 *
+	 * @param header The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
 		if (!header.hasFormatLine("FT"))
 			header.addMetaDataLine(new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.String,
-					"Filters applied to genotype call"));
+				"Filters applied to genotype call"));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_COV,
-				"Genotype has coverage >" + options.getMaxCov()));
+			"Genotype has coverage >" + options.getMaxCov()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HET,
-				"Het. genotype call has coverage <" + options.getMinGtCovHet()));
+			"Het. genotype call has coverage <" + options.getMinGtCovHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HOM_ALT,
-				"Hom. alt genotype call has coverage <" + options.getMinGtCovHomAlt()));
+			"Hom. alt genotype call has coverage <" + options.getMinGtCovHomAlt()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_GQ,
-				"Genotype has quality (GQ) <" + options.getMinGtGq()));
+			"Genotype has quality (GQ) <" + options.getMinGtGq()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_AAF_HET,
-				"Het. genotype has alternative allele fraction <" + options.getMinGtAafHet()));
+			"Het. genotype has alternative allele fraction <" + options.getMinGtAafHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HET,
-				"Het. genotype has alternative allele fraction >" + options.getMaxGtAafHet()));
+			"Het. genotype has alternative allele fraction >" + options.getMaxGtAafHet()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_AAF_HOM_ALT,
-				"Hom. alt genotype has alternative allele fraction <"
-						+ options.getMinGtAafHomAlt()));
+			"Hom. alt genotype has alternative allele fraction <"
+				+ options.getMinGtAafHomAlt()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HOM_REF,
-				"Wild-type genotype has AAF >" + options.getMaxGtAafHomRef()));
+			"Wild-type genotype has AAF >" + options.getMaxGtAafHomRef()));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_ALL_AFFECTED_GTS_FILTERED,
-				"The genotype calls of all affected individuals have been filtered for this variant."));
+			"The genotype calls of all affected individuals have been filtered for this variant."));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AD,
-				"Variant frequency >" + options.getMaxAlleleFrequencyAd()
-						+ " (threshold for AD inheritance), variant will be annotated with "
-						+ "compatibility with dominant inheritance regardlessly"));
+			"Variant frequency >" + options.getMaxAlleleFrequencyAd()
+				+ " (threshold for AD inheritance), variant will be annotated with "
+				+ "compatibility with dominant inheritance regardlessly"));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AR,
-				"Variant frequency >" + options.getMaxAlleleFrequencyAd()
-						+ " (threshold for AR inheritance), variant will not be considered for "
-						+ "composite recessive inheritance but for homozygous recessive inheritance "
-						+ "regardlessly"));
+			"Variant frequency >" + options.getMaxAlleleFrequencyAd()
+				+ " (threshold for AR inheritance), variant will not be considered for "
+				+ "composite recessive inheritance but for homozygous recessive inheritance "
+				+ "regardlessly"));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_HOM_EXAC, "Seen >"
-				+ options.getMaxExacHomState() + " times in ExAC data in homozygous state"));
+			+ options.getMaxExacHomState() + " times in ExAC data in homozygous state"));
 
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_HOM_THOUSAND_GENOMES,
-				"Seen >" + options.getMaxG1kHomState()
-						+ " times in thousand genomes data in homozygous state"));
+			"Seen >" + options.getMaxG1kHomState()
+				+ " times in thousand genomes data in homozygous state"));
 	}
 
 }

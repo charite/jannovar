@@ -1,11 +1,10 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
-import java.util.function.Consumer;
-
+import htsjdk.variant.variantcontext.VariantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import htsjdk.variant.variantcontext.VariantContext;
+import java.util.function.Consumer;
 
 /**
  * Call a function for each variant put into the pipeline step
@@ -14,10 +13,14 @@ import htsjdk.variant.variantcontext.VariantContext;
  */
 public class ConsumerProcessor implements VariantContextProcessor {
 
-	/** The logger object to use */
+	/**
+	 * The logger object to use
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerProcessor.class);
 
-	/** Write out variant into this consumer */
+	/**
+	 * Write out variant into this consumer
+	 */
 	private final Consumer<VariantContext> sink;
 
 	public ConsumerProcessor(Consumer<VariantContext> sink) {

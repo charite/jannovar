@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.pedigree;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
 
 /**
  * Builder for {@link GenotypeList}.
@@ -29,8 +29,7 @@ public class GenotypeListBuilder {
 	/**
 	 * Set "is X chromosomal" flag of next build GenotypeCalls.
 	 *
-	 * @param isXChromosomal
-	 *            <code>true</code> if the next built genotype list is X chromosomal
+	 * @param isXChromosomal <code>true</code> if the next built genotype list is X chromosomal
 	 * @return <code>this</code> for chaining
 	 */
 	public GenotypeListBuilder setIsXChromosomal(boolean isXChromosomal) {
@@ -41,8 +40,7 @@ public class GenotypeListBuilder {
 	/**
 	 * Adds new list of genotypes, one for each individual.
 	 *
-	 * @param lst
-	 *            list of {@link Genotype} objects, one for each individual
+	 * @param lst list of {@link Genotype} objects, one for each individual
 	 * @return <code>this</code> for chaining
 	 */
 	public GenotypeListBuilder addGenotypes(ImmutableList<Genotype> lst) {

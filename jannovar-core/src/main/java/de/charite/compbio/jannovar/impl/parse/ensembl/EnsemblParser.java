@@ -1,24 +1,6 @@
 package de.charite.compbio.jannovar.impl.parse.ensembl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.ini4j.Profile.Section;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -35,6 +17,14 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 // TODO(holtgrewe): Factor out common paths with RefSeqParser
 // TODO(holtgrewe): stop codon part of CDS here?
@@ -47,7 +37,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
  */
 public class EnsemblParser implements TranscriptParser {
 
-	/** the logger object to use */
+	/**
+	 * the logger object to use
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(EnsemblParser.class);
 
 	/**
@@ -55,22 +47,25 @@ public class EnsemblParser implements TranscriptParser {
 	 */
 	private final ReferenceDictionary refDict;
 
-	/** Path to directory where the to-be-parsed files live */
+	/**
+	 * Path to directory where the to-be-parsed files live
+	 */
 	private final String basePath;
 
-	/** INI {@link Section} from the configuration. */
+	/**
+	 * INI {@link Section} from the configuration.
+	 */
 	private final Section iniSection;
 
-	/** List of gene identifiers of genes to include, if non-empty. */
+	/**
+	 * List of gene identifiers of genes to include, if non-empty.
+	 */
 	private final List<String> geneIdentifiers;
 
 	/**
-	 * @param refDict
-	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
-	 * @param basePath
-	 *            path to where the to-be-parsed files live
-	 * @param iniSection
-	 *            {@link Section} with configuration from INI file
+	 * @param refDict         path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
+	 * @param basePath        path to where the to-be-parsed files live
+	 * @param iniSection      {@link Section} with configuration from INI file
 	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
 	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers, Section iniSection) {
@@ -89,7 +84,7 @@ public class EnsemblParser implements TranscriptParser {
 		// Augment information in builders with
 		try {
 			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEnsemblGeneID()),
-					tx -> tx.getGeneID()).run(builders);
+				tx -> tx.getGeneID()).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
 		}
@@ -98,7 +93,7 @@ public class EnsemblParser implements TranscriptParser {
 		for (TranscriptModelBuilder val : builders.values()) {
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
 				LOGGER.info("ENSEMBL Gene {} not known to HGNC, only annotating with ENSEMBL_GENE_ID => {} for additional IDs",
-						new Object[] { val.getGeneID(), val.getGeneID() });
+					new Object[]{val.getGeneID(), val.getGeneID()});
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
 			}
 		}
@@ -115,8 +110,8 @@ public class EnsemblParser implements TranscriptParser {
 				result.add(builder.build());
 			} else {
 				if (geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID())
-						|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
-								ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
+					|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
+					ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
 
 				) {
 					result.add(builder.build());
@@ -129,11 +124,10 @@ public class EnsemblParser implements TranscriptParser {
 	/**
 	 * Load FASTA from pathFASTA and set the sequence into builders.
 	 *
-	 * @throws TranscriptParseException
-	 *             on problems with parsing the FASTA
+	 * @throws TranscriptParseException on problems with parsing the FASTA
 	 */
 	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA)
-			throws TranscriptParseException {
+		throws TranscriptParseException {
 		// First, build mapping from RNA accession to builder
 		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
 		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
@@ -157,7 +151,7 @@ public class EnsemblParser implements TranscriptParser {
 				final TranscriptModelBuilder builder = txMap.get(accession);
 				if (builder == null) {
 					// This is not a warning as we observed this for some records regularly
-					LOGGER.debug("ID {} from FASTA did not map to transcript", new Object[] { accession });
+					LOGGER.debug("ID {} from FASTA did not map to transcript", new Object[]{accession});
 					continue;
 				}
 
@@ -166,32 +160,32 @@ public class EnsemblParser implements TranscriptParser {
 
 				builder.setAccession(builder.getSequence());
 				builder.setSequence(record.getSequence());
-				LOGGER.debug("Found sequence for transcript {}", new Object[] { builder.getAccession() });
+				LOGGER.debug("Found sequence for transcript {}", new Object[]{builder.getAccession()});
 			}
 		} catch (IOException e) {
 			throw new TranscriptParseException("Problem with reading FASTA file", e);
 		}
 
-		LOGGER.info("Ignoring {} transcripts without sequence.", new Object[] { missingSequence.size() });
+		LOGGER.info("Ignoring {} transcripts without sequence.", new Object[]{missingSequence.size()});
 		for (String key : missingSequence) {
-			LOGGER.debug("--> {}", new Object[] { key });
+			LOGGER.debug("--> {}", new Object[]{key});
 			builders.remove(key);
 		}
 
-		LOGGER.info("Successfully processed {} transcripts with sequence.", new Object[] { builders.size() });
+		LOGGER.info("Successfully processed {} transcripts with sequence.", new Object[]{builders.size()});
 	}
 
 	/**
 	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
-	 *
+	 * <p>
 	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the appropriate
 	 * TranscriptModel objects.
-	 *
+	 * <p>
 	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
 	private Map<String, TranscriptModelBuilder> recordsToBuilders(
-			HashMap<String, ArrayList<FeatureRecord>> recordsByGene) {
+		HashMap<String, ArrayList<FeatureRecord>> recordsByGene) {
 		Map<String, TranscriptModelBuilder> result = new HashMap<>();
 		for (Entry<String, ArrayList<FeatureRecord>> entry : recordsByGene.entrySet())
 			result.putAll(processGeneGFFRecords(entry.getValue()));
@@ -208,7 +202,7 @@ public class EnsemblParser implements TranscriptParser {
 		final HashMap<String, ArrayList<FeatureRecord>> recordsForTX = new HashMap<>();
 		for (FeatureRecord record : records) {
 			final String txID = (record.getAttributes().get("transcript_id") != null)
-					? record.getAttributes().get("transcript_id") : record.getAttributes().get("transcript_name");
+				? record.getAttributes().get("transcript_id") : record.getAttributes().get("transcript_name");
 			if (txID == null)
 				continue; // skip, no transcript ID
 			if (!recordsForTX.containsKey(txID))
@@ -244,14 +238,14 @@ public class EnsemblParser implements TranscriptParser {
 				ImmutableMap<String, Integer> dict = refDict.getContigNameToID();
 				final String seqID = record.getSeqID();
 				if (!dict.containsKey(seqID)) {
-					LOGGER.debug("Skipping record {} on unknown contig {}", new Object[] { record, seqID });
+					LOGGER.debug("Skipping record {} on unknown contig {}", new Object[]{record, seqID});
 					wrongContig = true;
 					continue;
 				}
 				if (record.getType().equals("exon")) {
 					final int chrom = dict.get(seqID);
 					GenomeInterval exon = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(),
-							record.getEnd());
+						record.getEnd());
 					exon = exon.withStrand(strand);
 					if (txRegion == null)
 						txRegion = exon;
@@ -260,7 +254,7 @@ public class EnsemblParser implements TranscriptParser {
 					builder.addExonRegion(exon);
 				} else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
 					GenomeInterval cds = new GenomeInterval(refDict, Strand.FWD,
-							refDict.getContigNameToID().get(record.getSeqID()), record.getBegin(), record.getEnd());
+						refDict.getContigNameToID().get(record.getSeqID()), record.getBegin(), record.getEnd());
 					cds = cds.withStrand(strand);
 					if (cdsRegion == null)
 						cdsRegion = cds;
@@ -273,7 +267,7 @@ public class EnsemblParser implements TranscriptParser {
 			if (txRegion == null) {
 				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
 				// observed in RefSeq
-				LOGGER.error("No transcript region for {}; skipping", new Object[] { txEntry });
+				LOGGER.error("No transcript region for {}; skipping", new Object[]{txEntry});
 				continue;
 			}
 			builder.setTXRegion(txRegion);
@@ -290,8 +284,7 @@ public class EnsemblParser implements TranscriptParser {
 	/**
 	 * Load GFF records, cluster by gene and return
 	 *
-	 * @throws TranscriptParseException
-	 *             on problems with handling the transcript file
+	 * @throws TranscriptParseException on problems with handling the transcript file
 	 */
 	private HashMap<String, ArrayList<FeatureRecord>> loadRecords(String pathGFF) throws TranscriptParseException {
 		HashMap<String, ArrayList<FeatureRecord>> result = new HashMap<String, ArrayList<FeatureRecord>>();
@@ -312,7 +305,7 @@ public class EnsemblParser implements TranscriptParser {
 		try {
 			FeatureRecord record;
 			while ((record = parser.next()) != null) {
-				LOGGER.debug("Loaded GFF record {}", new Object[] { record });
+				LOGGER.debug("Loaded GFF record {}", new Object[]{record});
 				numRecords += 1;
 
 				final String geneID = record.getAttributes().get("gene_id");
@@ -325,14 +318,13 @@ public class EnsemblParser implements TranscriptParser {
 			throw new TranscriptParseException("Problem parsing GFF file", e);
 		}
 
-		LOGGER.info("Loaded {} GFF records for {} genes", new Object[] { numRecords, result.size() });
+		LOGGER.info("Loaded {} GFF records for {} genes", new Object[]{numRecords, result.size()});
 
 		return result;
 	}
 
 	/**
-	 * @param key
-	 *            name of the INI entry
+	 * @param key name of the INI entry
 	 * @return file name from INI <code>key</code.
 	 */
 	private String getINIFileName(String key) {

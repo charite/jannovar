@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class MendelianCompatibilityCheckerADLargeTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -38,11 +32,11 @@ public class MendelianCompatibilityCheckerADLargeTest extends MendelianCompatibi
 		individuals.add(new PedPerson("ped", "III.5", "0", "II.3", Sex.FEMALE, Disease.UNAFFECTED)); // c5
 		individuals.add(new PedPerson("ped", "III.6", "0", "II.4", Sex.MALE, Disease.AFFECTED)); // c6
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2", "II.3", "II.4", "II.5", "III.1", "III.2", "III.3",
-				"III.4", "III.5", "III.6");
+			"III.4", "III.5", "III.6");
 
 		this.checker = new MendelianInheritanceChecker(this.pedigree);
 

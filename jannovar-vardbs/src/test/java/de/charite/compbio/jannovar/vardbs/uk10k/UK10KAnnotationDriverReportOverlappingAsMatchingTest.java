@@ -1,21 +1,19 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFHeader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFHeader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with UK10K reporting overlaps as matches
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KAnnotationDriverBaseTest {
@@ -74,7 +72,7 @@ public class UK10KAnnotationDriverReportOverlappingAsMatchingTest extends UK10KA
 
 		Assert.assertEquals("[5, 5, 5]", annotated.getAttributeAsString("AC", null));
 		Assert.assertEquals("[6.612007405448294E-4, 6.612007405448294E-4, 6.612007405448294E-4]",
-				annotated.getAttributeAsString("AF", null));
+			annotated.getAttributeAsString("AF", null));
 		Assert.assertEquals("7562", annotated.getAttributeAsString("AN", null));
 	}
 

@@ -2,13 +2,14 @@ package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+
 import java.util.EnumSet;
 
 // TODO(holtgrew): For now, only insert most specific variants by default, add switch that adds transitive changes
 
 /**
  * These codes reflect the possible types of variants that we call for an exome.
- *
+ * <p>
  * The values in this enum are given in the putative order of impact (more severe to less severe). The documentation
  * gives the sequence ontology (SO) ID and the SO description. Also, the documentation of each value explains whether
  * Jannovar generates this annotation or not.
@@ -62,7 +63,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001589">SO:0001589</a>A sequence variant
 	 * which causes a disruption of the translational reading frame, because the number of nucleotides inserted or
 	 * deleted is not a multiple of threee (is a: protein_altering_variant).
-	 *
+	 * <p>
 	 * Used for frameshift variant for the case where there is no stop codon any more and the rare case in which the
 	 * transcript length is retained.
 	 */
@@ -71,7 +72,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001908">SO:0001908</a> A sequence variant
 	 * that causes the extension of a genomic feature from within the feature rather than from the terminus of the
 	 * feature, with regard to the reference sequence.
-	 *
+	 * <p>
 	 * In Jannovar, used to annotate a {@link #COMPLEX_SUBSTITUTION} that does not lead to a frameshift and increases
 	 * the transcript length.
 	 */
@@ -79,10 +80,10 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001906">SO:0001906</a> A sequence variant
 	 * that causes the reduction of a genomic feature, with regard to the reference sequence (is a: feature_variant).
-	 *
+	 * <p>
 	 * The term <a href="http://www.sequenceontology.org/browser/current_svn/term/INTERNAL_FEATURE_TRUNCATION">
 	 * INTERNAL_FEATURE_TRUNCATION</a> would be more fitting but is not available in SO.
-	 *
+	 * <p>
 	 * In Jannovar, used to annotate a {@link #COMPLEX_SUBSTITUTION} that does not lead to a frameshift and decreases
 	 * the transcript length.
 	 */
@@ -91,7 +92,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002007">SO:0002007</a> An MNV is a multiple
 	 * nucleotide variant (substitution) in which the inserted sequence is the same length as the replaced sequence (is
 	 * a: substitution).
-	 *
+	 * <p>
 	 * In Jannovar, only used for marking MNVs in coding regions.
 	 */
 	MNV,
@@ -99,7 +100,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:1000005">SO:1000005</a> When no simple or
 	 * well defined DNA mutation event describes the observed DNA change, the keyword "complex" should be used. Usually
 	 * there are multiple equally plausible explanations for the change (is a: substitution).
-	 *
+	 * <p>
 	 * Used together with {@link #INTERNAL_FEATURE_ELONGATION} or {@link #FEATURE_TRUNCATION} to describe an variant
 	 * that does not lead to a frameshift but a changed transcript length. Used together with
 	 * {@link #FRAMESHIFT_ELONGATION} or {@link #FRAMESHIFT_TRUNCATION} if the substitution leads to a frameshift
@@ -195,7 +196,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002013">SO:0002013</a> A sequence variant
 	 * that causes the reduction of a the 5'UTR with regard to the reference sequence (is a:
 	 * {@link #FIVE_PRIME_UTR_EXON_VARIANT} or {@link #FIVE_PRIME_UTR_INTRON_VARIANT})
-	 *
+	 * <p>
 	 * Jannovar does <b>not</b> yield use this at the moment.
 	 */
 	FIVE_PRIME_UTR_TRUNCATION,
@@ -203,7 +204,7 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002015">SO:0002015</a> A sequence variant
 	 * that causes the reduction of a the 3' UTR with regard to the reference sequence (is a:
 	 * {@link #FIVE_PRIME_UTR_EXON_VARIANT} or {@link #FIVE_PRIME_UTR_INTRON_VARIANT}).
-	 *
+	 * <p>
 	 * Jannovar does <b>not</b> yield use this at the moment.
 	 */
 	THREE_PRIME_UTR_TRUNCATION,
@@ -309,7 +310,7 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:1000039">SO:1000039</a> A tandem duplication
 	 * where the individual regions are in the same orientation (is a: tandem_duplication).
-	 *
+	 * <p>
 	 * In Jannovar used, as an additional marker to describe that an insertion is a duplication.
 	 */
 	DIRECT_TANDEM_DUPLICATION,
@@ -427,7 +428,7 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001580">SO:0001580</a> A sequence variant
 	 * that changes the coding sequence (is a: {@link #CODING_TRANSCRIPT_VARIANT}, {@link #EXON_VARIANT}).
-	 *
+	 * <p>
 	 * Sequence Ontology does <b>not</b> have a term
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/CODING_TRANSCRIPT_EXON_VARIANT" >
 	 * CODING_TRANSCRIPT_EXON_VARIANT</a>, so we use this.
@@ -438,7 +439,7 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001627">SO:0001627</a> A transcript variant
 	 * occurring within an intron (is a: {@link #TRANSCRIPT_VARIANT}).
-	 *
+	 * <p>
 	 * Jannovar uses {@link #CODING_TRANSCRIPT_INTRON_VARIANT} and {@link #NON_CODING_TRANSCRIPT_INTRON_VARIANT}
 	 * instead.
 	 */
@@ -480,7 +481,7 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001619">SO:0001619</a> (is a:
 	 * {@link #TRANSCRIPT_VARIANT}).
-	 *
+	 * <p>
 	 * Used for marking splicing variants as non-coding.
 	 */
 	NON_CODING_TRANSCRIPT_VARIANT,
@@ -559,15 +560,15 @@ public enum VariantEffect {
 
 	/**
 	 * @return <code>true</code> if the effect type denotes a frameshift variant (can only return <code>true</code> only
-	 *         small variants, spanning at most one exon, are considered).
+	 * small variants, spanning at most one exon, are considered).
 	 */
 	boolean isFrameshiftVariant() {
 		switch (this) {
-		case FRAMESHIFT_ELONGATION:
-		case FRAMESHIFT_TRUNCATION:
-			return true;
-		default:
-			return false;
+			case FRAMESHIFT_ELONGATION:
+			case FRAMESHIFT_TRUNCATION:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -576,93 +577,93 @@ public enum VariantEffect {
 	 */
 	public String getLegacyTerm() {
 		switch (this) {
-		case DIRECT_TANDEM_DUPLICATION:
-		case DISRUPTIVE_INFRAME_DELETION:
-		case FEATURE_TRUNCATION:
-		case INFRAME_DELETION:
-			return "NON_FS_DELETION";
-		case DOWNSTREAM_GENE_VARIANT:
-			return "DOWNSTREAM";
-		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
-		case FIVE_PRIME_UTR_TRUNCATION:
-		case FIVE_PRIME_UTR_EXON_VARIANT:
-			return "UTR5";
-		case FRAMESHIFT_ELONGATION:
-			return "FS_INSERTION";
-		case FRAMESHIFT_TRUNCATION:
-			return "FS_DELETION";
-		case FRAMESHIFT_VARIANT:
-			return "FS_SUBSTITUTION";
-		case INITIATOR_CODON_VARIANT:
-			return "STARTLOSS";
-		case CONSERVED_INTERGENIC_VARIANT:
-		case INTERGENIC_VARIANT:
-			return "INTERGENIC";
-		case INFRAME_INSERTION:
-		case DISRUPTIVE_INFRAME_INSERTION:
-		case INTERNAL_FEATURE_ELONGATION:
-			return "NON_FS_INSERTION";
-		case INTRAGENIC_VARIANT:
-			return "INTRAGENIC";
-		case CONSERVED_INTRON_VARIANT:
-		case CODING_TRANSCRIPT_INTRON_VARIANT:
-		case INTRON_VARIANT:
-		case FIVE_PRIME_UTR_INTRON_VARIANT:
-		case THREE_PRIME_UTR_INTRON_VARIANT:
-			return "INTRONIC";
-		case MNV:
-			return "NON_FS_SUBSTITUTION";
-		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
-			return "ncRNA_EXONIC";
-		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
-			return "ncRNA_INTRONIC";
-		case MISSENSE_VARIANT:
-		case RARE_AMINO_ACID_VARIANT:
-			return "MISSENSE";
-		case SPLICE_ACCEPTOR_VARIANT:
-		case SPLICE_DONOR_VARIANT:
-		case SPLICE_REGION_VARIANT:
-		case SPLICING_VARIANT:
-			return "SPLICING";
-		case START_LOST:
-			return "STARTLOSS";
-		case STOP_GAINED:
-			return "STOPGAIN";
-		case STOP_LOST:
-			return "STOPLOSS";
-		case STOP_RETAINED_VARIANT:
-		case SYNONYMOUS_VARIANT:
-			return "SYNONYMOUS";
-		case THREE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_EXON_VARIANT:
-			return "UTR3";
-		case TRANSCRIPT_ABLATION:
-			return "TRANSCRIPT_ABLATION";
-		case UPSTREAM_GENE_VARIANT:
-			return "UPSTREAM";
-		case SEQUENCE_VARIANT:
-			return "UNKNOWN";
-		case GENE_VARIANT:
-		case CHROMOSOME:
-		case CHROMOSOME_NUMBER_VARIATION:
-		case CODING_SEQUENCE_VARIANT:
-		case CODING_TRANSCRIPT_VARIANT:
-		case COMPLEX_SUBSTITUTION:
-		case CUSTOM:
-		case EXON_LOSS_VARIANT:
-		case EXON_VARIANT:
-		case MIRNA:
-		case INTERGENIC_REGION:
-		case NON_CODING_TRANSCRIPT_VARIANT:
-		case REGULATORY_REGION_VARIANT:
-		case STRUCTURAL_VARIANT:
-		case TF_BINDING_SITE_VARIANT:
-		case TRANSCRIPT_VARIANT:
-		case _SMALLEST_HIGH_IMPACT:
-		case _SMALLEST_LOW_IMPACT:
-		case _SMALLEST_MODERATE_IMPACT:
-		default:
-			return null;
+			case DIRECT_TANDEM_DUPLICATION:
+			case DISRUPTIVE_INFRAME_DELETION:
+			case FEATURE_TRUNCATION:
+			case INFRAME_DELETION:
+				return "NON_FS_DELETION";
+			case DOWNSTREAM_GENE_VARIANT:
+				return "DOWNSTREAM";
+			case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
+			case FIVE_PRIME_UTR_TRUNCATION:
+			case FIVE_PRIME_UTR_EXON_VARIANT:
+				return "UTR5";
+			case FRAMESHIFT_ELONGATION:
+				return "FS_INSERTION";
+			case FRAMESHIFT_TRUNCATION:
+				return "FS_DELETION";
+			case FRAMESHIFT_VARIANT:
+				return "FS_SUBSTITUTION";
+			case INITIATOR_CODON_VARIANT:
+				return "STARTLOSS";
+			case CONSERVED_INTERGENIC_VARIANT:
+			case INTERGENIC_VARIANT:
+				return "INTERGENIC";
+			case INFRAME_INSERTION:
+			case DISRUPTIVE_INFRAME_INSERTION:
+			case INTERNAL_FEATURE_ELONGATION:
+				return "NON_FS_INSERTION";
+			case INTRAGENIC_VARIANT:
+				return "INTRAGENIC";
+			case CONSERVED_INTRON_VARIANT:
+			case CODING_TRANSCRIPT_INTRON_VARIANT:
+			case INTRON_VARIANT:
+			case FIVE_PRIME_UTR_INTRON_VARIANT:
+			case THREE_PRIME_UTR_INTRON_VARIANT:
+				return "INTRONIC";
+			case MNV:
+				return "NON_FS_SUBSTITUTION";
+			case NON_CODING_TRANSCRIPT_EXON_VARIANT:
+				return "ncRNA_EXONIC";
+			case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
+				return "ncRNA_INTRONIC";
+			case MISSENSE_VARIANT:
+			case RARE_AMINO_ACID_VARIANT:
+				return "MISSENSE";
+			case SPLICE_ACCEPTOR_VARIANT:
+			case SPLICE_DONOR_VARIANT:
+			case SPLICE_REGION_VARIANT:
+			case SPLICING_VARIANT:
+				return "SPLICING";
+			case START_LOST:
+				return "STARTLOSS";
+			case STOP_GAINED:
+				return "STOPGAIN";
+			case STOP_LOST:
+				return "STOPLOSS";
+			case STOP_RETAINED_VARIANT:
+			case SYNONYMOUS_VARIANT:
+				return "SYNONYMOUS";
+			case THREE_PRIME_UTR_TRUNCATION:
+			case THREE_PRIME_UTR_EXON_VARIANT:
+				return "UTR3";
+			case TRANSCRIPT_ABLATION:
+				return "TRANSCRIPT_ABLATION";
+			case UPSTREAM_GENE_VARIANT:
+				return "UPSTREAM";
+			case SEQUENCE_VARIANT:
+				return "UNKNOWN";
+			case GENE_VARIANT:
+			case CHROMOSOME:
+			case CHROMOSOME_NUMBER_VARIATION:
+			case CODING_SEQUENCE_VARIANT:
+			case CODING_TRANSCRIPT_VARIANT:
+			case COMPLEX_SUBSTITUTION:
+			case CUSTOM:
+			case EXON_LOSS_VARIANT:
+			case EXON_VARIANT:
+			case MIRNA:
+			case INTERGENIC_REGION:
+			case NON_CODING_TRANSCRIPT_VARIANT:
+			case REGULATORY_REGION_VARIANT:
+			case STRUCTURAL_VARIANT:
+			case TF_BINDING_SITE_VARIANT:
+			case TRANSCRIPT_VARIANT:
+			case _SMALLEST_HIGH_IMPACT:
+			case _SMALLEST_LOW_IMPACT:
+			case _SMALLEST_MODERATE_IMPACT:
+			default:
+				return null;
 		}
 	}
 
@@ -682,289 +683,289 @@ public enum VariantEffect {
 
 	/**
 	 * @return <a href="http://www.sequenceontology.org/browser/current_svn/term/String">String</a> with the Sequence
-	 *         Ontology term.
+	 * Ontology term.
 	 */
 	public String getSequenceOntologyTerm() {
 		switch (this) {
-		case CHROMOSOME:
-			return "chromosome";
-		case CHROMOSOME_NUMBER_VARIATION:
-			return "chromosome_number_variation";
-		case CODING_SEQUENCE_VARIANT:
-			return "coding_sequence_variant";
-		case CODING_TRANSCRIPT_INTRON_VARIANT:
-			return "coding_transcript_intron_variant";
-		case CODING_TRANSCRIPT_VARIANT:
-			return "coding_transcript_variant";
-		case COMPLEX_SUBSTITUTION:
-			return "complex_substitution";
-		case CONSERVED_INTERGENIC_VARIANT:
-			return "conserved_intergenic_variant";
-		case CONSERVED_INTRON_VARIANT:
-			return "conserved_intron_variant";
-		case CUSTOM:
-			return "<custom>";
-		case DIRECT_TANDEM_DUPLICATION:
-			return "direct_tandem_duplication";
-		case DISRUPTIVE_INFRAME_DELETION:
-			return "disruptive_inframe_deletion";
-		case DISRUPTIVE_INFRAME_INSERTION:
-			return "disruptive_inframe_insertion";
-		case DOWNSTREAM_GENE_VARIANT:
-			return "downstream_gene_variant";
-		case EXON_LOSS_VARIANT:
-			return "exon_loss_variant";
-		case EXON_VARIANT:
-			return "exon_variant";
-		case FEATURE_TRUNCATION:
-			return "feature_truncation";
-		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
-			return "5_prime_UTR_premature_start_codon_gain_variant";
-		case FIVE_PRIME_UTR_TRUNCATION:
-			return "5_prime_UTR_truncation";
-		case FIVE_PRIME_UTR_EXON_VARIANT:
-			return "5_prime_UTR_exon_variant";
-		case FIVE_PRIME_UTR_INTRON_VARIANT:
-			return "5_prime_UTR_intron_variant";
-		case FRAMESHIFT_ELONGATION:
-			return "frameshift_elongation";
-		case FRAMESHIFT_TRUNCATION:
-			return "frameshift_truncation";
-		case GENE_VARIANT:
-			return "gene_variant";
-		case INFRAME_DELETION:
-			return "inframe_deletion";
-		case INFRAME_INSERTION:
-			return "inframe_insertion";
-		case INITIATOR_CODON_VARIANT:
-			return "initiator_codon_variant";
-		case INTERGENIC_REGION:
-			return "intergenic_region";
-		case INTERGENIC_VARIANT:
-			return "intergenic_variant";
-		case TFBS_ABLATION:
-			return "tfbs_ablation";
-		case TFBS_AMPLIFICATION:
-			return "tfbs_amplification";
-		case INTERNAL_FEATURE_ELONGATION:
-			return "internal_feature_elongation";
-		case TRANSLOCATION:
-			return "translocation";
-		case INVERSION:
-			return "inversion";
-		case INTRAGENIC_VARIANT:
-			return "intragenic_variant";
-		case INTRON_VARIANT:
-			return "intron_variant";
-		case MIRNA:
-			return "miRNA";
-		case MISSENSE_VARIANT:
-			return "missense_variant";
-		case MNV:
-			return "mnv";
-		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
-			return "non_coding_transcript_exon_variant";
-		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
-			return "non_coding_transcript_intron_variant";
-		case NON_CODING_TRANSCRIPT_VARIANT:
-			return "non_coding_transcript_variant";
-		case RARE_AMINO_ACID_VARIANT:
-			return "rare_amino_acid_variant";
-		case REGULATORY_REGION_VARIANT:
-			return "regulatory_region_variant";
-		case REGULATORY_REGION_ABLATION:
-			return "regulatory_region_ablation";
-		case REGULATORY_REGION_AMPLIFICATION:
-			return "regulatory_region_amplification";
-		case SEQUENCE_VARIANT:
-			return "sequence_variant";
-		case SPLICE_ACCEPTOR_VARIANT:
-			return "splice_acceptor_variant";
-		case SPLICE_DONOR_VARIANT:
-			return "splice_donor_variant";
-		case SPLICE_REGION_VARIANT:
-			return "splice_region_variant";
-		case SPLICING_VARIANT:
-			return "splicing_variant";
-		case START_LOST:
-			return "start_lost";
-		case STOP_GAINED:
-			return "stop_gained";
-		case STOP_LOST:
-			return "stop_lost";
-		case STOP_RETAINED_VARIANT:
-			return "stop_retained_variant";
-		case STRUCTURAL_VARIANT:
-			return "structural_variant";
-		case SYNONYMOUS_VARIANT:
-			return "synonymous_variant";
-		case TF_BINDING_SITE_VARIANT:
-			return "tf_binding_site_variant";
-		case THREE_PRIME_UTR_TRUNCATION:
-			return "3_prime_UTR_truncation";
-		case THREE_PRIME_UTR_EXON_VARIANT:
-			return "3_prime_UTR_exon_variant";
-		case THREE_PRIME_UTR_INTRON_VARIANT:
-			return "3_prime_UTR_intron_variant";
-		case TRANSCRIPT_ABLATION:
-			return "transcript_ablation";
-		case TRANSCRIPT_AMPLIFICATION:
-			return "transcript_amplification";
-		case TRANSCRIPT_VARIANT:
-			return "transcript_variant";
-		case UPSTREAM_GENE_VARIANT:
-			return "upstream_gene_variant";
-		case FRAMESHIFT_VARIANT:
-			return "frameshift_variant";
-		case _SMALLEST_HIGH_IMPACT:
-		case _SMALLEST_LOW_IMPACT:
-		case _SMALLEST_MODERATE_IMPACT:
-		default:
-			return null;
+			case CHROMOSOME:
+				return "chromosome";
+			case CHROMOSOME_NUMBER_VARIATION:
+				return "chromosome_number_variation";
+			case CODING_SEQUENCE_VARIANT:
+				return "coding_sequence_variant";
+			case CODING_TRANSCRIPT_INTRON_VARIANT:
+				return "coding_transcript_intron_variant";
+			case CODING_TRANSCRIPT_VARIANT:
+				return "coding_transcript_variant";
+			case COMPLEX_SUBSTITUTION:
+				return "complex_substitution";
+			case CONSERVED_INTERGENIC_VARIANT:
+				return "conserved_intergenic_variant";
+			case CONSERVED_INTRON_VARIANT:
+				return "conserved_intron_variant";
+			case CUSTOM:
+				return "<custom>";
+			case DIRECT_TANDEM_DUPLICATION:
+				return "direct_tandem_duplication";
+			case DISRUPTIVE_INFRAME_DELETION:
+				return "disruptive_inframe_deletion";
+			case DISRUPTIVE_INFRAME_INSERTION:
+				return "disruptive_inframe_insertion";
+			case DOWNSTREAM_GENE_VARIANT:
+				return "downstream_gene_variant";
+			case EXON_LOSS_VARIANT:
+				return "exon_loss_variant";
+			case EXON_VARIANT:
+				return "exon_variant";
+			case FEATURE_TRUNCATION:
+				return "feature_truncation";
+			case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
+				return "5_prime_UTR_premature_start_codon_gain_variant";
+			case FIVE_PRIME_UTR_TRUNCATION:
+				return "5_prime_UTR_truncation";
+			case FIVE_PRIME_UTR_EXON_VARIANT:
+				return "5_prime_UTR_exon_variant";
+			case FIVE_PRIME_UTR_INTRON_VARIANT:
+				return "5_prime_UTR_intron_variant";
+			case FRAMESHIFT_ELONGATION:
+				return "frameshift_elongation";
+			case FRAMESHIFT_TRUNCATION:
+				return "frameshift_truncation";
+			case GENE_VARIANT:
+				return "gene_variant";
+			case INFRAME_DELETION:
+				return "inframe_deletion";
+			case INFRAME_INSERTION:
+				return "inframe_insertion";
+			case INITIATOR_CODON_VARIANT:
+				return "initiator_codon_variant";
+			case INTERGENIC_REGION:
+				return "intergenic_region";
+			case INTERGENIC_VARIANT:
+				return "intergenic_variant";
+			case TFBS_ABLATION:
+				return "tfbs_ablation";
+			case TFBS_AMPLIFICATION:
+				return "tfbs_amplification";
+			case INTERNAL_FEATURE_ELONGATION:
+				return "internal_feature_elongation";
+			case TRANSLOCATION:
+				return "translocation";
+			case INVERSION:
+				return "inversion";
+			case INTRAGENIC_VARIANT:
+				return "intragenic_variant";
+			case INTRON_VARIANT:
+				return "intron_variant";
+			case MIRNA:
+				return "miRNA";
+			case MISSENSE_VARIANT:
+				return "missense_variant";
+			case MNV:
+				return "mnv";
+			case NON_CODING_TRANSCRIPT_EXON_VARIANT:
+				return "non_coding_transcript_exon_variant";
+			case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
+				return "non_coding_transcript_intron_variant";
+			case NON_CODING_TRANSCRIPT_VARIANT:
+				return "non_coding_transcript_variant";
+			case RARE_AMINO_ACID_VARIANT:
+				return "rare_amino_acid_variant";
+			case REGULATORY_REGION_VARIANT:
+				return "regulatory_region_variant";
+			case REGULATORY_REGION_ABLATION:
+				return "regulatory_region_ablation";
+			case REGULATORY_REGION_AMPLIFICATION:
+				return "regulatory_region_amplification";
+			case SEQUENCE_VARIANT:
+				return "sequence_variant";
+			case SPLICE_ACCEPTOR_VARIANT:
+				return "splice_acceptor_variant";
+			case SPLICE_DONOR_VARIANT:
+				return "splice_donor_variant";
+			case SPLICE_REGION_VARIANT:
+				return "splice_region_variant";
+			case SPLICING_VARIANT:
+				return "splicing_variant";
+			case START_LOST:
+				return "start_lost";
+			case STOP_GAINED:
+				return "stop_gained";
+			case STOP_LOST:
+				return "stop_lost";
+			case STOP_RETAINED_VARIANT:
+				return "stop_retained_variant";
+			case STRUCTURAL_VARIANT:
+				return "structural_variant";
+			case SYNONYMOUS_VARIANT:
+				return "synonymous_variant";
+			case TF_BINDING_SITE_VARIANT:
+				return "tf_binding_site_variant";
+			case THREE_PRIME_UTR_TRUNCATION:
+				return "3_prime_UTR_truncation";
+			case THREE_PRIME_UTR_EXON_VARIANT:
+				return "3_prime_UTR_exon_variant";
+			case THREE_PRIME_UTR_INTRON_VARIANT:
+				return "3_prime_UTR_intron_variant";
+			case TRANSCRIPT_ABLATION:
+				return "transcript_ablation";
+			case TRANSCRIPT_AMPLIFICATION:
+				return "transcript_amplification";
+			case TRANSCRIPT_VARIANT:
+				return "transcript_variant";
+			case UPSTREAM_GENE_VARIANT:
+				return "upstream_gene_variant";
+			case FRAMESHIFT_VARIANT:
+				return "frameshift_variant";
+			case _SMALLEST_HIGH_IMPACT:
+			case _SMALLEST_LOW_IMPACT:
+			case _SMALLEST_MODERATE_IMPACT:
+			default:
+				return null;
 		}
 	}
 
 	/**
 	 * @return <a href="http://www.sequenceontology.org/browser/current_svn/term/String">String</a> with the Sequence
-	 *         Ontology ID.
+	 * Ontology ID.
 	 */
 	public String getSequenceOID() {
 		switch (this) {
-		case CHROMOSOME:
-			return "SO:0000340";
-		case CHROMOSOME_NUMBER_VARIATION:
-			return "SO:1000182";
-		case CODING_SEQUENCE_VARIANT:
-			return "SO:0001580";
-		case CODING_TRANSCRIPT_INTRON_VARIANT:
-			return "SO:0001969";
-		case CODING_TRANSCRIPT_VARIANT:
-			return "SO:0001968";
-		case COMPLEX_SUBSTITUTION:
-			return "SO:1000005";
-		case CONSERVED_INTERGENIC_VARIANT:
-			return "SO:0002017";
-		case CONSERVED_INTRON_VARIANT:
-			return "SO:0002018";
-		case CUSTOM:
-			return "<custom>";
-		case DIRECT_TANDEM_DUPLICATION:
-			return "SO:1000039";
-		case DISRUPTIVE_INFRAME_DELETION:
-			return "SO:0001826";
-		case DISRUPTIVE_INFRAME_INSERTION:
-			return "SO:0001824";
-		case DOWNSTREAM_GENE_VARIANT:
-			return "SO:0001632";
-		case EXON_LOSS_VARIANT:
-			return "SO:0001572";
-		case EXON_VARIANT:
-			return "SO:0001791";
-		case FEATURE_TRUNCATION:
-			return "SO:0001906";
-		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
-			return "SO:0001983";
-		case FIVE_PRIME_UTR_TRUNCATION:
-			return "SO:0002013";
-		case FIVE_PRIME_UTR_EXON_VARIANT:
-			return "SO:0002092";
-		case FIVE_PRIME_UTR_INTRON_VARIANT:
-			return "SO:0002091";
-		case FRAMESHIFT_ELONGATION:
-			return "SO:0001909";
-		case FRAMESHIFT_TRUNCATION:
-			return "SO:0001910";
-		case GENE_VARIANT:
-			return "SO:0001564";
-		case INFRAME_DELETION:
-			return "SO:0001822";
-		case INFRAME_INSERTION:
-			return "SO:0001821";
-		case INITIATOR_CODON_VARIANT:
-			return "SO:0001582";
-		case INTERGENIC_REGION:
-			return "SO:0000605";
-		case INTERGENIC_VARIANT:
-			return "SO:0001628";
-		case INTERNAL_FEATURE_ELONGATION:
-			return "SO:0001908";
-		case TRANSLOCATION:
-			return "SO:0000199";
-		case INVERSION:
-			return "SO:1000036";
-		case INTRAGENIC_VARIANT:
-			return "SO:0002011";
-		case INTRON_VARIANT:
-			return "SO:0001627";
-		case MIRNA:
-			return "SO:0000276";
-		case MISSENSE_VARIANT:
-			return "SO:0001583";
-		case MNV:
-			return "SO:0002007";
-		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
-			return "SO:0001792";
-		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
-			return "SO:0001970";
-		case NON_CODING_TRANSCRIPT_VARIANT:
-			return "SO:0001619";
-		case RARE_AMINO_ACID_VARIANT:
-			return "SO:0002008";
-		case REGULATORY_REGION_VARIANT:
-			return "SO:0001566";
-		case REGULATORY_REGION_ABLATION:
-			return "SO:0001894";
-		case REGULATORY_REGION_AMPLIFICATION:
-			return "SO:0001891";
-		case SEQUENCE_VARIANT:
-			return "SO:0001060";
-		case SPLICE_ACCEPTOR_VARIANT:
-			return "SO:0001574";
-		case SPLICE_DONOR_VARIANT:
-			return "SO:0001575";
-		case SPLICE_REGION_VARIANT:
-			return "SO:0001630";
-		case SPLICING_VARIANT:
-			return "SO:0001568";
-		case START_LOST:
-			return "SO:0002012";
-		case STOP_GAINED:
-			return "SO:0001587";
-		case STOP_LOST:
-			return "SO:0001578";
-		case STOP_RETAINED_VARIANT:
-			return "SO:0001567";
-		case STRUCTURAL_VARIANT:
-			return "SO:0001537";
-		case SYNONYMOUS_VARIANT:
-			return "SO:0001819";
-		case TFBS_ABLATION:
-			return "SO:0001895";
-		case TFBS_AMPLIFICATION:
-			return "SO:0001892";
-		case TF_BINDING_SITE_VARIANT:
-			return "SO:0001782";
-		case THREE_PRIME_UTR_TRUNCATION:
-			return "SO:0002015";
-		case THREE_PRIME_UTR_EXON_VARIANT:
-			return "SO:0002089";
-		case THREE_PRIME_UTR_INTRON_VARIANT:
-			return "SO:0002090";
-		case TRANSCRIPT_ABLATION:
-			return "SO:0001893";
-		case TRANSCRIPT_AMPLIFICATION:
-			return "SO:0001889";
-		case TRANSCRIPT_VARIANT:
-			return "SO:0001576";
-		case UPSTREAM_GENE_VARIANT:
-			return "SO:0001631";
-		case FRAMESHIFT_VARIANT:
-			return "SO:0001589";
-		case _SMALLEST_HIGH_IMPACT:
-		case _SMALLEST_LOW_IMPACT:
-		case _SMALLEST_MODERATE_IMPACT:
-		default:
-			return null;
+			case CHROMOSOME:
+				return "SO:0000340";
+			case CHROMOSOME_NUMBER_VARIATION:
+				return "SO:1000182";
+			case CODING_SEQUENCE_VARIANT:
+				return "SO:0001580";
+			case CODING_TRANSCRIPT_INTRON_VARIANT:
+				return "SO:0001969";
+			case CODING_TRANSCRIPT_VARIANT:
+				return "SO:0001968";
+			case COMPLEX_SUBSTITUTION:
+				return "SO:1000005";
+			case CONSERVED_INTERGENIC_VARIANT:
+				return "SO:0002017";
+			case CONSERVED_INTRON_VARIANT:
+				return "SO:0002018";
+			case CUSTOM:
+				return "<custom>";
+			case DIRECT_TANDEM_DUPLICATION:
+				return "SO:1000039";
+			case DISRUPTIVE_INFRAME_DELETION:
+				return "SO:0001826";
+			case DISRUPTIVE_INFRAME_INSERTION:
+				return "SO:0001824";
+			case DOWNSTREAM_GENE_VARIANT:
+				return "SO:0001632";
+			case EXON_LOSS_VARIANT:
+				return "SO:0001572";
+			case EXON_VARIANT:
+				return "SO:0001791";
+			case FEATURE_TRUNCATION:
+				return "SO:0001906";
+			case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
+				return "SO:0001983";
+			case FIVE_PRIME_UTR_TRUNCATION:
+				return "SO:0002013";
+			case FIVE_PRIME_UTR_EXON_VARIANT:
+				return "SO:0002092";
+			case FIVE_PRIME_UTR_INTRON_VARIANT:
+				return "SO:0002091";
+			case FRAMESHIFT_ELONGATION:
+				return "SO:0001909";
+			case FRAMESHIFT_TRUNCATION:
+				return "SO:0001910";
+			case GENE_VARIANT:
+				return "SO:0001564";
+			case INFRAME_DELETION:
+				return "SO:0001822";
+			case INFRAME_INSERTION:
+				return "SO:0001821";
+			case INITIATOR_CODON_VARIANT:
+				return "SO:0001582";
+			case INTERGENIC_REGION:
+				return "SO:0000605";
+			case INTERGENIC_VARIANT:
+				return "SO:0001628";
+			case INTERNAL_FEATURE_ELONGATION:
+				return "SO:0001908";
+			case TRANSLOCATION:
+				return "SO:0000199";
+			case INVERSION:
+				return "SO:1000036";
+			case INTRAGENIC_VARIANT:
+				return "SO:0002011";
+			case INTRON_VARIANT:
+				return "SO:0001627";
+			case MIRNA:
+				return "SO:0000276";
+			case MISSENSE_VARIANT:
+				return "SO:0001583";
+			case MNV:
+				return "SO:0002007";
+			case NON_CODING_TRANSCRIPT_EXON_VARIANT:
+				return "SO:0001792";
+			case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
+				return "SO:0001970";
+			case NON_CODING_TRANSCRIPT_VARIANT:
+				return "SO:0001619";
+			case RARE_AMINO_ACID_VARIANT:
+				return "SO:0002008";
+			case REGULATORY_REGION_VARIANT:
+				return "SO:0001566";
+			case REGULATORY_REGION_ABLATION:
+				return "SO:0001894";
+			case REGULATORY_REGION_AMPLIFICATION:
+				return "SO:0001891";
+			case SEQUENCE_VARIANT:
+				return "SO:0001060";
+			case SPLICE_ACCEPTOR_VARIANT:
+				return "SO:0001574";
+			case SPLICE_DONOR_VARIANT:
+				return "SO:0001575";
+			case SPLICE_REGION_VARIANT:
+				return "SO:0001630";
+			case SPLICING_VARIANT:
+				return "SO:0001568";
+			case START_LOST:
+				return "SO:0002012";
+			case STOP_GAINED:
+				return "SO:0001587";
+			case STOP_LOST:
+				return "SO:0001578";
+			case STOP_RETAINED_VARIANT:
+				return "SO:0001567";
+			case STRUCTURAL_VARIANT:
+				return "SO:0001537";
+			case SYNONYMOUS_VARIANT:
+				return "SO:0001819";
+			case TFBS_ABLATION:
+				return "SO:0001895";
+			case TFBS_AMPLIFICATION:
+				return "SO:0001892";
+			case TF_BINDING_SITE_VARIANT:
+				return "SO:0001782";
+			case THREE_PRIME_UTR_TRUNCATION:
+				return "SO:0002015";
+			case THREE_PRIME_UTR_EXON_VARIANT:
+				return "SO:0002089";
+			case THREE_PRIME_UTR_INTRON_VARIANT:
+				return "SO:0002090";
+			case TRANSCRIPT_ABLATION:
+				return "SO:0001893";
+			case TRANSCRIPT_AMPLIFICATION:
+				return "SO:0001889";
+			case TRANSCRIPT_VARIANT:
+				return "SO:0001576";
+			case UPSTREAM_GENE_VARIANT:
+				return "SO:0001631";
+			case FRAMESHIFT_VARIANT:
+				return "SO:0001589";
+			case _SMALLEST_HIGH_IMPACT:
+			case _SMALLEST_LOW_IMPACT:
+			case _SMALLEST_MODERATE_IMPACT:
+			default:
+				return null;
 		}
 	}
 
@@ -982,9 +983,9 @@ public enum VariantEffect {
 	 */
 	public boolean isStructural() {
 		return EnumSet
-				.of(STRUCTURAL_VARIANT, TRANSCRIPT_ABLATION, TRANSCRIPT_AMPLIFICATION, REGULATORY_REGION_ABLATION,
-						REGULATORY_REGION_AMPLIFICATION, TFBS_ABLATION, TFBS_AMPLIFICATION, INVERSION, TRANSLOCATION)
-				.contains(this);
+			.of(STRUCTURAL_VARIANT, TRANSCRIPT_ABLATION, TRANSCRIPT_AMPLIFICATION, REGULATORY_REGION_ABLATION,
+				REGULATORY_REGION_AMPLIFICATION, TFBS_ABLATION, TFBS_AMPLIFICATION, INVERSION, TRANSLOCATION)
+			.contains(this);
 	}
 
 	/**
@@ -992,19 +993,19 @@ public enum VariantEffect {
 	 */
 	public boolean isSplicing() {
 		switch (this) {
-		case SPLICING_VARIANT:
-		case SPLICE_ACCEPTOR_VARIANT:
-		case SPLICE_DONOR_VARIANT:
-		case SPLICE_REGION_VARIANT:
-			return true;
-		default:
-			return false;
+			case SPLICING_VARIANT:
+			case SPLICE_ACCEPTOR_VARIANT:
+			case SPLICE_DONOR_VARIANT:
+			case SPLICE_REGION_VARIANT:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	/**
 	 * @return <code>true</code> if equal to {@link #CODING_TRANSCRIPT_INTRON_VARIANT} or
-	 *         {@link #NON_CODING_TRANSCRIPT_INTRON_VARIANT}.
+	 * {@link #NON_CODING_TRANSCRIPT_INTRON_VARIANT}.
 	 */
 	public boolean isIntronic() {
 		return (this == CODING_TRANSCRIPT_INTRON_VARIANT || this == NON_CODING_TRANSCRIPT_INTRON_VARIANT);
@@ -1013,65 +1014,63 @@ public enum VariantEffect {
 	/**
 	 * Variant of <code>isOffExome()</code> that allows to specify whether UTR and non-consensus intronic splice
 	 * variants count as off-exome or not.
-	 *
+	 * <p>
 	 * The parameter-less version counts both as on-exome.
 	 *
-	 * @param isUtrOffExome
-	 *            whether or not UTR exons are considered off-exome (start codon gain is always on-exome)
-	 * @param isIntronicSpliceNonConsensusOffExome
-	 *            whether or not intronic splice (non consensus) is considered off-exome
+	 * @param isUtrOffExome                        whether or not UTR exons are considered off-exome (start codon gain is always on-exome)
+	 * @param isIntronicSpliceNonConsensusOffExome whether or not intronic splice (non consensus) is considered off-exome
 	 * @return <code>true</code> if the variant effect describes off-exome variant.
 	 */
 	public boolean isOffExome(boolean isUtrOffExome, boolean isIntronicSpliceNonConsensusOffExome) {
 		switch (this) {
-		case FIVE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_TRUNCATION:
-		case FIVE_PRIME_UTR_EXON_VARIANT:
-		case THREE_PRIME_UTR_EXON_VARIANT:
-			return isUtrOffExome;
-		case SPLICE_REGION_VARIANT:
-		case SPLICING_VARIANT:
-			return isIntronicSpliceNonConsensusOffExome;
-		case CODING_SEQUENCE_VARIANT:
-		case COMPLEX_SUBSTITUTION:
-		case CUSTOM:
-		case DIRECT_TANDEM_DUPLICATION:
-		case DISRUPTIVE_INFRAME_DELETION:
-		case DISRUPTIVE_INFRAME_INSERTION:
-		case EXON_LOSS_VARIANT:
-		case EXON_VARIANT:
-		case FEATURE_TRUNCATION:
-		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
-		case FRAMESHIFT_ELONGATION:
-		case FRAMESHIFT_TRUNCATION:
-		case FRAMESHIFT_VARIANT:
-		case INFRAME_DELETION:
-		case INFRAME_INSERTION:
-		case INITIATOR_CODON_VARIANT:
-		case INTERNAL_FEATURE_ELONGATION:
-		case MISSENSE_VARIANT:
-		case MNV:
-		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
-		case RARE_AMINO_ACID_VARIANT:
-		case SPLICE_ACCEPTOR_VARIANT:
-		case SPLICE_DONOR_VARIANT:
-		case START_LOST:
-		case STOP_GAINED:
-		case STOP_LOST:
-		case STOP_RETAINED_VARIANT:
-		case STRUCTURAL_VARIANT:
-		case SYNONYMOUS_VARIANT:
-		case TF_BINDING_SITE_VARIANT:
-		case TRANSCRIPT_ABLATION:
-			return false;
-		default:
-			return true;
+			case FIVE_PRIME_UTR_TRUNCATION:
+			case THREE_PRIME_UTR_TRUNCATION:
+			case FIVE_PRIME_UTR_EXON_VARIANT:
+			case THREE_PRIME_UTR_EXON_VARIANT:
+				return isUtrOffExome;
+			case SPLICE_REGION_VARIANT:
+			case SPLICING_VARIANT:
+				return isIntronicSpliceNonConsensusOffExome;
+			case CODING_SEQUENCE_VARIANT:
+			case COMPLEX_SUBSTITUTION:
+			case CUSTOM:
+			case DIRECT_TANDEM_DUPLICATION:
+			case DISRUPTIVE_INFRAME_DELETION:
+			case DISRUPTIVE_INFRAME_INSERTION:
+			case EXON_LOSS_VARIANT:
+			case EXON_VARIANT:
+			case FEATURE_TRUNCATION:
+			case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
+			case FRAMESHIFT_ELONGATION:
+			case FRAMESHIFT_TRUNCATION:
+			case FRAMESHIFT_VARIANT:
+			case INFRAME_DELETION:
+			case INFRAME_INSERTION:
+			case INITIATOR_CODON_VARIANT:
+			case INTERNAL_FEATURE_ELONGATION:
+			case MISSENSE_VARIANT:
+			case MNV:
+			case NON_CODING_TRANSCRIPT_EXON_VARIANT:
+			case RARE_AMINO_ACID_VARIANT:
+			case SPLICE_ACCEPTOR_VARIANT:
+			case SPLICE_DONOR_VARIANT:
+			case START_LOST:
+			case STOP_GAINED:
+			case STOP_LOST:
+			case STOP_RETAINED_VARIANT:
+			case STRUCTURAL_VARIANT:
+			case SYNONYMOUS_VARIANT:
+			case TF_BINDING_SITE_VARIANT:
+			case TRANSCRIPT_ABLATION:
+				return false;
+			default:
+				return true;
 		}
 	}
 
 	/**
 	 * @return <code>true</code> if the variant effect does not indicate a change affecting the exome, {@link #CUSTOM}
-	 *         is considered on-exome, splice variants are on-exome, UTR is off-exome
+	 * is considered on-exome, splice variants are on-exome, UTR is off-exome
 	 * @see #isOffTranscript
 	 */
 	public boolean isOffExome() {
@@ -1080,7 +1079,7 @@ public enum VariantEffect {
 
 	/**
 	 * @return <code>true</code> if the variant effect does not indicate a change affecting a transcript,
-	 *         {@link #CUSTOM} is considered on-transcript
+	 * {@link #CUSTOM} is considered on-transcript
 	 * @see #isOffExome
 	 */
 	public boolean isOffTranscript() {
@@ -1090,15 +1089,15 @@ public enum VariantEffect {
 			return false;
 
 		switch (this) {
-		case CODING_TRANSCRIPT_INTRON_VARIANT:
-		case FIVE_PRIME_UTR_INTRON_VARIANT:
-		case THREE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_INTRON_VARIANT:
-		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
-		case NON_CODING_TRANSCRIPT_VARIANT:
-			return false;
-		default:
-			return true;
+			case CODING_TRANSCRIPT_INTRON_VARIANT:
+			case FIVE_PRIME_UTR_INTRON_VARIANT:
+			case THREE_PRIME_UTR_TRUNCATION:
+			case THREE_PRIME_UTR_INTRON_VARIANT:
+			case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
+			case NON_CODING_TRANSCRIPT_VARIANT:
+				return false;
+			default:
+				return true;
 		}
 	}
 

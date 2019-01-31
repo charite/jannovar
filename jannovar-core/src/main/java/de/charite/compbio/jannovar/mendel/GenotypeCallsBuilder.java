@@ -4,16 +4,22 @@ import java.util.TreeMap;
 
 /**
  * Helper class for building {@link GenotypeCalls} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenotypeCallsBuilder {
 
-	/** Type of the chromosome that the variant lies on */
+	/**
+	 * Type of the chromosome that the variant lies on
+	 */
 	private ChromosomeType chromType;
-	/** Mapping from sample name to {@link Genotype} */
+	/**
+	 * Mapping from sample name to {@link Genotype}
+	 */
 	private TreeMap<String, Genotype> sampleToGenotype;
-	/** A payload object for later easier reidentification */
+	/**
+	 * A payload object for later easier reidentification
+	 */
 	private Object payload;
 
 	public GenotypeCallsBuilder() {

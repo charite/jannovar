@@ -6,16 +6,20 @@ import de.charite.compbio.jannovar.hgvs.Translator;
 
 /**
  * Specification for inserted protein sequence, e.g. deleted or inserted.
- *
+ * <p>
  * This can be either just a count or an amino acid sequence.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinSeqDescription implements ConvertibleToHGVSString {
 
-	/** String of inserted amino acids, null if there are none */
+	/**
+	 * String of inserted amino acids, null if there are none
+	 */
 	private final String aas;
-	/** Length of amino acid string, fallback if {@link #aas} is empty */
+	/**
+	 * Length of amino acid string, fallback if {@link #aas} is empty
+	 */
 	private final int aaCount;
 
 	/**
@@ -42,7 +46,9 @@ public class ProteinSeqDescription implements ConvertibleToHGVSString {
 		this.aaCount = aas.length();
 	}
 
-	/** @return <code>true</code> if the amino acid sequence was specified */
+	/**
+	 * @return <code>true</code> if the amino acid sequence was specified
+	 */
 	public boolean hasAminoAcids() {
 		return this.aas != null;
 	}
@@ -56,12 +62,16 @@ public class ProteinSeqDescription implements ConvertibleToHGVSString {
 		return this.aas;
 	}
 
-	/** @return <code>true</code> if nothing is to be printed. */
+	/**
+	 * @return <code>true</code> if nothing is to be printed.
+	 */
 	public boolean isBlank() {
 		return aaCount == -1;
 	}
 
-	/** @return length of amino acids */
+	/**
+	 * @return length of amino acids
+	 */
 	public int length() {
 		return this.aaCount;
 	}

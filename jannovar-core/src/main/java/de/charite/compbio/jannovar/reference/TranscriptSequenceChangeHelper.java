@@ -10,14 +10,15 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class TranscriptSequenceChangeHelper {
 
-	/** The {@link TranscriptModel} with the sequence and position infos. */
+	/**
+	 * The {@link TranscriptModel} with the sequence and position infos.
+	 */
 	private final TranscriptModel transcript;
 
 	/**
 	 * Construct helper with the given {@link TranscriptModel}
 	 *
-	 * @param transcript
-	 *            with position and sequence information
+	 * @param transcript with position and sequence information
 	 */
 	public TranscriptSequenceChangeHelper(TranscriptModel transcript) {
 		this.transcript = transcript;
@@ -26,22 +27,21 @@ public final class TranscriptSequenceChangeHelper {
 	/**
 	 * Return modified transcript after applying a {@link GenomeVariant}.
 	 *
-	 * @param change
-	 *            {@link GenomeVariant} to apply to the transcript
+	 * @param change {@link GenomeVariant} to apply to the transcript
 	 * @return transcript string with applied {@link GenomeVariant}
 	 */
 	public String getTranscriptWithChange(GenomeVariant change) {
 		change = change.withStrand(transcript.getStrand());
 
 		switch (change.getType()) {
-		case SNV:
-		case INSERTION:
-			return getTranscriptWithPointInRefAffected(change);
-		case DELETION:
-		case BLOCK_SUBSTITUTION:
-			return getTranscriptWithRangeInRefAffected(change);
-		default:
-			throw new Error("Unhandled change type " + change.getType());
+			case SNV:
+			case INSERTION:
+				return getTranscriptWithPointInRefAffected(change);
+			case DELETION:
+			case BLOCK_SUBSTITUTION:
+				return getTranscriptWithRangeInRefAffected(change);
+			default:
+				throw new Error("Unhandled change type " + change.getType());
 		}
 	}
 
@@ -49,7 +49,7 @@ public final class TranscriptSequenceChangeHelper {
 		// Short-circuit in the case of change that does not affect the transcript.
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval())
-				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
+			|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 			return transcript.getSequence(); // non-coding change, does not affect transcript
 
 		// Get transcript position for the change position.
@@ -102,15 +102,13 @@ public final class TranscriptSequenceChangeHelper {
 
 	/**
 	 * Translate {@link GenomePosition} to {@link TranscriptPosition} for {@link #transcript}.
-	 *
+	 * <p>
 	 * Positions upstream of transcript region (TX) are projected to TX begin, positions downstream of TX are projected
 	 * to TX end, positions in introns are projected to first position of the next TX exon.
 	 *
-	 * @param pos
-	 *            the position to translate
+	 * @param pos the position to translate
 	 * @return the corresponding position in the transcript sequence
-	 * @throws ProjectionException
-	 *             in case of problems with the position conversion
+	 * @throws ProjectionException in case of problems with the position conversion
 	 */
 	private TranscriptPosition translateGenomeToTranscriptPosition(GenomePosition pos) throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
@@ -133,26 +131,25 @@ public final class TranscriptSequenceChangeHelper {
 
 	/**
 	 * Similar to {@link #getTranscriptWithChange} but <b>starting</b> at the CDS begin position.
-	 *
+	 * <p>
 	 * We <b>extend</b> the CDS transcript to the right so that the changed protein sequence can be computed for
 	 * frameshift changes.
 	 *
-	 * @param change
-	 *            {@link GenomeVariant} to apply to the CDS region of the transcript
+	 * @param change {@link GenomeVariant} to apply to the CDS region of the transcript
 	 * @return CDS of transcript with applied {@link GenomeVariant}
 	 */
 	public String getCDSWithGenomeVariant(GenomeVariant change) {
 		change = change.withStrand(transcript.getStrand());
 
 		switch (change.getType()) {
-		case SNV:
-		case INSERTION:
-			return getCDSWithPointInRefAffected(change);
-		case DELETION:
-		case BLOCK_SUBSTITUTION:
-			return getCDSWithRangeInRefAffected(change);
-		default:
-			throw new Error("Unhandled change type " + change.getType());
+			case SNV:
+			case INSERTION:
+				return getCDSWithPointInRefAffected(change);
+			case DELETION:
+			case BLOCK_SUBSTITUTION:
+				return getCDSWithRangeInRefAffected(change);
+			default:
+				throw new Error("Unhandled change type " + change.getType());
 		}
 	}
 
@@ -166,13 +163,13 @@ public final class TranscriptSequenceChangeHelper {
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (change.getType() == GenomeVariantType.SNV) {
 			if (!transcript.getCDSRegion().overlapsWith(change.getGenomeInterval())
-					|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
+				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 				return cdsSeq;
 		} else { // insertion
 			// Get change position and the one left of it.
 			GenomePosition lPos = change.getGenomePos().shifted(-1);
 			if (!transcript.getCDSRegion().contains(change.getGenomePos()) || !transcript.getCDSRegion().contains(lPos)
-					|| (!soDecorator.liesInExon(change.getGenomePos()) && !soDecorator.liesInExon(lPos)))
+				|| (!soDecorator.liesInExon(change.getGenomePos()) && !soDecorator.liesInExon(lPos)))
 				return cdsSeq;
 		}
 
@@ -197,7 +194,7 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (!transcript.getCDSRegion().overlapsWith(change.getGenomeInterval())
-				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
+			|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 			return cdsSeq;
 
 		// Get transcript begin and end position.

@@ -1,41 +1,39 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackInputStream;
+import com.google.common.base.Joiner;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import com.google.common.base.Joiner;
-
 /**
  * Generic FASTA parser that allow record-wise loading of FASTA files
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class FASTAParser {
 
-	/** Data is read line by line from this reader */
+	/**
+	 * Data is read line by line from this reader
+	 */
 	private final BufferedReader reader;
 
-	/** A Buffer with the current line, null in the beginning */
+	/**
+	 * A Buffer with the current line, null in the beginning
+	 */
 	private String lastLine = null;
 
-	/** Lines collect for this record so far */
+	/**
+	 * Lines collect for this record so far
+	 */
 	private final List<String> recordBuffer = new ArrayList<>();
 
 	/**
 	 * Initialize with a file, gzip compression is automatically recognized.
-	 * 
-	 * @param file
-	 *            The file to read from
-	 * @throws IOException
-	 *             on I/O problems
+	 *
+	 * @param file The file to read from
+	 * @throws IOException on I/O problems
 	 */
 	public FASTAParser(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -43,11 +41,9 @@ public final class FASTAParser {
 
 	/**
 	 * Initialize from a {@link InputStream}, gzip compression is automatically recognized.
-	 * 
-	 * @param stream
-	 *            {@link InputStream} to read from
-	 * @throws IOException
-	 *             on I/O problems
+	 *
+	 * @param stream {@link InputStream} to read from
+	 * @throws IOException on I/O problems
 	 */
 	public FASTAParser(InputStream stream) throws IOException {
 		this.reader = new BufferedReader(new InputStreamReader(openStream(stream)));
@@ -58,10 +54,9 @@ public final class FASTAParser {
 
 	/**
 	 * Reads next record from the GFF file and return it, <code>null</code> when the file is at its end.
-	 * 
+	 *
 	 * @return GFFRecord or <code>null</code>
-	 * @throws IOException
-	 *             on problems with reading the GFF files
+	 * @throws IOException on problems with reading the GFF files
 	 */
 	public FASTARecord next() throws IOException {
 		if (lastLine == null)
@@ -84,7 +79,9 @@ public final class FASTAParser {
 		return buildRecord();
 	}
 
-	/** Build record from {@link #recordBuffer} */
+	/**
+	 * Build record from {@link #recordBuffer}
+	 */
 	private FASTARecord buildRecord() {
 		if (recordBuffer.isEmpty())
 			return null;
@@ -101,10 +98,9 @@ public final class FASTAParser {
 
 	/**
 	 * Open the {@link InputStream} as a {@link BufferedReader}
-	 * 
+	 *
 	 * @return {@link InputStream}, wrapping a gzip reading stream if <code>stream</code> is gzip compressed
-	 * @throws IOException
-	 *             on I/O problems
+	 * @throws IOException on I/O problems
 	 */
 	private InputStream openStream(InputStream stream) throws IOException {
 		PushbackInputStream pb = new PushbackInputStream(stream, 2);

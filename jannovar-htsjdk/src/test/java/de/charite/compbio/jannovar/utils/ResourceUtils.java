@@ -1,13 +1,8 @@
 package de.charite.compbio.jannovar.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-
 import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 
 /**
  * Helper class with static methods for handling resources in tests
@@ -16,7 +11,9 @@ import org.apache.commons.io.IOUtils;
  */
 public class ResourceUtils {
 
-	/** Helper function for reading resources into memory */
+	/**
+	 * Helper function for reading resources into memory
+	 */
 	public static String readResource(String path) {
 		StringWriter writer = new StringWriter();
 		try {
@@ -32,7 +29,7 @@ public class ResourceUtils {
 	 */
 	public static void copyResourceToFile(String path, File outFile) {
 		try (InputStream input = BuildExampleJannovarDB.class.getResourceAsStream(path);
-				OutputStream os = new FileOutputStream(outFile)) {
+			 OutputStream os = new FileOutputStream(outFile)) {
 			byte[] buffer = new byte[1024];
 			int length;
 			while ((length = input.read(buffer)) > 0) {

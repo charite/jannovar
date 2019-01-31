@@ -6,28 +6,50 @@ import java.util.List;
 
 public class ExacRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String contig;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	private ArrayList<String> filter;
 
-	/** Allele counts for each population */
+	/**
+	 * Allele counts for each population
+	 */
 	private HashMap<ExacPopulation, List<Integer>> alleleCounts;
-	/** Allele het counts for each population */
+	/**
+	 * Allele het counts for each population
+	 */
 	private HashMap<ExacPopulation, List<Integer>> alleleHetCounts;
-	/** Allele hom counts for each population */
+	/**
+	 * Allele hom counts for each population
+	 */
 	private HashMap<ExacPopulation, List<Integer>> alleleHomCounts;
-	/** Allele hemicounts for each population */
+	/**
+	 * Allele hemicounts for each population
+	 */
 	private HashMap<ExacPopulation, List<Integer>> alleleHemiCounts;
-	/** Chromsome counts for each population */
+	/**
+	 * Chromsome counts for each population
+	 */
 	private HashMap<ExacPopulation, Integer> chromCounts;
 
 	ExacRecordBuilder() {
@@ -47,7 +69,7 @@ public class ExacRecordBuilder {
 
 	public ExacRecord build() {
 		return new ExacRecord(contig, pos, id, ref, alt, filter, alleleCounts, alleleHetCounts, alleleHomCounts,
-				alleleHemiCounts, chromCounts);
+			alleleHemiCounts, chromCounts);
 	}
 
 	public String getContig() {
@@ -101,15 +123,15 @@ public class ExacRecordBuilder {
 	public HashMap<ExacPopulation, List<Integer>> getAlleleCounts() {
 		return alleleCounts;
 	}
-	
+
 	public HashMap<ExacPopulation, List<Integer>> getAlleleHetCounts() {
 		return alleleHetCounts;
 	}
-	
+
 	public HashMap<ExacPopulation, List<Integer>> getAlleleHomCounts() {
 		return alleleHomCounts;
 	}
-	
+
 	public HashMap<ExacPopulation, List<Integer>> getAlleleHemiCounts() {
 		return alleleHemiCounts;
 	}
@@ -117,15 +139,15 @@ public class ExacRecordBuilder {
 	public void setAlleleCounts(HashMap<ExacPopulation, List<Integer>> alleleCounts) {
 		this.alleleCounts = alleleCounts;
 	}
-	
+
 	public void setAlleleHetCounts(HashMap<ExacPopulation, List<Integer>> alleleHetCounts) {
 		this.alleleHetCounts = alleleHetCounts;
 	}
-	
+
 	public void setAlleleHomCounts(HashMap<ExacPopulation, List<Integer>> alleleHomCounts) {
 		this.alleleHomCounts = alleleHomCounts;
 	}
-	
+
 	public void setAlleleHemiCounts(HashMap<ExacPopulation, List<Integer>> alleleHemiCounts) {
 		this.alleleHemiCounts = alleleHemiCounts;
 	}
@@ -141,9 +163,9 @@ public class ExacRecordBuilder {
 	@Override
 	public String toString() {
 		return "ExacRecordBuilder [chrom=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", alleleHetCounts=" + alleleHetCounts
-				+ ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts + ", chromCounts="
-				+ chromCounts + "]";
+			+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", alleleHetCounts=" + alleleHetCounts
+			+ ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts + ", chromCounts="
+			+ chromCounts + "]";
 	}
 
 	@Override

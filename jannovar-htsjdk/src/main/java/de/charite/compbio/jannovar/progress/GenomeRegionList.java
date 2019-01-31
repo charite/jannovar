@@ -5,14 +5,18 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * A list of {@link GenomeRegion} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final public class GenomeRegionList {
 
-	/** List of {@link GenomeRegion} objects */
+	/**
+	 * List of {@link GenomeRegion} objects
+	 */
 	ImmutableList<GenomeRegion> genomeRegions;
-	/** Mapping from contig name to {@link GenomeRegion} */
+	/**
+	 * Mapping from contig name to {@link GenomeRegion}
+	 */
 	ImmutableMap<String, GenomeRegion> nameToRegion;
 
 	public GenomeRegionList(Iterable<GenomeRegion> regions) {
@@ -27,14 +31,14 @@ final public class GenomeRegionList {
 		this.genomeRegions = listBuilder.build();
 		this.nameToRegion = mapBuilder.build();
 	}
-	
+
 	/**
 	 * @return Number of bases up to position (contig, pos).
 	 */
 	public long lengthUpTo(String contig, int pos) {
 		if (getGenomeRegion(contig) == null)
 			throw new IllegalArgumentException("Contig " + contig + " not found");
-		
+
 		long result = 0;
 		for (GenomeRegion region : genomeRegions) {
 			if (region.getContig().equals(contig)) {
@@ -46,11 +50,11 @@ final public class GenomeRegionList {
 		}
 		return result;
 	}
-	
+
 	public long totalLength() {
 		return this.genomeRegions.stream().mapToLong(r -> r.length()).sum();
 	}
-	
+
 	public GenomeRegion getGenomeRegion(String name) {
 		return this.nameToRegion.getOrDefault(name, null);
 	}

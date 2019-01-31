@@ -1,11 +1,10 @@
 package de.charite.compbio.jannovar.cmd;
 
+import de.charite.compbio.jannovar.JannovarException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
-
-import de.charite.compbio.jannovar.JannovarException;
 
 /**
  * Super class for all commands, i.e. the classes implementing one Jannovar execution step.
@@ -34,8 +33,7 @@ public abstract class JannovarCommand {
 	/**
 	 * Function for the execution of the command.
 	 *
-	 * @throws JannovarException
-	 *             on problems executing the command.
+	 * @throws JannovarException on problems executing the command.
 	 */
 	public abstract void run() throws JannovarException;
 

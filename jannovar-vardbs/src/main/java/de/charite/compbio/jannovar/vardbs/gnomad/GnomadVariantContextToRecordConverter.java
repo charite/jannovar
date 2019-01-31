@@ -1,18 +1,17 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link GnomadRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class GnomadVariantContextToRecordConverter implements VariantContextToRecordConverter<GnomadRecord> {
@@ -42,7 +41,7 @@ final class GnomadVariantContextToRecordConverter implements VariantContextToRec
 			if (pop == GnomadPopulation.POPMAX) {
 				final List<String> lst = vc.getAttributeAsStringList("AN_POPMAX", ".");
 				builder.getChromCounts().put(pop, ImmutableList.copyOf(
-						lst.stream().map(s -> ".".equals(s) ? 0 : Integer.parseInt(s)).collect(Collectors.toList())));
+					lst.stream().map(s -> ".".equals(s) ? 0 : Integer.parseInt(s)).collect(Collectors.toList())));
 			} else {
 				int an = vc.getAttributeAsInt("AN_" + pop, 0);
 				builder.getChromCounts().put(pop, ImmutableList.of(an));
@@ -69,7 +68,7 @@ final class GnomadVariantContextToRecordConverter implements VariantContextToRec
 
 			// AC
 			List<Integer> acLst = vc.getAttributeAsList("AC_" + pop).stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!acLst.isEmpty()) {
 				builder.getAlleleCounts().put(pop, acLst);
 				if (pop != GnomadPopulation.POPMAX)
@@ -79,7 +78,7 @@ final class GnomadVariantContextToRecordConverter implements VariantContextToRec
 
 			// Hom
 			List<Integer> homLst = vc.getAttributeAsList("Hom_" + pop).stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!homLst.isEmpty()) {
 				builder.getAlleleHomCounts().put(pop, homLst);
 				if (pop != GnomadPopulation.POPMAX)
@@ -89,7 +88,7 @@ final class GnomadVariantContextToRecordConverter implements VariantContextToRec
 
 			// Hemi
 			List<Integer> hemiLst = vc.getAttributeAsList("Hemi_" + pop).stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!hemiLst.isEmpty()) {
 				builder.getAlleleHemiCounts().put(pop, hemiLst);
 				if (pop != GnomadPopulation.POPMAX)

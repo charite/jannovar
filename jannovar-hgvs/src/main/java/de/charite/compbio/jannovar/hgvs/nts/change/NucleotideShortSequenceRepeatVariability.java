@@ -1,27 +1,36 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 
 public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 
-	/** range in the Nucleotide that has variable length */
+	/**
+	 * range in the Nucleotide that has variable length
+	 */
 	private final NucleotideRange range;
-	/** lower bound on length, inclusive */
+	/**
+	 * lower bound on length, inclusive
+	 */
 	private final int minCount;
-	/** upper bound on length, inclusive */
+	/**
+	 * upper bound on length, inclusive
+	 */
 	private final int maxCount;
 
-	/** Factory forwards to {@link #NucleotideShortSequenceRepeatVariability(boolean, NucleotideRange, int, int)}. */
+	/**
+	 * Factory forwards to {@link #NucleotideShortSequenceRepeatVariability(boolean, NucleotideRange, int, int)}.
+	 */
 	public static NucleotideShortSequenceRepeatVariability build(boolean onlyPredicted, NucleotideRange range,
-			int minCount, int maxCount) {
+																 int minCount, int maxCount) {
 		return new NucleotideShortSequenceRepeatVariability(onlyPredicted, range, minCount, maxCount);
 	}
 
-	/** Construct with the given values */
+	/**
+	 * Construct with the given values
+	 */
 	public NucleotideShortSequenceRepeatVariability(boolean onlyPredicted, NucleotideRange range, int minCount,
-			int maxCount) {
+													int maxCount) {
 		super(onlyPredicted);
 		this.range = range;
 		this.minCount = minCount;
@@ -33,17 +42,23 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 		return new NucleotideShortSequenceRepeatVariability(flag, range, minCount, maxCount);
 	}
 
-	/** @return range of repeat */
+	/**
+	 * @return range of repeat
+	 */
 	public NucleotideRange getRange() {
 		return range;
 	}
 
-	/** @return lower bound on count, inclusive */
+	/**
+	 * @return lower bound on count, inclusive
+	 */
 	public int getMinCount() {
 		return minCount;
 	}
 
-	/** @return upper bound on count, inclusive */
+	/**
+	 * @return upper bound on count, inclusive
+	 */
 	public int getMaxCount() {
 		return maxCount;
 	}
@@ -56,7 +71,7 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 	@Override
 	public String toString() {
 		return "NucleotideShortSequenceRepeatVariability [range=" + range + ", minCount=" + minCount + ", maxCount="
-				+ maxCount + "]";
+			+ maxCount + "]";
 	}
 
 	@Override

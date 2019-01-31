@@ -19,8 +19,7 @@ public interface ConvertibleToHGVSString {
 	/**
 	 * Return HGVS representation using the given amino acid code.
 	 *
-	 * @param code
-	 *            {@link AminoAcidCode} to use
+	 * @param code {@link AminoAcidCode} to use
 	 * @return HGVS representation, e.g. "133L" for an {@link ProteinPointLocation}
 	 */
 	public String toHGVSString(AminoAcidCode code);

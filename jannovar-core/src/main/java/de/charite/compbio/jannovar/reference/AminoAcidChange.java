@@ -11,14 +11,22 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class AminoAcidChange {
 
-	/** 0-based position of the change */
+	/**
+	 * 0-based position of the change
+	 */
 	private final int pos;
-	/** reference amino acid string */
+	/**
+	 * reference amino acid string
+	 */
 	private final String ref;
-	/** alternative amino acid string */
+	/**
+	 * alternative amino acid string
+	 */
 	private final String alt;
 
-	/** Construct object with given values. */
+	/**
+	 * Construct object with given values.
+	 */
 	public AminoAcidChange(int pos, String ref, String alt) {
 		super();
 		this.pos = pos;
@@ -26,24 +34,30 @@ public final class AminoAcidChange {
 		this.alt = alt;
 	}
 
-	/** @return 0-based position of the change */
+	/**
+	 * @return 0-based position of the change
+	 */
 	public int getPos() {
 		return pos;
 	}
 
-	/** @return reference amino acid string */
+	/**
+	 * @return reference amino acid string
+	 */
 	public String getRef() {
 		return ref;
 	}
 
-	/** @return alternative amino acid string */
+	/**
+	 * @return alternative amino acid string
+	 */
 	public String getAlt() {
 		return alt;
 	}
 
 	/**
 	 * @return 0-based position of last changed base in reference, computed from {@link #getPos} and the length of
-	 *         {@link #getRef}.
+	 * {@link #getRef}.
 	 */
 	public int getLastPos() {
 		return pos + ref.length() - 1;

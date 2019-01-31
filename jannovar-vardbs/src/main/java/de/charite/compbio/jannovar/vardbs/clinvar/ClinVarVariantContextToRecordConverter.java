@@ -1,20 +1,19 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
+import htsjdk.variant.variantcontext.Allele;
+import htsjdk.variant.variantcontext.VariantContext;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
-import htsjdk.variant.variantcontext.Allele;
-import htsjdk.variant.variantcontext.VariantContext;
-
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link ClinVarRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class ClinVarVariantContextToRecordConverter implements VariantContextToRecordConverter<ClinVarRecord> {
@@ -84,7 +83,7 @@ final class ClinVarVariantContextToRecordConverter implements VariantContextToRe
 			ArrayList<String> clnDiseaseDbList = Lists.newArrayList(((String) clnDiseaseDb.get(idx)).split("\\|"));
 			ArrayList<String> clnDiseaseDbIdList = Lists.newArrayList(((String) clnDiseaseDbId.get(idx)).split("\\|"));
 			ArrayList<String> clnDiseaseDbNameList = Lists
-					.newArrayList(((String) clnDiseaseDbName.get(idx)).split("\\|"));
+				.newArrayList(((String) clnDiseaseDbName.get(idx)).split("\\|"));
 			ArrayList<String> clnRevStatList = Lists.newArrayList(((String) clnRevStat.get(idx)).split("\\|"));
 			ArrayList<String> clnAccessionList = Lists.newArrayList(((String) clnAccession.get(idx)).split("\\|"));
 
@@ -112,15 +111,15 @@ final class ClinVarVariantContextToRecordConverter implements VariantContextToRe
 			// Construct variant disease information
 			List<ClinVarDiseaseInfo> diseaseInfos = new ArrayList<>();
 			int numDiseaseAlleles = Collections
-					.max(ImmutableList.of(clnSigList.size(), clnDiseaseDbList.size(), clnDiseaseDbIdList.size(),
-							clnDiseaseDbNameList.size(), clnRevStatList.size(), clnAccessionList.size()));
+				.max(ImmutableList.of(clnSigList.size(), clnDiseaseDbList.size(), clnDiseaseDbIdList.size(),
+					clnDiseaseDbNameList.size(), clnRevStatList.size(), clnAccessionList.size()));
 			for (int i = 0; i < numDiseaseAlleles; ++i)
 				diseaseInfos.add(new ClinVarDiseaseInfo(
-						ClinVarSignificance.fromInteger(Integer.parseInt(getFromList(clnSigList, i, "255"))),
-						getFromList(clnDiseaseDbList, i, ""), getFromList(clnDiseaseDbIdList, i, ""),
-						getFromList(clnDiseaseDbNameList, i, ""),
-						ClinVarRevisionStatus.fromString(getFromList(clnRevStatList, i, "no_assertion")),
-						getFromList(clnAccessionList, i, "")));
+					ClinVarSignificance.fromInteger(Integer.parseInt(getFromList(clnSigList, i, "255"))),
+					getFromList(clnDiseaseDbList, i, ""), getFromList(clnDiseaseDbIdList, i, ""),
+					getFromList(clnDiseaseDbNameList, i, ""),
+					ClinVarRevisionStatus.fromString(getFromList(clnRevStatList, i, "no_assertion")),
+					getFromList(clnAccessionList, i, "")));
 			annoBuilder.setDiseaseInfos(diseaseInfos);
 		}
 

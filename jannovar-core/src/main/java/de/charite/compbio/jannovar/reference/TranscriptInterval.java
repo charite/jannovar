@@ -11,52 +11,74 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class TranscriptInterval {
 
-	/** the transcript that this position is relative to */
+	/**
+	 * the transcript that this position is relative to
+	 */
 	private final TranscriptModel transcript;
-	/** the begin position within the transcript */
+	/**
+	 * the begin position within the transcript
+	 */
 	private final int beginPos;
-	/** the end position within the transcript */
+	/**
+	 * the end position within the transcript
+	 */
 	private final int endPos;
 
-	/** construct transcript interval with one-based coordinate system */
+	/**
+	 * construct transcript interval with one-based coordinate system
+	 */
 	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos) {
 		this(transcript, beginPos, endPos, PositionType.ZERO_BASED);
 	}
 
-	/** construct transcript interval with selected coordinate system */
+	/**
+	 * construct transcript interval with selected coordinate system
+	 */
 	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
 		this.transcript = transcript;
 		this.beginPos = beginPos + ((positionType == PositionType.ONE_BASED) ? -1 : 0);
 		this.endPos = endPos;
 	}
 
-	/** @return transcript that this position is relative to */
+	/**
+	 * @return transcript that this position is relative to
+	 */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 
-	/** @return zero-based begin position */
+	/**
+	 * @return zero-based begin position
+	 */
 	public int getBeginPos() {
 		return beginPos;
 	}
 
-	/** @return zero-based end position */
+	/**
+	 * @return zero-based end position
+	 */
 	public int getEndPos() {
 		return endPos;
 	}
 
-	/** @return length of the interval */
+	/**
+	 * @return length of the interval
+	 */
 	public int length() {
 		return this.endPos - this.beginPos;
 	}
 
-	/** @return begin position of the interval */
+	/**
+	 * @return begin position of the interval
+	 */
 	public TranscriptPosition getTranscriptBeginPos() {
 		// TODO(holtgrem): test me!
 		return new TranscriptPosition(transcript, beginPos, PositionType.ZERO_BASED);
 	}
 
-	/** @return end position of the interval */
+	/**
+	 * @return end position of the interval
+	 */
 	public TranscriptPosition getTranscriptEndPos() {
 		// TODO(holtgrem): test me!
 		return new TranscriptPosition(transcript, endPos, PositionType.ZERO_BASED);

@@ -11,17 +11,25 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class CDSPosition {
 
-	/** the transcript that this position is relative to */
+	/**
+	 * the transcript that this position is relative to
+	 */
 	private final TranscriptModel transcript;
-	/** the position within the transcript */
+	/**
+	 * the position within the transcript
+	 */
 	private final int pos;
 
-	/** construct transcript position with one-based coordinate system */
+	/**
+	 * construct transcript position with one-based coordinate system
+	 */
 	public CDSPosition(TranscriptModel transcript, int pos) {
 		this(transcript, pos, PositionType.ZERO_BASED);
 	}
 
-	/** construct transcript position with selected coordinate system */
+	/**
+	 * construct transcript position with selected coordinate system
+	 */
 	public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
 		this.transcript = transcript;
 		if (positionType == PositionType.ONE_BASED)
@@ -30,12 +38,16 @@ public final class CDSPosition {
 			this.pos = pos;
 	}
 
-	/** @return the transcript that this position is relative to */
+	/**
+	 * @return the transcript that this position is relative to
+	 */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 
-	/** @return the position within the transcript */
+	/**
+	 * @return the position within the transcript
+	 */
 	public int getPos() {
 		return pos;
 	}
@@ -43,8 +55,7 @@ public final class CDSPosition {
 	/**
 	 * Return shifted CDSPosition.
 	 *
-	 * @param delta
-	 *            the value to add to the position
+	 * @param delta the value to add to the position
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public CDSPosition shifted(int delta) {

@@ -1,16 +1,16 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
+import htsjdk.samtools.reference.IndexedFastaSequenceFile;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-
 /**
  * Helper class for normalizing two variants
- *
+ * <p>
  * This is necessary for indel realignment. More information can be found in the
  * <a href="http://genome.sph.umich.edu/wiki/Variant_Normalization">vt documentation</a> and in the following paper:
- *
+ * <p>
  * Tan, Adrian, Gonçalo R. Abecasis, and Hyun Min Kang. "Unified representation of genetic variants." Bioinformatics
  * (2015): btv112.
  *
@@ -18,18 +18,20 @@ import htsjdk.samtools.reference.IndexedFastaSequenceFile;
  */
 public final class VariantNormalizer {
 
-	/** Path to indexed FASTA path to use */
+	/**
+	 * Path to indexed FASTA path to use
+	 */
 	final String fastaPath;
-	/** Random access in FASTA files using FAI */
+	/**
+	 * Random access in FASTA files using FAI
+	 */
 	final IndexedFastaSequenceFile fai;
 
 	/**
 	 * Construct new variant normalizer object
 	 *
-	 * @param fastaPath
-	 *            Path to indexed FASTA file
-	 * @throws JannovarVarDBException
-	 *             On problems with opening the FASTA/FAI file
+	 * @param fastaPath Path to indexed FASTA file
+	 * @throws JannovarVarDBException On problems with opening the FASTA/FAI file
 	 */
 	public VariantNormalizer(String fastaPath) throws JannovarVarDBException {
 		this.fastaPath = fastaPath;
@@ -42,7 +44,7 @@ public final class VariantNormalizer {
 
 	/**
 	 * Normalize a variant given as a start coordinate, reference, and variant sequence
-	 *
+	 * <p>
 	 * The chromosome is given by its name, position is an 0-based integer, reference and variant are given as sequence.
 	 */
 	public VariantDescription normalizeVariant(VariantDescription desc) {
@@ -52,9 +54,9 @@ public final class VariantNormalizer {
 
 	/**
 	 * Normalize a variant given as a start coordinate, reference, and variant sequence
-	 *
+	 * <p>
 	 * However, leave the leftmost base intact in the case so insertions have a REF base.
-	 *
+	 * <p>
 	 * The chromosome is given by its name, position is an 0-based integer, reference and variant are given as sequence.
 	 */
 	public VariantDescription normalizeInsertion(VariantDescription desc) {

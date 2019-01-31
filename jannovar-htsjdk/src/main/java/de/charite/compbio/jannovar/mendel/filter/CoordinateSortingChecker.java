@@ -1,32 +1,40 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
-import java.util.HashSet;
-
 import htsjdk.variant.variantcontext.VariantContext;
+
+import java.util.HashSet;
 
 /**
  * Check that the VCF file is sorted by coordinate
- *
+ * <p>
  * Since VCF files do not have to provide a reference name dictionary in their header, validating the sort order of the
  * chromosomes is tricky. Instead, we check that there is no run of VCF records for a chromosome, something on a
  * different chromsome, and then a previous one again. Within one chromosome, we check by change begin position.
- *
+ * <p>
  * In case of problems, {@link #put} throws a {@link VariantContextFilterException}.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class CoordinateSortingChecker implements VariantContextProcessor {
 
-	/** Next pipeline step */
+	/**
+	 * Next pipeline step
+	 */
 	VariantContextProcessor sink;
 
-	/** set of seen chromosome names */
+	/**
+	 * set of seen chromosome names
+	 */
 	final private HashSet<String> seenChromosomes = new HashSet<String>();
 
-	/** previously seen variant context */
+	/**
+	 * previously seen variant context
+	 */
 	private VariantContext prevVC = null;
 
-	/** Initialize the checker */
+	/**
+	 * Initialize the checker
+	 */
 	public CoordinateSortingChecker(VariantContextProcessor sink) {
 		this.sink = sink;
 	}

@@ -1,11 +1,6 @@
 package de.charite.compbio.jannovar.pedigree;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 // TODO(holtgrem): Test me!
 
@@ -16,7 +11,9 @@ import java.io.PrintWriter;
  */
 public final class PedFileWriter {
 
-	/** the file to write to */
+	/**
+	 * the file to write to
+	 */
 	private final File file;
 
 	public PedFileWriter(File file) {
@@ -26,10 +23,8 @@ public final class PedFileWriter {
 	/**
 	 * Write out the {@link PedFileContents} object to the output.
 	 *
-	 * @param contents
-	 *            the PED file contents to write out
-	 * @throws IOException
-	 *             on failures during writing
+	 * @param contents the PED file contents to write out
+	 * @throws IOException on failures during writing
 	 */
 	public void write(PedFileContents contents) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
@@ -42,12 +37,9 @@ public final class PedFileWriter {
 	/**
 	 * Static method for writing a {@link PedFileContents} file to a {@link OutputStream}.
 	 *
-	 * @param contents
-	 *            {@link PedFileContents} to write
-	 * @param stream
-	 *            destination stream
-	 * @throws IOException
-	 *             on failures during writing
+	 * @param contents {@link PedFileContents} to write
+	 * @param stream   destination stream
+	 * @throws IOException on failures during writing
 	 */
 	public static void write(PedFileContents contents, OutputStream stream) throws IOException {
 		PrintWriter out = new PrintWriter(stream);

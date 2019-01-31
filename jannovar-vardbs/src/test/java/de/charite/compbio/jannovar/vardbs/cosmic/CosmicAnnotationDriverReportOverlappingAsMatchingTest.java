@@ -1,21 +1,19 @@
 package de.charite.compbio.jannovar.vardbs.cosmic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFHeader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFHeader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with COSMIC reporting overlaps as matches
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends CosmicAnnotationDriverBaseTest {
@@ -74,7 +72,7 @@ public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends Cosmi
 
 		Assert.assertEquals("34", annotated.getAttributeAsString("CNT", null));
 		Assert.assertEquals("[COSM814119, COSM814119, COSM814119]",
-				annotated.getAttributeAsString("IDS", null));
+			annotated.getAttributeAsString("IDS", null));
 		Assert.assertEquals("true", annotated.getAttributeAsString("SNP", "false"));
 	}
 

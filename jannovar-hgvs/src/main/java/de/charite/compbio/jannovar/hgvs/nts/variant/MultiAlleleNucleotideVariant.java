@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.hgvs.nts.variant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.SequenceType;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Nucleotide variant having multiple alleles.
@@ -15,14 +14,16 @@ import de.charite.compbio.jannovar.hgvs.SequenceType;
  */
 public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 
-	/** alleles */
+	/**
+	 * alleles
+	 */
 	protected final ImmutableList<NucleotideChangeAllele> alleles;
 
 	/**
 	 * @return single-allele nucleotide variant for the given changes
 	 */
 	public static MultiAlleleNucleotideVariant build(SequenceType seqType, String seqID,
-			NucleotideChangeAllele... alleles) {
+													 NucleotideChangeAllele... alleles) {
 		return new MultiAlleleNucleotideVariant(seqType, seqID, ImmutableList.copyOf(alleles));
 	}
 
@@ -31,7 +32,7 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 	 * collection of {@link NucleotideChangeAllele}s.
 	 */
 	public MultiAlleleNucleotideVariant(SequenceType seqType, String refID, String proteinID, int transcriptVersion,
-			Collection<NucleotideChangeAllele> alleles) {
+										Collection<NucleotideChangeAllele> alleles) {
 		super(seqType, refID, proteinID, transcriptVersion);
 		this.alleles = ImmutableList.copyOf(alleles);
 	}
@@ -45,7 +46,9 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 		this.alleles = ImmutableList.copyOf(alleles);
 	}
 
-	/** @return the alleles */
+	/**
+	 * @return the alleles
+	 */
 	public ImmutableList<NucleotideChangeAllele> getAlleles() {
 		return alleles;
 	}

@@ -1,79 +1,114 @@
 package de.charite.compbio.jannovar.hgnc;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.Immutable;
+
+import java.util.Collection;
 
 // TODO(holtgrewe): better documentation
 
 /**
  * Representation of the relevant entries from one record from the <tt>hgnc_complete_set.txt</tt> file.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class HGNCRecord {
 
-	/** Official HGNC ID */
+	/**
+	 * Official HGNC ID
+	 */
 	private final String hgncID;
 
-	/** HGNC-approved HUGO symbol */
+	/**
+	 * HGNC-approved HUGO symbol
+	 */
 	private final String symbol;
 
-	/** HGNC name */
+	/**
+	 * HGNC name
+	 */
 	private final String name;
 
-	/** HGNC-approved aliases */
+	/**
+	 * HGNC-approved aliases
+	 */
 	private final ImmutableList<String> aliasSymbols;
 
-	/** Previous symbols */
+	/**
+	 * Previous symbols
+	 */
 	private final ImmutableList<String> prevSymbol;
 
-	/** Entrez ID for gene */
+	/**
+	 * Entrez ID for gene
+	 */
 	private final String entrezID;
 
-	/** Ensemble gene ID */
+	/**
+	 * Ensemble gene ID
+	 */
 	private final String ensemblGeneID;
 
-	/** VEGA gene ID */
+	/**
+	 * VEGA gene ID
+	 */
 	private final String vegaID;
 
-	/** UCSC gene ID */
+	/**
+	 * UCSC gene ID
+	 */
 	private final String ucscID;
 
-	/** ENA gene ID */
+	/**
+	 * ENA gene ID
+	 */
 	private final String enaID;
 
-	/** RefSeq accession */
+	/**
+	 * RefSeq accession
+	 */
 	private final String refseqAccession;
 
-	/** CCDS IDs */
+	/**
+	 * CCDS IDs
+	 */
 	private final ImmutableList<String> ccdsIDs;
 
-	/** Uniprot IDs */
+	/**
+	 * Uniprot IDs
+	 */
 	private final ImmutableList<String> uniprotIDs;
 
-	/** PubMed IDs */
+	/**
+	 * PubMed IDs
+	 */
 	private final ImmutableList<String> pubmedIDs;
 
-	/** Mouse Genome Database ID */
+	/**
+	 * Mouse Genome Database ID
+	 */
 	private final String mgdID;
 
-	/** Rat Genome Database ID */
+	/**
+	 * Rat Genome Database ID
+	 */
 	private final String rgdID;
 
-	/** COSMIC gene ID */
+	/**
+	 * COSMIC gene ID
+	 */
 	private final String cosmicID;
 
-	/** OMIM gene ID */
+	/**
+	 * OMIM gene ID
+	 */
 	private final String omimID;
 
 	public HGNCRecord(String hgncID, String symbol, String name, Collection<String> aliasSymbols,
-			Collection<String> prevSymbol, String entrezID, String ensemblGeneID, String vegaID, String ucscID,
-			String enaID, String refseqAccession, Collection<String> ccdsIDs, Collection<String> uniprotIDs,
-			Collection<String> pubmedIDs, String mgdID, String rgdID, String cosmicID, String omimID) {
+					  Collection<String> prevSymbol, String entrezID, String ensemblGeneID, String vegaID, String ucscID,
+					  String enaID, String refseqAccession, Collection<String> ccdsIDs, Collection<String> uniprotIDs,
+					  Collection<String> pubmedIDs, String mgdID, String rgdID, String cosmicID, String omimID) {
 		super();
 		this.hgncID = hgncID;
 		this.symbol = symbol;
@@ -170,11 +205,11 @@ public class HGNCRecord {
 	@Override
 	public String toString() {
 		return "HGNCRecord [hgncID=" + hgncID + ", symbol=" + symbol + ", name=" + name + ", aliasSymbols="
-				+ aliasSymbols + ", prevSymbol=" + prevSymbol + ", entrezID=" + entrezID + ", ensemblGeneID="
-				+ ensemblGeneID + ", vegaID=" + vegaID + ", ucscID=" + ucscID + ", enaID=" + enaID
-				+ ", refseqAccession=" + refseqAccession + ", ccdsIDs=" + ccdsIDs + ", uniprotIDs=" + uniprotIDs
-				+ ", pubmedIDs=" + pubmedIDs + ", mgdID=" + mgdID + ", rgdID=" + rgdID + ", cosmicID=" + cosmicID
-				+ ", omimID=" + omimID + "]";
+			+ aliasSymbols + ", prevSymbol=" + prevSymbol + ", entrezID=" + entrezID + ", ensemblGeneID="
+			+ ensemblGeneID + ", vegaID=" + vegaID + ", ucscID=" + ucscID + ", enaID=" + enaID
+			+ ", refseqAccession=" + refseqAccession + ", ccdsIDs=" + ccdsIDs + ", uniprotIDs=" + uniprotIDs
+			+ ", pubmedIDs=" + pubmedIDs + ", mgdID=" + mgdID + ", rgdID=" + rgdID + ", cosmicID=" + cosmicID
+			+ ", omimID=" + omimID + "]";
 	}
 
 	@Override

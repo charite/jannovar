@@ -4,6 +4,7 @@ import de.charite.compbio.jannovar.filter.impl.gt.GenotypeFilterAnnotator;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
+
 import java.util.ArrayList;
 
 /**
@@ -14,10 +15,14 @@ import java.util.ArrayList;
  */
 public class GenotypeThresholdFilterAnnotator {
 
-	/** Configuration for the threshold-based filter */
+	/**
+	 * Configuration for the threshold-based filter
+	 */
 	private final ThresholdFilterOptions options;
 
-	/** Helper for genotype-wide application of filters */
+	/**
+	 * Helper for genotype-wide application of filters
+	 */
 	private final GenotypeFilterAnnotator gtAnnotator;
 
 	public GenotypeThresholdFilterAnnotator(ThresholdFilterOptions options) {
@@ -39,9 +44,9 @@ public class GenotypeThresholdFilterAnnotator {
 
 	/**
 	 * Annotate genotypes individually in <code>vc</code>
-	 * 
+	 *
 	 * @param builder the {@link VariantContextBuilder} used for building variant
-	 * @param vc {@link VariantContext} to annotate
+	 * @param vc      {@link VariantContext} to annotate
 	 */
 	private void annotateGenotypes(VariantContextBuilder builder, VariantContext vc) {
 		ArrayList<Genotype> gts = new ArrayList<>();

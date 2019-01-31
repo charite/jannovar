@@ -9,7 +9,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending {@link VCFHeader}s for ExAC annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ExacVCFHeaderExtender extends VCFHeaderExtender {
@@ -53,21 +53,27 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		}
 	}
 
-	/** Add header for highest allele frequency */
+	/**
+	 * Add header for highest allele frequency
+	 */
 	private void addBestAFHeader(VCFHeader header, String prefix, String idInfix, String noteInfix) {
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AF_POPMAX", VCFHeaderLineCount.A,
-				VCFHeaderLineType.Float, "Highest allele frequency seen in any population" + noteInfix);
+			VCFHeaderLineType.Float, "Highest allele frequency seen in any population" + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header for allele count with highest frequency */
+	/**
+	 * Add header for allele count with highest frequency
+	 */
 	private void addBestACHeader(VCFHeader header, String prefix, String idInfix, String noteInfix) {
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AC_POPMAX", VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Allele count for population with highest frequency" + noteInfix);
+			VCFHeaderLineType.Integer, "Allele count for population with highest frequency" + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with allele frequency */
+	/**
+	 * Add header with allele frequency
+	 */
 	private void addAFHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		String popName;
 		if (pop == ExacPopulation.ALL)
@@ -75,11 +81,13 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AF_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Float, "Frequency observed in ExAC data set in " + popName + noteInfix);
+			VCFHeaderLineType.Float, "Frequency observed in ExAC data set in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with chromosome count */
+	/**
+	 * Add header with chromosome count
+	 */
 	private void addANHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		// TODO: change counts to 1 for AN?
 		String popName;
@@ -88,11 +96,13 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AN_" + pop, 1, VCFHeaderLineType.Integer,
-				"Overall number of positions/chromosomes with coverage in " + popName + noteInfix);
+			"Overall number of positions/chromosomes with coverage in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with allele counts */
+	/**
+	 * Add header with allele counts
+	 */
 	private void addACHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		String popName;
 		if (pop == ExacPopulation.ALL)
@@ -100,11 +110,13 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AC_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
-	
-	/** Add header with het allele counts */
+
+	/**
+	 * Add header with het allele counts
+	 */
 	private void addACHetHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		String popName;
 		if (pop != ExacPopulation.ALL)
@@ -112,11 +124,13 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HET_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed heterozygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed heterozygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
-	
-	/** Add header with hom allele counts */
+
+	/**
+	 * Add header with hom allele counts
+	 */
 	private void addACHomHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		String popName;
 		if (pop == ExacPopulation.ALL)
@@ -124,11 +138,13 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HOM_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed homozygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed homozygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
-	
-	/** Add header with hemi allele counts */
+
+	/**
+	 * Add header with hemi allele counts
+	 */
 	private void addACHemiHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
 		String popName;
 		if (pop == ExacPopulation.ALL)
@@ -136,7 +152,7 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HEMI_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed hemizygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed hemizygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 

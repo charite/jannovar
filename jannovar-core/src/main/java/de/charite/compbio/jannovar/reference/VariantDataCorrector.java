@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.reference;
 
 /**
  * Converts a triple (ref string, alt string, position) into the internal Jannovar represetation.
- *
+ * <p>
  * The longest prefix of ref and alt is removed and position is incremented by the number of removed characters.
- *
+ * <p>
  * This is used in the constructor {@link GenomeVariant} so there is no need for using this class directly when the
  * change is converted into a {@link GenomeVariant} before processing. This class has package-visibility only because its
  * members are visible to the outside. Rather construct a {@link GenomeVariant} and use this immutable class.
@@ -13,14 +13,22 @@ package de.charite.compbio.jannovar.reference;
  */
 final class VariantDataCorrector {
 
-	/** The reference characters after correction. */
+	/**
+	 * The reference characters after correction.
+	 */
 	String ref;
-	/** The alt bases after correction. */
+	/**
+	 * The alt bases after correction.
+	 */
 	String alt;
-	/** The position after correction. */
+	/**
+	 * The position after correction.
+	 */
 	int position;
 
-	/** Initialize from triple and immediately correct. */
+	/**
+	 * Initialize from triple and immediately correct.
+	 */
 	public VariantDataCorrector(String ref, String alt, int position) {
 		this.ref = ref;
 		this.alt = alt;

@@ -1,24 +1,22 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
-import static org.junit.Assert.*;
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFFileReader;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collection;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.utils.ResourceUtils;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for the matching of alleles
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class AlleleMatcherTest {
@@ -49,7 +47,7 @@ public class AlleleMatcherTest {
 
 		// Header of VCF file
 		String vcfHeader = "##fileformat=VCFv4.0\n"
-				+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
+			+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
 
 		vcfSingle = tmpDir + "/query_single.vcf";
 		try (PrintWriter writer = new PrintWriter(vcfSingle)) {

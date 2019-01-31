@@ -13,188 +13,152 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Factory for generating {@link DBVariantContextAnnotator} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBVariantContextAnnotatorFactory {
 
 	/**
 	 * Construct dbSNP {@link VariantContext} annotator factory.
-	 * 
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed dbSNP file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotaiton
+	 *
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed dbSNP file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotaiton
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructDBSNP(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+													DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new DBSNPAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new DBSNPAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct ExAC {@link VariantContext} annotator factory.
-	 * 
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed ExAC file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 *
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed ExAC file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructExac(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+												   DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new ExacAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new ExacAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct gnomAD {@link VariantContext} annotator factory.
-	 * 
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed gnomAD file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 *
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed gnomAD file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructGnomad(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+													 DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new GnomadAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new GnomadAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct thousand genomes {@link VariantContext} annotator factory.
-	 * 
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed thousand genomes file to use
-	 *            for the annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 *
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed thousand genomes file to use
+	 *                     for the annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructThousandGenomes(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+															  DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new ThousandGenomesAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new ThousandGenomesAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct UK10K {@link VariantContext} annotator factory.
-	 * 
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed UK10K file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 *
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed UK10K file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructUK10K(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+													DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct ClinVar {@link VariantContext} annotator factory.
 	 *
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed ClinVar file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed ClinVar file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructClinVar(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+													  DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new ClinVarAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new ClinVarAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct Cosmic {@link VariantContext} annotator factory.
 	 *
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed Cosmic file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed Cosmic file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructCosmic(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+													 DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct TSV {@link VariantContext} annotator factory.
 	 *
-	 * @param tsvPath
-	 *            Path to the bgzip-ed TSV annotation file, e.g., dbNSFP or CADD
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 * @param tsvPath      Path to the bgzip-ed TSV annotation file, e.g., dbNSFP or CADD
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructGenericTSV(String tsvPath, String fastaRefPath,
-			GenericTSVAnnotationOptions options) throws JannovarVarDBException {
+														 GenericTSVAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new CosmicAnnotationDriver(tsvPath, fastaRefPath, options), options);
+			new CosmicAnnotationDriver(tsvPath, fastaRefPath, options), options);
 	}
 
 	/**
 	 * Construct Generic VCF {@link VariantContext} annotator factory.
 	 *
-	 * @param vcfDBPath
-	 *            Path to gzip-compressed, normalized and tbi-indexed VCF file to use for the
-	 *            annotation
-	 * @param fastaRefPath
-	 *            Path to reference FASTA file
-	 * @param options
-	 *            Configuration for the variant context annotation
+	 * @param vcfDBPath    Path to gzip-compressed, normalized and tbi-indexed VCF file to use for the
+	 *                     annotation
+	 * @param fastaRefPath Path to reference FASTA file
+	 * @param options      Configuration for the variant context annotation
 	 * @return Preconfigured {@link DBVariantContextAnnotator} object
-	 * @throws JannovarVarDBException
-	 *             on problems loading the resources
+	 * @throws JannovarVarDBException on problems loading the resources
 	 */
 	public DBVariantContextAnnotator constructGenericVCF(String vcfDBPath, String fastaRefPath,
-			DBAnnotationOptions options) throws JannovarVarDBException {
+														 DBAnnotationOptions options) throws JannovarVarDBException {
 		return new DBVariantContextAnnotator(
-				new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
+			new CosmicAnnotationDriver(vcfDBPath, fastaRefPath, options), options);
 	}
 
 }

@@ -10,38 +10,22 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDuplication;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDuplication;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinExtension;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinFrameshift;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinIndel;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinInsertion;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
+import de.charite.compbio.jannovar.hgvs.protein.change.*;
 import de.charite.compbio.jannovar.impl.util.Translator;
-import de.charite.compbio.jannovar.reference.AminoAcidChange;
-import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
-import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.DuplicationChecker;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.NucleotidePointLocationBuilder;
-import de.charite.compbio.jannovar.reference.ProjectionException;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptPosition;
+import de.charite.compbio.jannovar.reference.*;
+
 import java.util.EnumSet;
 
 /**
  * Builds {@link Annotation} objects for the insertion {@link GenomeVariant} in the given {@link TranscriptModel}
  *
  * <h2>Duplications</h2>
- *
+ * <p>
  * In the case of insertions that are duplications are annotated as such. These insertions must be in the coding region,
  * such that the duplication can be recognized from the transcript sequence.
  *
  * <h2>Shifting of Insertions</h2>
- *
+ * <p>
  * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
  * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site.
  *
@@ -50,17 +34,13 @@ import java.util.EnumSet;
 public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
-	 * @param transcript
-	 *            {@link TranscriptModel} to build the annotation for
-	 * @param change
-	 *            {@link GenomeVariant} to build the annotation with
-	 * @param options
-	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeVariant
-	 *             if <code>change</code> did not describe an insertion
+	 * @param transcript {@link TranscriptModel} to build the annotation for
+	 * @param change     {@link GenomeVariant} to build the annotation with
+	 * @param options    the configuration to use for the {@link AnnotationBuilder}
+	 * @throws InvalidGenomeVariant if <code>change</code> did not describe an insertion
 	 */
 	InsertionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeVariant {
+		throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
@@ -111,8 +91,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			if (change.getAlt().length() == 1) {
 				try {
 					final NucleotideRange range = new NucleotideRange(
-							posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))),
-							posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))));
+						posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))),
+						posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))));
 					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
@@ -120,9 +100,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			} else {
 				try {
 					final NucleotidePointLocation firstPos = posBuilder.getNucleotidePointLocation(
-							projector.transcriptToGenomePos(txPos.shifted(-change.getAlt().length())));
+						projector.transcriptToGenomePos(txPos.shifted(-change.getAlt().length())));
 					final NucleotidePointLocation lastPos = posBuilder
-							.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1)));
+						.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1)));
 					final NucleotideRange range = new NucleotideRange(firstPos, lastPos);
 					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
@@ -140,7 +120,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * Helper class for generating annotations for exonic CDS variants.
-	 *
+	 * <p>
 	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
@@ -219,7 +199,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			}
 
 			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-					proteinChange, messages);
+				proteinChange, messages);
 		}
 
 		private void handleFrameShiftCase() {
@@ -249,8 +229,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// TODO(holtgrew): Check for duplication? This is a very rare corner case with bogus transcript.
 			// TODO(holtgrew): This is wrong.
 			proteinChange = ProteinInsertion.buildWithSequence(true, toString(wtAASeq.charAt(varAAInsertPos - 1)),
-					varAAInsertPos, toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
-					varAASeq.substring(varAAInsertPos - 1, varAASeq.length()));
+				varAAInsertPos, toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
+				varAASeq.substring(varAAInsertPos - 1, varAASeq.length()));
 			if (varAAStopPos != -1)
 				varTypes.add(VariantEffect.STOP_GAINED);
 			varTypes.add(VariantEffect.INFRAME_INSERTION);
@@ -269,12 +249,12 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// this case we cannot really differentiate this from a non-frameshift insertion but we still call
 				// it so.
 				proteinChange = ProteinExtension.build(true, "*", varAAInsertPos,
-						toString(varAASeq.charAt(varAAInsertPos)), (varAAStopPos - varAAInsertPos));
+					toString(varAASeq.charAt(varAAInsertPos)), (varAAStopPos - varAAInsertPos));
 				varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
 			} else {
 				// The variant AA does not contain a stop codon, is stop loss.
 				proteinChange = ProteinFrameshift.buildWithoutTerminal(true, toString(varAASeq.charAt(varAAInsertPos)),
-						varAAInsertPos, toString(varAASeq.charAt(varAAInsertPos)));
+					varAAInsertPos, toString(varAASeq.charAt(varAAInsertPos)));
 				varTypes.add(VariantEffect.STOP_LOST);
 			}
 		}
@@ -290,14 +270,14 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				if (varAAStopPos == varAAInsertPos) {
 					// The insertion directly creates a stop codon, is stop gain.
 					proteinChange = ProteinSubstitution.build(true, toString(wtAASeq.charAt(varAAInsertPos)),
-							varAAInsertPos, "*");
+						varAAInsertPos, "*");
 					varTypes.add(VariantEffect.STOP_GAINED);
 				} else if (varAAStopPos > varAAInsertPos) {
 					// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
 					// simple frameshift insertion.
 					proteinChange = ProteinFrameshift.build(true, toString(wtAASeq.charAt(varAAInsertPos)),
-							varAAInsertPos, toString(varAASeq.charAt(varAAInsertPos)),
-							(varAAStopPos + 1 - varAAInsertPos));
+						varAAInsertPos, toString(varAASeq.charAt(varAAInsertPos)),
+						(varAAStopPos + 1 - varAAInsertPos));
 
 					if (varAASeq.length() > wtAASeq.length())
 						varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
@@ -309,8 +289,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					// The insertion is a frameshift variant that leads to the loss of the stop codon, we mark this as
 					// frameshift elongation and the "fs*?" indicates that the stop codon is lost.
 					proteinChange = ProteinFrameshift.buildWithoutTerminal(true,
-							toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos,
-							toString(varAASeq.charAt(varAAInsertPos)));
+						toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos,
+						toString(varAASeq.charAt(varAAInsertPos)));
 					varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
 				}
 			}
@@ -335,13 +315,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			} else if (varAAStopPos > 0) {
 				// varAA contains a stop codon
 				proteinChange = ProteinExtension.build(true, "*", aaChange.getPos(),
-						toString(varAASeq.charAt(aaChange.getPos())), (varAAStopPos - aaChange.getPos()));
+					toString(varAASeq.charAt(aaChange.getPos())), (varAAStopPos - aaChange.getPos()));
 				// last is stop codon AA pos
 				varTypes.add(VariantEffect.STOP_LOST);
 			} else {
 				// varAA contains no stop codon
 				proteinChange = ProteinExtension.buildWithoutTerminal(true, toString(wtAASeq.charAt(aaChange.getPos())),
-						aaChange.getPos(), toString(varAASeq.charAt(aaChange.getPos())));
+					aaChange.getPos(), toString(varAASeq.charAt(aaChange.getPos())));
 				varTypes.add(VariantEffect.STOP_LOST);
 			}
 		}
@@ -360,7 +340,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				if (varAAStopPos == varAAInsertPos) {
 					// The insertion directly starts with a stop codon, is stop gain.
 					proteinChange = ProteinSubstitution.build(true, toString(wtAASeq.charAt(varAAInsertPos)),
-							varAAInsertPos, "*");
+						varAAInsertPos, "*");
 					varTypes.add(VariantEffect.STOP_GAINED);
 
 					// Differentiate the case of disruptive and non-disruptive insertions.
@@ -370,14 +350,14 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 						varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
 				} else {
 					if (varAAStopPos != -1 && wtAAStopPos != -1
-							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
+						&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
 						// The insertion does not directly start with a stop codon but the insertion leads to a stop
 						// codon in the affected amino acids. This leads to an "delins" protein annotation.
 						proteinChange = ProteinIndel.buildWithSeqDescription(true,
-								toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos,
-								toString(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 1,
-								new ProteinSeqDescription(),
-								new ProteinSeqDescription(varAASeq.substring(varAAInsertPos, varAAStopPos)));
+							toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos,
+							toString(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 1,
+							new ProteinSeqDescription(),
+							new ProteinSeqDescription(varAASeq.substring(varAAInsertPos, varAAStopPos)));
 						varTypes.add(VariantEffect.STOP_GAINED);
 
 						addNonFrameshiftInsertionEffect();
@@ -392,15 +372,15 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 								// normalization in CDSExonicAnnotationBuilder constructor.
 								if (aaChange.getAlt().length() == 1) {
 									proteinChange = ProteinDuplication.buildWithSeqDescription(true,
-											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
-											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
-											new ProteinSeqDescription());
+										toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
+										toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
+										new ProteinSeqDescription());
 								} else {
 									proteinChange = ProteinDuplication.buildWithSeqDescription(true,
-											toString(wtAASeq.charAt(varAAInsertPos - aaChange.getAlt().length())),
-											varAAInsertPos - aaChange.getAlt().length(),
-											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
-											new ProteinSeqDescription());
+										toString(wtAASeq.charAt(varAAInsertPos - aaChange.getAlt().length())),
+										varAAInsertPos - aaChange.getAlt().length(),
+										toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
+										new ProteinSeqDescription());
 								}
 
 								addNonFrameshiftInsertionEffect();
@@ -408,16 +388,16 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 							} else {
 								// We have a simple insertion.
 								proteinChange = ProteinInsertion.buildWithSequence(true,
-										toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
-										toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos, aaChange.getAlt());
+									toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
+									toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos, aaChange.getAlt());
 
 								addNonFrameshiftInsertionEffect();
 							}
 						} else {
 							// The delins/substitution case.
 							proteinChange = ProteinIndel.buildWithSeqDescription(true, aaChange.getRef(),
-									varAAInsertPos, aaChange.getRef(), varAAInsertPos, new ProteinSeqDescription(),
-									new ProteinSeqDescription(aaChange.getAlt()));
+								varAAInsertPos, aaChange.getRef(), varAAInsertPos, new ProteinSeqDescription(),
+								new ProteinSeqDescription(aaChange.getAlt()));
 							addNonFrameshiftInsertionEffect();
 						}
 					}
@@ -436,7 +416,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
 		}
 
-		/** Helper function for char to String conversion. */
+		/**
+		 * Helper function for char to String conversion.
+		 */
 		protected String toString(char c) {
 			return Character.toString(c);
 		}

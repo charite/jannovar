@@ -2,18 +2,26 @@ package de.charite.compbio.jannovar.vardbs.base;
 
 /**
  * Simple variant description, for use with variant normalization
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class VariantDescription {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private final String chrom;
-	/** 0-based position of the first base in ref */
+	/**
+	 * 0-based position of the first base in ref
+	 */
 	private final int pos;
-	/** String with reference sequence */
+	/**
+	 * String with reference sequence
+	 */
 	private final String ref;
-	/** String with alternative sequence */
+	/**
+	 * String with alternative sequence
+	 */
 	private final String alt;
 
 	public VariantDescription(String chrom, int pos, String ref, String alt) {
@@ -31,8 +39,10 @@ public final class VariantDescription {
 	public int getPos() {
 		return pos;
 	}
-	
-	/** @return 0-based end position of the variant in the reference */
+
+	/**
+	 * @return 0-based end position of the variant in the reference
+	 */
 	public int getEnd() {
 		if (ref.length() == 0)
 			return pos + 1;
@@ -47,7 +57,7 @@ public final class VariantDescription {
 	public String getAlt() {
 		return alt;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "VariantDescription [chrom=" + chrom + ", pos=" + pos + ", ref=" + ref + ", alt=" + alt + "]";

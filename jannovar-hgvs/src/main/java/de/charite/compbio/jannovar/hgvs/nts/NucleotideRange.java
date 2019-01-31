@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
@@ -14,14 +13,18 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public class NucleotideRange implements ConvertibleToHGVSString {
 
-	/** position of the first base */
+	/**
+	 * position of the first base
+	 */
 	private final NucleotidePointLocation firstPos;
-	/** position of the last base */
+	/**
+	 * position of the last base
+	 */
 	private final NucleotidePointLocation lastPos;
 
 	public static NucleotideRange build(int firstPos, int firstPosOffset, int lastPos, int lastPosOffset) {
 		return new NucleotideRange(NucleotidePointLocation.buildWithOffset(firstPos, firstPosOffset),
-				NucleotidePointLocation.buildWithOffset(lastPos, lastPosOffset));
+			NucleotidePointLocation.buildWithOffset(lastPos, lastPosOffset));
 	}
 
 	public static NucleotideRange buildWithoutOffset(int firstPos, int lastPos) {

@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.Immutable;
 
 /**

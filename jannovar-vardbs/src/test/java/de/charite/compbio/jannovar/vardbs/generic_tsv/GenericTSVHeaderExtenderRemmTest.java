@@ -7,7 +7,7 @@ import org.junit.Test;
 
 /**
  * Test header extension code for generic TSV processing
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVHeaderExtenderRemmTest extends GenericTSVAnnotationDriverWithRemmBaseTest {

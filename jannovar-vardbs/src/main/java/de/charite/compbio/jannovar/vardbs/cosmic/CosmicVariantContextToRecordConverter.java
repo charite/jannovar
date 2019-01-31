@@ -6,7 +6,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link CosmicRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class CosmicVariantContextToRecordConverter implements VariantContextToRecordConverter<CosmicRecord> {

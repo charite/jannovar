@@ -1,15 +1,13 @@
 package de.charite.compbio.jannovar.hgvs.nts.variant;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class SingleAlleleNucleotideVariantTest {
 
@@ -19,23 +17,23 @@ public class SingleAlleleNucleotideVariantTest {
 	@Before
 	public void setUp() throws Exception {
 		singleChangeVariant = new SingleAlleleNucleotideVariant(SequenceType.CODING_DNA, "REF",
-				VariantConfiguration.IN_CIS, ImmutableList.of(NucleotideSubstitution.build(false, 99,
-						"A", "G")));
+			VariantConfiguration.IN_CIS, ImmutableList.of(NucleotideSubstitution.build(false, 99,
+			"A", "G")));
 		multiChangeVariant = new SingleAlleleNucleotideVariant(SequenceType.CODING_DNA, "REF",
-				VariantConfiguration.IN_CIS, ImmutableList.of(
-						NucleotideSubstitution.build(false, 99, "C", "T"),
-						NucleotideSubstitution.build(false, 300, "A", "G")));
+			VariantConfiguration.IN_CIS, ImmutableList.of(
+			NucleotideSubstitution.build(false, 99, "C", "T"),
+			NucleotideSubstitution.build(false, 300, "A", "G")));
 	}
 
 	public void testStaticFactoryMakeSingleChangeVariant() {
 		Assert.assertEquals(singleChangeVariant, SingleAlleleNucleotideVariant.makeSingleChangeVariant(
-				SequenceType.CODING_DNA, "REF", NucleotideSubstitution.build(false, 99, "A", "G")));
+			SequenceType.CODING_DNA, "REF", NucleotideSubstitution.build(false, 99, "A", "G")));
 	}
 
 	public void testStaticFactoryBuild() {
 		Assert.assertEquals(multiChangeVariant, SingleAlleleNucleotideVariant.build(SequenceType.CODING_DNA, "REF",
-				VariantConfiguration.IN_CIS, NucleotideSubstitution.build(false, 99, "C", "T"),
-				NucleotideSubstitution.build(false, 300, "A", "G")));
+			VariantConfiguration.IN_CIS, NucleotideSubstitution.build(false, 99, "C", "T"),
+			NucleotideSubstitution.build(false, 300, "A", "G")));
 	}
 
 	@Test

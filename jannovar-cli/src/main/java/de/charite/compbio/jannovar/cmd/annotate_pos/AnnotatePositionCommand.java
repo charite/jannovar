@@ -1,15 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_pos;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
-import de.charite.compbio.jannovar.annotation.AnnotationException;
-import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
-import de.charite.compbio.jannovar.annotation.VariantAnnotations;
-import de.charite.compbio.jannovar.annotation.VariantAnnotationsTextGenerator;
-import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
@@ -20,6 +12,9 @@ import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Allows the annotation of a single position.
  *
@@ -29,7 +24,9 @@ import net.sourceforge.argparse4j.inf.Namespace;
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	private JannovarAnnotatePosOptions options;
 
 	public AnnotatePositionCommand(String argv[], Namespace args) throws CommandLineParsingException {
@@ -39,14 +36,12 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 	/**
 	 * This function will simply annotate given chromosomal position with HGVS compliant output.
-	 *
+	 * <p>
 	 * For example, the change <tt>chr1:909238G&gt;C</tt> could be converted to
 	 * <tt>PLEKHN1:NM_032129.2:c.1460G&gt;C,p.(Arg487Pro)</tt>.
 	 *
-	 * @param options
-	 *            configuration for the command
-	 * @throws AnnotationException
-	 *             on problems in the annotation process
+	 * @param options configuration for the command
+	 * @throws AnnotationException on problems in the annotation process
 	 */
 	@Override
 	public void run() throws JannovarException {
@@ -82,10 +77,10 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			else
 				textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
 			annotation = textGenerator.buildHGVSText(
-					options.isUseThreeLetterAminoAcidCode() ? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER);
+				options.isUseThreeLetterAminoAcidCode() ? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER);
 			effect = textGenerator.buildEffectText();
 			messages = textGenerator.buildMessages();
-			
+
 			System.out.println(String.format("%s\t%s\t%s\t%s", chromosomalChange.toString(), effect, annotation, messages));
 		}
 	}
@@ -96,7 +91,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 		if (!match.matches()) {
 			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
-					+ " does not fit the regular expression ... :(");
+				+ " does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 

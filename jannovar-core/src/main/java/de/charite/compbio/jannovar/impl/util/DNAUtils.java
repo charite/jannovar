@@ -13,8 +13,7 @@ public final class DNAUtils {
 	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
 	 * are not valid.
 	 *
-	 * @param sq
-	 *            original, upper-case cDNA string
+	 * @param sq original, upper-case cDNA string
 	 * @return reverse complement version of the input string sq.
 	 */
 	public static String reverseComplement(String sq) {
@@ -26,21 +25,21 @@ public final class DNAUtils {
 			char c = sq.charAt(i);
 			char match = 0;
 			switch (c) {
-			case 'A':
-				match = 'T';
-				break;
-			case 'C':
-				match = 'G';
-				break;
-			case 'G':
-				match = 'C';
-				break;
-			case 'T':
-				match = 'A';
-				break;
-			case 'N':
-				match = 'N';
-				break;
+				case 'A':
+					match = 'T';
+					break;
+				case 'C':
+					match = 'G';
+					break;
+				case 'G':
+					match = 'C';
+					break;
+				case 'T':
+					match = 'A';
+					break;
+				case 'N':
+					match = 'N';
+					break;
 			}
 			if (match > 0)
 				sb.append(match);

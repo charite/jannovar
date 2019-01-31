@@ -1,61 +1,85 @@
 package de.charite.compbio.jannovar.vardbs.g1k;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedMap;
-
 /**
  * Represents on entry in the thousand genomes VCF database file
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ThousandGenomesRecord {
 
 	// Fields up to the INFO column
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	final private String chrom;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	final private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	final private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	final private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	final private ImmutableList<String> alt;
 	/**
 	 * Filters, RF: failed random forest, AC0: Allele count is zero, InbreedingCoeff: InbreedingCoeff < threshold, LCR:
 	 * in a low-complexity region, SEGDUP: in a segmental duplication region
 	 */
 	final private ImmutableList<String> filter;
-	/** POPMAX for each alternative allele */
+	/**
+	 * POPMAX for each alternative allele
+	 */
 	final private ImmutableList<String> popmax;
 
 	// Entries of the INFO column
 
-	/** Observed alternative allele counts for each population */
+	/**
+	 * Observed alternative allele counts for each population
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Integer>> alleleCounts;
-	/** Observed alternative allele het counts for each population */
+	/**
+	 * Observed alternative allele het counts for each population
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Integer>> alleleHetCounts;
-	/** Observed alternative allele hom counts for each population */
+	/**
+	 * Observed alternative allele hom counts for each population
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Integer>> alleleHomCounts;
-	/** Observed alternative allele hemi counts for each population */
+	/**
+	 * Observed alternative allele hemi counts for each population
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Integer>> alleleHemiCounts;
-	/** Chromsome counts for each population, for all but POPMAX, one-element list, otherwise multiple */
+	/**
+	 * Chromsome counts for each population, for all but POPMAX, one-element list, otherwise multiple
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Integer>> chromCounts;
-	/** Observed alternative allele frequencies for each population */
+	/**
+	 * Observed alternative allele frequencies for each population
+	 */
 	final private ImmutableSortedMap<ThousandGenomesPopulation, ImmutableList<Double>> alleleFrequencies;
 
 	public ThousandGenomesRecord(String chrom, int pos, String id, String ref, List<String> alt, Collection<String> filter,
-			List<String> popmax, Map<ThousandGenomesPopulation, List<Integer>> alleleCounts,
-			Map<ThousandGenomesPopulation, List<Integer>> alleleHetCounts, Map<ThousandGenomesPopulation, List<Integer>> alleleHomCounts,
-			Map<ThousandGenomesPopulation, List<Integer>> alleleHemiCounts,
-			Map<ThousandGenomesPopulation, ImmutableList<Integer>> chromCounts) {
+								 List<String> popmax, Map<ThousandGenomesPopulation, List<Integer>> alleleCounts,
+								 Map<ThousandGenomesPopulation, List<Integer>> alleleHetCounts, Map<ThousandGenomesPopulation, List<Integer>> alleleHomCounts,
+								 Map<ThousandGenomesPopulation, List<Integer>> alleleHemiCounts,
+								 Map<ThousandGenomesPopulation, ImmutableList<Integer>> chromCounts) {
 		this.chrom = chrom;
 		this.pos = pos;
 		this.id = id;
@@ -65,22 +89,22 @@ public class ThousandGenomesRecord {
 		this.popmax = ImmutableList.copyOf(popmax);
 
 		ImmutableSortedMap.Builder<ThousandGenomesPopulation, ImmutableList<Integer>> acBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<ThousandGenomesPopulation, List<Integer>> e : alleleCounts.entrySet())
 			acBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleCounts = acBuilder.build();
 		ImmutableSortedMap.Builder<ThousandGenomesPopulation, ImmutableList<Integer>> acHetBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<ThousandGenomesPopulation, List<Integer>> e : alleleHetCounts.entrySet())
 			acHetBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHetCounts = acHetBuilder.build();
 		ImmutableSortedMap.Builder<ThousandGenomesPopulation, ImmutableList<Integer>> acHomBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<ThousandGenomesPopulation, List<Integer>> e : alleleHomCounts.entrySet())
 			acHomBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHomCounts = acHomBuilder.build();
 		ImmutableSortedMap.Builder<ThousandGenomesPopulation, ImmutableList<Integer>> acHemiBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<ThousandGenomesPopulation, List<Integer>> e : alleleHemiCounts.entrySet())
 			acHemiBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHemiCounts = acHemiBuilder.build();
@@ -88,7 +112,7 @@ public class ThousandGenomesRecord {
 		this.chromCounts = ImmutableSortedMap.copyOf(chromCounts.entrySet());
 
 		ImmutableSortedMap.Builder<ThousandGenomesPopulation, ImmutableList<Double>> afBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<ThousandGenomesPopulation, ImmutableList<Integer>> e : this.alleleCounts.entrySet()) {
 			final ThousandGenomesPopulation pop = e.getKey();
 			final ImmutableList<Integer> counts = chromCounts.get(pop);
@@ -164,22 +188,30 @@ public class ThousandGenomesRecord {
 		return alleleFrequencies;
 	}
 
-	/** @return Allele count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleCounts(ThousandGenomesPopulation pop) {
 		return alleleCounts.get(pop);
 	}
 
-	/** @return Allele het count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele het count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHetCounts(ThousandGenomesPopulation pop) {
 		return alleleHetCounts.get(pop);
 	}
 
-	/** @return Allele hom count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele hom count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHomCounts(ThousandGenomesPopulation pop) {
 		return alleleHomCounts.get(pop);
 	}
 
-	/** @return Allele hemi count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele hemi count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHemiCounts(ThousandGenomesPopulation pop) {
 		return alleleHemiCounts.get(pop);
 	}
@@ -191,21 +223,23 @@ public class ThousandGenomesRecord {
 		return chromCounts.get(pop);
 	}
 
-	/** @return Alternative allele frequency for the given population, for each allele, including the reference one */
+	/**
+	 * @return Alternative allele frequency for the given population, for each allele, including the reference one
+	 */
 	public ImmutableList<Double> getAlleleFrequencies(ThousandGenomesPopulation pop) {
 		return alleleFrequencies.get(pop);
 	}
 
 	/**
 	 * @return {@link ThousandGenomesPopulation} with highest allele frequency for the given allele index (0 is first alternative
-	 *         allele)
+	 * allele)
 	 */
 	public ThousandGenomesPopulation popWithHighestAlleleFreq(int alleleNo) {
 		double bestFreq = -1;
 		ThousandGenomesPopulation bestPop = ThousandGenomesPopulation.ALL;
 		for (ThousandGenomesPopulation pop : ThousandGenomesPopulation.values()) {
 			if (alleleFrequencies.get(pop) != null && alleleNo < alleleFrequencies.get(pop).size()
-					&& alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
+				&& alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
 				bestFreq = alleleFrequencies.get(pop).get(alleleNo);
 				bestPop = pop;
 			}
@@ -213,26 +247,30 @@ public class ThousandGenomesRecord {
 		return bestPop;
 	}
 
-	/** @return Highest frequency of the given allele, 0 is first alternative allele */
+	/**
+	 * @return Highest frequency of the given allele, 0 is first alternative allele
+	 */
 	public double highestAlleleFreq(int alleleNo) {
 		return getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo);
 	}
 
-	/** @return Highest frequency of any allele in any population */
+	/**
+	 * @return Highest frequency of any allele in any population
+	 */
 	public double highestAlleleFreqOverall() {
 		double maxAlleleFreq = 0;
 		for (int alleleNo = 0; alleleNo < alt.size(); ++alleleNo)
 			maxAlleleFreq = Math.max(maxAlleleFreq,
-					getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo));
+				getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo));
 		return maxAlleleFreq;
 	}
 
 	@Override
 	public String toString() {
 		return "ThousandGenomesRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
-				+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
-				+ ", chromCounts=" + chromCounts + ", alleleFrequencies=" + alleleFrequencies + "]";
+			+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
+			+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
+			+ ", chromCounts=" + chromCounts + ", alleleFrequencies=" + alleleFrequencies + "]";
 	}
 
 	@Override

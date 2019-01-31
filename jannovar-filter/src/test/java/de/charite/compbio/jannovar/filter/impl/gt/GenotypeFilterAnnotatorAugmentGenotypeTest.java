@@ -1,16 +1,15 @@
 package de.charite.compbio.jannovar.filter.impl.gt;
 
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
+import htsjdk.variant.variantcontext.Genotype;
+import htsjdk.variant.variantcontext.VariantContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
-import htsjdk.variant.variantcontext.Genotype;
-import htsjdk.variant.variantcontext.VariantContext;
-
 /**
  * Tests for GenotypeFilterAnnotator augmenting of Genotypes
- * 
+ * <p>
  * It's sufficient to test this for GATK variant files only
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
@@ -32,7 +31,7 @@ public class GenotypeFilterAnnotatorAugmentGenotypeTest extends GenotypeFilterTe
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals("[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]",
-				annotator.gtWithAppliedFilters(gt).toString());
+			annotator.gtWithAppliedFilters(gt).toString());
 	}
 
 }

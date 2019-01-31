@@ -1,18 +1,6 @@
 package de.charite.compbio.jannovar.impl.parse.flatbed;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.ini4j.Profile.Section;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
@@ -21,6 +9,12 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Class for parsing flat BED data.
@@ -29,30 +23,36 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
  */
 public class FlatBEDParser implements TranscriptParser {
 
-	/** the logger object to use */
+	/**
+	 * the logger object to use
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlatBEDParser.class);
 
-	/** Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping */
+	/**
+	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
+	 */
 	private final ReferenceDictionary refDict;
 
-	/** Path to directory where the to-be-parsed files live */
+	/**
+	 * Path to directory where the to-be-parsed files live
+	 */
 	private final String basePath;
 
-	/** INI {@link Section} from the configuration */
+	/**
+	 * INI {@link Section} from the configuration
+	 */
 	private final Section iniSection;
 
-	/** whether or not to print the progress bars */
+	/**
+	 * whether or not to print the progress bars
+	 */
 	private final boolean printProgressBars;
 
 	/**
-	 * @param refDict
-	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
-	 * @param basePath
-	 *            path to where the to-be-parsed files live
-	 * @param iniSection
-	 *            INI {@link Section} for the configuration
-	 * @param printProgressBars
-	 *            whether or not to print progress bars
+	 * @param refDict           path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
+	 * @param basePath          path to where the to-be-parsed files live
+	 * @param iniSection        INI {@link Section} for the configuration
+	 * @param printProgressBars whether or not to print progress bars
 	 */
 	public FlatBEDParser(ReferenceDictionary refDict, String basePath, Section iniSection, boolean printProgressBars) {
 		this.refDict = refDict;
@@ -94,8 +94,7 @@ public class FlatBEDParser implements TranscriptParser {
 	/**
 	 * Parse BED6 file
 	 *
-	 * @param path
-	 *            to the BED file to load
+	 * @param path to the BED file to load
 	 * @return list of {@link TranscriptModelBuilder} objects
 	 */
 	private ArrayList<TranscriptModelBuilder> parseBEDFile(String path) {
@@ -136,8 +135,7 @@ public class FlatBEDParser implements TranscriptParser {
 	}
 
 	/**
-	 * @param key
-	 *            name of the INI entry
+	 * @param key name of the INI entry
 	 * @return file name from INI <code>key</code.
 	 */
 	private String getINIFileName(String key) {

@@ -6,14 +6,24 @@ package de.charite.compbio.jannovar.reference;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum GenomeVariantType {
-	/** single nucleotide variant */
+	/**
+	 * single nucleotide variant
+	 */
 	SNV,
-	/** insertion */
+	/**
+	 * insertion
+	 */
 	INSERTION,
-	/** deletion */
+	/**
+	 * deletion
+	 */
 	DELETION,
-	/** block substitution */
+	/**
+	 * block substitution
+	 */
 	BLOCK_SUBSTITUTION,
-	/** other, e.g., structural variant from symbolic allele */
+	/**
+	 * other, e.g., structural variant from symbolic allele
+	 */
 	OTHER;
 }

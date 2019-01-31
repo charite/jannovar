@@ -7,7 +7,6 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 
 import java.util.Collection;
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,15 +15,15 @@ import java.util.stream.Stream;
  * pedigree and mitochondrial inheritance
  *
  * <h2>Compatibility Check</h2>
- *
+ * <p>
  * In the case of a single individual, we require merely that a variant is
  * located on the mitochondrion.
- *
+ * <p>
  * In the case of multiple individuals, we require that all affecteds have the
  * called variant and that there is is no transmission from an affected father
  * to children (this would mean that the case is definitely not related to a
  * mitochondrial mutation, whatever the distribution of variants may be!).
- * <P>
+ * <p>
  * Note that mitochondrial inheritance is considered to be Nonmendelian, so that
  * this class is named {@code InheritanceCheckerMT} rather than
  * {@code MendelianCheckerMT} as the other classes in this package.
@@ -32,7 +31,6 @@ import java.util.stream.Stream;
  *
  * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:max.schubach@bihealth.de">Max Schubach</a>
- * 
  * @since version 0.24 (September 15, 2017)
  */
 public class InheritanceCheckerMT extends AbstractMendelianChecker {
@@ -43,11 +41,11 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 
 	@Override
 	public ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls)
-			throws IncompatiblePedigreeException {
+		throws IncompatiblePedigreeException {
 
 		// Filter to calls on the mitochondrion
 		Stream<GenotypeCalls> mitoCalls = calls.stream()
-				.filter(call -> call.getChromType() == ChromosomeType.MITOCHONDRIAL);
+			.filter(call -> call.getChromType() == ChromosomeType.MITOCHONDRIAL);
 
 		// Filter to calls compatible with mitochondrial inheritance
 		Stream<GenotypeCalls> compatibleCalls;
@@ -67,9 +65,9 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * found in an unaffected because of the possiblity that the unaffected has the
 	 * mutation in a low copy number and thus is not substantially affected
 	 * clinically.
-	 * 
+	 *
 	 * @return whether <code>calls</code> is compatible with mitochondrial
-	 *         inheritance in the case of multiple individuals in the pedigree
+	 * inheritance in the case of multiple individuals in the pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
 		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) && unaffectedAreCompatible(calls));
@@ -83,7 +81,7 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * wildtype sequence, we rule out the candidate variant. Variant calling on the
 	 * mito doesnot currently assess heteroplasmy, but any amount // of called
 	 * mutation will be assessed as potentially disease causing here.
-	 * 
+	 *
 	 * @param calls
 	 * @return true if no affected is homozygous wildtype
 	 */
@@ -116,10 +114,10 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * Variant must be transmitted by the mother. So mother (if avaiable) should be
 	 * affected or (because of heteroplasmie) mother can be HET and unaffected. But
 	 * HOM_ALT and HOM_REF together with unaffected is not possible.
-	 * 
+	 * <p>
 	 * We do not have to look at the father because he does not transmit the
 	 * variants.
-	 * 
+	 *
 	 * @return true the variant is not transmitted by the mother
 	 */
 	private boolean parentsAreCompatible(GenotypeCalls calls) {
@@ -141,9 +139,9 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 	 * Males and females can be affected by mitochrondial mutations, and so if there
 	 * is any call from a variant on the mitochondrion, a singleton sample is
 	 * compatible with mitochondrial inheritance.
-	 * 
+	 *
 	 * @return whether <code>calls</code> is compatible with mitochondrial
-	 *         inheritance in the case of a single individual in the pedigree
+	 * inheritance in the case of a single individual in the pedigree
 	 */
 	private boolean isCompatibleSingleton(GenotypeCalls calls) {
 		if (calls.getNSamples() == 0)

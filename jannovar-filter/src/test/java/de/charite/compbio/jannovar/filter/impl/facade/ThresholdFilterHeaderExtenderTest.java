@@ -1,11 +1,10 @@
 package de.charite.compbio.jannovar.filter.impl.facade;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 
@@ -21,7 +20,7 @@ public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		new ThresholdFilterHeaderExtender(ThresholdFilterOptions.buildDefaultOptions())
-				.addHeaders(header);
+			.addHeaders(header);
 
 		// Check header after extension
 		Assert.assertEquals(13, header.getFilterLines().size());
@@ -31,34 +30,34 @@ public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV));
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET));
 		Assert.assertNotNull(header
-				.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT));
+			.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT));
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ));
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET));
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET));
 		Assert.assertNotNull(header
-				.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT));
+			.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT));
 		Assert.assertNotNull(header
-				.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF));
+			.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF));
 
 		Assert.assertNotNull(header.getFilterHeaderLine(
-				ThresholdFilterHeaderExtender.FILTER_VAR_ALL_AFFECTED_GTS_FILTERED));
+			ThresholdFilterHeaderExtender.FILTER_VAR_ALL_AFFECTED_GTS_FILTERED));
 
 		Assert.assertNotNull(header
-				.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD));
+			.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD));
 		Assert.assertNotNull(header
-				.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR));
+			.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR));
 
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_EXAC));
+			header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_EXAC));
 		Assert.assertNotNull(header.getFilterHeaderLine(
-				ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_THOUSAND_GENOMES));
+			ThresholdFilterHeaderExtender.FILTER_VAR_MAX_HOM_THOUSAND_GENOMES));
 	}
 
 }

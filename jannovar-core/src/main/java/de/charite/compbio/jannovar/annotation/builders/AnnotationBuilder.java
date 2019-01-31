@@ -1,44 +1,28 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
-import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationLocation;
-import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
-import de.charite.compbio.jannovar.annotation.AnnotationMessage;
-import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
-import de.charite.compbio.jannovar.reference.NucleotidePointLocationBuilder;
-import de.charite.compbio.jannovar.reference.ProjectionException;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
-import de.charite.compbio.jannovar.reference.TranscriptSequenceChangeHelper;
-import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
-import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator;
+import de.charite.compbio.jannovar.reference.*;
+
+import java.util.EnumSet;
 
 // TODO(holtgrem): Handle case of start gain => ext
 
 /**
  * Base class for the annotation builder helper classes.
- *
+ * <p>
  * The helpers subclass this class and and call the superclass constructor in their constructors. This initializes the
  * decorators for {@link #transcript} and initializes protected member such as {@link #locAnno}. The annotation building
  * process is greatly simplified by this.
- *
+ * <p>
  * The realizing classes then override {@link #build} and implement their annotation building logic there.
- *
+ * <p>
  * At the moment, this has package visibility only since it is not clear yet whether and how client code should extend
  * the builder hierarchy.
  *
@@ -52,41 +36,58 @@ abstract class AnnotationBuilder {
 	private static final ImmutableSet<VariantEffect> DOWNSTREAM_GENE_VARIANT = Sets.immutableEnumSet(VariantEffect.DOWNSTREAM_GENE_VARIANT);
 	private static final ImmutableSet<VariantEffect> INTERGENIC_VARIANT = Sets.immutableEnumSet(VariantEffect.INTERGENIC_VARIANT);
 
-	/** configuration */
+	/**
+	 * configuration
+	 */
 	protected final AnnotationBuilderOptions options;
 
-	/** transcript to annotate. */
+	/**
+	 * transcript to annotate.
+	 */
 	protected final TranscriptModel transcript;
-	/** genome change to use for annotation */
+	/**
+	 * genome change to use for annotation
+	 */
 	protected final GenomeVariant change;
 
-	/** helper for sequence ontology terms */
+	/**
+	 * helper for sequence ontology terms
+	 */
 	protected final TranscriptSequenceOntologyDecorator so;
-	/** helper for coordinate transformations */
+	/**
+	 * helper for coordinate transformations
+	 */
 	protected final TranscriptProjectionDecorator projector;
-	/** helper for updating CDS/TX sequence */
+	/**
+	 * helper for updating CDS/TX sequence
+	 */
 	protected final TranscriptSequenceChangeHelper seqChangeHelper;
-	/** helper for sequence access */
+	/**
+	 * helper for sequence access
+	 */
 	protected final TranscriptSequenceDecorator seqDecorator;
 
-	/** location annotation string */
+	/**
+	 * location annotation string
+	 */
 	protected final AnnotationLocation locAnno;
-	/** locus of the change, length() == 1 in case of point changes */
+	/**
+	 * locus of the change, length() == 1 in case of point changes
+	 */
 	protected NucleotideRange ntChangeRange;
-	/** warnings and messages occuring during annotation process */
+	/**
+	 * warnings and messages occuring during annotation process
+	 */
 	protected EnumSet<AnnotationMessage> messages = EnumSet.noneOf(AnnotationMessage.class);
 
 	/**
 	 * Initialize the helper object with the given <code>transcript</code> and <code>change</code>.
-	 *
+	 * <p>
 	 * Note that {@link #change} will be initialized with normalized positions (shifted to the left) if possible.
 	 *
-	 * @param transcript
-	 *            the {@link TranscriptModel} to build the annotation for
-	 * @param change
-	 *            the {@link GenomeVariant} to use for building the annotation
-	 * @param options
-	 *            the configuration to use for the {@link AnnotationBuilder}
+	 * @param transcript the {@link TranscriptModel} to build the annotation for
+	 * @param change     the {@link GenomeVariant} to use for building the annotation
+	 * @param options    the configuration to use for the {@link AnnotationBuilder}
 	 */
 	AnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options) {
 		this.options = options;
@@ -105,7 +106,7 @@ abstract class AnnotationBuilder {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
 				this.change = GenomeVariantNormalizer.normalizeGenomeChange(transcript, change,
-						projector.genomeToTranscriptPos(change.getGenomePos()));
+					projector.genomeToTranscriptPos(change.getGenomePos()));
 				if (!change.equals(this.change))
 					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
 			} catch (ProjectionException e) {
@@ -140,7 +141,7 @@ abstract class AnnotationBuilder {
 
 	/**
 	 * Build and return annotation for non-coding RNA.
-	 *
+	 * <p>
 	 * We can handle these cases quite easily from the location and amino acid change and just have to check the
 	 * splicing and intronic/exonic cases.
 	 *
@@ -187,10 +188,12 @@ abstract class AnnotationBuilder {
 				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-				null, messages);
+			null, messages);
 	}
 
-	/** @return intronic anotation */
+	/**
+	 * @return intronic anotation
+	 */
 	protected Annotation buildIntronicAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
@@ -224,7 +227,7 @@ abstract class AnnotationBuilder {
 		if (!Sets.intersection(Sets.immutableEnumSet(varTypes), SPLICE_VARIANT_EFFECTS).isEmpty())
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-				proteinChange, messages);
+			proteinChange, messages);
 	}
 
 	/**
@@ -302,10 +305,12 @@ abstract class AnnotationBuilder {
 			}
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE));
+			ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE));
 	}
 
-	/** @return upstream/downstream annotation */
+	/**
+	 * @return upstream/downstream annotation
+	 */
 	protected Annotation buildUpOrDownstreamAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
@@ -314,35 +319,35 @@ abstract class AnnotationBuilder {
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
 				return new Annotation(transcript, change, UPSTREAM_GENE_VARIANT, null,
-						null, null, null, messages);
+					null, null, null, messages);
 			else
 				// so.liesInDownstreamRegion(pos))
 				return new Annotation(transcript, change, DOWNSTREAM_GENE_VARIANT, null,
-						null, null, null, messages);
+					null, null, null, messages);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
 				return new Annotation(transcript, change, UPSTREAM_GENE_VARIANT, null,
-						null, null, null, messages);
+					null, null, null, messages);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
 				return new Annotation(transcript, change, DOWNSTREAM_GENE_VARIANT, null,
-						null, null, null, messages);
+					null, null, null, messages);
 		}
 	}
 
-	/** @return intergenic anotation */
+	/**
+	 * @return intergenic anotation
+	 */
 	protected Annotation buildIntergenicAnnotation() {
 		return new Annotation(transcript, change, INTERGENIC_VARIANT, null, null, null,
-				null, messages);
+			null, messages);
 	}
 
 	/**
-	 * @param transcript
-	 *            {@link TranscriptModel} to build annotation for
-	 * @param change
-	 *            {@link GenomeVariant} to build annotation for
+	 * @param transcript {@link TranscriptModel} to build annotation for
+	 * @param change     {@link GenomeVariant} to build annotation for
 	 * @return AnnotationLocation with location annotation
 	 */
 	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeVariant change) {
@@ -369,7 +374,7 @@ abstract class AnnotationBuilder {
 			final int exonNum = projector.locateExon(changePos);
 			final int lExonNum = projector.locateExon(lPos);
 			if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID
-					|| lExonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+				|| lExonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
 				locBuilder.setRankType(AnnotationLocation.RankType.EXON);
 				if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID)
 					locBuilder.setRank(exonNum);
@@ -395,7 +400,7 @@ abstract class AnnotationBuilder {
 
 			// Handle the cases for which no exon and no intron number is available.
 			if ((!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
-					&& (!soDecorator.liesInIntron(firstChangeBase) || !soDecorator.liesInIntron(lastChangeBase)))
+				&& (!soDecorator.liesInIntron(firstChangeBase) || !soDecorator.liesInIntron(lastChangeBase)))
 				return locBuilder.build(); // no exon/intron information if change pos does not lie in exon
 			final int intronNum = projector.locateIntron(firstChangePos);
 			if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
@@ -416,12 +421,10 @@ abstract class AnnotationBuilder {
 	}
 
 	/**
-	 * @param transcript
-	 *            {@link TranscriptModel} to build annotation for
-	 * @param change
-	 *            {@link GenomeVariant} to build annotation for
+	 * @param transcript {@link TranscriptModel} to build annotation for
+	 * @param change     {@link GenomeVariant} to build annotation for
 	 * @return {@link NucleotideRange} describing the CDS-level position of the change (or transcript-level in the case
-	 *         of non-coding transcripts)
+	 * of non-coding transcripts)
 	 */
 	private NucleotideRange buildNTChangeRange(TranscriptModel transcript, GenomeVariant change) {
 		NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
@@ -431,11 +434,11 @@ abstract class AnnotationBuilder {
 		if (change.getGenomeInterval().length() == 0)
 			// case of zero-base change (insertion)
 			return new NucleotideRange(posBuilder.getNucleotidePointLocation(lastChangePos),
-					posBuilder.getNucleotidePointLocation(firstChangePos));
+				posBuilder.getNucleotidePointLocation(firstChangePos));
 		else
 			// case of single-base change (SNV) or multi-base change
 			return new NucleotideRange(posBuilder.getNucleotidePointLocation(firstChangePos),
-					posBuilder.getNucleotidePointLocation(lastChangePos));
+				posBuilder.getNucleotidePointLocation(lastChangePos));
 	}
 
 }

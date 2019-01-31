@@ -6,31 +6,35 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 public class ProteinDuplication extends ProteinChange {
 
-	/** range of one or more amino acids that are deleted */
+	/**
+	 * range of one or more amino acids that are deleted
+	 */
 	private final ProteinRange range;
-	/** specification of the deleted characters, can be null */
+	/**
+	 * specification of the deleted characters, can be null
+	 */
 	private final ProteinSeqDescription seqSpec;
 
 	public static ProteinDuplication buildWithoutSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos) {
+																String lastAA, int lastPos) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription());
+			new ProteinSeqDescription());
 	}
 
 	public static ProteinDuplication buildWithSequence(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos, String seq) {
+													   String lastAA, int lastPos, String seq) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription(seq));
+			new ProteinSeqDescription(seq));
 	}
 
 	public static ProteinDuplication buildWithLength(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos, int len) {
+													 String lastAA, int lastPos, int len) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription(len));
+			new ProteinSeqDescription(len));
 	}
 
 	public static ProteinDuplication buildWithSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos, ProteinSeqDescription desc) {
+															 String lastAA, int lastPos, ProteinSeqDescription desc) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), desc);
 	}
 

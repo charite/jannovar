@@ -2,16 +2,24 @@ package de.charite.compbio.jannovar.mendel;
 
 /**
  * Describe the chromosome type, for use in mendelian inheritance filtering
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum ChromosomeType {
-	/** Autosomal chromosomes */
+	/**
+	 * Autosomal chromosomes
+	 */
 	AUTOSOMAL,
-	/** X chromosome */
+	/**
+	 * X chromosome
+	 */
 	X_CHROMOSOMAL,
-	/** Y chromosome */
+	/**
+	 * Y chromosome
+	 */
 	Y_CHROMOSOMAL,
-	/** Mitochondrium chromosome */
+	/**
+	 * Mitochondrium chromosome
+	 */
 	MITOCHONDRIAL;
 }

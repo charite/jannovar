@@ -1,26 +1,31 @@
 package de.charite.compbio.jannovar.hgvs.legacy;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 /**
  * Representation of a legacy notation insertion.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyInsertion extends LegacyChange {
 
-	/** deleted string */
+	/**
+	 * deleted string
+	 */
 	private final NucleotideSeqDescription insertedSeq;
 
-	/** Construct new legacy substitution with the given values */
+	/**
+	 * Construct new legacy substitution with the given values
+	 */
 	public LegacyInsertion(LegacyLocation location, NucleotideSeqDescription insertedSeq) {
 		super(location);
 		this.insertedSeq = insertedSeq;
 	}
 
-	/** @return deleted sequence */
+	/**
+	 * @return deleted sequence
+	 */
 	public NucleotideSeqDescription getDeletedSeq() {
 		return insertedSeq;
 	}

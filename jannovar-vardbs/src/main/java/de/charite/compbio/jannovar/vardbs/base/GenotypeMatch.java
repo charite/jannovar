@@ -4,24 +4,34 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * A class for annotating the match between an observed genotype and a database genotype
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class GenotypeMatch {
 
-	/** Numeric index of the observed allele (in <code>obsVC</code>) */
+	/**
+	 * Numeric index of the observed allele (in <code>obsVC</code>)
+	 */
 	final int observedAllele;
-	/** Numeric index of the database allele (in <code>dbVC</code>) */
+	/**
+	 * Numeric index of the database allele (in <code>dbVC</code>)
+	 */
 	final int dbAllele;
-	/** The observed VariantContext */
+	/**
+	 * The observed VariantContext
+	 */
 	final VariantContext obsVC;
-	/** The database VariantContext */
+	/**
+	 * The database VariantContext
+	 */
 	final VariantContext dbVC;
-	/** Whether is a match (if false: overlap only). */
+	/**
+	 * Whether is a match (if false: overlap only).
+	 */
 	final boolean isMatch;
 
 	public GenotypeMatch(int observedAllele, int dbAllele, VariantContext obsVC,
-			VariantContext dbVC, boolean isMatch) {
+						 VariantContext dbVC, boolean isMatch) {
 		this.observedAllele = observedAllele;
 		this.dbAllele = dbAllele;
 		this.obsVC = obsVC;
@@ -52,7 +62,7 @@ public final class GenotypeMatch {
 	@Override
 	public String toString() {
 		return "GenotypeMatch [observedAllele=" + observedAllele + ", dbAllele=" + dbAllele
-				+ ", obsVC=" + obsVC + ", dbVC=" + dbVC + ", isMatch=" + isMatch + "]";
+			+ ", obsVC=" + obsVC + ", dbVC=" + dbVC + ", isMatch=" + isMatch + "]";
 	}
 
 	@Override

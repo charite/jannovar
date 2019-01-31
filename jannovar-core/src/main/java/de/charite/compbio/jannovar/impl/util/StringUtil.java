@@ -4,7 +4,7 @@ public class StringUtil {
 
 	/**
 	 * Concatenate values.toString() using a StringBuilder.
-	 *
+	 * <p>
 	 * Java's {@link String#format} is very slow and internally uses regular expressions.
 	 */
 	public static String concatenate(Object... values) {

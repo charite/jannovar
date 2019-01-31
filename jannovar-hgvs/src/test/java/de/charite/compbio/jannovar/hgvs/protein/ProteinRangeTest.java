@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.protein;
 
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 
 public class ProteinRangeTest {
 
@@ -20,9 +19,9 @@ public class ProteinRangeTest {
 		firstRange2 = new ProteinRange(ProteinPointLocation.build("A", 123), ProteinPointLocation.build("T", 300));
 		secondRange = new ProteinRange(ProteinPointLocation.build("G", 125), ProteinPointLocation.build("T", 301));
 		offsetRange = new ProteinRange(ProteinPointLocation.buildWithOffset("G", 125, -1),
-				ProteinPointLocation.buildWithOffset("T", 301, -1));
+			ProteinPointLocation.buildWithOffset("T", 301, -1));
 		downstreamOfTerminalRange = new ProteinRange(ProteinPointLocation.buildDownstreamOfTerminal("G", 125),
-				ProteinPointLocation.buildDownstreamOfTerminal("T", 301));
+			ProteinPointLocation.buildDownstreamOfTerminal("T", 301));
 	}
 
 	@Test
@@ -37,7 +36,7 @@ public class ProteinRangeTest {
 	@Test
 	public void testToHGVSStringRange() {
 		ProteinRange range = new ProteinRange(ProteinPointLocation.build("A", 123),
-				ProteinPointLocation.build("G", 125));
+			ProteinPointLocation.build("G", 125));
 
 		Assert.assertEquals("A124_G126", range.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124_Gly126", range.toHGVSString(AminoAcidCode.THREE_LETTER));
@@ -49,7 +48,7 @@ public class ProteinRangeTest {
 	@Test
 	public void testToHGVSStringSinglePos() {
 		ProteinRange range = new ProteinRange(ProteinPointLocation.build("A", 123),
-				ProteinPointLocation.build("A", 123));
+			ProteinPointLocation.build("A", 123));
 
 		Assert.assertEquals("A124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124", range.toHGVSString(AminoAcidCode.THREE_LETTER));

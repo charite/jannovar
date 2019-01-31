@@ -1,16 +1,15 @@
 package de.charite.compbio.jannovar.stats.facade;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.annotation.PutativeImpact;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeSet;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.annotation.PutativeImpact;
-import de.charite.compbio.jannovar.annotation.VariantEffect;
 
 /**
  * Implementation of writing the statistics to a CSV file
@@ -60,11 +59,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(effect.toString());
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getCountVariantEffects().getOrDefault(effect, 0)));
+				statsCollector.getPerSampleStats().get(null).getCountVariantEffects().getOrDefault(effect, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getCountVariantEffects().getOrDefault(effect, 0)));
+					statsCollector.getPerSampleStats().get(name).getCountVariantEffects().getOrDefault(effect, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -83,11 +82,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(region.toString());
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getCountGenomeRegion().getOrDefault(region, 0)));
+				statsCollector.getPerSampleStats().get(null).getCountGenomeRegion().getOrDefault(region, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getCountGenomeRegion().getOrDefault(region, 0)));
+					statsCollector.getPerSampleStats().get(name).getCountGenomeRegion().getOrDefault(region, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -102,11 +101,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(tsTv.toString());
 			arr.add(Integer
-					.toString(statsCollector.getPerSampleStats().get(null).getTsTvCount().getOrDefault(tsTv, 0)));
+				.toString(statsCollector.getPerSampleStats().get(null).getTsTvCount().getOrDefault(tsTv, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer
-						.toString(statsCollector.getPerSampleStats().get(name).getTsTvCount().getOrDefault(tsTv, 0)));
+					.toString(statsCollector.getPerSampleStats().get(name).getTsTvCount().getOrDefault(tsTv, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -124,11 +123,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(count.toString());
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getAltAlleleCountHist().getOrDefault(count, 0)));
+				statsCollector.getPerSampleStats().get(null).getAltAlleleCountHist().getOrDefault(count, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getAltAlleleCountHist().getOrDefault(count, 0)));
+					statsCollector.getPerSampleStats().get(name).getAltAlleleCountHist().getOrDefault(count, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -146,11 +145,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(filter);
 			arr.add(Integer
-					.toString(statsCollector.getPerSampleStats().get(null).getFilterCount().getOrDefault(filter, 0)));
+				.toString(statsCollector.getPerSampleStats().get(null).getFilterCount().getOrDefault(filter, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getFilterCount().getOrDefault(filter, 0)));
+					statsCollector.getPerSampleStats().get(name).getFilterCount().getOrDefault(filter, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -168,11 +167,11 @@ public class StatisticsWriter implements AutoCloseable {
 			else
 				arr.add("PASS");
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getIsFilteredCount().getOrDefault(isFiltered, 0)));
+				statsCollector.getPerSampleStats().get(null).getIsFilteredCount().getOrDefault(isFiltered, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getIsFilteredCount().getOrDefault(isFiltered, 0)));
+					statsCollector.getPerSampleStats().get(name).getIsFilteredCount().getOrDefault(isFiltered, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -191,11 +190,11 @@ public class StatisticsWriter implements AutoCloseable {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(impact.toString());
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getCountPutativeImpacts().getOrDefault(impact, 0)));
+				statsCollector.getPerSampleStats().get(null).getCountPutativeImpacts().getOrDefault(impact, 0)));
 
 			for (String name : statsCollector.getSampleNames()) {
 				arr.add(Integer.toString(statsCollector.getPerSampleStats().get(name).getCountPutativeImpacts()
-						.getOrDefault(impact, 0)));
+					.getOrDefault(impact, 0)));
 			}
 			writer.println(Joiner.on('\t').join(arr));
 		}
@@ -210,15 +209,15 @@ public class StatisticsWriter implements AutoCloseable {
 		writer.println("[contig_counts]");
 		printHeader("contig");
 
-		for (String	contig : contigs) {
+		for (String contig : contigs) {
 			ArrayList<String> arr = new ArrayList<>();
 			arr.add(contig);
 			arr.add(Integer.toString(
-					statsCollector.getPerSampleStats().get(null).getContigCount().getOrDefault(contig, 0)));
+				statsCollector.getPerSampleStats().get(null).getContigCount().getOrDefault(contig, 0)));
 
 			for (String name : statsCollector.getSampleNames())
 				arr.add(Integer.toString(
-						statsCollector.getPerSampleStats().get(name).getContigCount().getOrDefault(contig, 0)));
+					statsCollector.getPerSampleStats().get(name).getContigCount().getOrDefault(contig, 0)));
 			writer.println(Joiner.on('\t').join(arr));
 		}
 	}

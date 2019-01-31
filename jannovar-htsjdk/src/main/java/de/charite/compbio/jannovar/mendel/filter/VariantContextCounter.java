@@ -1,13 +1,13 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
-import java.util.TreeSet;
-
 import de.charite.compbio.jannovar.mendel.SubModeOfInheritance;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.TreeSet;
+
 /**
  * A {@link VariantContext} with an integer counter and set of compatible modes
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class VariantContextCounter {
@@ -70,7 +70,7 @@ public class VariantContextCounter {
 	@Override
 	public String toString() {
 		return "VariantContextCounter [variantContext=" + variantContext + ", counter=" + counter + ", compatibleModes="
-				+ compatibleModes + "]";
+			+ compatibleModes + "]";
 	}
 
 	@Override

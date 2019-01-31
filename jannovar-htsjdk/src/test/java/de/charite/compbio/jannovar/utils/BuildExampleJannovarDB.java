@@ -1,33 +1,28 @@
 package de.charite.compbio.jannovar.utils;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.data.*;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.refseq.RefSeqParser;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
+import org.ini4j.Ini;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.ini4j.Ini;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.data.JannovarData;
-import de.charite.compbio.jannovar.data.JannovarDataSerializer;
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
-import de.charite.compbio.jannovar.data.SerializationException;
-import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.impl.parse.refseq.RefSeqParser;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 public class BuildExampleJannovarDB {
 
 	public static void main(String args[])
-			throws FileNotFoundException, IOException, SerializationException, TranscriptParseException {
+		throws FileNotFoundException, IOException, SerializationException, TranscriptParseException {
 		build("fbn1");
 		build("ctns");
 	}
 
 	private static void build(String name)
-			throws FileNotFoundException, IOException, SerializationException, TranscriptParseException {
+		throws FileNotFoundException, IOException, SerializationException, TranscriptParseException {
 		// create temporary directory
 		File tmpDir = Files.createTempDir();
 		// copy files

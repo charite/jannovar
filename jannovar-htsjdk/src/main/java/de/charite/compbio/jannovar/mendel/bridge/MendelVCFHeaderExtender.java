@@ -12,24 +12,42 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
  */
 public class MendelVCFHeaderExtender {
 
-	/** Constant for autosomal dominant */
+	/**
+	 * Constant for autosomal dominant
+	 */
 	public static String AD = "AD";
-	/** Constant for autosomal recessive */
+	/**
+	 * Constant for autosomal recessive
+	 */
 	public static String AR = "AR";
-	/** Constant for X dominant */
+	/**
+	 * Constant for X dominant
+	 */
 	public static String XD = "XD";
-	/** Constant for X recessive */
+	/**
+	 * Constant for X recessive
+	 */
 	public static String XR = "XR";
-	/** Constant for mitochondrial */
+	/**
+	 * Constant for mitochondrial
+	 */
 	public static final String MT = "MT";
 
-	/** Constant for autosomal recessive hom. alt. */
+	/**
+	 * Constant for autosomal recessive hom. alt.
+	 */
 	public static String AR_HOM_ALT = "AR_HOM_ALT";
-	/** Constant for autosomal recessive compound het. */
+	/**
+	 * Constant for autosomal recessive compound het.
+	 */
 	public static String AR_COMP_HET = "AR_COMP_HET";
-	/** Constant for X recessive hom. alt. */
+	/**
+	 * Constant for X recessive hom. alt.
+	 */
 	public static String XR_HOM_ALT = "XR_HOM_ALT";
-	/** Constant for X recessive compound het. */
+	/**
+	 * Constant for X recessive compound het.
+	 */
 	public static String XR_COMP_HET = "XR_COMP_HET";
 
 	public void extendHeader(VCFHeader vcfHeader) {
@@ -54,11 +72,11 @@ public class MendelVCFHeaderExtender {
 
 	public void extendHeader(VCFHeader vcfHeader, String prefix) {
 		VCFInfoHeaderLine inheritanceLine = new VCFInfoHeaderLine(key(prefix), VCFHeaderLineCount.UNBOUNDED,
-				VCFHeaderLineType.String, "Compatible inheritance modes (AD, AR, XD, XR, MT)");
+			VCFHeaderLineType.String, "Compatible inheritance modes (AD, AR, XD, XR, MT)");
 		vcfHeader.addMetaDataLine(inheritanceLine);
 		VCFInfoHeaderLine subInheritanceLine = new VCFInfoHeaderLine(keySub(prefix), VCFHeaderLineCount.UNBOUNDED,
-				VCFHeaderLineType.String,
-				"Extra annotation for recessive inheritance sub type (AR_HOM_ALT, AR_COMP_HET, XR_HOM_ALT, XR_COMP_HET)");
+			VCFHeaderLineType.String,
+			"Extra annotation for recessive inheritance sub type (AR_HOM_ALT, AR_COMP_HET, XR_HOM_ALT, XR_COMP_HET)");
 		vcfHeader.addMetaDataLine(subInheritanceLine);
 	}
 

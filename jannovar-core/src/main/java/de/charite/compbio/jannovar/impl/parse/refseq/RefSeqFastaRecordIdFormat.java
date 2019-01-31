@@ -73,13 +73,15 @@ public enum RefSeqFastaRecordIdFormat {
 		}
 		return of(tokens.get(format.accessionIndex));
 	}
-	
+
 	public String getPrefix() {
 		return this.expectedPrefix;
 	}
+
 	public int getAcdcessionIndex() {
 		return this.accessionIndex;
 	}
+
 	public int getIDElementCount() {
 		return this.expectedIdElementCount;
 	}

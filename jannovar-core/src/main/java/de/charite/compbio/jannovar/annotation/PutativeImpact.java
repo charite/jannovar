@@ -4,12 +4,20 @@ package de.charite.compbio.jannovar.annotation;
  * Putative impact of an annotation.
  */
 public enum PutativeImpact {
-	/** high impact */
+	/**
+	 * high impact
+	 */
 	HIGH,
-	/** moderate impact */
+	/**
+	 * moderate impact
+	 */
 	MODERATE,
-	/** low impact */
+	/**
+	 * low impact
+	 */
 	LOW,
-	/** modifier of other {@link PutativeImpact} values */
+	/**
+	 * modifier of other {@link PutativeImpact} values
+	 */
 	MODIFIER
 }

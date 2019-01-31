@@ -7,17 +7,25 @@ package de.charite.compbio.jannovar.reference;
  */
 public enum Strand {
 
-	/** forward strand */
+	/**
+	 * forward strand
+	 */
 	FWD,
-	/** reverse strand */
+	/**
+	 * reverse strand
+	 */
 	REV;
 
-	/** @return <code>true</code> if this is the forward strand */
+	/**
+	 * @return <code>true</code> if this is the forward strand
+	 */
 	public boolean isForward() {
 		return (this == FWD);
 	}
 
-	/** @return <code>true</code> if this is the reverse strand */
+	/**
+	 * @return <code>true</code> if this is the reverse strand
+	 */
 	public boolean isReverse() {
 		return (this == REV);
 	}

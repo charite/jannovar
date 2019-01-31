@@ -1,13 +1,13 @@
 package de.charite.compbio.jannovar.progress;
 
-import java.util.ArrayList;
-
 import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.samtools.SAMSequenceRecord;
 
+import java.util.ArrayList;
+
 /**
  * Construct {@link GenomeRegionList} from a {@link SAMSequenceDictionary}
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenomeRegionListFactoryFromSAMSequenceDictionary {

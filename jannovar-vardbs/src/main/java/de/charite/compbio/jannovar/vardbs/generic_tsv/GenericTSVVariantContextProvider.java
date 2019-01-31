@@ -7,25 +7,20 @@ import htsjdk.tribble.readers.TabixReader;
 import htsjdk.tribble.readers.TabixReader.Iterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Read TSV records as {@link VariantContext} entries.
- * 
+ *
  * <p>
  * Note that there cannot be concurrent queries with the same
  * <code>GenericTSVVariantContextProvider</code> because we currently only shallowly wrap HTSJDK's
  * TabixReader.
  * </p>
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVVariantContextProvider implements DatabaseVariantContextProvider {
@@ -51,7 +46,7 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 
 	/**
 	 * Wrapper for iterator from {@link TabixReader}.
-	 * 
+	 *
 	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
 	 */
 	private class TabixIteratorWrapper implements CloseableIterator<VariantContext> {
@@ -94,13 +89,13 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 
 			final int delta = options.isOneBasedPositions() ? 0 : 1;
 			final int startPos = Integer.parseInt(tokens[options.getBeginColumnIndex() - 1])
-					- delta;
+				- delta;
 			builder.start(startPos);
 			builder.stop(startPos);
 
 			if (options.getRefAlleleColumnIndex() > 0 && options.getAltAlleleColumnIndex() > 0) {
 				builder.alleles(tokens[options.getRefAlleleColumnIndex() - 1],
-						tokens[options.getAltAlleleColumnIndex() - 1]);
+					tokens[options.getAltAlleleColumnIndex() - 1]);
 			} else {
 				builder.alleles("N");
 			}
@@ -110,7 +105,7 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 			Set<String> allColNames = new HashSet<>(options.getColumnNames());
 			for (String colName : options.getColumnNames()) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
-						.get(colName);
+					.get(colName);
 				if (desc.getRefField() != null) {
 					allColNames.add(desc.getRefField());
 				}
@@ -120,45 +115,45 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 			Map<String, List<Object>> colValues = new HashMap<>();
 			for (String colName : allColNames) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
-						.get(colName);
+					.get(colName);
 				final String token = tokens[desc.getColumnIndex() - 1];
 				final String sep = ";";
 				final ImmutableList<String> splitTokens = ImmutableList.copyOf(token.split(sep));
 
 				switch (desc.getValueType()) {
-				case Flag:
-					colValues.put(colName, splitTokens.stream().map(s -> {
-						if (s == null || ".".equals(s)) {
-							return null;
-						} else {
-							return (Object) ImmutableList.of("1", "Y", "y", "T", "t", "yes", "true")
+					case Flag:
+						colValues.put(colName, splitTokens.stream().map(s -> {
+							if (s == null || ".".equals(s)) {
+								return null;
+							} else {
+								return (Object) ImmutableList.of("1", "Y", "y", "T", "t", "yes", "true")
 									.contains(s);
-						}
-					}).collect(Collectors.toList()));
-					break;
-				case Float:
-					colValues.put(colName, splitTokens.stream().map(s -> {
-						if (s == null || ".".equals(s)) {
-							return null;
-						} else {
-							return (Object) Double.parseDouble(s);
-						}
-					}).collect(Collectors.toList()));
-					break;
-				case Integer:
-					colValues.put(colName, splitTokens.stream().map(s -> {
-						if (s == null || ".".equals(s)) {
-							return null;
-						} else {
-							return (Object) Integer.parseInt(s);
-						}
-					}).collect(Collectors.toList()));
-					break;
-				case Character:
-				case String:
-				default:
-					colValues.put(colName, ImmutableList.<Object> copyOf(splitTokens));
-					break;
+							}
+						}).collect(Collectors.toList()));
+						break;
+					case Float:
+						colValues.put(colName, splitTokens.stream().map(s -> {
+							if (s == null || ".".equals(s)) {
+								return null;
+							} else {
+								return (Object) Double.parseDouble(s);
+							}
+						}).collect(Collectors.toList()));
+						break;
+					case Integer:
+						colValues.put(colName, splitTokens.stream().map(s -> {
+							if (s == null || ".".equals(s)) {
+								return null;
+							} else {
+								return (Object) Integer.parseInt(s);
+							}
+						}).collect(Collectors.toList()));
+						break;
+					case Character:
+					case String:
+					default:
+						colValues.put(colName, ImmutableList.<Object>copyOf(splitTokens));
+						break;
 				}
 			}
 
@@ -167,110 +162,110 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 
 			for (String colName : options.getColumnNames()) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
-						.get(colName);
+					.get(colName);
 				final GenericTSVValueColumnDescription refDesc = options
-						.getValueColumnDescriptions().get(desc.getRefField());
+					.getValueColumnDescriptions().get(desc.getRefField());
 
 				switch (refDesc.getValueType()) {
-				case Character:
-				case Flag:
-				case String:
-					// Pick first one
-					values.put(colName, colValues.get(colName).get(0));
-					break;
-				case Float:
-					final List<
+					case Character:
+					case Flag:
+					case String:
+						// Pick first one
+						values.put(colName, colValues.get(colName).get(0));
+						break;
+					case Float:
+						final List<
 							LabeledValue<Double, Object>> doubleLabeledValues = new ArrayList<>();
-					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
-						Double value = (Double) colValues.get(refDesc.getFieldName()).get(i);
-						if (value == null && refDesc
+						for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
+							Double value = (Double) colValues.get(refDesc.getFieldName()).get(i);
+							if (value == null && refDesc
 								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MIN) {
-							value = Double.MAX_VALUE;
-						} else if (value == null && refDesc
+								value = Double.MAX_VALUE;
+							} else if (value == null && refDesc
 								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MAX) {
-							value = Double.MIN_VALUE;
-						}
-						doubleLabeledValues.add(new LabeledValue<Double, Object>(value, i));
-					}
-
-					if (doubleLabeledValues.isEmpty()) {
-						values.put(colName, ".");
-					} else {
-						final int key;
-						switch (refDesc.getAccumulationStrategy()) {
-						case CHOOSE_MIN:
-							Collections.sort(doubleLabeledValues);
-							key = (int) doubleLabeledValues.get(0).getValue();
-							break;
-						case CHOOSE_MAX:
-							Collections.sort(doubleLabeledValues);
-							key = (int) doubleLabeledValues.get(doubleLabeledValues.size() - 1)
-									.getValue();
-							break;
-						case CHOOSE_FIRST:
-						case AVERAGE:
-						default:
-							key = 0;
+								value = Double.MIN_VALUE;
+							}
+							doubleLabeledValues.add(new LabeledValue<Double, Object>(value, i));
 						}
 
-						if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
-							values.put(colName, colValues.get(desc.getFieldName()).get(0));
+						if (doubleLabeledValues.isEmpty()) {
+							values.put(colName, ".");
 						} else {
-							values.put(colName, colValues.get(desc.getFieldName()).get(key));
+							final int key;
+							switch (refDesc.getAccumulationStrategy()) {
+								case CHOOSE_MIN:
+									Collections.sort(doubleLabeledValues);
+									key = (int) doubleLabeledValues.get(0).getValue();
+									break;
+								case CHOOSE_MAX:
+									Collections.sort(doubleLabeledValues);
+									key = (int) doubleLabeledValues.get(doubleLabeledValues.size() - 1)
+										.getValue();
+									break;
+								case CHOOSE_FIRST:
+								case AVERAGE:
+								default:
+									key = 0;
+							}
+
+							if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
+								values.put(colName, colValues.get(desc.getFieldName()).get(0));
+							} else {
+								values.put(colName, colValues.get(desc.getFieldName()).get(key));
+							}
 						}
-					}
-					break;
-				case Integer:
-					final List<LabeledValue<Integer, Object>> intLabeledValues = new ArrayList<>();
-					for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
-						Integer value = (Integer) colValues.get(refDesc.getFieldName()).get(i);
-						if (value == null && refDesc
+						break;
+					case Integer:
+						final List<LabeledValue<Integer, Object>> intLabeledValues = new ArrayList<>();
+						for (int i = 0; i < colValues.get(refDesc.getFieldName()).size(); ++i) {
+							Integer value = (Integer) colValues.get(refDesc.getFieldName()).get(i);
+							if (value == null && refDesc
 								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MIN) {
-							value = Integer.MAX_VALUE;
-						} else if (value == null && refDesc
+								value = Integer.MAX_VALUE;
+							} else if (value == null && refDesc
 								.getAccumulationStrategy() == GenericTSVAccumulationStrategy.CHOOSE_MAX) {
-							value = Integer.MIN_VALUE;
-						}
-						intLabeledValues.add(new LabeledValue<Integer, Object>(
+								value = Integer.MIN_VALUE;
+							}
+							intLabeledValues.add(new LabeledValue<Integer, Object>(
 								(Integer) colValues.get(refDesc.getFieldName()).get(i), i));
-					}
-
-					if (intLabeledValues.isEmpty()) {
-						values.put(colName, ".");
-					} else {
-						final int key;
-						switch (refDesc.getAccumulationStrategy()) {
-						case CHOOSE_MIN:
-							Collections.sort(intLabeledValues);
-							key = (int) intLabeledValues.get(0).getValue();
-							break;
-						case CHOOSE_MAX:
-							Collections.sort(intLabeledValues);
-							key = (int) intLabeledValues.get(intLabeledValues.size() - 1)
-									.getValue();
-							break;
-						case CHOOSE_FIRST:
-						case AVERAGE:
-						default:
-							key = 0;
 						}
 
-						if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
-							values.put(colName, colValues.get(desc.getFieldName()).get(0));
+						if (intLabeledValues.isEmpty()) {
+							values.put(colName, ".");
 						} else {
-							values.put(colName, colValues.get(desc.getFieldName()).get(key));
+							final int key;
+							switch (refDesc.getAccumulationStrategy()) {
+								case CHOOSE_MIN:
+									Collections.sort(intLabeledValues);
+									key = (int) intLabeledValues.get(0).getValue();
+									break;
+								case CHOOSE_MAX:
+									Collections.sort(intLabeledValues);
+									key = (int) intLabeledValues.get(intLabeledValues.size() - 1)
+										.getValue();
+									break;
+								case CHOOSE_FIRST:
+								case AVERAGE:
+								default:
+									key = 0;
+							}
+
+							if (colValues.get(desc.getFieldName()).size() == 1) {  // might be single value...
+								values.put(colName, colValues.get(desc.getFieldName()).get(0));
+							} else {
+								values.put(colName, colValues.get(desc.getFieldName()).get(key));
+							}
 						}
-					}
-					break;
-				default:
-					break;
+						break;
+					default:
+						break;
 				}
 			}
 
 			// Finally, write out one value
 			for (String colName : options.getColumnNames()) {
 				final GenericTSVValueColumnDescription desc = options.getValueColumnDescriptions()
-						.get(colName);
+					.get(colName);
 				builder.attribute(desc.getFieldName(), values.get(colName));
 			}
 
@@ -288,7 +283,7 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 	 * Helper for comparable pairs.
 	 */
 	private static class LabeledValue<Label extends Comparable<Label>, Value>
-			implements Comparable<LabeledValue<Label, Value>> {
+		implements Comparable<LabeledValue<Label, Value>> {
 
 		private final Label label;
 		private final Value value;

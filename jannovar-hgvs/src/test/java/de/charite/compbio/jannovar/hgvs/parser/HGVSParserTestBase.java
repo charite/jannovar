@@ -1,24 +1,15 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.*;
 
 public class HGVSParserTestBase {
 
 	/**
 	 * Parse the given string and return the parser.
 	 *
-	 * @param inputString
-	 *            HGVS string to parse
-	 * @param mode
-	 *            to enter into
-	 * @param trace
-	 *            whether or not to activate debug tracing
+	 * @param inputString HGVS string to parse
+	 * @param mode        to enter into
+	 * @param trace       whether or not to activate debug tracing
 	 */
 	protected Antlr4HGVSParser buildParserForString(String inputString, int mode, boolean trace) {
 		if (trace) {
@@ -42,7 +33,7 @@ public class HGVSParserTestBase {
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-					int charPositionInLine, String msg, RecognitionException e) {
+									int charPositionInLine, String msg, RecognitionException e) {
 				throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 			}
 		});

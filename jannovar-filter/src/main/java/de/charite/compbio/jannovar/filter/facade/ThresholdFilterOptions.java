@@ -7,68 +7,104 @@ package de.charite.compbio.jannovar.filter.facade;
  */
 public class ThresholdFilterOptions {
 
-	/** Minimal coverage at a site for heterozygous calls */
+	/**
+	 * Minimal coverage at a site for heterozygous calls
+	 */
 	private final int minGtCovHet;
 
-	/** Minimal coverage at a site for homozygous calls */
+	/**
+	 * Minimal coverage at a site for homozygous calls
+	 */
 	private final int minGtCovHomAlt;
 
-	/** Maximal coverage at a site for any call */
+	/**
+	 * Maximal coverage at a site for any call
+	 */
 	private final int maxCov;
 
-	/** Minimal genotype for calls */
+	/**
+	 * Minimal genotype for calls
+	 */
 	private final int minGtGq;
 
-	/** Minimal alternative allele fraction for heterozygous calls */
+	/**
+	 * Minimal alternative allele fraction for heterozygous calls
+	 */
 	private final double minGtAafHet;
 
-	/** Maximal alternative allele fraction for heterozygous calls */
+	/**
+	 * Maximal alternative allele fraction for heterozygous calls
+	 */
 	private final double maxGtAafHet;
 
-	/** Minimal alternative allele fraction for homozygous alternative calls */
+	/**
+	 * Minimal alternative allele fraction for homozygous alternative calls
+	 */
 	private final double minGtAafHomAlt;
 
-	/** Maximal alternative allele fraction for homozygous ref calls */
+	/**
+	 * Maximal alternative allele fraction for homozygous ref calls
+	 */
 	private final double maxGtAafHomRef;
 
-	/** Prefix of EXAC annotation */
+	/**
+	 * Prefix of EXAC annotation
+	 */
 	private final String exacPrefix;
 
-	/** Prefix of dbSNP annotation */
+	/**
+	 * Prefix of dbSNP annotation
+	 */
 	private final String dbSnpPrefix;
 
-	/** Prefix of thousand genomes annotation */
+	/**
+	 * Prefix of thousand genomes annotation
+	 */
 	private final String g1kPrefix;
 
-	/** Prefix of gnomAD exomes annotation */
+	/**
+	 * Prefix of gnomAD exomes annotation
+	 */
 	private final String gnomAdExomesPrefix;
 
-	/** Prefix of gnomAD genomes annotation */
+	/**
+	 * Prefix of gnomAD genomes annotation
+	 */
 	private final String gnomAdGenomesPrefix;
 
-	/** Maximal alternative allele's frequency for autosomal dominant inheritance mode */
+	/**
+	 * Maximal alternative allele's frequency for autosomal dominant inheritance mode
+	 */
 	private final double maxAlleleFrequencyAd;
 
-	/** Maximal alternative allele's frequency for autosomal recessive inheritance mode */
+	/**
+	 * Maximal alternative allele's frequency for autosomal recessive inheritance mode
+	 */
 	private final double maxAlleleFrequencyAr;
 
-	/** Maximal number of occurences in homozygous state in ExAC. */
+	/**
+	 * Maximal number of occurences in homozygous state in ExAC.
+	 */
 	private final int maxExacHomState;
 
-	/** Maximal number of occurences in homozygous state in thousand genomes. */
+	/**
+	 * Maximal number of occurences in homozygous state in thousand genomes.
+	 */
 	private final int maxG1kHomState;
 
-	/** @return {@link ThresholdFilterOptions} with conservative default settings */
+	/**
+	 * @return {@link ThresholdFilterOptions} with conservative default settings
+	 */
 	public static ThresholdFilterOptions buildDefaultOptions() {
 		return new ThresholdFilterOptions(8, 4, 10000, 20, 0.2, 0.8, 0.7, 0.3, "EXAC_", "DBSNP_",
-				"GNOMAD_GENOMES_", "GNOMAD_EXOMES_", "G1K_", 0.01, 0.01, 20, 10);
+			"GNOMAD_GENOMES_", "GNOMAD_EXOMES_", "G1K_", 0.01, 0.01, 20, 10);
 	}
 
 	public ThresholdFilterOptions(int minGtCovHet, int minGtCovHomAlt, int maxCov, int minGtGq,
-			double minGtAafHet, double maxGtAafHet, double minGtAafHomAlt, double maxGtAafHomRef,
-			String exacPrefix, String dbSnpPrefix, String gnomAdGenomesPrefix,
-			String gnomAdExomesPrefix, String g1kPrefix, double maxAlleleFrequencyAd,
-			double maxAlleleFrequencyAr, int maxExacHomState, int maxG1kHomState) {
+								  double minGtAafHet, double maxGtAafHet, double minGtAafHomAlt, double maxGtAafHomRef,
+								  String exacPrefix, String dbSnpPrefix, String gnomAdGenomesPrefix,
+								  String gnomAdExomesPrefix, String g1kPrefix, double maxAlleleFrequencyAd,
+								  double maxAlleleFrequencyAr, int maxExacHomState, int maxG1kHomState) {
 		super();
 		this.minGtCovHet = minGtCovHet;
 		this.minGtCovHomAlt = minGtCovHomAlt;
@@ -160,14 +196,14 @@ public class ThresholdFilterOptions {
 	@Override
 	public String toString() {
 		return "ThresholdFilterOptions [minGtCovHet=" + minGtCovHet + ", minGtCovHomAlt="
-				+ minGtCovHomAlt + ", maxCov=" + maxCov + ", minGtGq=" + minGtGq + ", minGtAafHet="
-				+ minGtAafHet + ", maxGtAafHet=" + maxGtAafHet + ", minGtAafHomAlt="
-				+ minGtAafHomAlt + ", maxGtAafHomRef=" + maxGtAafHomRef + ", exacPrefix="
-				+ exacPrefix + ", dbSnpPrefix=" + dbSnpPrefix + ", gnomAdExomesPrefix="
-				+ gnomAdExomesPrefix + ", gnomAdGenomesPrefix=" + gnomAdGenomesPrefix
-				+ ", maxAlleleFrequencyAd=" + maxAlleleFrequencyAd + ", maxAlleleFrequencyAr="
-				+ maxAlleleFrequencyAr + ", maxExacHomState=" + maxExacHomState
-				+ ", maxG1kHomState=" + maxG1kHomState + "]";
+			+ minGtCovHomAlt + ", maxCov=" + maxCov + ", minGtGq=" + minGtGq + ", minGtAafHet="
+			+ minGtAafHet + ", maxGtAafHet=" + maxGtAafHet + ", minGtAafHomAlt="
+			+ minGtAafHomAlt + ", maxGtAafHomRef=" + maxGtAafHomRef + ", exacPrefix="
+			+ exacPrefix + ", dbSnpPrefix=" + dbSnpPrefix + ", gnomAdExomesPrefix="
+			+ gnomAdExomesPrefix + ", gnomAdGenomesPrefix=" + gnomAdGenomesPrefix
+			+ ", maxAlleleFrequencyAd=" + maxAlleleFrequencyAd + ", maxAlleleFrequencyAr="
+			+ maxAlleleFrequencyAr + ", maxExacHomState=" + maxExacHomState
+			+ ", maxG1kHomState=" + maxG1kHomState + "]";
 	}
 
 	@Override
@@ -177,9 +213,9 @@ public class ThresholdFilterOptions {
 		result = prime * result + ((dbSnpPrefix == null) ? 0 : dbSnpPrefix.hashCode());
 		result = prime * result + ((exacPrefix == null) ? 0 : exacPrefix.hashCode());
 		result = prime * result
-				+ ((gnomAdExomesPrefix == null) ? 0 : gnomAdExomesPrefix.hashCode());
+			+ ((gnomAdExomesPrefix == null) ? 0 : gnomAdExomesPrefix.hashCode());
 		result = prime * result
-				+ ((gnomAdGenomesPrefix == null) ? 0 : gnomAdGenomesPrefix.hashCode());
+			+ ((gnomAdGenomesPrefix == null) ? 0 : gnomAdGenomesPrefix.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(maxAlleleFrequencyAd);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -232,10 +268,10 @@ public class ThresholdFilterOptions {
 		} else if (!gnomAdGenomesPrefix.equals(other.gnomAdGenomesPrefix))
 			return false;
 		if (Double.doubleToLongBits(maxAlleleFrequencyAd) != Double
-				.doubleToLongBits(other.maxAlleleFrequencyAd))
+			.doubleToLongBits(other.maxAlleleFrequencyAd))
 			return false;
 		if (Double.doubleToLongBits(maxAlleleFrequencyAr) != Double
-				.doubleToLongBits(other.maxAlleleFrequencyAr))
+			.doubleToLongBits(other.maxAlleleFrequencyAr))
 			return false;
 		if (maxCov != other.maxCov)
 			return false;
@@ -246,12 +282,12 @@ public class ThresholdFilterOptions {
 		if (Double.doubleToLongBits(maxGtAafHet) != Double.doubleToLongBits(other.maxGtAafHet))
 			return false;
 		if (Double.doubleToLongBits(maxGtAafHomRef) != Double
-				.doubleToLongBits(other.maxGtAafHomRef))
+			.doubleToLongBits(other.maxGtAafHomRef))
 			return false;
 		if (Double.doubleToLongBits(minGtAafHet) != Double.doubleToLongBits(other.minGtAafHet))
 			return false;
 		if (Double.doubleToLongBits(minGtAafHomAlt) != Double
-				.doubleToLongBits(other.minGtAafHomAlt))
+			.doubleToLongBits(other.minGtAafHomAlt))
 			return false;
 		if (minGtCovHet != other.minGtCovHet)
 			return false;

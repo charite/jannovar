@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.annotation;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMultiset;
-
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.VariantDescription;
+
+import java.util.Collection;
 
 /**
  * A list of priority-sorted {@link Annotation} objects.
@@ -18,30 +17,31 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
 @Immutable
 public final class VariantAnnotations implements VariantDescription {
 
-	/** the {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for. */
+	/**
+	 * the {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for.
+	 */
 	private final GenomeVariant change;
 
-	/** the list of the annotations */
+	/**
+	 * the list of the annotations
+	 */
 	private final ImmutableList<Annotation> entries;
 
 	/**
-	 * @param change
-	 *            to use for the empty list
+	 * @param change to use for the empty list
 	 * @return empty <code>AnnotationList</code> with the given {@link GenomeVariant}
 	 */
 	public static VariantAnnotations buildEmptyList(GenomeVariant change) {
-		return new VariantAnnotations(change, ImmutableList.<Annotation> of());
+		return new VariantAnnotations(change, ImmutableList.<Annotation>of());
 	}
 
 	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
-	 *
+	 * <p>
 	 * Note that <code>variant</code> is converted to the forward strand using {@link GenomeVariant#withStrand}.
 	 *
-	 * @param variant
-	 *            {@link GenomeVariant} that this anotation list annotates
-	 * @param entries
-	 *            {@link Collection} of {@link Annotation} objects
+	 * @param variant {@link GenomeVariant} that this anotation list annotates
+	 * @param entries {@link Collection} of {@link Annotation} objects
 	 */
 	public VariantAnnotations(GenomeVariant variant, Collection<Annotation> entries) {
 		this.change = variant.withStrand(Strand.FWD);
@@ -50,7 +50,7 @@ public final class VariantAnnotations implements VariantDescription {
 
 	/**
 	 * Return the {@link GenomeVariant} that this AnnotationList is annotated with.
-	 *
+	 * <p>
 	 * Note that the {@link GenomeVariant} is converted to be on the forward strand on construction of AnnotationList
 	 * objects.
 	 *
@@ -88,7 +88,7 @@ public final class VariantAnnotations implements VariantDescription {
 	 * Convenience method.
 	 *
 	 * @return {@link VariantEffect} with the highest impact of all in entries or {@link VariantEffect#SEQUENCE_VARIANT}
-	 *         if entries are empty or contain no annotated effects.
+	 * if entries are empty or contain no annotated effects.
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();

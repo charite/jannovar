@@ -1,16 +1,11 @@
 package de.charite.compbio.jannovar.pedigree;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+
+import java.io.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 // TODO(holtgrem): Test me!
 
@@ -22,7 +17,9 @@ import com.google.common.collect.ImmutableList;
  */
 public final class PedFileReader {
 
-	/** the file to read from */
+	/**
+	 * the file to read from
+	 */
 	private final File file;
 
 	/**
@@ -35,10 +32,8 @@ public final class PedFileReader {
 	/**
 	 * Read in the pedigree file in {@link #file}.
 	 *
-	 * @throws IOException
-	 *             in the case of problems with reading from {@link #file}
-	 * @throws PedParseException
-	 *             in the case of problems with parsing the data from {@link #file}
+	 * @throws IOException       in the case of problems with reading from {@link #file}
+	 * @throws PedParseException in the case of problems with parsing the data from {@link #file}
 	 */
 	public PedFileContents read() throws IOException, PedParseException {
 		return read(new FileInputStream(file));
@@ -47,13 +42,10 @@ public final class PedFileReader {
 	/**
 	 * Static method for parsing a PED file into a {@link PedFileContents} object.
 	 *
-	 * @param stream
-	 *            input stream to read from
+	 * @param stream input stream to read from
 	 * @return resulting {@link PedFileContents} representing the contents of the file
-	 * @throws IOException
-	 *             in the case of problems with reading from <code>stream</code>
-	 * @throws PedParseException
-	 *             in the case of problems with parsing the data from <code>stream</code>
+	 * @throws IOException       in the case of problems with reading from <code>stream</code>
+	 * @throws PedParseException in the case of problems with parsing the data from <code>stream</code>
 	 */
 	public static PedFileContents read(InputStream stream) throws IOException, PedParseException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
@@ -96,8 +88,7 @@ public final class PedFileReader {
 	/**
 	 * Parse individual from the given line.
 	 *
-	 * @throws PedParseException
-	 *             on problems with the parsing
+	 * @throws PedParseException on problems with the parsing
 	 */
 	private static PedPerson readIndividual(String line) throws PedParseException {
 		try {
@@ -117,7 +108,7 @@ public final class PedFileReader {
 				extraFields.add(it.next());
 
 			return new PedPerson(pedigree, name, father, mother, Sex.toSex(sex), Disease.toDisease(disease),
-					extraFields.build());
+				extraFields.build());
 		} catch (NoSuchElementException e) {
 			throw new PedParseException("Insufficient number of fields in line: \"" + line + "\"");
 		}

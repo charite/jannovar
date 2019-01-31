@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.vardbs.base;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
+
 import java.io.File;
 
 /**
@@ -12,7 +13,9 @@ import java.io.File;
  */
 public class VCFReaderVariantProvider implements DatabaseVariantContextProvider {
 
-	/** VCFReader to use for loading the VCF records */
+	/**
+	 * VCFReader to use for loading the VCF records
+	 */
 	private final VCFFileReader vcfReader;
 
 	public VCFReaderVariantProvider(String vcfPath) {

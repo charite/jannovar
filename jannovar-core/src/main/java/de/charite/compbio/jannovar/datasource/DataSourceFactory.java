@@ -17,18 +17,19 @@ import java.util.List;
  */
 final public class DataSourceFactory {
 
-	/** {@link DatasourceOptions} object for proxy settings */
+	/**
+	 * {@link DatasourceOptions} object for proxy settings
+	 */
 	private final DatasourceOptions options;
-	/** {@link Ini} object to use for loading data */
+	/**
+	 * {@link Ini} object to use for loading data
+	 */
 	private final ImmutableList<Ini> inis;
 
 	/**
-	 * @param options
-	 *            for proxy configuration
-	 * @param iniFilePaths
-	 *            path to INI file to load the data source config from
-	 * @throws InvalidDataSourceException
-	 *             on problems with the data source config file
+	 * @param options      for proxy configuration
+	 * @param iniFilePaths path to INI file to load the data source config from
+	 * @throws InvalidDataSourceException on problems with the data source config file
 	 */
 	public DataSourceFactory(DatasourceOptions options, List<String> iniFilePaths) throws InvalidDataSourceException {
 		this.options = options;
@@ -47,7 +48,7 @@ final public class DataSourceFactory {
 					is = new FileInputStream(iniFilePath);
 				} catch (FileNotFoundException e) {
 					throw new InvalidDataSourceException(
-							"Problem opening data source file " + iniFilePath + ": " + e.getMessage());
+						"Problem opening data source file " + iniFilePath + ": " + e.getMessage());
 				}
 			}
 			Ini ini = new Ini();
@@ -76,11 +77,9 @@ final public class DataSourceFactory {
 	/**
 	 * Construct {@link DataSource}
 	 *
-	 * @param name
-	 *            key of the INI section to load the data source from
+	 * @param name key of the INI section to load the data source from
 	 * @return {@link DataSource} with data from the file
-	 * @throws InvalidDataSourceException
-	 *             if <code>name</code> could not be found in any data source config file
+	 * @throws InvalidDataSourceException if <code>name</code> could not be found in any data source config file
 	 */
 	public DataSource getDataSource(String name) throws InvalidDataSourceException {
 		for (Ini ini : inis) {

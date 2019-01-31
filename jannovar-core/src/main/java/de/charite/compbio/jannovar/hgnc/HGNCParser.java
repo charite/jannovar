@@ -1,5 +1,10 @@
 package de.charite.compbio.jannovar.hgnc;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.JannovarException;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,26 +12,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.JannovarException;
-
 // TODO(holtgrewe): test me
 
 /**
  * Parser for <tt>hgnc_complete_set.txt</tt>
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class HGNCParser {
 
-	/** Download URL for the HGNC complete set TSV file */
+	/**
+	 * Download URL for the HGNC complete set TSV file
+	 */
 	public static final String DOWNLOAD_URL = "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt";
 
-	/** Path to the file to parser */
+	/**
+	 * Path to the file to parser
+	 */
 	private final String path;
 
 	public HGNCParser(String path) {
@@ -34,7 +37,9 @@ public class HGNCParser {
 		this.path = path;
 	}
 
-	/** @return entry in the given index or the empty string */
+	/**
+	 * @return entry in the given index or the empty string
+	 */
 	private static String getField(String[] arr, int idx) {
 		if (idx >= arr.length)
 			return "";
@@ -44,8 +49,7 @@ public class HGNCParser {
 
 	/**
 	 * @return <tt>ImmutableList</tt> with {@link HGNCRecord}s
-	 * @throws JannovarException
-	 *             if there is a problem with opening or reading the file
+	 * @throws JannovarException if there is a problem with opening or reading the file
 	 */
 	public ImmutableList<HGNCRecord> run() throws JannovarException {
 		ImmutableList.Builder<HGNCRecord> result = new ImmutableList.Builder<HGNCRecord>();
@@ -86,8 +90,8 @@ public class HGNCParser {
 					final String omimID = getField(arr, header.get("omim_id"));
 
 					result.add(new HGNCRecord(hgncID, symbol, name, aliasSymbols, prevSymbols, entrezID, ensemblGeneID,
-							vegaID, ucscID, enaID, refseqAccession, ccdsIDs, uniprotIDs, pubmedIDs, mgdID, rgdID,
-							cosmicID, omimID));
+						vegaID, ucscID, enaID, refseqAccession, ccdsIDs, uniprotIDs, pubmedIDs, mgdID, rgdID,
+						cosmicID, omimID));
 				}
 			}
 		} catch (FileNotFoundException e) {

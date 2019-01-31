@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.reference;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.reference.PositionType;
-
 /**
  * We only need a few tests so we can double-check if the PositionType enum changes.
  *

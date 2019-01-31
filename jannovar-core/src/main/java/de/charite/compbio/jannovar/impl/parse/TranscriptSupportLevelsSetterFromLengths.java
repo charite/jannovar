@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import java.util.Collection;
-import java.util.HashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Set the transcript support level from transcript lengths.
@@ -17,7 +16,9 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
  */
 public class TranscriptSupportLevelsSetterFromLengths {
 
-	/** {@link Logger} to use for logging */
+	/**
+	 * {@link Logger} to use for logging
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptSupportLevelsSetterFromLengths.class);
 
 	public static void run(Collection<TranscriptModelBuilder> values) {
@@ -29,8 +30,7 @@ public class TranscriptSupportLevelsSetterFromLengths {
 	 * Set the level of the longest {@link TranscriptModelBuilder} objects for each gene to
 	 * {@link TranscriptSupportLevels.LONGEST_TRANSCRIPT}.
 	 *
-	 * @param values
-	 *            the builders to analyze
+	 * @param values the builders to analyze
 	 */
 	private static void updateLevelsOfLongest(Collection<TranscriptModelBuilder> builders) {
 		// obtain the longest builder for each gene
@@ -54,7 +54,7 @@ public class TranscriptSupportLevelsSetterFromLengths {
 		// update level of longest
 		for (TranscriptModelBuilder builder : longest.values()) {
 			LOGGER.debug("Longest builder for {} is {}",
-					new Object[] { builder.getGeneSymbol(), builder.getAccession() });
+				new Object[]{builder.getGeneSymbol(), builder.getAccession()});
 			builder.setTranscriptSupportLevel(TranscriptSupportLevels.LONGEST_TRANSCRIPT);
 		}
 	}
@@ -62,9 +62,8 @@ public class TranscriptSupportLevelsSetterFromLengths {
 	/**
 	 * Set the level of all {@link TranscriptModelBuilder} objects to {@link TranscriptSupportLevels.LOW_PRIORITY}.
 	 *
-	 * @param values
-	 *            the {@link TranscriptModelBuilder} to set the levels of to
-	 *            {@link TranscriptSupportLevels.LOW_PRIORITY}.
+	 * @param values the {@link TranscriptModelBuilder} to set the levels of to
+	 *               {@link TranscriptSupportLevels.LOW_PRIORITY}.
 	 */
 	private static void setDefaultLevels(Collection<TranscriptModelBuilder> builders) {
 		for (TranscriptModelBuilder builder : builders)

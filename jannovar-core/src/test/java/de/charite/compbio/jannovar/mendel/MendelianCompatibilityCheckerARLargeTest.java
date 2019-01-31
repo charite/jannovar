@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class MendelianCompatibilityCheckerARLargeTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -35,7 +29,7 @@ public class MendelianCompatibilityCheckerARLargeTest extends MendelianCompatibi
 		individuals.add(new PedPerson("ped", "IV.1", "III.1", "0", Sex.FEMALE, Disease.AFFECTED)); // baby1
 		individuals.add(new PedPerson("ped", "IV.2", "III.2", "0", Sex.FEMALE, Disease.UNAFFECTED)); // baby2
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2", "II.3", "II.4", "III.1", "III.2", "IV.1", "IV.2");
@@ -103,7 +97,7 @@ public class MendelianCompatibilityCheckerARLargeTest extends MendelianCompatibi
 	public void testCaseNegativesOneVariant5() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, HET, REF, HET, ALT, UKN, HET, HET, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
-		
+
 		// TODO: ask max why this is not a ChromosomeType.AUTOSOMAL negative case but was in his test...
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -232,7 +226,7 @@ public class MendelianCompatibilityCheckerARLargeTest extends MendelianCompatibi
 	@Test
 	public void testCasePositivesTwoVariants1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF),
-				lst(REF, HET, HET, REF, HET, UKN, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
+			lst(REF, HET, HET, REF, HET, UKN, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -245,7 +239,7 @@ public class MendelianCompatibilityCheckerARLargeTest extends MendelianCompatibi
 	@Test
 	public void testCasePositivesTwoVariants2() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, REF, HET, HET, UKN, HET, HET, HET, REF),
-				lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());

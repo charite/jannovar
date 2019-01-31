@@ -1,25 +1,39 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
-import java.util.ArrayList;
-
 import com.google.common.collect.ArrayListMultimap;
+
+import java.util.ArrayList;
 
 public class ClinVarRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String contig;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	private ArrayList<String> filter;
 
-	/** Multi-mapping from allele to ClinVarAnnotation records */
+	/**
+	 * Multi-mapping from allele to ClinVarAnnotation records
+	 */
 	final private ArrayListMultimap<Integer, ClinVarAnnotation> annotations;
 
 	ClinVarRecordBuilder() {
@@ -100,7 +114,7 @@ public class ClinVarRecordBuilder {
 	@Override
 	public String toString() {
 		return "ClinVarRecordBuilder [contig=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt="
-				+ alt + ", filter=" + filter + ", annotations=" + annotations + "]";
+			+ alt + ", filter=" + filter + ", annotations=" + annotations + "]";
 	}
 
 	@Override

@@ -1,13 +1,12 @@
 package de.charite.compbio.jannovar.reference;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
-
 import de.charite.compbio.jannovar.Immutable;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The information representing a transcript model.
@@ -29,7 +28,9 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	private final String geneSymbol;
 
-	/** Genomic interval with transcript begin/end. */
+	/**
+	 * Genomic interval with transcript begin/end.
+	 */
 	private final GenomeInterval txRegion;
 
 	/**
@@ -39,10 +40,14 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	private final GenomeInterval cdsRegion;
 
-	/** Genomic intervals with the exons, order is dictated by strand of transcript. */
+	/**
+	 * Genomic intervals with the exons, order is dictated by strand of transcript.
+	 */
 	private final ImmutableList<GenomeInterval> exonRegions;
 
-	/** cDNA sequence of the spliced RNA of this known gene transcript. */
+	/**
+	 * cDNA sequence of the spliced RNA of this known gene transcript.
+	 */
 	private final String sequence;
 
 	/**
@@ -55,7 +60,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	/**
 	 * Alternative gene IDs, as parsed from RefSeq GFF3 file
-	 * 
+	 * <p>
 	 * See {@link #getAltGeneIDs()} for more information
 	 */
 	private final ImmutableSortedMap<String, String> altGeneIDs;
@@ -68,24 +73,26 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	private final int transcriptSupportLevel;
 
-	/** Class version (for serialization). */
+	/**
+	 * Class version (for serialization).
+	 */
 	private static final long serialVersionUID = 3L;
 
 	/**
 	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
+						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
 		this(accession, geneSymbol, txRegion, cdsRegion, exonRegions, sequence, geneID, transcriptSupportLevel,
-				ImmutableMap.<String, String> of());
+			ImmutableMap.<String, String>of());
 	}
 
 	/**
 	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,
-			Map<String, String> altGeneIDs) {
+						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,
+						   Map<String, String> altGeneIDs) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -98,39 +105,51 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		checkForConsistency();
 	}
 
-	/** @return accession number */
+	/**
+	 * @return accession number
+	 */
 	public String getAccession() {
 		return accession;
 	}
 
-	/** @return the gene symbol */
+	/**
+	 * @return the gene symbol
+	 */
 	public String getGeneSymbol() {
 		return geneSymbol;
 	}
 
-	/** @return transcript's genomic region */
+	/**
+	 * @return transcript's genomic region
+	 */
 	public GenomeInterval getTXRegion() {
 		return txRegion;
 	}
 
-	/** @return CDS genomic region */
+	/**
+	 * @return CDS genomic region
+	 */
 	public GenomeInterval getCDSRegion() {
 		return cdsRegion;
 	}
 
-	/** @return genomic intervals with the exons, order is dictated by strand of transcript. */
+	/**
+	 * @return genomic intervals with the exons, order is dictated by strand of transcript.
+	 */
 	public ImmutableList<GenomeInterval> getExonRegions() {
 		return exonRegions;
 	}
 
-	/** @return mDNA sequence of the spliced RNA of this known gene transcript. */
+	/**
+	 * @return mDNA sequence of the spliced RNA of this known gene transcript.
+	 */
 	public String getSequence() {
 		return sequence;
 	}
 
 	/**
 	 * @return The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
-	 *         "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
+	 * "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
 	 */
 	public String getGeneID() {
 		return geneID;
@@ -138,7 +157,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	/**
 	 * Return mapping containing alternative gene IDs, as parsed from RefSeq GFF3 file
-	 * 
+	 * <p>
 	 * The alternative identifiers used are the values of {@link AltGeneIDType} converted to strings.
 	 */
 	public ImmutableSortedMap<String, String> getAltGeneIDs() {
@@ -147,7 +166,6 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	/**
 	 * @return transcript support level of the this transcript (the lower the better).
-	 *
 	 * @see TranscriptSupportLevels
 	 * @see <a href="http://www.ensembl.org/Help/Glossary?id=492">http://www.ensembl.org/Help/Glossary?id=492</a>
 	 */
@@ -155,12 +173,16 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		return transcriptSupportLevel;
 	}
 
-	/** @return the strand of the transcript */
+	/**
+	 * @return the strand of the transcript
+	 */
 	public Strand getStrand() {
 		return txRegion.getStrand();
 	}
 
-	/** @return the chromosome of the transcript */
+	/**
+	 * @return the chromosome of the transcript
+	 */
 	public int getChr() {
 		return txRegion.getChr();
 	}
@@ -193,8 +215,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
-	 * @param i
-	 *            0-based index of the intron's region to return
+	 * @param i 0-based index of the intron's region to return
 	 * @return {@link GenomeInterval} with the intron's region
 	 */
 	public GenomeInterval intronRegion(int i) {
@@ -202,7 +223,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		GenomeInterval exonRegionL = exonRegions.get(i);
 		GenomeInterval exonRegionR = exonRegions.get(i + 1);
 		return new GenomeInterval(exonRegionL.refDict, exonRegionL.getStrand(), exonRegionL.getChr(),
-				exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
+			exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
 	}
 
 	/**

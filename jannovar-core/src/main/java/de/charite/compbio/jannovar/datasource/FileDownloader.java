@@ -1,27 +1,20 @@
 package de.charite.compbio.jannovar.datasource;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.net.URL;
-import java.net.URLConnection;
-
+import de.charite.compbio.jannovar.impl.util.ProgressBar;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.charite.compbio.jannovar.impl.util.ProgressBar;
+import java.io.*;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Helper class for downloading files over HTTP and FTP.
- *
+ * <p>
  * The implementation of FTP downloads is more complex since we need passive FTP transfer through firewalls. This is not
  * possible when just opening a stream through an {@link URL} object with Java's builtin features.
  *
@@ -29,7 +22,9 @@ import de.charite.compbio.jannovar.impl.util.ProgressBar;
  */
 final class FileDownloader {
 
-	/** the logger object to use */
+	/**
+	 * the logger object to use
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileDownloader.class);
 
 	public static class ProxyOptions {
@@ -49,10 +44,14 @@ final class FileDownloader {
 		public ProxyOptions ftp = new ProxyOptions();
 	}
 
-	/** configuration for the downloader */
+	/**
+	 * configuration for the downloader
+	 */
 	Options options;
 
-	/** Initializer FileDownloader with the given options string */
+	/**
+	 * Initializer FileDownloader with the given options string
+	 */
 	FileDownloader(Options options) {
 		this.options = options;
 	}
@@ -61,13 +60,10 @@ final class FileDownloader {
 	 * This method downloads a file to the specified local file path. If the file already exists, it emits a warning
 	 * message and does nothing.
 	 *
-	 * @param src
-	 *            {@link URL} with file to download
-	 * @param dest
-	 *            {@link File} with destination path
+	 * @param src  {@link URL} with file to download
+	 * @param dest {@link File} with destination path
 	 * @return <code>true</code> if the file was downloaded and <code>false</code> if not.
-	 * @throws FileDownloadException
-	 *             on problems with downloading
+	 * @throws FileDownloadException on problems with downloading
 	 */
 	public boolean copyURLToFile(URL src, File dest) throws FileDownloadException {
 		if (dest.exists())
@@ -214,7 +210,7 @@ final class FileDownloader {
 
 	/**
 	 * Copy contents of a URL to a file using the {@link URL} class.
-	 *
+	 * <p>
 	 * This works for the HTTP and the HTTPS protocol and for FTP through a proxy. For plain FTP, we need to use the
 	 * passive mode.
 	 */

@@ -1,14 +1,15 @@
 package de.charite.compbio.jannovar.reference;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
-
 public class GenomeVariantTest {
 
-	/** this test uses this static hg19 reference dictionary */
+	/**
+	 * this test uses this static hg19 reference dictionary
+	 */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	GenomePosition genomePosOneBasedForward;
@@ -82,7 +83,7 @@ public class GenomeVariantTest {
 	public void testConstructorStripLeading() {
 		GenomeVariant change = new GenomeVariant(this.genomePosOneBasedForward, "AAA", "AAC");
 		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.getStrand(),
-				this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
+			this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.getGenomePos());
 		Assert.assertEquals("A", change.getRef());
 		Assert.assertEquals("C", change.getAlt());
@@ -100,7 +101,7 @@ public class GenomeVariantTest {
 	public void testConstructorStripBoth() {
 		GenomeVariant change = new GenomeVariant(this.genomePosOneBasedForward, "GGACC", "GGCCC");
 		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.getStrand(),
-				this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
+			this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.getGenomePos());
 		Assert.assertEquals("A", change.getRef());
 		Assert.assertEquals("C", change.getAlt());
@@ -160,7 +161,7 @@ public class GenomeVariantTest {
 		GenomeVariant change = new GenomeVariant(this.genomePosZeroBasedReverse, "A", "C");
 		GenomeInterval genomeInterval = change.getGenomeInterval();
 		GenomeInterval expectedInterval = new GenomeInterval(refDict, Strand.REV, 1, 122, 123,
-				PositionType.ZERO_BASED);
+			PositionType.ZERO_BASED);
 		Assert.assertTrue(expectedInterval.equals(genomeInterval));
 		Assert.assertEquals(expectedInterval, genomeInterval);
 	}

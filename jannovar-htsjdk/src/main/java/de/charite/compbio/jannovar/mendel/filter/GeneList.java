@@ -1,22 +1,25 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 
 /**
  * List of genes, accessible through an interval tree.
  */
 class GeneList {
 
-	/** overall gene list */
+	/**
+	 * overall gene list
+	 */
 	private final ImmutableList<Gene> genes;
-	/** map from numeric chromosome id to interval tree of genes */
+	/**
+	 * map from numeric chromosome id to interval tree of genes
+	 */
 	private final ImmutableMap<Integer, IntervalArray<Gene>> gIntervalTree;
 
 	public GeneList(ImmutableList<Gene> genes) {

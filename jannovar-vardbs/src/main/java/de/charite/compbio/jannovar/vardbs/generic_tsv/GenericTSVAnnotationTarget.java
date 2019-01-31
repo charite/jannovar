@@ -7,8 +7,12 @@ package de.charite.compbio.jannovar.vardbs.generic_tsv;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum GenericTSVAnnotationTarget {
-	/** TSV file annotates a position. */
+	/**
+	 * TSV file annotates a position.
+	 */
 	POSITION,
-	/** TSV file annotates a variant allele. */
+	/**
+	 * TSV file annotates a variant allele.
+	 */
 	VARIANT;
 }

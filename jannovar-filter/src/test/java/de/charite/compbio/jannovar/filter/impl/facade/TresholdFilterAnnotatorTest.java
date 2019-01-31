@@ -19,7 +19,7 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 	@Before
 	public void setUp() {
 		annotator =
-				new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
+			new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
 	}
 
 	/**
@@ -35,9 +35,9 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
 		Assert.assertEquals("[]", updatedVC.getFilters().toString());
 		Assert.assertEquals(
-				"[VC Unknown @ 1:17452 Q35.74 of type=SNP alleles=[G*, A] attr={} "
-						+ "GT=[[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]] filters=",
-				updatedVC.toString());
+			"[VC Unknown @ 1:17452 Q35.74 of type=SNP alleles=[G*, A] attr={} "
+				+ "GT=[[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]] filters=",
+			updatedVC.toString());
 	}
 
 }

@@ -1,10 +1,10 @@
 package de.charite.compbio.jannovar.data;
 
-import java.io.Serializable;
-
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+
+import java.io.Serializable;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * also to find the neighbors (5' and 3') of the closest gene in order to find the right and left genes of intergenic
  * variants and to find the correct gene in the cases of complex regions of the chromosome with one gene located in the
  * intron of the next or with overlapping genes.
- *
+ * <p>
  * Note that the {@link GenomeInterval} objects in the interval tree are defined by the transcription start and stop
  * sites of the isoform.
  *
@@ -24,13 +24,19 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  */
 public final class Chromosome implements Serializable {
 
-	/** serial version ID */
+	/**
+	 * serial version ID
+	 */
 	private static final long serialVersionUID = 1L;
 
-	/** reference dictionary to use */
+	/**
+	 * reference dictionary to use
+	 */
 	private final ReferenceDictionary refDict;
 
-	/** numeric chromsome ID */
+	/**
+	 * numeric chromsome ID
+	 */
 	private final int chrID;
 
 	/**
@@ -42,12 +48,9 @@ public final class Chromosome implements Serializable {
 	/**
 	 * Initialize object.
 	 *
-	 * @param refDict
-	 *            the {@link ReferenceDictionary} to use
-	 * @param chrID
-	 *            the chromosome
-	 * @param tmIntervalTree
-	 *            An interval tree with all transcripts on this chromosome.
+	 * @param refDict        the {@link ReferenceDictionary} to use
+	 * @param chrID          the chromosome
+	 * @param tmIntervalTree An interval tree with all transcripts on this chromosome.
 	 */
 	public Chromosome(ReferenceDictionary refDict, int chrID, IntervalArray<TranscriptModel> tmIntervalTree) {
 		this.refDict = refDict;
@@ -55,12 +58,16 @@ public final class Chromosome implements Serializable {
 		this.tmIntervalTree = tmIntervalTree;
 	}
 
-	/** @return reference dictionary to use */
+	/**
+	 * @return reference dictionary to use
+	 */
 	public ReferenceDictionary getRefDict() {
 		return refDict;
 	}
 
-	/** @return numeric chromsome ID */
+	/**
+	 * @return numeric chromsome ID
+	 */
 	public int getChrID() {
 		return chrID;
 	}

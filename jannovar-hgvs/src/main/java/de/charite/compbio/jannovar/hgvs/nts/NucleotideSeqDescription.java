@@ -5,19 +5,25 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
 /**
  * Specification for a nucleotide sequence, e.g. deleted or inserted.
- *
+ * <p>
  * This can be either just a count or a nucleotide sequence.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 
-	/** sentinel value for invalid nucleotide count */
+	/**
+	 * sentinel value for invalid nucleotide count
+	 */
 	public static final int INVALID_NT_COUNT = -1;
 
-	/** String of nucleotides, null if there are none */
+	/**
+	 * String of nucleotides, null if there are none
+	 */
 	private final String nts;
-	/** Length of nucleotide string, fallback if {@link #nts} is empty */
+	/**
+	 * Length of nucleotide string, fallback if {@link #nts} is empty
+	 */
 	private final int ntCount;
 
 	/**
@@ -44,7 +50,9 @@ public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 		this.ntCount = nts.length();
 	}
 
-	/** @return <code>true</code> if the nucleotide sequence was specified */
+	/**
+	 * @return <code>true</code> if the nucleotide sequence was specified
+	 */
 	public boolean hasNucleotides() {
 		return this.nts != null;
 	}
@@ -58,12 +66,16 @@ public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 		return this.nts;
 	}
 
-	/** @return <code>true</code> if nothing is to be printed. */
+	/**
+	 * @return <code>true</code> if nothing is to be printed.
+	 */
 	public boolean isBlank() {
 		return ntCount == -1;
 	}
 
-	/** @return length of amino acids */
+	/**
+	 * @return length of amino acids
+	 */
 	public int length() {
 		return this.ntCount;
 	}

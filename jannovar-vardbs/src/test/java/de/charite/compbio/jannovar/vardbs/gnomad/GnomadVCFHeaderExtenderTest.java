@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GnomadVCFHeaderExtenderTest {
 
@@ -61,7 +60,7 @@ public class GnomadVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_AN_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HET_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HOM_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HEMI_AFR"));
@@ -86,7 +85,7 @@ public class GnomadVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HET_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HOM_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_HEMI_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_AC_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_AN_POPMAX"));
@@ -114,7 +113,7 @@ public class GnomadVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_AN_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HET_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HOM_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HEMI_AFR"));
@@ -139,7 +138,7 @@ public class GnomadVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HOM_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HEMI_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_HET_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_AC_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("GNOMAD_OVL_AN_POPMAX"));

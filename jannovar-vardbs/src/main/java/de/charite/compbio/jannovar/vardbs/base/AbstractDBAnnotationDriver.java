@@ -2,44 +2,48 @@ package de.charite.compbio.jannovar.vardbs.base;
 
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Abstract base class for annotation based on VCF files.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnotationDriver {
 
-	/** Path to dbSNP VCF file */
+	/**
+	 * Path to dbSNP VCF file
+	 */
 	protected final DatabaseVariantContextProvider variantProvider;
-	/** Helper objects for matching alleles */
+	/**
+	 * Helper objects for matching alleles
+	 */
 	protected final AlleleMatcher matcher;
-	/** Helper for converting from VariantContex to DBSNP record */
+	/**
+	 * Helper for converting from VariantContex to DBSNP record
+	 */
 	protected final VariantContextToRecordConverter<RecordType> vcToRecord;
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	protected final DBAnnotationOptions options;
 
 	/**
 	 * Create annotation driver for a coordinate-sorted, bgzip-compressed, VCF file
-	 * 
-	 * @param variantProvider
-	 *            {@link DatabaseVariantContextProvider} for querying database for
-	 *            {@link VariantContext} objects describing annotations from database.
-	 * @param vcfPath
-	 *            Path to VCF file with dbSNP.
-	 * @param options
-	 *            configuration
-	 * @param vcToRecord
-	 *            converter from {@link VariantContext} to record type
-	 * @throws JannovarVarDBException
-	 *             on problems loading the reference FASTA/FAI file or incompatible dbSNP version
+	 *
+	 * @param variantProvider {@link DatabaseVariantContextProvider} for querying database for
+	 *                        {@link VariantContext} objects describing annotations from database.
+	 * @param vcfPath         Path to VCF file with dbSNP.
+	 * @param options         configuration
+	 * @param vcToRecord      converter from {@link VariantContext} to record type
+	 * @throws JannovarVarDBException on problems loading the reference FASTA/FAI file or incompatible dbSNP version
 	 */
 	public AbstractDBAnnotationDriver(DatabaseVariantContextProvider variantProvider, String fastaPath,
-			DBAnnotationOptions options, VariantContextToRecordConverter<RecordType> vcToRecord)
-			throws JannovarVarDBException {
+									  DBAnnotationOptions options, VariantContextToRecordConverter<RecordType> vcToRecord)
+		throws JannovarVarDBException {
 		this.variantProvider = variantProvider;
 		this.matcher = new AlleleMatcher(fastaPath);
 		this.vcToRecord = vcToRecord;
@@ -49,7 +53,7 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	@Override
 	public VariantContext annotateVariantContext(VariantContext obsVC) {
 		try (CloseableIterator<VariantContext> iter = variantProvider.query(obsVC.getContig(), obsVC.getStart() - 1,
-				obsVC.getEnd())) {
+			obsVC.getEnd())) {
 			// Fetch all overlapping and matching genotypes from database and pair them with the
 			// correct allele from vc.
 			List<GenotypeMatch> genotypeMatches = new ArrayList<>();
@@ -64,9 +68,9 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 
 			// Pick best record for each alternative allele
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsMatch = buildAnnotatingDBRecordsWrapper(
-					genotypeMatches, true);
+				genotypeMatches, true);
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsOverlap = buildAnnotatingDBRecordsWrapper(
-					positionOverlaps, false);
+				positionOverlaps, false);
 			HashMap<Integer, AnnotatingRecord<RecordType>> emptyMap = new HashMap<>();
 
 			// Use these records to annotate the variant call in obsVC (record-wise but also per
@@ -82,22 +86,20 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 
 	/**
 	 * Build mapping from alternative allele number to db VCF record to use
-	 * 
+	 * <p>
 	 * For SNVs, there should only be one value in the value set at which all alleles point to for
 	 * most cases. The selection of the record for each observed allele is delegated to the
 	 * subclass' {@link #pickAnnotatingDBRecords}.
-	 * 
-	 * @param genotypeMatches
-	 *            List of {@link GenotypeMatch} objects to build the annotating database records
-	 *            from
-	 * @param isMatch
-	 *            whether or not to consider true matching alleles (<code>true</code>) or only
-	 *            position-based overlaps (<code>false</code>)
+	 *
+	 * @param genotypeMatches List of {@link GenotypeMatch} objects to build the annotating database records
+	 *                        from
+	 * @param isMatch         whether or not to consider true matching alleles (<code>true</code>) or only
+	 *                        position-based overlaps (<code>false</code>)
 	 * @return Resulting map from alternative observed allele ID (starting with 1) to the database
-	 *         record to use
+	 * record to use
 	 */
 	private HashMap<Integer, AnnotatingRecord<RecordType>> buildAnnotatingDBRecordsWrapper(
-			List<GenotypeMatch> genotypeMatches, boolean isMatch) {
+		List<GenotypeMatch> genotypeMatches, boolean isMatch) {
 		// Collect annotating variants for each allele
 		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords = new HashMap<>();
 		HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord = new HashMap<>();
@@ -107,7 +109,7 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 			annotatingRecords.get(alleleNo).add(match);
 			if (!matchToRecord.containsKey(match))
 				matchToRecord.put(match,
-						new AnnotatingRecord<RecordType>(vcToRecord.convert(match.getDBVC()), match.getDbAllele()));
+					new AnnotatingRecord<RecordType>(vcToRecord.convert(match.getDBVC()), match.getDbAllele()));
 		}
 
 		return pickAnnotatingDBRecords(annotatingRecords, matchToRecord, isMatch);
@@ -115,37 +117,31 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 
 	/**
 	 * Pick best annotating DB record for each alternative observed allele
-	 * 
-	 * @param annotatingRecords
-	 *            Map of alternative allele number to genotype match
-	 * @param matchToRecord
-	 *            Mapping from alternative allele number to record
-	 * @param isMatch
-	 *            whether or not to consider true matching alleles (<code>true</code>) or only
-	 *            position-based overlaps (<code>false</code>)
+	 *
+	 * @param annotatingRecords Map of alternative allele number to genotype match
+	 * @param matchToRecord     Mapping from alternative allele number to record
+	 * @param isMatch           whether or not to consider true matching alleles (<code>true</code>) or only
+	 *                          position-based overlaps (<code>false</code>)
 	 * @return Mapping from alternative allele number to <code>RecordType</code>
 	 */
 	protected abstract HashMap<Integer, AnnotatingRecord<RecordType>> pickAnnotatingDBRecords(
-			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord, boolean isMatch);
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+		HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord, boolean isMatch);
 
 	/**
 	 * Annotate the given {@link VariantContext} with the given database records
-	 * 
+	 * <p>
 	 * There can be more than one database record, for example in the case that a SNV is squished
 	 * together with an indel.
-	 * 
-	 * @param vc
-	 *            The {@link VariantContext} to annotate
-	 * @param dbRecordMatches
-	 *            Map from alternative allele index to annotating <code>RecordType</code> with
-	 *            matching allele
-	 * @param dbRecordOverlaps
-	 *            Map from alternative allele index to annotating <code>RecordType</code> with
-	 *            overlapping positions
+	 *
+	 * @param vc               The {@link VariantContext} to annotate
+	 * @param dbRecordMatches  Map from alternative allele index to annotating <code>RecordType</code> with
+	 *                         matching allele
+	 * @param dbRecordOverlaps Map from alternative allele index to annotating <code>RecordType</code> with
+	 *                         overlapping positions
 	 */
 	protected abstract VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordMatches,
-			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordOverlaps);
+															HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordMatches,
+															HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordOverlaps);
 
 }

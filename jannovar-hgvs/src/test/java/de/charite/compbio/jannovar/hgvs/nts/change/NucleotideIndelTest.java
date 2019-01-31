@@ -1,9 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import org.junit.Assert;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 public class NucleotideIndelTest {
 
@@ -28,7 +27,7 @@ public class NucleotideIndelTest {
 	@Test
 	public void testWithNucleotideSeqDescription() {
 		NucleotideIndel del = NucleotideIndel.buildWithOffsetWithSeqDescription(true, 123, 0, 125, 0,
-				new NucleotideSeqDescription(), new NucleotideSeqDescription("AC"));
+			new NucleotideSeqDescription(), new NucleotideSeqDescription("AC"));
 		Assert.assertEquals("(124_126delinsAC)", del.toHGVSString());
 	}
 

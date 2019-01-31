@@ -1,17 +1,16 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link UK10KRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class UK10KVariantContextToRecordConverter implements VariantContextToRecordConverter<UK10KRecord> {
@@ -37,12 +36,12 @@ final class UK10KVariantContextToRecordConverter implements VariantContextToReco
 
 		// AC: Alternative allele count
 		ArrayList<Integer> counts = Lists.newArrayList(vc.getAttributeAsList("AC").stream()
-				.map(x -> Integer.parseInt((String) x)).collect(Collectors.toList()));
+			.map(x -> Integer.parseInt((String) x)).collect(Collectors.toList()));
 		builder.setAlleleCounts(counts);
 
 		// AC: Alternative allele count
 		builder.setAlleleFrequencies(
-				Lists.newArrayList(counts.stream().map(x -> (1.0 * x) / an).collect(Collectors.toList())));
+			Lists.newArrayList(counts.stream().map(x -> (1.0 * x) / an).collect(Collectors.toList())));
 
 		return builder.build();
 	}

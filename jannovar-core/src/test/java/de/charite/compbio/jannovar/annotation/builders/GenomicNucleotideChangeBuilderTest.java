@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.Strand;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GenomicNucleotideChangeBuilderTest {
 

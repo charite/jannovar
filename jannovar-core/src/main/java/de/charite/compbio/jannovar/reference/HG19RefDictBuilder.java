@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
 
 /**
  * Builds a {@link ReferenceDictionary} for the hg19 release.
- *
+ * <p>
  * This is a utility class that can be used in tests of Java code that uses the Jannovar library for the easy
  * construction of a {@link ReferenceDictionary}.
  *

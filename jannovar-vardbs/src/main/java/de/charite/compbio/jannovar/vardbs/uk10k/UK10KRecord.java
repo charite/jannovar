@@ -1,37 +1,55 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
 
 public class UK10KRecord {
 
 	// Fields up to the INFO column
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	final private String chrom;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	final private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	final private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	final private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	final private ImmutableList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	final private ImmutableList<String> filter;
 
 	// Entries of the INFO column
 
-	/** Number of observed chromosomes for each alternative allele */
+	/**
+	 * Number of observed chromosomes for each alternative allele
+	 */
 	final private ImmutableList<Integer> altAlleleCounts;
-	/** Chromosome count, number of chromosomes with coverage in UK10K data */
+	/**
+	 * Chromosome count, number of chromosomes with coverage in UK10K data
+	 */
 	final private int chromCount;
-	/** Allele frequencies for alternative alleles */
+	/**
+	 * Allele frequencies for alternative alleles
+	 */
 	final private ImmutableList<Double> altAlleleFrequencies;
 
 	public UK10KRecord(String chrom, int pos, String id, String ref, List<String> alt, List<String> filter,
-			int chromCount, List<Integer> alleleCounts, List<Double> alleleFrequencies) {
+					   int chromCount, List<Integer> alleleCounts, List<Double> alleleFrequencies) {
 		this.chrom = chrom;
 		this.pos = pos;
 		this.id = id;
@@ -86,8 +104,8 @@ public class UK10KRecord {
 	@Override
 	public String toString() {
 		return "UK10KRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", altAlleleCounts=" + altAlleleCounts + ", chromCount=" + chromCount
-				+ ", altAlleleFrequencies=" + altAlleleFrequencies + "]";
+			+ ", filter=" + filter + ", altAlleleCounts=" + altAlleleCounts + ", chromCount=" + chromCount
+			+ ", altAlleleFrequencies=" + altAlleleFrequencies + "]";
 	}
 
 	@Override

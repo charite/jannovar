@@ -1,13 +1,12 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.Immutable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.Immutable;
 
 // TODO(holtgrem): Test me!
 
@@ -20,22 +19,26 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class Pedigree {
 
-	/** the pedigree's name */
+	/**
+	 * the pedigree's name
+	 */
 	private final String name;
 
-	/** the pedigree's members */
+	/**
+	 * the pedigree's members
+	 */
 	private final ImmutableList<Person> members;
 
-	/** mapping from member name to member */
+	/**
+	 * mapping from member name to member
+	 */
 	private final ImmutableMap<String, IndexedPerson> nameToMember;
 
 	/**
 	 * Initialize the object with the given values
 	 *
-	 * @param name
-	 *            the name of the pedigree/family
-	 * @param members
-	 *            list of the members
+	 * @param name    the name of the pedigree/family
+	 * @param members list of the members
 	 */
 	public Pedigree(String name, Collection<Person> members) {
 		this.name = name;
@@ -52,40 +55,45 @@ public final class Pedigree {
 	 * Initialize the object with the members of <code>contents</code> that have the pedigree name equal to
 	 * <code>pedigreeName</code>.
 	 *
-	 * @param contents
-	 *            contents from the pedigree file
-	 * @param pedigreeName
-	 *            name of the pedigree to extract
-	 * @throws PedParseException
-	 *             in the case of problems with references to individuals for mother and father
+	 * @param contents     contents from the pedigree file
+	 * @param pedigreeName name of the pedigree to extract
+	 * @throws PedParseException in the case of problems with references to individuals for mother and father
 	 */
 	public Pedigree(PedFileContents contents, String pedigreeName) throws PedParseException {
 		this(pedigreeName, new PedigreeExtractor(pedigreeName, contents).run());
 	}
-	
-	/** @return number of members in pedigree */
+
+	/**
+	 * @return number of members in pedigree
+	 */
 	public int getNMembers() {
 		return members.size();
 	}
 
-	/** @return the pedigree's name */
+	/**
+	 * @return the pedigree's name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	/** @return the pedigree's members */
+	/**
+	 * @return the pedigree's members
+	 */
 	public ImmutableList<Person> getMembers() {
 		return members;
 	}
 
-	/** @return mapping from member name to member */
+	/**
+	 * @return mapping from member name to member
+	 */
 	public ImmutableMap<String, IndexedPerson> getNameToMember() {
 		return nameToMember;
 	}
 
 	/**
 	 * Obtain subset of members in a pedigree or change order.
-	 *
+	 * <p>
 	 * If a {@link Person} is selected that has parents in <code>this</code> but the parent's name is not in
 	 * <code>name</code> then the {@link Person} will have <code>null</code> as the parent object.
 	 *
@@ -149,12 +157,16 @@ public final class Pedigree {
 			this.person = person;
 		}
 
-		/** @return numeric index of person in pedigree */
+		/**
+		 * @return numeric index of person in pedigree
+		 */
 		public int getIdx() {
 			return idx;
 		}
 
-		/** @return the wrapped {@link Person} */
+		/**
+		 * @return the wrapped {@link Person}
+		 */
 		public Person getPerson() {
 			return person;
 		}

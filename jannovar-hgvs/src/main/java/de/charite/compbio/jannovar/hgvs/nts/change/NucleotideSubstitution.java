@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 
 /**
@@ -11,26 +10,38 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
  */
 public class NucleotideSubstitution extends NucleotideChange {
 
-	/** position of the substituted base */
+	/**
+	 * position of the substituted base
+	 */
 	private final NucleotidePointLocation position;
-	/** String of length 1 with the original base */
+	/**
+	 * String of length 1 with the original base
+	 */
 	private final String fromNT;
-	/** String of length 1 with the changed based */
+	/**
+	 * String of length 1 with the changed based
+	 */
 	private final String toNT;
 
-	/** Build {@link NucleotideSubstitution} with nucleotide positions with offset values. */
+	/**
+	 * Build {@link NucleotideSubstitution} with nucleotide positions with offset values.
+	 */
 	public static NucleotideSubstitution buildWithOffset(boolean onlyPredicted, int basePos, int posOffset,
-			String fromNT, String toNT) {
+														 String fromNT, String toNT) {
 		return new NucleotideSubstitution(onlyPredicted, NucleotidePointLocation.buildWithOffset(basePos, posOffset),
-				fromNT, toNT);
+			fromNT, toNT);
 	}
 
-	/** Build {@link NucleotideSubstitution} with nucleotide positions without offset values. */
+	/**
+	 * Build {@link NucleotideSubstitution} with nucleotide positions without offset values.
+	 */
 	public static NucleotideSubstitution build(boolean onlyPredicted, int basePos, String fromNT, String toNT) {
 		return new NucleotideSubstitution(onlyPredicted, NucleotidePointLocation.build(basePos), fromNT, toNT);
 	}
 
-	/** Construct with the given values */
+	/**
+	 * Construct with the given values
+	 */
 	public NucleotideSubstitution(boolean onlyPredicted, NucleotidePointLocation position, String fromNT, String toNT) {
 		super(onlyPredicted);
 		this.position = position;
@@ -43,17 +54,23 @@ public class NucleotideSubstitution extends NucleotideChange {
 		return new NucleotideSubstitution(flag, position, fromNT, toNT);
 	}
 
-	/** @return {@link NucleotidePointLocation} of the changed nucleotide */
+	/**
+	 * @return {@link NucleotidePointLocation} of the changed nucleotide
+	 */
 	public NucleotidePointLocation getPosition() {
 		return position;
 	}
 
-	/** @return reference nucleotide */
+	/**
+	 * @return reference nucleotide
+	 */
 	public String getFromNT() {
 		return fromNT;
 	}
 
-	/** @return variant nucleotide */
+	/**
+	 * @return variant nucleotide
+	 */
 	public String getToNT() {
 		return toNT;
 	}

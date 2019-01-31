@@ -1,19 +1,10 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
-import de.charite.compbio.jannovar.pedigree.Sex;
 
 public class PedigreeQueryDecoratorTest {
 
@@ -28,7 +19,7 @@ public class PedigreeQueryDecoratorTest {
 		individuals.add(new PedPerson("fam", "son", "father", "mother", Sex.MALE, Disease.AFFECTED));
 		individuals.add(new PedPerson("fam", "daughter", "father", "mother", Sex.FEMALE, Disease.UNKNOWN));
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 
 		this.pedigree = new Pedigree(pedFileContents, "fam");
 		this.decorator = new PedigreeQueryDecorator(pedigree);

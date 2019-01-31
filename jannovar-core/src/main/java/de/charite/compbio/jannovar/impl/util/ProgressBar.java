@@ -2,48 +2,66 @@ package de.charite.compbio.jannovar.impl.util;
 
 /**
  * A simple status bar that only work on terminals where "\r" has an affect.
- *
+ * <p>
  * The progress is done/shown in the closed interval <code>[min, max]</code>.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class ProgressBar {
 
-	/** smallest value */
+	/**
+	 * smallest value
+	 */
 	private final long min;
-	/** largest value */
+	/**
+	 * largest value
+	 */
 	private final long max;
-	/** whether or not to print */
+	/**
+	 * whether or not to print
+	 */
 	private final boolean doPrint;
 
-	/** Initialize progress bar with the given settings */
+	/**
+	 * Initialize progress bar with the given settings
+	 */
 	public ProgressBar(long min, long max) {
 		this(min, max, true);
 	}
 
-	/** Initialize progress bar with the given settings */
+	/**
+	 * Initialize progress bar with the given settings
+	 */
 	public ProgressBar(long min, long max, boolean doPrint) {
 		this.min = min;
 		this.max = max;
 		this.doPrint = doPrint;
 	}
 
-	/** @return smallest value to represent */
+	/**
+	 * @return smallest value to represent
+	 */
 	public long getMin() {
 		return min;
 	}
 
-	/** @return largest value to represent */
+	/**
+	 * @return largest value to represent
+	 */
 	public long getMax() {
 		return max;
 	}
 
-	/** @return <code>true</code> if the progress bar has printing enabled */
+	/**
+	 * @return <code>true</code> if the progress bar has printing enabled
+	 */
 	public boolean doPrint() {
 		return doPrint;
 	}
 
-	/** print progress up to position <code>pos</code>, if {@link #doPrint} */
+	/**
+	 * print progress up to position <code>pos</code>, if {@link #doPrint}
+	 */
 	public void print(long pos) {
 		if (!doPrint)
 			return;

@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.annotation;
 
-import java.util.stream.Collectors;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
+
+import java.util.stream.Collectors;
 
 // TODO(holtgrem): Test me!
 
@@ -17,24 +16,27 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  */
 public abstract class VariantAnnotationsTextGenerator {
 
-	/** the decorated {@link VariantAnnotations} */
+	/**
+	 * the decorated {@link VariantAnnotations}
+	 */
 	protected final VariantAnnotations annotations;
 
-	/** alternative allele ID (1 from VCF is 0 here) */
+	/**
+	 * alternative allele ID (1 from VCF is 0 here)
+	 */
 	private final int alleleID;
 
-	/** total number of alternative alleles */
+	/**
+	 * total number of alternative alleles
+	 */
 	private final int altCount;
 
 	/**
 	 * Initialize the decorator.
 	 *
-	 * @param annotations
-	 *            {@link VariantAnnotations} of {@link Annotation} objects
-	 * @param alleleID
-	 *            the 0-based id of the allele
-	 * @param altCount
-	 *            total number of alternative alleles
+	 * @param annotations {@link VariantAnnotations} of {@link Annotation} objects
+	 * @param alleleID    the 0-based id of the allele
+	 * @param altCount    total number of alternative alleles
 	 */
 	public VariantAnnotationsTextGenerator(VariantAnnotations annotations, int alleleID, int altCount) {
 		this.annotations = annotations;
@@ -42,12 +44,16 @@ public abstract class VariantAnnotationsTextGenerator {
 		this.altCount = altCount;
 	}
 
-	/** @return alternative allele ID (1 from VCF is 0 here) */
+	/**
+	 * @return alternative allele ID (1 from VCF is 0 here)
+	 */
 	public int getAlleleID() {
 		return alleleID;
 	}
 
-	/** @return total number of alternative alleles */
+	/**
+	 * @return total number of alternative alleles
+	 */
 	public int getAltCount() {
 		return altCount;
 	}

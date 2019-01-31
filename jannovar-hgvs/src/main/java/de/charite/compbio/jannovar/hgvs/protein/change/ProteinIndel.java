@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
@@ -13,42 +12,56 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
  */
 public class ProteinIndel extends ProteinChange {
 
-	/** range that is to deleted */
+	/**
+	 * range that is to deleted
+	 */
 	private final ProteinRange range;
-	/** description of the to be deleted sequence */
+	/**
+	 * description of the to be deleted sequence
+	 */
 	private final ProteinSeqDescription delSeq;
-	/** description of the to be inserted sequence */
+	/**
+	 * description of the to be inserted sequence
+	 */
 	private final ProteinSeqDescription insSeq;
 
-	/** Build without any sequence description */
+	/**
+	 * Build without any sequence description
+	 */
 	public static ProteinIndel buildWithoutSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos) {
+														  String lastAA, int lastPos) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription(), new ProteinSeqDescription());
+			new ProteinSeqDescription(), new ProteinSeqDescription());
 	}
 
-	/** Build with length information */
+	/**
+	 * Build with length information
+	 */
 	public static ProteinIndel buildWithLength(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, int deletedLength, int insertedLength) {
+											   int lastPos, int deletedLength, int insertedLength) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription(deletedLength), new ProteinSeqDescription(insertedLength));
+			new ProteinSeqDescription(deletedLength), new ProteinSeqDescription(insertedLength));
 	}
 
-	/** Build with sequence information */
+	/**
+	 * Build with sequence information
+	 */
 	public static ProteinIndel buildWithSequence(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, String deletedSeq, String insertedSeq) {
+												 int lastPos, String deletedSeq, String insertedSeq) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
-				new ProteinSeqDescription(deletedSeq), new ProteinSeqDescription(insertedSeq));
+			new ProteinSeqDescription(deletedSeq), new ProteinSeqDescription(insertedSeq));
 	}
 
-	/** Build with sequence description */
+	/**
+	 * Build with sequence description
+	 */
 	public static ProteinIndel buildWithSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos, ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
+													   String lastAA, int lastPos, ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), delDesc, insDesc);
 	}
 
 	public ProteinIndel(boolean onlyPredicted, ProteinRange range, ProteinSeqDescription delSeq,
-			ProteinSeqDescription insSeq) {
+						ProteinSeqDescription insSeq) {
 		super(onlyPredicted);
 		this.range = range;
 		this.delSeq = delSeq;
@@ -60,10 +73,10 @@ public class ProteinIndel extends ProteinChange {
 		String open = isOnlyPredicted() ? "(" : "";
 		String close = isOnlyPredicted() ? ")" : "";
 		return Joiner
-				.on("")
-				.skipNulls()
-				.join(open, range.toHGVSString(code), "del", delSeq.toHGVSString(code), "ins",
-						insSeq.toHGVSString(code), close);
+			.on("")
+			.skipNulls()
+			.join(open, range.toHGVSString(code), "del", delSeq.toHGVSString(code), "ins",
+				insSeq.toHGVSString(code), close);
 	}
 
 	@Override

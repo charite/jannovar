@@ -1,21 +1,19 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFHeader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFHeader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with dbSNP with not reporting overlapping
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPAnnotationDriverReportNoOverlappingTest extends DBSNPAnnotationDriverBaseTest {

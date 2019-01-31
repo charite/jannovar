@@ -1,26 +1,24 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with dbNSFP with default options
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVAnnotationDriverWithRemmReportOnlyOverlappingTest
-		extends GenericTSVAnnotationDriverWithRemmBaseTest {
+	extends GenericTSVAnnotationDriverWithRemmBaseTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -73,7 +71,7 @@ public class GenericTSVAnnotationDriverWithRemmReportOnlyOverlappingTest
 		Assert.assertEquals("[REMM_SCORE]", keys.toString());
 
 		Assert.assertEquals("[., 0.102, 0.102, 0.102]",
-				annotatedFirst.getAttributeAsString("REMM_SCORE", null));
+			annotatedFirst.getAttributeAsString("REMM_SCORE", null));
 
 		// Annotation of second variant
 		VariantContext vcSecond = iter.next();

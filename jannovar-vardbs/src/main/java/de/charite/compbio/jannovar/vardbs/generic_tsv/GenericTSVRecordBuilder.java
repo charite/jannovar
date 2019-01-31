@@ -71,7 +71,7 @@ public class GenericTSVRecordBuilder {
 	@Override
 	public String toString() {
 		return "GenericTSVRecordBuilder [contig=" + contig + ", pos=" + pos
-				+ ", ref=" + ref + ", alt=" + alt + ", values=" + values + "]";
+			+ ", ref=" + ref + ", alt=" + alt + ", values=" + values + "]";
 	}
 
 	@Override

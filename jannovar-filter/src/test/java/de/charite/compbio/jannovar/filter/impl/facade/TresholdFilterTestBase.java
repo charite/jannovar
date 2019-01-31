@@ -4,7 +4,7 @@ import de.charite.compbio.jannovar.filter.impl.gt.GenotypeFilterTestBase;
 
 /**
  * Intermediate class, we can take the implementation from GenotypeFilterTestBase
- * 
+ * <p>
  * Sub classing this class for semantic reasons so the threshold filter tests don't have to extend the genotype filter
  * test base directly
  *

@@ -2,16 +2,22 @@ package de.charite.compbio.jannovar.progress;
 
 /**
  * A region on a genome, can be a whole chromosome
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenomeRegion {
 
-	/** Name of the containing chromosome */
+	/**
+	 * Name of the containing chromosome
+	 */
 	private final String contig;
-	/** 0-based begin position of half-open interval */
+	/**
+	 * 0-based begin position of half-open interval
+	 */
 	private final int beginPos;
-	/** 0-based end position of half-open interval */
+	/**
+	 * 0-based end position of half-open interval
+	 */
 	private final int endPos;
 
 	public GenomeRegion(String contig, int beginPos, int endPos) {
@@ -36,7 +42,7 @@ public class GenomeRegion {
 	public int length() {
 		return endPos - beginPos;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "GenomeRegion [contig=" + contig + ", beginPos=" + beginPos + ", endPos=" + endPos + "]";

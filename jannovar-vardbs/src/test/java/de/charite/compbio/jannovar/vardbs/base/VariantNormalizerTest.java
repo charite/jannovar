@@ -1,14 +1,12 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
-import java.io.File;
-
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.utils.ResourceUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.utils.ResourceUtils;
+import java.io.File;
 
 public class VariantNormalizerTest {
 
