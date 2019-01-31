@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.charite.compbio</groupId>
     <artifactId>Jannovar</artifactId>
@@ -16,19 +17,25 @@
         <slf4j.version>1.7.24</slf4j.version>
         <guava.version>22.0</guava.version>
         <antlr.version>4.7</antlr.version>
+        <antlr4-maven-plugin.version>4.7.2</antlr4-maven-plugin.version>
+
+        <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
+        <maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
+        <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>8.17</checkstyle.version>
     </properties>
 
     <modules>
+        <module>jannovar-hgvs</module>
         <module>jannovar-core</module>
         <module>jannovar-htsjdk</module>
-        <module>jannovar-hgvs</module>
         <module>jannovar-vardbs</module>
         <module>jannovar-cli</module>
         <module>jannovar-filter</module>
         <module>jannovar-stats</module>
     </modules>
 
-    <!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
+    <!-- Inherit artifact from SonaType OSS pom.xml Following this article:
         http://java.dzone.com/articles/deploy-maven-central -->
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -121,7 +128,8 @@
                     <forkCount>3</forkCount>
                     <reuseForks>true</reuseForks>
                     <argLine>${argLine} -Xms512m -Xmx1024m
-                        -Duser.language=en -Duser.region=US</argLine>
+                        -Duser.language=en -Duser.region=US
+                    </argLine>
                     <systemPropertyVariables>
                         <user.language>en</user.language>
                         <user.region>US</user.region>
@@ -138,7 +146,7 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                <DependencyConvergence />
+                                <DependencyConvergence/>
                             </rules>
                         </configuration>
                         <goals>
@@ -186,7 +194,8 @@
                 <configuration>
                     <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
                     <checkinComment>Publishing javadoc for
-                        ${project.artifactId}:${project.version}</checkinComment>
+                        ${project.artifactId}:${project.version}
+                    </checkinComment>
                     <content>${project.reporting.outputDirectory}/apidocs</content>
                     <skipDeletedFiles>true</skipDeletedFiles>
                     <pubScmUrl>scm:git:git@github.com:charite/jannovar.git</pubScmUrl>
@@ -198,9 +207,9 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <executions>
-                    <!-- Prepares the property pointing to the JaCoCo runtime 
+                    <!-- Prepares the property pointing to the JaCoCo runtime
                         agent which is passed as VM argument when Maven the Surefire plugin is executed. -->
                     <execution>
                         <id>pre-unit-test</id>
@@ -208,7 +217,7 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <!-- Ensures that the code coverage report for unit tests 
+                    <!-- Ensures that the code coverage report for unit tests
                         is created after unit tests have been run. -->
                     <execution>
                         <id>post-unit-test</id>
@@ -248,37 +257,42 @@
                     </archive>
                 </configuration>
             </plugin>
-        </plugins>
 
-        <!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-enforcer-plugin</artifactId>
-                                        <versionRange>[1.0.0,)</versionRange>
-                                        <goals>
-                                            <goal>enforce</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+            <!-- Code style checking -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDirectories>
+                        <sourceDirectory>src/main/java</sourceDirectory>
+                        <sourceDirectory>src/test/java</sourceDirectory>
+                    </sourceDirectories>
+                    <configLocation>google_checks.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failOnViolation>false</failOnViolation>
+                    <failOnErrors>false</failOnErrors>
+                    <violationSeverity>info</violationSeverity>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
     </build>
 
     <!-- Sphinx Manual, build with "mvn site". -->
@@ -290,7 +304,7 @@
                 <version>2.4</version>
                 <reportSets>
                     <reportSet>
-                        <reports />
+                        <reports/>
                     </reportSet>
                 </reportSets>
             </plugin>
@@ -302,7 +316,53 @@
                     <sourceDirectory>${basedir}/manual</sourceDirectory>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </plugin>
         </plugins>
     </reporting>
 
+    <profiles>
+        <!-- Ignore various plugins in Eclipse -->
+        <profile>
+            <id>only-eclipse</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>1.0.0</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>maven-enforcer-plugin</artifactId>
+                                                <versionRange>[1.0.0,)</versionRange>
+                                                <goals>
+                                                    <goal>enforce</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore/>
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
