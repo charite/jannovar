@@ -4,12 +4,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.reference.AminoAcidChange;
-import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
-
 public class AminoAcidChangeTest {
 
-	/** the amino acid strings to use as the references */
+	/**
+	 * the amino acid strings to use as the references
+	 */
 	String ref, ref2;
 
 	@Before

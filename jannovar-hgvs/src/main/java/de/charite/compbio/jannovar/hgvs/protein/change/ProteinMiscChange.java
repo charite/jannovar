@@ -9,7 +9,9 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
  */
 public class ProteinMiscChange extends ProteinChange {
 
-	/** type of the misc change */
+	/**
+	 * type of the misc change
+	 */
 	private final ProteinMiscChangeType changeType;
 
 	/**
@@ -22,17 +24,17 @@ public class ProteinMiscChange extends ProteinChange {
 	/**
 	 * Construct with given <code>changeType</code> and <code>onlyPredicted</code> flag.
 	 *
-	 * @param onlyPredicted
-	 *            whether or not the change is only predicted
-	 * @param changeType
-	 *            type of the change
+	 * @param onlyPredicted whether or not the change is only predicted
+	 * @param changeType    type of the change
 	 */
 	public ProteinMiscChange(boolean onlyPredicted, ProteinMiscChangeType changeType) {
 		super(onlyPredicted);
 		this.changeType = changeType;
 	}
 
-	/** @return type of this {@link ProteinMiscChangeType} */
+	/**
+	 * @return type of this {@link ProteinMiscChangeType}
+	 */
 	public ProteinMiscChangeType getChangeType() {
 		return changeType;
 	}

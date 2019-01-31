@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
@@ -12,53 +11,57 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
  */
 public class NucleotideDeletion extends NucleotideChange {
 
-	/** deleted range of nucleotides */
+	/**
+	 * deleted range of nucleotides
+	 */
 	private final NucleotideRange range;
-	/** description of the deleted nucleotide sequence */
+	/**
+	 * description of the deleted nucleotide sequence
+	 */
 	private final NucleotideSeqDescription seq;
 
 	public static NucleotideDeletion buildWithOffset(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, NucleotideSeqDescription seq) {
+													 int lastPos, int lastPosOffset, NucleotideSeqDescription seq) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
-				lastPosOffset), seq);
+			lastPosOffset), seq);
 	}
 
 	public static NucleotideDeletion buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos,
-			int firstPosOffset, int lastPos, int lastPosOffset, String nts) {
+																 int firstPosOffset, int lastPos, int lastPosOffset, String nts) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
-				lastPosOffset), new NucleotideSeqDescription(nts));
+			lastPosOffset), new NucleotideSeqDescription(nts));
 	}
 
 	public static NucleotideDeletion buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, int seqLen) {
+															   int lastPos, int lastPosOffset, int seqLen) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
-				lastPosOffset), new NucleotideSeqDescription(seqLen));
+			lastPosOffset), new NucleotideSeqDescription(seqLen));
 	}
 
 	public static NucleotideDeletion buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int firstPosOffset, int lastPos, int lastPosOffset) {
+																		  int firstPosOffset, int lastPos, int lastPosOffset) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
-				lastPosOffset), new NucleotideSeqDescription());
+			lastPosOffset), new NucleotideSeqDescription());
 	}
 
 	public static NucleotideDeletion build(boolean onlyPredicted, int firstPos, int lastPos,
-			NucleotideSeqDescription seq) {
+										   NucleotideSeqDescription seq) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), seq);
 	}
 
 	public static NucleotideDeletion buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String nts) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription(nts));
+			new NucleotideSeqDescription(nts));
 	}
 
 	public static NucleotideDeletion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int seqLen) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription(seqLen));
+			new NucleotideSeqDescription(seqLen));
 	}
 
 	public static NucleotideDeletion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription());
+			new NucleotideSeqDescription());
 	}
 
 	public NucleotideDeletion(boolean onlyPredicted, NucleotideRange range, NucleotideSeqDescription seq) {

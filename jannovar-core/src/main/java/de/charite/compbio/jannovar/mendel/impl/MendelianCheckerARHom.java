@@ -1,29 +1,24 @@
 package de.charite.compbio.jannovar.mendel.impl;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-
-import de.charite.compbio.jannovar.mendel.ChromosomeType;
-import de.charite.compbio.jannovar.mendel.Genotype;
-import de.charite.compbio.jannovar.mendel.GenotypeCalls;
-import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
-import de.charite.compbio.jannovar.mendel.MendelianInheritanceChecker;
+import de.charite.compbio.jannovar.mendel.*;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Helper class for checking a {@link Collection} of {@link GenotypeCalls} for compatibility with a {@link Pedigree} and
  * autosomal recessive homozygous mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
- *
+ * <p>
  * In the case of a single individual, we require an homozygous alternative call.
- *
+ * <p>
  * In the case of multiple individuals, we require that the affects are compatible, that the unaffected parents of
  * affected individuals are not homozygous ref or homozygous alt and that the unaffected individuals are not homozygous
  * alt. The affected individuals are compatible if no affected individual is homozygous ref or heterozygous and there is
@@ -41,10 +36,10 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 
 	@Override
 	public ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls)
-			throws IncompatiblePedigreeException {
+		throws IncompatiblePedigreeException {
 		// Filter to calls on autosomal chromosomes
 		Stream<GenotypeCalls> autosomalCalls = calls.stream()
-				.filter(call -> call.getChromType() == ChromosomeType.AUTOSOMAL);
+			.filter(call -> call.getChromType() == ChromosomeType.AUTOSOMAL);
 		// Filter to calls compatible with AD inheritance
 		Stream<GenotypeCalls> compatibleCalls;
 		if (this.pedigree.getNMembers() == 1)
@@ -56,7 +51,7 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with AR homozygous inheritance in the case of a single
-	 *         individual in the pedigree
+	 * individual in the pedigree
 	 */
 	private boolean isCompatibleSingleton(GenotypeCalls calls) {
 		if (calls.getNSamples() == 0)
@@ -66,11 +61,11 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with AR homozygous inheritance in the case of multiple
-	 *         individuals in the pedigree
+	 * individuals in the pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
 		return (affectedsAreCompatible(calls) && unaffectedParentsOfAffectedAreNotHomozygous(calls)
-				&& unaffectedsAreNotHomozygousAlt(calls));
+			&& unaffectedsAreNotHomozygousAlt(calls));
 	}
 
 	private boolean affectedsAreCompatible(GenotypeCalls calls) {
@@ -118,7 +113,7 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 	private boolean unaffectedsAreNotHomozygousAlt(GenotypeCalls calls) {
 		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values())
 			if (entry.getPerson().getDisease() == Disease.UNAFFECTED
-					&& calls.getGenotypeForSample(entry.getPerson().getName()).isHomAlt())
+				&& calls.getGenotypeForSample(entry.getPerson().getName()).isHomAlt())
 				return false;
 		return true;
 	}

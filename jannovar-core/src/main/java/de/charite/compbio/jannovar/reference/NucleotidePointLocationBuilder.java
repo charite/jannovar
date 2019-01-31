@@ -11,14 +11,22 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 @Immutable
 public final class NucleotidePointLocationBuilder {
 
-	/** transcript to use for the coordinate system */
+	/**
+	 * transcript to use for the coordinate system
+	 */
 	final TranscriptModel transcript;
-	/** helper for performing coordinate projection */
+	/**
+	 * helper for performing coordinate projection
+	 */
 	final TranscriptProjectionDecorator projector;
-	/** helper for performing Sequence Ontology feature queries */
+	/**
+	 * helper for performing Sequence Ontology feature queries
+	 */
 	final TranscriptSequenceOntologyDecorator soDecorator;
 
-	/** Construct the position builder with the given transcript */
+	/**
+	 * Construct the position builder with the given transcript
+	 */
 	public NucleotidePointLocationBuilder(TranscriptModel transcript) {
 		this.transcript = transcript;
 		this.projector = new TranscriptProjectionDecorator(transcript);
@@ -26,8 +34,7 @@ public final class NucleotidePointLocationBuilder {
 	}
 
 	/**
-	 * @param pos
-	 *            {@link GenomePosition} with to translate into {@link NucleotidePointLocation}
+	 * @param pos {@link GenomePosition} with to translate into {@link NucleotidePointLocation}
 	 * @return {@link NucleotidePointLocation}, given the transcript in {@link #transcript}.
 	 */
 	public NucleotidePointLocation getNucleotidePointLocation(GenomePosition pos) {
@@ -47,8 +54,7 @@ public final class NucleotidePointLocationBuilder {
 	/**
 	 * Return {@link NucleotidePointLocation} in case of exon positions.
 	 *
-	 * @param pos
-	 *            position to get the HGVS position for
+	 * @param pos position to get the HGVS position for
 	 * @return corresponding {@link NucleotidePointLocation}
 	 */
 	private NucleotidePointLocation getCDNANucleotidePointLocationForExonPos(GenomePosition pos) {
@@ -77,8 +83,7 @@ public final class NucleotidePointLocationBuilder {
 	/**
 	 * Return {@link NucleotidePointLocation} in case of intron positions.
 	 *
-	 * @param pos
-	 *            position to get the HGVS position for
+	 * @param pos position to get the HGVS position for
 	 * @return corresponding {@link NucleotidePointLocation}
 	 */
 	private NucleotidePointLocation getCDNANucleotidePointLocationForIntronPos(GenomePosition pos) {
@@ -106,8 +111,7 @@ public final class NucleotidePointLocationBuilder {
 	/**
 	 * Return {@link NucleotidePointLocation} in case of upstream positions.
 	 *
-	 * @param pos
-	 *            position to get the HGVS position for
+	 * @param pos position to get the HGVS position for
 	 * @return corresponding {@link NucleotidePointLocation}
 	 */
 	private NucleotidePointLocation getCDNANucleotidePointLocationForUpstreamPos(GenomePosition pos) {
@@ -125,8 +129,7 @@ public final class NucleotidePointLocationBuilder {
 	/**
 	 * Return {@link NucleotidePointLocation} in case of downstream positions.
 	 *
-	 * @param pos
-	 *            position to get the HGVS position for
+	 * @param pos position to get the HGVS position for
 	 * @return corresponding {@link NucleotidePointLocation}
 	 */
 	private NucleotidePointLocation getCDNANucleotidePointLocationForDownstreamPos(GenomePosition pos) {

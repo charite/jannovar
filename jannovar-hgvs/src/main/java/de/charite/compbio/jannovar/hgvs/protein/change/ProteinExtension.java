@@ -1,46 +1,63 @@
 package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.Translator;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
 
 public class ProteinExtension extends ProteinChange {
 
-	/** no terminal is encountered */
+	/**
+	 * no terminal is encountered
+	 */
 	public static final int LEN_NO_TER = 0;
 
-	/** changed amino acid */
+	/**
+	 * changed amino acid
+	 */
 	private final ProteinPointLocation position;
-	/** amino acid that the changed one is changed to */
+	/**
+	 * amino acid that the changed one is changed to
+	 */
 	private final String targetAA;
-	/** shift value, see {@link #getShift()} */
+	/**
+	 * shift value, see {@link #getShift()}
+	 */
 	private final int shift;
 
-	/** Construct normal {@link ProteinExtension} */
+	/**
+	 * Construct normal {@link ProteinExtension}
+	 */
 	public static ProteinExtension build(boolean onlyPredicted, String wtAA, int pos, String targetAA, int shift) {
 		return build(onlyPredicted, ProteinPointLocation.build(wtAA, pos), targetAA, shift);
 	}
 
-	/** Construct normal {@link ProteinExtension} */
+	/**
+	 * Construct normal {@link ProteinExtension}
+	 */
 	public static ProteinExtension build(boolean onlyPredicted, ProteinPointLocation position, String targetAA,
-			int shift) {
+										 int shift) {
 		return new ProteinExtension(onlyPredicted, position, targetAA, shift);
 	}
 
-	/** Construct {@link ProteinExtension} without a terminal in the extension */
+	/**
+	 * Construct {@link ProteinExtension} without a terminal in the extension
+	 */
 	public static ProteinExtension buildWithoutTerminal(boolean onlyPredicted, String wtAA, int pos, String targetAA) {
 		return new ProteinExtension(onlyPredicted, ProteinPointLocation.build(wtAA, pos), targetAA, LEN_NO_TER);
 	}
 
-	/** Construct {@link ProteinExtension} without a terminal in the extension */
+	/**
+	 * Construct {@link ProteinExtension} without a terminal in the extension
+	 */
 	public static ProteinExtension buildWithoutTerminal(boolean onlyPredicted, ProteinPointLocation position,
-			String targetAA) {
+														String targetAA) {
 		return new ProteinExtension(onlyPredicted, position, targetAA, LEN_NO_TER);
 	}
 
-	/** Construct {@link ProteinExtension} with the given values */
+	/**
+	 * Construct {@link ProteinExtension} with the given values
+	 */
 	public ProteinExtension(boolean onlyPredicted, ProteinPointLocation position, String targetAA, int shift) {
 		super(onlyPredicted);
 		this.position = position;
@@ -48,12 +65,16 @@ public class ProteinExtension extends ProteinChange {
 		this.shift = shift;
 	}
 
-	/** @return changed amino acid and its position */
+	/**
+	 * @return changed amino acid and its position
+	 */
 	public ProteinPointLocation getPosition() {
 		return position;
 	}
 
-	/** @return amino acid that the changed one is changed to */
+	/**
+	 * @return amino acid that the changed one is changed to
+	 */
 	public String getTargetAA() {
 		return targetAA;
 	}
@@ -68,7 +89,9 @@ public class ProteinExtension extends ProteinChange {
 		return shift;
 	}
 
-	/** @return <code>true</code> if this object describes an extension without a terminal at the end */
+	/**
+	 * @return <code>true</code> if this object describes an extension without a terminal at the end
+	 */
 	public boolean isNoTerminalExtension() {
 		return (shift == LEN_NO_TER);
 	}
@@ -87,7 +110,7 @@ public class ProteinExtension extends ProteinChange {
 	@Override
 	public String toString() {
 		return "ProteinExtension [position=" + position + ", targetAA=" + targetAA + ", shift=" + shift
-				+ ", toHGVSString()=" + toHGVSString() + "]";
+			+ ", toHGVSString()=" + toHGVSString() + "]";
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending {@link VCFHeader}s for generic TSV annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVHeaderExtender extends VCFHeaderExtender {
@@ -33,13 +33,13 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 		if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0) {
 			if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching())
 				addHeadersInfixes(header, prefix, "OVL_",
-						" (requiring no genotype match, only position overlap)");
+					" (requiring no genotype match, only position overlap)");
 		}
 	}
 
 	/**
 	 * Add INFO header lines.
-	 * 
+	 *
 	 * <p>
 	 * In the case of annotating a TSV file with REF and ALT columns, annotate reference and
 	 * alternative alleles. Otherwise, annotate with a list of values.
@@ -48,10 +48,10 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 	private void addHeadersInfixes(VCFHeader header, String prefix, String infix, String note) {
 		for (String colName : tsvOptions.getColumnNames()) {
 			final GenericTSVValueColumnDescription desc = tsvOptions.getValueColumnDescriptions()
-					.get(colName);
+				.get(colName);
 			final VCFHeaderLineCount count;
 			if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0
-					&& options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
+				&& options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
 				if (tsvOptions.isRefAlleleAnnotated()) {
 					count = VCFHeaderLineCount.R;
 				} else {
@@ -62,8 +62,8 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
 			}
 
 			final VCFInfoHeaderLine headerLine = new VCFInfoHeaderLine(
-					prefix + infix + desc.getFieldName(), count, desc.getValueType(),
-					desc.getFieldDescription() + note);
+				prefix + infix + desc.getFieldName(), count, desc.getValueType(),
+				desc.getFieldDescription() + note);
 			header.addMetaDataLine(headerLine);
 		}
 	}

@@ -4,24 +4,32 @@ import com.google.common.base.Joiner;
 
 /**
  * Representation of a {@link LegacyChange} on a reference sequence.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyVariant {
 
-	/** name of reference that the variant is on */
+	/**
+	 * name of reference that the variant is on
+	 */
 	private final String reference;
-	/** the change of the variant */
+	/**
+	 * the change of the variant
+	 */
 	private final LegacyChange change;
 
-	/** Initialize object with the given values */
+	/**
+	 * Initialize object with the given values
+	 */
 	public LegacyVariant(String reference, LegacyChange change) {
 		super();
 		this.reference = reference;
 		this.change = change;
 	}
 
-	/** Return human readable legacy HGVS notation */
+	/**
+	 * Return human readable legacy HGVS notation
+	 */
 	public String toLegacyString() {
 		return Joiner.on("").join(reference, ":", change.toLegacyString());
 	}

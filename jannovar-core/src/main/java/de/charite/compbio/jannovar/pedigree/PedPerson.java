@@ -1,15 +1,14 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.Immutable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.Immutable;
-
 /**
  * Representation of a line from a pedigree (<code>.ped</code>) file.
- *
+ * <p>
  * A pedigree file is a TSV file and contains information about multiple indivdidual. Each line is a record and
  * describes an individual. The files have six <b>core columns</b> that have to be present:
  *
@@ -27,9 +26,9 @@ import de.charite.compbio.jannovar.Immutable;
  * <dt>{@link #disease}</dt>
  * <dd>the disease status of the individual</dd>
  * </dl>
- *
+ * <p>
  * The remaining columns are stored in {@link #extraFields}.
- *
+ * <p>
  * The <code>PedPerson</code> class describes a record from a pedigree file. This introduces some limitations. For
  * example, the record stores the id of the parents but not references to the parent objects. The class {@link Person}
  * provides a more Java-programmer oriented version of this information.
@@ -39,32 +38,46 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class PedPerson {
 
-	/** pedigree name */
+	/**
+	 * pedigree name
+	 */
 	private final String pedigree;
 
-	/** name of the individual */
+	/**
+	 * name of the individual
+	 */
 	private final String name;
 
-	/** individual's father's name, <code>"0"</code> if father not in pedigree */
+	/**
+	 * individual's father's name, <code>"0"</code> if father not in pedigree
+	 */
 	private final String father;
 
-	/** individual's mother's name, <code>"0"</code> if father not in pedigree */
+	/**
+	 * individual's mother's name, <code>"0"</code> if father not in pedigree
+	 */
 	private final String mother;
 
-	/** invidual's sex */
+	/**
+	 * invidual's sex
+	 */
 	private final Sex sex;
 
-	/** individual's disease status */
+	/**
+	 * individual's disease status
+	 */
 	private final Disease disease;
 
-	/** the additional fields stored for this person */
+	/**
+	 * the additional fields stored for this person
+	 */
 	private final ImmutableList<String> extraFields;
 
 	/**
 	 * Initialize object with the given data.
 	 */
 	public PedPerson(String pedigree, String name, String father, String mother, Sex sex, Disease disease,
-			Collection<String> extraFields) {
+					 Collection<String> extraFields) {
 		this.pedigree = pedigree;
 		this.name = name;
 		this.father = father;
@@ -81,37 +94,51 @@ public final class PedPerson {
 		this(pedigree, name, father, mother, sex, disease, new ArrayList<String>());
 	}
 
-	/** @return pedigree name */
+	/**
+	 * @return pedigree name
+	 */
 	public String getPedigree() {
 		return pedigree;
 	}
 
-	/** @return name of the individual */
+	/**
+	 * @return name of the individual
+	 */
 	public String getName() {
 		return name;
 	}
 
-	/** @return individual's father's name, <code>"0"</code> if father not in pedigree */
+	/**
+	 * @return individual's father's name, <code>"0"</code> if father not in pedigree
+	 */
 	public String getFather() {
 		return father;
 	}
 
-	/** @return individual's mother's name, <code>"0"</code> if father not in pedigree */
+	/**
+	 * @return individual's mother's name, <code>"0"</code> if father not in pedigree
+	 */
 	public String getMother() {
 		return mother;
 	}
 
-	/** @return invidual's sex */
+	/**
+	 * @return invidual's sex
+	 */
 	public Sex getSex() {
 		return sex;
 	}
 
-	/** @return individual's disease status */
+	/**
+	 * @return individual's disease status
+	 */
 	public Disease getDisease() {
 		return disease;
 	}
 
-	/** @return the additional fields stored for this person */
+	/**
+	 * @return the additional fields stored for this person
+	 */
 	public ImmutableList<String> getExtraFields() {
 		return extraFields;
 	}
@@ -126,7 +153,7 @@ public final class PedPerson {
 	@Override
 	public String toString() {
 		return "PedPerson [pedigree=" + pedigree + ", name=" + name + ", father=" + father + ", mother=" + mother
-				+ ", sex=" + sex + ", disease=" + disease + ", extraFields=" + extraFields + "]";
+			+ ", sex=" + sex + ", disease=" + disease + ", extraFields=" + extraFields + "]";
 	}
 
 	@Override

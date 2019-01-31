@@ -1,16 +1,15 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.Immutable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.Immutable;
-
 /**
  * An individual from a pedigree file, Java programmer friendly version.
- *
+ * <p>
  * Note that a Person is not truly immutable since its mother and father field have to be non-final during its
  * construction. However, since the members only have <code>package</code> visibility, <code>Person</code> is immutable
  * for all practical considerations after construction.
@@ -21,22 +20,34 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class Person {
 
-	/** the individual's name */
+	/**
+	 * the individual's name
+	 */
 	private final String name;
 
-	/** the individual's father, or <code>null</code> if father is not in pedigree */
+	/**
+	 * the individual's father, or <code>null</code> if father is not in pedigree
+	 */
 	private final Person father;
 
-	/** the individual's mother, or <code>null</code> if mother is not in pedigree */
+	/**
+	 * the individual's mother, or <code>null</code> if mother is not in pedigree
+	 */
 	private final Person mother;
 
-	/** the individual's sex */
+	/**
+	 * the individual's sex
+	 */
 	private final Sex sex;
 
-	/** the individual's disease state */
+	/**
+	 * the individual's disease state
+	 */
 	private final Disease disease;
 
-	/** extra fields from the PED file */
+	/**
+	 * extra fields from the PED file
+	 */
 	private final ImmutableList<String> extraFields;
 
 	/**
@@ -79,32 +90,44 @@ public final class Person {
 		this.mother = existing.get(pedPerson.getMother());
 	}
 
-	/** @return the individual's name */
+	/**
+	 * @return the individual's name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	/** @return the individual's father, or <code>null</code> if father is not in pedigree */
+	/**
+	 * @return the individual's father, or <code>null</code> if father is not in pedigree
+	 */
 	public Person getFather() {
 		return father;
 	}
 
-	/** @return the individual's mother, or <code>null</code> if mother is not in pedigree */
+	/**
+	 * @return the individual's mother, or <code>null</code> if mother is not in pedigree
+	 */
 	public Person getMother() {
 		return mother;
 	}
 
-	/** @return the individual's sex */
+	/**
+	 * @return the individual's sex
+	 */
 	public Sex getSex() {
 		return sex;
 	}
 
-	/** @return the individual's disease state */
+	/**
+	 * @return the individual's disease state
+	 */
 	public Disease getDisease() {
 		return disease;
 	}
 
-	/** @return extra fields from the PED file */
+	/**
+	 * @return extra fields from the PED file
+	 */
 	public ImmutableList<String> getExtraFields() {
 		return extraFields;
 	}
@@ -147,7 +170,7 @@ public final class Person {
 	@Override
 	public String toString() {
 		return "Person [name=" + name + ", father=" + father + ", mother=" + mother + ", sex=" + sex + ", disease="
-				+ disease + ", extraFields=" + extraFields + "]";
+			+ disease + ", extraFields=" + extraFields + "]";
 	}
 
 	@Override

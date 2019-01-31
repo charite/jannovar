@@ -29,4 +29,5 @@ in the Jannovar manual.
 
 - Java code should follow IntelliJ default formatting and the `Ctrl+Alt+l` formatter.
   Eclipse users please use [Eclipse Code Formatter](https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter).
+  Enable the "wrap at right margin" option for JavaDoc.
 - For all other text, use `.editorconfig`.

@@ -1,22 +1,17 @@
 package de.charite.compbio.jannovar.hgvs.nts.variant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 
+import java.util.*;
+
 /**
  * Contains the {@link NucleotideChange}s on one allee.
- *
+ * <p>
  * Examples:
  *
  * <ul>
@@ -29,20 +24,28 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
  */
 public final class NucleotideChangeAllele implements ConvertibleToHGVSString, List<NucleotideChange> {
 
-	/** variant configuration on this allele */
+	/**
+	 * variant configuration on this allele
+	 */
 	protected final VariantConfiguration varConfig;
-	/** nucleotide changes that lie on the allele */
+	/**
+	 * nucleotide changes that lie on the allele
+	 */
 	protected final ImmutableList<NucleotideChange> changes;
 
-	/** @return a new allele containing one nucleotide change */
+	/**
+	 * @return a new allele containing one nucleotide change
+	 */
 	public static NucleotideChangeAllele singleChangeAllele(NucleotideChange change) {
 		if (change == null)  // parsing failed below
-			return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.<NucleotideChange> of());
+			return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.<NucleotideChange>of());
 		else
 			return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
 	}
 
-	/** @return a new allele with the given variant configuration and changes */
+	/**
+	 * @return a new allele with the given variant configuration and changes
+	 */
 	public static NucleotideChangeAllele build(VariantConfiguration varConfig, NucleotideChange... changes) {
 		return new NucleotideChangeAllele(varConfig, ImmutableList.copyOf(changes));
 	}
@@ -50,17 +53,17 @@ public final class NucleotideChangeAllele implements ConvertibleToHGVSString, Li
 	/**
 	 * Construct allele with the given a variant {@link VariantConfiguration} and {@link NucleotideChange}s.
 	 *
-	 * @param varConfig
-	 *            configuration of the changes
-	 * @param changes
-	 *            nucleotide changes to store in the allele
+	 * @param varConfig configuration of the changes
+	 * @param changes   nucleotide changes to store in the allele
 	 */
 	public NucleotideChangeAllele(VariantConfiguration varConfig, Collection<? extends NucleotideChange> changes) {
 		this.varConfig = varConfig;
 		this.changes = ImmutableList.copyOf(changes);
 	}
 
-	/** @return Allele with the onlyPredicted state of all contained changes set to the given value */
+	/**
+	 * @return Allele with the onlyPredicted state of all contained changes set to the given value
+	 */
 	public NucleotideChangeAllele withOnlyPredicted(boolean flag) {
 		ArrayList<NucleotideChange> changesCopy = new ArrayList<>();
 		for (NucleotideChange change : changes)
@@ -68,12 +71,16 @@ public final class NucleotideChangeAllele implements ConvertibleToHGVSString, Li
 		return new NucleotideChangeAllele(varConfig, changesCopy);
 	}
 
-	/** @return the {@link VariantConfiguration} of this allele */
+	/**
+	 * @return the {@link VariantConfiguration} of this allele
+	 */
 	public VariantConfiguration getVarConfig() {
 		return varConfig;
 	}
 
-	/** @return list of {@link NucleotideChange}s */
+	/**
+	 * @return list of {@link NucleotideChange}s
+	 */
 	public ImmutableList<NucleotideChange> getChanges() {
 		return changes;
 	}

@@ -9,7 +9,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending {@link VCFHeader}s for thousand genomes annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
@@ -51,7 +51,9 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
 		}
 	}
 
-	/** Add header with allele frequency */
+	/**
+	 * Add header with allele frequency
+	 */
 	private void addAFHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ThousandGenomesPopulation pop) {
 		String popName;
 		if (pop == ThousandGenomesPopulation.ALL)
@@ -59,12 +61,14 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AF_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Float,
-				"Frequency observed in thousand genomes data set in " + popName + noteInfix);
+			VCFHeaderLineType.Float,
+			"Frequency observed in thousand genomes data set in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with chromosome count */
+	/**
+	 * Add header with chromosome count
+	 */
 	private void addANHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ThousandGenomesPopulation pop) {
 		// TODO: change counts to 1 for AN?
 		String popName;
@@ -73,12 +77,14 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AN_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer,
-				"Overall number of positions/chromosomes with coverage in " + popName + noteInfix);
+			VCFHeaderLineType.Integer,
+			"Overall number of positions/chromosomes with coverage in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with allele counts */
+	/**
+	 * Add header with allele counts
+	 */
 	private void addACHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ThousandGenomesPopulation pop) {
 		String popName;
 		if (pop == ThousandGenomesPopulation.ALL)
@@ -86,53 +92,61 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AC_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with het allele counts */
+	/**
+	 * Add header with het allele counts
+	 */
 	private void addACHetHeader(VCFHeader header, String prefix, String idInfix, String noteInfix,
-			ThousandGenomesPopulation pop) {
+								ThousandGenomesPopulation pop) {
 		String popName;
 		if (pop != ThousandGenomesPopulation.ALL)
 			popName = "all populations";
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "Het_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed heterozygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed heterozygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with hom allele counts */
+	/**
+	 * Add header with hom allele counts
+	 */
 	private void addACHomHeader(VCFHeader header, String prefix, String idInfix, String noteInfix,
-			ThousandGenomesPopulation pop) {
+								ThousandGenomesPopulation pop) {
 		String popName;
 		if (pop == ThousandGenomesPopulation.ALL)
 			popName = "all populations";
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "Hom_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed homozygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed homozygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add header with hemi allele counts */
+	/**
+	 * Add header with hemi allele counts
+	 */
 	private void addACHemiHeader(VCFHeader header, String prefix, String idInfix, String noteInfix,
-			ThousandGenomesPopulation pop) {
+								 ThousandGenomesPopulation pop) {
 		String popName;
 		if (pop == ThousandGenomesPopulation.ALL)
 			popName = "all populations";
 		else
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "Hemi_" + pop, VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Overall number of observed hemizygous alleles in " + popName + noteInfix);
+			VCFHeaderLineType.Integer, "Overall number of observed hemizygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 
-	/** Add POPMAX name */
+	/**
+	 * Add POPMAX name
+	 */
 	private void addPopmaxHeader(VCFHeader header, String prefix, String idInfix, String noteInfix) {
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "POPMAX", VCFHeaderLineCount.A,
-				VCFHeaderLineType.String, "Population with the max AF" + noteInfix);
+			VCFHeaderLineType.String, "Population with the max AF" + noteInfix);
 		header.addMetaDataLine(line);
 	}
 

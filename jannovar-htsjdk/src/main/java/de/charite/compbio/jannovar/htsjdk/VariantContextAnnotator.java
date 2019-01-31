@@ -1,20 +1,9 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantAnnotations;
@@ -24,14 +13,14 @@ import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.Strand;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.*;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
@@ -40,15 +29,16 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
  */
 public final class VariantContextAnnotator {
 
-	/** the logger object to use */
+	/**
+	 * the logger object to use
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
 
 	/**
 	 * Options class for {@link VariantContextAnnotator}
-	 * 
+	 *
 	 * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
 	 * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
-	 *
 	 */
 	public static class Options {
 		/**
@@ -56,25 +46,35 @@ public final class VariantContextAnnotator {
 		 * <code>true</code>
 		 */
 		private final boolean oneAnnotationOnly;
-		
+
 		/**
 		 * HGVS protein output in three or one letter
 		 */
 		private final AminoAcidCode aminoAcidCode;
 
-		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
+		/**
+		 * whether or not to escape values in the ANN field (defaults to <code>true</code>)
+		 */
 		private final boolean escapeAnnField;
 
-		/** whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>) */
+		/**
+		 * whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>)
+		 */
 		private final boolean nt3PrimeShifting;
 
-		/** Whether or not off-target filter is enabled */
+		/**
+		 * Whether or not off-target filter is enabled
+		 */
 		private boolean offTargetFilterEnabled;
 
-		/** Whether or not UTR counts as off-target */
+		/**
+		 * Whether or not UTR counts as off-target
+		 */
 		private boolean offTargetFilterUtrIsOffTarget;
 
-		/** Whether or not non-consensus splice region counts as off-target */
+		/**
+		 * Whether or not non-consensus splice region counts as off-target
+		 */
 		private boolean offTargetFilterIntronicSpliceIsOffTarget;
 
 		/**
@@ -91,31 +91,23 @@ public final class VariantContextAnnotator {
 		}
 
 		/**
-		 * 
 		 * constructor using fields
-		 * 
-		 * @param oneAnnotationOnly
-		 *            Whether or not to trim each annotation list to the first (one with
-		 *            highest putative impact), defaults to <code>true</code>
-		 * @param code
-		 *            HGVS protein output in three or one letter
-		 * @param escapeAnnField
-		 *            whether or not to escape values in the ANN field (defaults to
-		 *            <code>true</code>)
-		 * @param nt3PrimeShifting
-		 *            whether or not to perform shifting towards the 3' end of the
-		 *            transcript (defaults to <code>true</code>)
-		 * @param offTargetFilterEnabled
-		 *            whether or not off target filter application is abled
-		 * @param offTargetFilterUtrIsOffTarget
-		 *            whether or not to count UTR as off-target
-		 * @param offTargetFilterIntronicSpliceIsOffTarget
-		 *            whether or not to to count non-consensus intronic splicing as
-		 *            off-target
+		 *
+		 * @param oneAnnotationOnly                        Whether or not to trim each annotation list to the first (one with
+		 *                                                 highest putative impact), defaults to <code>true</code>
+		 * @param code                                     HGVS protein output in three or one letter
+		 * @param escapeAnnField                           whether or not to escape values in the ANN field (defaults to
+		 *                                                 <code>true</code>)
+		 * @param nt3PrimeShifting                         whether or not to perform shifting towards the 3' end of the
+		 *                                                 transcript (defaults to <code>true</code>)
+		 * @param offTargetFilterEnabled                   whether or not off target filter application is abled
+		 * @param offTargetFilterUtrIsOffTarget            whether or not to count UTR as off-target
+		 * @param offTargetFilterIntronicSpliceIsOffTarget whether or not to to count non-consensus intronic splicing as
+		 *                                                 off-target
 		 */
 		public Options(boolean oneAnnotationOnly, AminoAcidCode code, boolean escapeAnnField, boolean nt3PrimeShifting,
-				boolean offTargetFilterEnabled, boolean offTargetFilterUtrIsOffTarget,
-				boolean offTargetFilterIntronicSpliceIsOffTarget) {
+					   boolean offTargetFilterEnabled, boolean offTargetFilterUtrIsOffTarget,
+					   boolean offTargetFilterIntronicSpliceIsOffTarget) {
 			this.oneAnnotationOnly = oneAnnotationOnly;
 			this.aminoAcidCode = code;
 			this.escapeAnnField = escapeAnnField;
@@ -160,23 +152,29 @@ public final class VariantContextAnnotator {
 
 	}
 
-	/** the {@link ReferenceDictionary} to use */
+	/**
+	 * the {@link ReferenceDictionary} to use
+	 */
 	private final ReferenceDictionary refDict;
-	/** {@link Chromosome} map with the {@link TranscriptModel}s, probably from {@link JannovarData} */
+	/**
+	 * {@link Chromosome} map with the {@link TranscriptModel}s, probably from {@link JannovarData}
+	 */
 	private final ImmutableMap<Integer, Chromosome> chromosomeMap;
-	/** configuration */
+	/**
+	 * configuration
+	 */
 	private final Options options;
 
-	/** implementation of the actual variant annotation */
+	/**
+	 * implementation of the actual variant annotation
+	 */
 	private final VariantAnnotator annotator;
 
 	/**
 	 * Construct annotator with default options.
-	 * 
-	 * @param refDict
-	 *            Referencedictionary
-	 * @param chromosomeMap
-	 *            the chomosomal map
+	 *
+	 * @param refDict       Referencedictionary
+	 * @param chromosomeMap the chomosomal map
 	 */
 	public VariantContextAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap) {
 		this(refDict, chromosomeMap, new Options());
@@ -185,20 +183,17 @@ public final class VariantContextAnnotator {
 	/**
 	 * Construct Annotator.
 	 *
-	 * @param refDict
-	 *            {@link ReferenceDictionary} to use, probably from {@link JannovarData}
-	 * @param chromosomeMap
-	 *            {@link Chromosome} map to use, probably from {@link JannovarData}
-	 * @param options
-	 *            configuration of the Annotator, for {@link #applyAnnotations}
+	 * @param refDict       {@link ReferenceDictionary} to use, probably from {@link JannovarData}
+	 * @param chromosomeMap {@link Chromosome} map to use, probably from {@link JannovarData}
+	 * @param options       configuration of the Annotator, for {@link #applyAnnotations}
 	 */
 	public VariantContextAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
-			Options options) {
+								   Options options) {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap,
-				new AnnotationBuilderOptions(options.nt3PrimeShifting, false));
+			new AnnotationBuilderOptions(options.nt3PrimeShifting, false));
 	}
 
 	/**
@@ -231,17 +226,14 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Build a {@link GenomeVariant} from a {@link VariantContext} object.
-	 *
+	 * <p>
 	 * In the case of exceptions, you can use {@link #buildErrorAnnotations} to build an {@link VariantAnnotations} with
 	 * an error message.
 	 *
-	 * @param vc
-	 *            {@link VariantContext} describing the variant
-	 * @param alleleID
-	 *            numeric identifier of the allele
+	 * @param vc       {@link VariantContext} describing the variant
+	 * @param alleleID numeric identifier of the allele
 	 * @return {@link GenomeVariant} corresponding to <code>vc</code>, guaranteed to be on {@link Strand#FWD}.
-	 * @throws InvalidCoordinatesException
-	 *             in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
+	 * @throws InvalidCoordinatesException in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
 	 */
 	public GenomeVariant buildGenomeVariant(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
@@ -249,7 +241,7 @@ public final class VariantContextAnnotator {
 		Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
 		if (boxedInt == null)
 			throw new InvalidCoordinatesException("Unknown reference " + vc.getContig(),
-					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+				AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 		int chr = boxedInt.intValue();
 
 		// Build the GenomeChange object.
@@ -262,13 +254,11 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Put error annotation messages to a {@link VariantContext} into the ANN field in the INFO column.
-	 *
+	 * <p>
 	 * Previous values are overwritten.
 	 *
-	 * @param vc
-	 *            {@link VariantContext} to add the error message to
-	 * @param messages
-	 *            set of messages to write into the {@link VariantContext}
+	 * @param vc       {@link VariantContext} to add the error message to
+	 * @param messages set of messages to write into the {@link VariantContext}
 	 */
 	public void putErrorAnnotation(VariantContext vc, Set<AnnotationMessage> messages) {
 		// TODO(holtgrewe): Do something more elegant way than 15 * "|", needs to be kept in sync with VCFAnnotationData
@@ -282,9 +272,8 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Annotate variant <code>vc</code> and return annoated variant
-	 * 
-	 * @param vc
-	 *            {@link VariantContext} to annotate
+	 *
+	 * @param vc {@link VariantContext} to annotate
 	 */
 	public VariantContext annotateVariantContext(VariantContext vc) {
 		try {
@@ -298,20 +287,18 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Given a {@link VariantContext}, generate one {@link VariantAnnotations} for each alternative allele.
-	 *
+	 * <p>
 	 * Note that in the case of an exception being thrown, you have to add an error annotation yourself to the
 	 * {@link VariantContext} yourself, e.g. by using {@link #putErrorAnnotation}.
 	 *
-	 * @param vc
-	 *            the VCF record to annotate, remains unchanged
+	 * @param vc the VCF record to annotate, remains unchanged
 	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of
-	 *         the alternative alleles in <code>vc</code>
-	 * @throws InvalidCoordinatesException
-	 *             in the case of problems with resolving coordinates internally, namely building the
-	 *             {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
+	 * the alternative alleles in <code>vc</code>
+	 * @throws InvalidCoordinatesException in the case of problems with resolving coordinates internally, namely building the
+	 *                                     {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
 	 */
 	public ImmutableList<VariantAnnotations> buildAnnotations(VariantContext vc) throws InvalidCoordinatesException {
-		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
+		LOGGER.trace("building annotation lists for {}", new Object[]{vc});
 
 		ImmutableList.Builder<VariantAnnotations> builder = new ImmutableList.Builder<VariantAnnotations>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
@@ -321,11 +308,11 @@ public final class VariantContextAnnotator {
 			try {
 				final VariantAnnotations lst = annotator.buildAnnotations(change);
 				builder.add(lst);
-				LOGGER.trace("adding annotation list {}", new Object[] { lst });
+				LOGGER.trace("adding annotation list {}", new Object[]{lst});
 			} catch (Exception e) {
 				final VariantAnnotations lst = buildErrorAnnotations(change);
 				builder.add(lst);
-				LOGGER.trace("adding error annotation list {}", new Object[] { lst });
+				LOGGER.trace("adding error annotation list {}", new Object[]{lst});
 			}
 		}
 
@@ -334,11 +321,9 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Write annotations from <code>annos</code> to <code>vc</code> l
-	 * 
-	 * @param vc
-	 *            {@link VariantContext} to write the annotations to (to INFO column)
-	 * @param annos
-	 *            annotations to apply (one for each alternative allele in <code>vc</code>)
+	 *
+	 * @param vc    {@link VariantContext} to write the annotations to (to INFO column)
+	 * @param annos annotations to apply (one for each alternative allele in <code>vc</code>)
 	 * @return modified <code>vc</code>
 	 */
 	public VariantContext applyAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
@@ -350,8 +335,8 @@ public final class VariantContextAnnotator {
 			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
 				for (Annotation ann : annos.get(alleleID).getAnnotations()) {
 					boolean offTargetInThis = ann.getEffects().stream()
-							.allMatch(e -> e.isOffExome(options.offTargetFilterUtrIsOffTarget,
-									options.offTargetFilterIntronicSpliceIsOffTarget));
+						.allMatch(e -> e.isOffExome(options.offTargetFilterUtrIsOffTarget,
+							options.offTargetFilterIntronicSpliceIsOffTarget));
 					offTargetInAll = offTargetInAll && offTargetInThis;
 
 					if (!options.oneAnnotationOnly || annotations.isEmpty()) {
@@ -378,13 +363,12 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
-	 * @param change
-	 *            {@link GenomeVariant} to build error annotation for
+	 * @param change {@link GenomeVariant} to build error annotation for
 	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
 	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
 		return new VariantAnnotations(change,
-				ImmutableList.of(new Annotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
+			ImmutableList.of(new Annotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}
 
 }

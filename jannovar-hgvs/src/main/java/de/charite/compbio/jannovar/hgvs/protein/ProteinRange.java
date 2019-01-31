@@ -5,11 +5,11 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
 /**
  * Represent a range in a protein.
- *
+ * <p>
  * Note that contrary to Java-style, we represent the <b>first</b> and <b>last</b> character of the range instead of the
  * begin and end position. Thus, we use inclusive positions. This is also reflected by the members being named first and
  * last instead of begin and end.
- *
+ * <p>
  * In the case of the first position being equal to the last one, the {@link ProteinRange} degrades to a point when
  * {@link #toHGVSString()} is called.
  *
@@ -17,9 +17,13 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public class ProteinRange implements ConvertibleToHGVSString {
 
-	/** location of the first amino acid in the range */
+	/**
+	 * location of the first amino acid in the range
+	 */
 	private final ProteinPointLocation first;
-	/** location of the last amino acid in the range */
+	/**
+	 * location of the last amino acid in the range
+	 */
 	private final ProteinPointLocation last;
 
 	public static ProteinRange build(String firstAA, int first, String lastAA, int last) {
@@ -27,21 +31,19 @@ public class ProteinRange implements ConvertibleToHGVSString {
 	}
 
 	public static ProteinRange buildWithOffset(String firstAA, int first, int firstOffset, String lastAA, int last,
-			int lastOffset) {
+											   int lastOffset) {
 		return new ProteinRange(ProteinPointLocation.buildWithOffset(firstAA, first, firstOffset),
-				ProteinPointLocation.buildWithOffset(lastAA, last, lastOffset));
+			ProteinPointLocation.buildWithOffset(lastAA, last, lastOffset));
 	}
 
 	public static ProteinRange buildDownstreamOfTerminal(String firstAA, int first, String lastAA, int last) {
 		return new ProteinRange(ProteinPointLocation.buildWithOffset(firstAA, first, 0),
-				ProteinPointLocation.buildWithOffset(lastAA, last, 0));
+			ProteinPointLocation.buildWithOffset(lastAA, last, 0));
 	}
 
 	/**
-	 * @param first
-	 *            first position of the range
-	 * @param last
-	 *            last position of the range
+	 * @param first first position of the range
+	 * @param last  last position of the range
 	 */
 	public ProteinRange(ProteinPointLocation first, ProteinPointLocation last) {
 		super();
@@ -49,17 +51,23 @@ public class ProteinRange implements ConvertibleToHGVSString {
 		this.last = last;
 	}
 
-	/** @return location of the first amino acid in the range */
+	/**
+	 * @return location of the first amino acid in the range
+	 */
 	public ProteinPointLocation getFirst() {
 		return first;
 	}
 
-	/** @return location of the last amino acid in the range */
+	/**
+	 * @return location of the last amino acid in the range
+	 */
 	public ProteinPointLocation getLast() {
 		return last;
 	}
 
-	/** @return length of the range */
+	/**
+	 * @return length of the range
+	 */
 	public int length() {
 		return last.getPos() - first.getPos() + 1;
 	}

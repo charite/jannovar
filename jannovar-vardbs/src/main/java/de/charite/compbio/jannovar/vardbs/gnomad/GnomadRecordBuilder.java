@@ -1,37 +1,61 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 public class GnomadRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String contig;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	private ArrayList<String> filter;
 
-	/** Populations with highest frequency */
+	/**
+	 * Populations with highest frequency
+	 */
 	private ArrayList<String> popmax;
-	/** Allele counts for each population */
+	/**
+	 * Allele counts for each population
+	 */
 	private HashMap<GnomadPopulation, List<Integer>> alleleCounts;
-	/** Allele het counts for each population */
+	/**
+	 * Allele het counts for each population
+	 */
 	private HashMap<GnomadPopulation, List<Integer>> alleleHetCounts;
-	/** Allele hom counts for each population */
+	/**
+	 * Allele hom counts for each population
+	 */
 	private HashMap<GnomadPopulation, List<Integer>> alleleHomCounts;
-	/** Allele hemicounts for each population */
+	/**
+	 * Allele hemicounts for each population
+	 */
 	private HashMap<GnomadPopulation, List<Integer>> alleleHemiCounts;
-	/** Chromsome counts for each population */
+	/**
+	 * Chromsome counts for each population
+	 */
 	private HashMap<GnomadPopulation, ImmutableList<Integer>> chromCounts;
 
 	GnomadRecordBuilder() {
@@ -52,7 +76,7 @@ public class GnomadRecordBuilder {
 
 	public GnomadRecord build() {
 		return new GnomadRecord(contig, pos, id, ref, alt, filter, popmax, alleleCounts, alleleHetCounts,
-				alleleHomCounts, alleleHemiCounts, chromCounts);
+			alleleHomCounts, alleleHemiCounts, chromCounts);
 	}
 
 	public String getContig() {
@@ -162,9 +186,9 @@ public class GnomadRecordBuilder {
 	@Override
 	public String toString() {
 		return "GnomadRecordBuilder [contig=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
-				+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
-				+ ", chromCounts=" + chromCounts + "]";
+			+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
+			+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
+			+ ", chromCounts=" + chromCounts + "]";
 	}
 
 	@Override

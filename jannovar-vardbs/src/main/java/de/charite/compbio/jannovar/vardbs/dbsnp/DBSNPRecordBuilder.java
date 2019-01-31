@@ -5,124 +5,230 @@ import java.util.HashSet;
 
 /**
  * Builder for {@link DBSNPRecord} class
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String chrom;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	private ArrayList<String> filter;
 
 	// Entries of the INFO column
 
-	/** Numeric RS cluster ID */
+	/**
+	 * Numeric RS cluster ID
+	 */
 	private int rsID;
-	/** Position of the cluster */
+	/**
+	 * Position of the cluster
+	 */
 	private int rsPos;
-	/** Whether or not the RS orientation is reversed */
+	/**
+	 * Whether or not the RS orientation is reversed
+	 */
 	private boolean reversed;
-	/** Representation of the dbSNP bit flags */
+	/**
+	 * Representation of the dbSNP bit flags
+	 */
 	private DBSNPVariantProperty variantProperty;
-	/** Gene information of overlapping genes */
+	/**
+	 * Gene information of overlapping genes
+	 */
 	private ArrayList<DBSNPGeneInfo> geneInfos;
-	/** ID of first dbSNP build where this variant appears */
+	/**
+	 * ID of first dbSNP build where this variant appears
+	 */
 	private int dbSNPBuildID;
-	/** Variant origin (germline/somatic) */
+	/**
+	 * Variant origin (germline/somatic)
+	 */
 	private DBSNPVariantAlleleOrigin variantAlleleOrigin;
-	/** Explanation of possible suspectiveness */
+	/**
+	 * Explanation of possible suspectiveness
+	 */
 	private HashSet<DBSNPVariantSuspectReasonCode> variantSuspectReasonCode;
-	/** Weight of the variant */
+	/**
+	 * Weight of the variant
+	 */
 	private int weight;
-	/** Class of the variation */
+	/**
+	 * Class of the variation
+	 */
 	private String variationClass;
-	/** Whether the variant is precious (clinical or pubmed cited) */
+	/**
+	 * Whether the variant is precious (clinical or pubmed cited)
+	 */
 	private boolean precious;
-	/** Has third-party annotation */
+	/**
+	 * Has third-party annotation
+	 */
 	private boolean thirdPartyAnnotation;
-	/** Has pub med central citation */
+	/**
+	 * Has pub med central citation
+	 */
 	private boolean pubMedCentral;
-	/** Has 3D structure information */
+	/**
+	 * Has 3D structure information
+	 */
 	private boolean threeDStructure;
-	/** Has submitter link-out */
+	/**
+	 * Has submitter link-out
+	 */
 	private boolean submitterLinkOut;
-	/** Has non-synonymous frameshift effect */
+	/**
+	 * Has non-synonymous frameshift effect
+	 */
 	private boolean nonSynonymousFrameShift;
-	/** Has non-synonymous missense effect */
+	/**
+	 * Has non-synonymous missense effect
+	 */
 	private boolean nonSynonymousMissense;
-	/** Has non-synonymous nonsense effect */
+	/**
+	 * Has non-synonymous nonsense effect
+	 */
 	private boolean nonSynonymousNonsense;
-	/** Coding variant with one allele being reference */
+	/**
+	 * Coding variant with one allele being reference
+	 */
 	private boolean reference;
-	/** Coding variant with synonymous effect */
+	/**
+	 * Coding variant with synonymous effect
+	 */
 	private boolean synonymous;
-	/** Is in 3' UTR */
+	/**
+	 * Is in 3' UTR
+	 */
 	private boolean inThreePrimeUTR;
-	/** Is in 5' UTR */
+	/**
+	 * Is in 5' UTR
+	 */
 	private boolean inFivePrimeUTR;
-	/** Is in splice acceptor site */
+	/**
+	 * Is in splice acceptor site
+	 */
 	private boolean inAcceptor;
-	/** Is in splice donor site */
+	/**
+	 * Is in splice donor site
+	 */
 	private boolean inDonor;
-	/** Is in intron */
+	/**
+	 * Is in intron
+	 */
 	private boolean inIntron;
-	/** Is in 3' gene region */
+	/**
+	 * Is in 3' gene region
+	 */
 	private boolean inThreePrime;
-	/** Is in 5' gene region */
+	/**
+	 * Is in 5' gene region
+	 */
 	private boolean inFivePrime;
-	/** Has other variatn with exactly same set of mapped positions */
+	/**
+	 * Has other variatn with exactly same set of mapped positions
+	 */
 	private boolean otherVariant;
-	/** Has assembly conflict */
+	/**
+	 * Has assembly conflict
+	 */
 	private boolean assemblyConflict;
-	/** Is assembly specific */
+	/**
+	 * Is assembly specific
+	 */
 	private boolean assemblySpecific;
-	/** Is known mutation (journal citation, explicit fact), low-frequency */
+	/**
+	 * Is known mutation (journal citation, explicit fact), low-frequency
+	 */
 	private boolean mutation;
-	/** Has been validated */
+	/**
+	 * Has been validated
+	 */
 	private boolean validated;
-	/** Has >5% minor allele frequency in each and all populations */
+	/**
+	 * Has >5% minor allele frequency in each and all populations
+	 */
 	private boolean fivePercentAll;
-	/** Has >5% minor allele frequency in >=1 population */
+	/**
+	 * Has >5% minor allele frequency in >=1 population
+	 */
 	private boolean fivePercentOne;
-	/** Marker is on high-density genotyping kit */
+	/**
+	 * Marker is on high-density genotyping kit
+	 */
 	private boolean highDensityGenotyping;
-	/** Individual genotypes available */
+	/**
+	 * Individual genotypes available
+	 */
 	private boolean genotypesAvailable;
-	/** Is in 1000 genomes phase 1 list */
+	/**
+	 * Is in 1000 genomes phase 1 list
+	 */
 	private boolean g1kPhase1;
-	/** Is in 1000 genomes phase 3 list */
+	/**
+	 * Is in 1000 genomes phase 3 list
+	 */
 	private boolean g1kPhase3;
-	/** Is interrogated in clinical diagnostic assay */
+	/**
+	 * Is interrogated in clinical diagnostic assay
+	 */
 	private boolean clinicalDiagnosticAssay;
-	/** Comes from locus-specific database */
+	/**
+	 * Comes from locus-specific database
+	 */
 	private boolean locusSpecificDatabase;
-	/** Microattribution/thirdy-aprty annotation */
+	/**
+	 * Microattribution/thirdy-aprty annotation
+	 */
 	private boolean microattributionThirdParty;
-	/** Has OMIM/OMIA id */
+	/**
+	 * Has OMIM/OMIA id
+	 */
 	private boolean hasOMIMOrOMIA;
-	/** Contig allele not present in variant allele list */
+	/**
+	 * Contig allele not present in variant allele list
+	 */
 	private boolean contigAlelleNotVariant;
-	/** Has been withdrawn by submitter */
+	/**
+	 * Has been withdrawn by submitter
+	 */
 	private boolean withdrawn;
-	/** NonHas non-overlapping allele sets */
+	/**
+	 * NonHas non-overlapping allele sets
+	 */
 	private boolean nonOverlappingAlleleSet;
 	/**
 	 * Allele frequencies as seen in 1000 Genomes project, entry with index 0 is from reference, the others are (in the
 	 * same order) the frequencies for the alternative alleles.
 	 */
 	private ArrayList<Double> alleleFrequenciesG1K;
-	/** Is a common SNP (>=1% in at least one 1000 genomes population with at least 2 founders contributing */
+	/**
+	 * Is a common SNP (>=1% in at least one 1000 genomes population with at least 2 founders contributing
+	 */
 	boolean common;
-	/** List of information on old variants */
+	/**
+	 * List of information on old variants
+	 */
 	private ArrayList<String> oldVariants;
 
 	DBSNPRecordBuilder() {
@@ -185,14 +291,14 @@ public class DBSNPRecordBuilder {
 
 	public DBSNPRecord build() {
 		return new DBSNPRecord(chrom, pos, id, ref, alt, filter, rsID, rsPos, reversed, variantProperty, geneInfos,
-				dbSNPBuildID, variantAlleleOrigin, variantSuspectReasonCode, weight, variationClass, precious,
-				thirdPartyAnnotation, pubMedCentral, threeDStructure, submitterLinkOut, nonSynonymousFrameShift,
-				nonSynonymousMissense, nonSynonymousNonsense, reference, synonymous, inThreePrimeUTR, inFivePrimeUTR,
-				inAcceptor, inDonor, inIntron, inThreePrime, inFivePrime, otherVariant, assemblyConflict,
-				assemblySpecific, mutation, validated, fivePercentAll, fivePercentOne, highDensityGenotyping,
-				genotypesAvailable, g1kPhase1, g1kPhase3, clinicalDiagnosticAssay, locusSpecificDatabase,
-				microattributionThirdParty, hasOMIMOrOMIA, contigAlelleNotVariant, withdrawn, nonOverlappingAlleleSet,
-				alleleFrequenciesG1K, common, oldVariants);
+			dbSNPBuildID, variantAlleleOrigin, variantSuspectReasonCode, weight, variationClass, precious,
+			thirdPartyAnnotation, pubMedCentral, threeDStructure, submitterLinkOut, nonSynonymousFrameShift,
+			nonSynonymousMissense, nonSynonymousNonsense, reference, synonymous, inThreePrimeUTR, inFivePrimeUTR,
+			inAcceptor, inDonor, inIntron, inThreePrime, inFivePrime, otherVariant, assemblyConflict,
+			assemblySpecific, mutation, validated, fivePercentAll, fivePercentOne, highDensityGenotyping,
+			genotypesAvailable, g1kPhase1, g1kPhase3, clinicalDiagnosticAssay, locusSpecificDatabase,
+			microattributionThirdParty, hasOMIMOrOMIA, contigAlelleNotVariant, withdrawn, nonOverlappingAlleleSet,
+			alleleFrequenciesG1K, common, oldVariants);
 	}
 
 	public String getChrom() {

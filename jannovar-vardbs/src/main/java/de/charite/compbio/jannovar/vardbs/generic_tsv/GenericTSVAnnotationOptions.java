@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import htsjdk.variant.vcf.VCFHeaderLineType;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,22 +20,21 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 
 	/**
 	 * Construct new TSV annotation configuration from command line option value.
-	 * 
+	 *
 	 * <p>
 	 * The value must have the format:
 	 * <code>pathToTsvFile:oneBasedOffset:colContig:colStart:colEnd:colRef(or=0):
 	 * colAlt(or=0):colValue:fieldType:fieldName:fieldDescription:accumulationStrategy</code>
 	 * </p>
-	 * 
-	 * @param strValue
-	 *            String to parse from
+	 *
+	 * @param strValue String to parse from
 	 * @return Constructed {@link BedAnnotationOptions} from the given string value.
 	 */
 	public static GenericTSVAnnotationOptions parseFrom(String strValue) {
 		String tokens[] = strValue.split(":");
 		if (tokens.length != 13) {
 			throw new RuntimeException("Wrong number of tokens tokens in TSV annotation configuration " + strValue
-					+ " expected 13 but was " + tokens.length);
+				+ " expected 13 but was " + tokens.length);
 		}
 
 		final String pathTsvFile = tokens[0];
@@ -53,55 +53,77 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 
 		final boolean ovlAsIdentical = (colRef == 0) || (colAlt == 0);
 		final GenericTSVAnnotationTarget target = ((colRef == 0) || (colAlt == 0)) ? GenericTSVAnnotationTarget.POSITION
-				: GenericTSVAnnotationTarget.VARIANT;
+			: GenericTSVAnnotationTarget.VARIANT;
 
 		return new GenericTSVAnnotationOptions(true, ovlAsIdentical, "", MultipleMatchBehaviour.BEST_ONLY,
-				new File(pathTsvFile), target, (oneBasedOffset != 0), colContig, colStart, colEnd, colRef, colAlt,
-				refAnnotated, ImmutableList.of(fieldName),
-				ImmutableMap.of(fieldName,
-						new GenericTSVValueColumnDescription(colValue, VCFHeaderLineType.valueOf(fieldType), fieldName,
-								fieldDescription, GenericTSVAccumulationStrategy.valueOf(accStrategy))));
+			new File(pathTsvFile), target, (oneBasedOffset != 0), colContig, colStart, colEnd, colRef, colAlt,
+			refAnnotated, ImmutableList.of(fieldName),
+			ImmutableMap.of(fieldName,
+				new GenericTSVValueColumnDescription(colValue, VCFHeaderLineType.valueOf(fieldType), fieldName,
+					fieldDescription, GenericTSVAccumulationStrategy.valueOf(accStrategy))));
 	}
 
-	/** File with TSV annotations. */
+	/**
+	 * File with TSV annotations.
+	 */
 	private File tsvFile;
 
-	/** Configuration of annotation target. */
+	/**
+	 * Configuration of annotation target.
+	 */
 	private GenericTSVAnnotationTarget annotationTarget = GenericTSVAnnotationTarget.VARIANT;
 
-	/** Whether or not coordinates are 1-based. */
+	/**
+	 * Whether or not coordinates are 1-based.
+	 */
 	private boolean oneBasedPositions = true;
 
-	/** 1-based index of column with contig name */
+	/**
+	 * 1-based index of column with contig name
+	 */
 	private int contigColumnIndex = 1;
 
-	/** 1-based index of column with begin position. */
+	/**
+	 * 1-based index of column with begin position.
+	 */
 	private int beginColumnIndex = 2;
 
-	/** 1-based index of column with end position. */
+	/**
+	 * 1-based index of column with end position.
+	 */
 	private int endColumnIndex = 3;
 
-	/** 1-based index of column with reference allele, 0 for none. */
+	/**
+	 * 1-based index of column with reference allele, 0 for none.
+	 */
 	private int refAlleleColumnIndex = 4;
 
-	/** 1-based index of column with variant allele, 0 for none. */
+	/**
+	 * 1-based index of column with variant allele, 0 for none.
+	 */
 	private int altAlleleColumnIndex = 5;
 
-	/** Whether or not the ref allele can be annotated. */
+	/**
+	 * Whether or not the ref allele can be annotated.
+	 */
 	private boolean refAlleleAnnotated = false;
 
-	/** Column description names as ordered as in file. */
+	/**
+	 * Column description names as ordered as in file.
+	 */
 	private List<String> columnNames = new ArrayList<>();
 
-	/** Description of value columns. */
+	/**
+	 * Description of value columns.
+	 */
 	private Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions = new HashMap<>();
 
 	public GenericTSVAnnotationOptions(boolean reportOverlapping, boolean reportOverlappingAsIdentical,
-			String identifierPrefix, MultipleMatchBehaviour multiMatchBehaviour, File tsvFile,
-			GenericTSVAnnotationTarget annotationTarget, boolean oneBasedPositions, int contigColumnIndex,
-			int beginColumnIndex, int endColumnIndex, int refAlleleColumnIndex, int altAlleleColumnIndex,
-			boolean refAlleleAnnotated, List<String> columnNames,
-			Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions) {
+									   String identifierPrefix, MultipleMatchBehaviour multiMatchBehaviour, File tsvFile,
+									   GenericTSVAnnotationTarget annotationTarget, boolean oneBasedPositions, int contigColumnIndex,
+									   int beginColumnIndex, int endColumnIndex, int refAlleleColumnIndex, int altAlleleColumnIndex,
+									   boolean refAlleleAnnotated, List<String> columnNames,
+									   Map<String, GenericTSVValueColumnDescription> valueColumnDescriptions) {
 		super(reportOverlapping, reportOverlappingAsIdentical, identifierPrefix, multiMatchBehaviour);
 
 		this.tsvFile = tsvFile;
@@ -208,11 +230,11 @@ public class GenericTSVAnnotationOptions extends DBAnnotationOptions {
 	@Override
 	public String toString() {
 		return "GenericTSVAnnotationOptions [tsvFile=" + tsvFile + ", annotationTarget=" + annotationTarget
-				+ ", oneBasedPositions=" + oneBasedPositions + ", contigColumnIndex=" + contigColumnIndex
-				+ ", beginColumnIndex=" + beginColumnIndex + ", endColumnIndex=" + endColumnIndex
-				+ ", refAlleleColumnIndex=" + refAlleleColumnIndex + ", altAlleleColumnIndex=" + altAlleleColumnIndex
-				+ ", refAlleleAnnotated=" + refAlleleAnnotated + ", columnNames=" + columnNames
-				+ ", valueColumnDescriptions=" + valueColumnDescriptions + "]";
+			+ ", oneBasedPositions=" + oneBasedPositions + ", contigColumnIndex=" + contigColumnIndex
+			+ ", beginColumnIndex=" + beginColumnIndex + ", endColumnIndex=" + endColumnIndex
+			+ ", refAlleleColumnIndex=" + refAlleleColumnIndex + ", altAlleleColumnIndex=" + altAlleleColumnIndex
+			+ ", refAlleleAnnotated=" + refAlleleAnnotated + ", columnNames=" + columnNames
+			+ ", valueColumnDescriptions=" + valueColumnDescriptions + "]";
 	}
 
 }

@@ -1,17 +1,6 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.google.common.io.Files;
-
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -19,16 +8,32 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.samtools.reference.IndexedFastaSequenceFile;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class GenomeRegionSequenceExtractorTest {
 
-	/** path to FASTA file with sequence */
+	/**
+	 * path to FASTA file with sequence
+	 */
 	static String fastaPath;
-	/** path to Jannovar database file */
+	/**
+	 * path to Jannovar database file
+	 */
 	static String dbPath;
-	/** indexed FASTA file reader */
+	/**
+	 * indexed FASTA file reader
+	 */
 	IndexedFastaSequenceFile indexedFile;
-	/** Jannovar database */
+	/**
+	 * Jannovar database
+	 */
 	JannovarData jannovarData;
 
 	@BeforeClass

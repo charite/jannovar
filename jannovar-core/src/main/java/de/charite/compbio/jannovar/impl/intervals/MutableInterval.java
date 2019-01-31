@@ -8,19 +8,29 @@ package de.charite.compbio.jannovar.impl.intervals;
  */
 public class MutableInterval<T> implements java.io.Serializable, Comparable<MutableInterval<T>> {
 
-	/** start point of the interval (inclusive) */
+	/**
+	 * start point of the interval (inclusive)
+	 */
 	private int begin = -1;
 
-	/** end point of the interval (exclusive) */
+	/**
+	 * end point of the interval (exclusive)
+	 */
 	private int end = -1;
 
-	/** the value stored for the Interval */
+	/**
+	 * the value stored for the Interval
+	 */
 	private T value = null;
 
-	/** the maximum of this nodes {@link #end} and both of it children's {@link #end} */
+	/**
+	 * the maximum of this nodes {@link #end} and both of it children's {@link #end}
+	 */
 	private int maxEnd = -1;
 
-	/** verioin number for serializing an Interval */
+	/**
+	 * verioin number for serializing an Interval
+	 */
 	private static final long serialVersionUID = 1L;
 
 	public MutableInterval() {

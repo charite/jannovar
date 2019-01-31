@@ -1,19 +1,16 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import java.util.HashMap;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
-
-import org.junit.Assert;
+import java.util.HashMap;
 
 public class FeatureRecordTest {
 
 	@Test
 	public void test() {
 		FeatureRecord record = new FeatureRecord("seqID", "source", "type", 10, 20, "score", FeatureRecord.Strand.FORWARD, 0,
-				new HashMap<String, String>());
+			new HashMap<String, String>());
 
 		Assert.assertEquals("seqID", record.getSeqID());
 		Assert.assertEquals("source", record.getSource());

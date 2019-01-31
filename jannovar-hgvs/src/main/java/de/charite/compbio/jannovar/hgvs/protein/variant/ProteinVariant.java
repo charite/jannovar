@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.protein.variant;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 
@@ -14,21 +13,31 @@ public abstract class ProteinVariant extends HGVSVariant {
 
 	public static final int NO_PROTEIN_ISOFORM = -1;
 
-	/** reference ID */
+	/**
+	 * reference ID
+	 */
 	protected final String refID;
-	/** protein ID */
+	/**
+	 * protein ID
+	 */
 	protected final String proteinID;
-	/** protein isoform, {@link #NO_PROTEIN_ISOFORM} for no isoform */
+	/**
+	 * protein isoform, {@link #NO_PROTEIN_ISOFORM} for no isoform
+	 */
 	protected final int proteinIsoform;
 
-	/** Set variant's reference ID, protein ID is null, isoform is {@link #NO_PROTEIN_ISOFORM}. */
+	/**
+	 * Set variant's reference ID, protein ID is null, isoform is {@link #NO_PROTEIN_ISOFORM}.
+	 */
 	public ProteinVariant(String refID) {
 		this.refID = refID;
 		this.proteinID = null;
 		this.proteinIsoform = NO_PROTEIN_ISOFORM;
 	}
 
-	/** Set variant's reference ID, protein ID, and protein isoform to the given value */
+	/**
+	 * Set variant's reference ID, protein ID, and protein isoform to the given value
+	 */
 	public ProteinVariant(String refID, String proteinID, int proteinIsoform) {
 		this.refID = refID;
 		this.proteinID = proteinID;
@@ -40,12 +49,16 @@ public abstract class ProteinVariant extends HGVSVariant {
 		return toHGVSString(AminoAcidCode.THREE_LETTER);
 	}
 
-	/** @return the protein ID */
+	/**
+	 * @return the protein ID
+	 */
 	public String getProteinID() {
 		return proteinID;
 	}
 
-	/** @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"</code>. */
+	/**
+	 * @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"</code>.
+	 */
 	public String getSequenceNamePrefix() {
 		String proteinID = this.proteinID;
 		if (proteinID != null && proteinIsoform != NO_PROTEIN_ISOFORM)

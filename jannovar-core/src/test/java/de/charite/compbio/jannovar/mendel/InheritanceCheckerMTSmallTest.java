@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -31,7 +25,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		individuals.add(new PedPerson("ped", "II.1", "I.1", "I.2", Sex.MALE, Disease.AFFECTED)); // son
 		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.AFFECTED)); // daughter
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2");
@@ -50,7 +44,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		individuals2.add(new PedPerson("ped2", "II.1", "I.1", "I.2", Sex.MALE, Disease.AFFECTED)); // son
 		individuals2.add(new PedPerson("ped2", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.AFFECTED)); // daughter
 		PedFileContents pedFileContents2 = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals2.build());
+			individuals2.build());
 		this.inconsistentMTpedigree = new Pedigree(pedFileContents2, "ped2");
 	}
 
@@ -66,7 +60,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * no affected is HET or ALT
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -84,7 +78,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * TWO affected are REF
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -102,7 +96,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * TWO affected are REF
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -120,7 +114,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * Two affected are REF
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -138,7 +132,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * One unaffected is also ALT
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -157,7 +151,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 	/**
 	 * Affected Okay but one unaffected has it HET. We allow this because of
 	 * heteroplasmie in unaffected
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -175,7 +169,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * At least one HET or ALT call in affected
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -193,7 +187,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * At least one HET or ALT call in affected
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -211,7 +205,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	/**
 	 * One affected is REF
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -231,7 +225,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 	 * Affected Okay but one unaffected has it HET. We allow this because of
 	 * heteroplasmie in unaffected. This is in general difficult an can only be
 	 * figured out by using the exact "allele balances".
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test
@@ -254,7 +248,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 	 * with mitochondrial inheritance, because the unaffected father is REF, the
 	 * affected mother and her affected daughter are HET, and her affected son is
 	 * ALT (OK because he might have a higher degree of heteroplasmy).
-	 * 
+	 *
 	 * @throws IncompatiblePedigreeException
 	 */
 	@Test

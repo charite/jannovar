@@ -1,15 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.google.common.io.Files;
-
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -20,16 +11,31 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class NucleotidePositionConverterTest {
 
-	/** path to Jannovar database file */
+	/**
+	 * path to Jannovar database file
+	 */
 	static String dbPath;
-	/** Jannovar database */
+	/**
+	 * Jannovar database
+	 */
 	JannovarData jannovarData;
-	/** TranscriptModel */
+	/**
+	 * TranscriptModel
+	 */
 	TranscriptModel tm;
-	/** Position conversion */
+	/**
+	 * Position conversion
+	 */
 	NucleotideLocationConverter converter;
 
 	@BeforeClass
@@ -72,7 +78,7 @@ public class NucleotidePositionConverterTest {
 	@Test
 	public void testConvertCDSInterval() throws CannotTranslateHGVSVariant {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.build(10),
-				NucleotidePointLocation.build(20));
+			NucleotidePointLocation.build(20));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
 		Assert.assertEquals("ref:g.43511_43521", gItv.toString());
 	}
@@ -80,7 +86,7 @@ public class NucleotidePositionConverterTest {
 	@Test
 	public void testConvertUTR5Interval() throws CannotTranslateHGVSVariant {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.build(-20),
-				NucleotidePointLocation.build(-10));
+			NucleotidePointLocation.build(-10));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
 		Assert.assertEquals("ref:g.40610_43491", gItv.toString());
 	}
@@ -88,7 +94,7 @@ public class NucleotidePositionConverterTest {
 	@Test
 	public void testConvertUTR3Interval() throws CannotTranslateHGVSVariant {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.buildDownstreamOfCDS(10),
-				NucleotidePointLocation.buildDownstreamOfCDS(20));
+			NucleotidePointLocation.buildDownstreamOfCDS(20));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
 		Assert.assertEquals("ref:g.63671_63681", gItv.toString());
 	}

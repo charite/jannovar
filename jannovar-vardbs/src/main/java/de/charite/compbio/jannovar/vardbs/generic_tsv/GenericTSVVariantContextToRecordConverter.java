@@ -5,17 +5,17 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Helper class for converting {@link VariantContext} to {@link GenericTSVRecord}.
- * 
+ *
  * <p>
  * It is a bit complex to first generate a {@link VariantContext} from TSV and then use this for
  * converting back into {@link GenericTSVRecord}. However, this is the easiest way to use the
  * existing machinery for annotation and allele matching.
  * </p>
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class GenericTSVVariantContextToRecordConverter
-		implements VariantContextToRecordConverter<GenericTSVRecord> {
+	implements VariantContextToRecordConverter<GenericTSVRecord> {
 
 	private GenericTSVAnnotationOptions tsvOptions;
 
@@ -29,7 +29,7 @@ final class GenericTSVVariantContextToRecordConverter
 
 		if (vc.getAlternateAlleles().size() > 1) {
 			throw new RuntimeException(
-					"Must have exactly zero or one ALT allele but this == " + this.toString());
+				"Must have exactly zero or one ALT allele but this == " + this.toString());
 		}
 
 		builder.setContig(vc.getContig());
@@ -43,7 +43,7 @@ final class GenericTSVVariantContextToRecordConverter
 		}
 		for (String colName : tsvOptions.getColumnNames()) {
 			final GenericTSVValueColumnDescription desc = tsvOptions.getValueColumnDescriptions()
-					.get(colName);
+				.get(colName);
 			builder.getValues().add(vc.getAttribute(desc.getFieldName()));
 		}
 

@@ -6,20 +6,10 @@ import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinExtension;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
+import de.charite.compbio.jannovar.hgvs.protein.change.*;
 import de.charite.compbio.jannovar.impl.util.Translator;
-import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.InvalidCodonException;
-import de.charite.compbio.jannovar.reference.ProjectionException;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptPosition;
-import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
+import de.charite.compbio.jannovar.reference.*;
+
 import java.util.EnumSet;
 
 /**
@@ -31,24 +21,20 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * Override {@link NucleotideSubstitution} in the case of coding change.
-	 *
+	 * <p>
 	 * For changes in coding regions, this is necessary since the transcript might not be the same as the reference
 	 * (that the VCF file is generated from).
 	 */
 	private NucleotideSubstitution ntSubstitutionOverride = null;
 
 	/**
-	 * @param transcript
-	 *            {@link TranscriptModel} to build the annotation for
-	 * @param change
-	 *            {@link GenomeVariant} to build the annotation with
-	 * @param options
-	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeVariant
-	 *             if <code>change</code> did not describe a deletion
+	 * @param transcript {@link TranscriptModel} to build the annotation for
+	 * @param change     {@link GenomeVariant} to build the annotation with
+	 * @param options    the configuration to use for the {@link AnnotationBuilder}
+	 * @throws InvalidGenomeVariant if <code>change</code> did not describe a deletion
 	 */
 	SNVAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeVariant {
+		throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// guard against invalid genome change
@@ -91,7 +77,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
 		if (txPos.getPos() >= transcript.getSequence().length()
-				|| !transcript.getSequence().substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
+			|| !transcript.getSequence().substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT);
 
 		// Compute the frame shift and codon start position.
@@ -106,21 +92,21 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		} catch (InvalidCodonException e) {
 			// Bail out in the case of invalid codon from sequence
 			return new Annotation(transcript, change, EnumSet.noneOf(VariantEffect.class), locAnno, getGenomicNTChange(),
-					getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT),
+				getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT),
 				EnumSet.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
 		}
 		String wtCodon = transcriptCodon;
 		if (options.isOverrideTxSeqWithGenomeVariantRef())
 			TranscriptSequenceDecorator.codonWithUpdatedBase(wtCodon, frameShift, change.getRef().charAt(0));
 		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.getAlt().charAt(0));
+			change.getAlt().charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
 		char wtNT = wtCodon.charAt(frameShift); // wild type nucleotide
 		char varNT = varCodon.charAt(frameShift); // wild type amino acid
 		ntSubstitutionOverride = new NucleotideSubstitution(false, ntChangeRange.getFirstPos(),
-				Character.toString(wtNT), Character.toString(varNT));
+			Character.toString(wtNT), Character.toString(varNT));
 
 		// Construct annotation part for the protein.
 		String wtAA = Translator.getTranslator().translateDNA(wtCodon);
@@ -157,7 +143,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-				proteinChange, messages);
+			proteinChange, messages);
 	}
 
 	@Override
@@ -169,10 +155,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	/**
-	 * @param wtAA
-	 *            wild type amino acid
-	 * @param varAA
-	 *            variant amino acid
+	 * @param wtAA  wild type amino acid
+	 * @param varAA variant amino acid
 	 * @return variant types described by single nucleotide change
 	 */
 	private EnumSet<VariantEffect> computeVariantTypes(String wtAA, String varAA) {

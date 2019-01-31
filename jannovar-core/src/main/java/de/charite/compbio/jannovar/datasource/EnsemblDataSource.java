@@ -1,8 +1,7 @@
 package de.charite.compbio.jannovar.datasource;
 
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
+import org.ini4j.Profile.Section;
 
 /**
  * {@link DataSource} implementation for data from Ensembl.
@@ -11,11 +10,13 @@ import com.google.common.collect.ImmutableList;
  */
 final class EnsemblDataSource extends DataSource {
 
-	/** expected keys in data source configuration file */
+	/**
+	 * expected keys in data source configuration file
+	 */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("cdna", "gtf", "chromInfo", "chrToAccessions");
 
 	EnsemblDataSource(DatasourceOptions options, Section iniSection)
-			throws InvalidDataSourceException {
+		throws InvalidDataSourceException {
 		super(options, iniSection);
 
 		checkURLs();

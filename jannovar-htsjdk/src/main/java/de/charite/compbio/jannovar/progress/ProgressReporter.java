@@ -1,35 +1,44 @@
 package de.charite.compbio.jannovar.progress;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
+import htsjdk.variant.variantcontext.VariantContext;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-
-import htsjdk.variant.variantcontext.VariantContext;
-
 /**
  * Helper for displaying progress
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProgressReporter extends TimerTask {
 
 	private static ImmutableList<String> HEADERS = ImmutableList.of("Location", "processed.sites",
-			"runtime.per.1M.sites", "completed", "total.runtime", "remaining");
+		"runtime.per.1M.sites", "completed", "total.runtime", "remaining");
 
-	/** All contigs of the genome to expect */
+	/**
+	 * All contigs of the genome to expect
+	 */
 	private final GenomeRegionList contigs;
-	/** Current variant context */
+	/**
+	 * Current variant context
+	 */
 	private VariantContext currentVC;
-	/** Number of variant contexts */
+	/**
+	 * Number of variant contexts
+	 */
 	private int numProcessed;
-	/** Number of seconds between intervals */
+	/**
+	 * Number of seconds between intervals
+	 */
 	private int seconds;
-	/** Start time in miliseconds */
+	/**
+	 * Start time in miliseconds
+	 */
 	private long startTime;
 
 	public ProgressReporter(GenomeRegionList contigs, int seconds) {

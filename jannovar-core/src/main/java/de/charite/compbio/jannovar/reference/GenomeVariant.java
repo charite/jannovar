@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ComparisonChain;
-
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
@@ -12,10 +11,10 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
- *
+ * <p>
  * GenomeChange objects are immutable, the members are automatically adjusted for the longest common suffix and prefix
  * in REF and ALT.
- *
+ * <p>
  * Symbolic alleles, as in the VCF standard, are also possible, but methods like {@link #getType} etc. do not return
  * sensible results.
  *
@@ -26,16 +25,22 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
 @Immutable
 public final class GenomeVariant implements VariantDescription {
 
-	/** position of the change */
+	/**
+	 * position of the change
+	 */
 	private final GenomePosition pos;
-	/** nucleic acid reference string */
+	/**
+	 * nucleic acid reference string
+	 */
 	private final String ref;
-	/** nucleic acid alternative string */
+	/**
+	 * nucleic acid alternative string
+	 */
 	private final String alt;
 
 	/**
 	 * Construct object given the position, reference, and alternative nucleic acid string.
-	 *
+	 * <p>
 	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
 	 * longest common prefix and suffix of ref and alt.
 	 */
@@ -49,14 +54,14 @@ public final class GenomeVariant implements VariantDescription {
 
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
 		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
-				PositionType.ZERO_BASED);
+			PositionType.ZERO_BASED);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
 
 	/**
 	 * Construct object given the position, reference, alternative nucleic acid string, and strand.
-	 *
+	 * <p>
 	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
@@ -90,7 +95,7 @@ public final class GenomeVariant implements VariantDescription {
 			delta = ref.length() - 1;
 
 		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
-				PositionType.ZERO_BASED).shifted(delta).withStrand(strand);
+			PositionType.ZERO_BASED).shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -102,15 +107,15 @@ public final class GenomeVariant implements VariantDescription {
 
 	/**
 	 * @return <code>true</code> if the given <code>allele</code> string describes a symbolic allele (events not
-	 *         described by replacement of bases, e.g. break-ends or duplications that are described in one line).
+	 * described by replacement of bases, e.g. break-ends or duplications that are described in one line).
 	 */
 	private static boolean wouldBeSymbolicAllele(String allele) {
 		if (allele.length() <= 1)
 			return false;
 		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>') || // symbolic or large insertion
-				(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.') || // single breakend
-				(allele.contains("[") || allele.contains("]")); // mated
-																// breakend
+			(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.') || // single breakend
+			(allele.contains("[") || allele.contains("]")); // mated
+		// breakend
 	}
 
 	@Override
@@ -189,7 +194,7 @@ public final class GenomeVariant implements VariantDescription {
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref, "ins", alt);
 		else if (ref.length() > 1 && alt.length() != 0)
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref,
-					"ins", alt);
+				"ins", alt);
 		else
 			return Joiner.on("").join(pos, (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}
@@ -310,7 +315,7 @@ public final class GenomeVariant implements VariantDescription {
 	@Override
 	public int compareTo(Annotation other) {
 		return ComparisonChain.start().compare(pos, other.getPos()).compare(ref, other.getRef())
-				.compare(alt, other.getAlt()).result();
+			.compare(alt, other.getAlt()).result();
 	}
 
 }

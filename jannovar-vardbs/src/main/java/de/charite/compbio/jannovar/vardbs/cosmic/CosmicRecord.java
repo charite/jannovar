@@ -1,29 +1,43 @@
 package de.charite.compbio.jannovar.vardbs.cosmic;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
 
 public class CosmicRecord {
 
 	// Fields up to the INFO column
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	final private String chrom;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	final private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	final private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	final private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	final private ImmutableList<String> alt;
 
 	// Entries of the INFO column
 
-	/** Number of samples in COSMIC showing the mutation */
+	/**
+	 * Number of samples in COSMIC showing the mutation
+	 */
 	private final int cnt;
-	/** Whether or not the sample is flagged as SNP in COSMIC */
+	/**
+	 * Whether or not the sample is flagged as SNP in COSMIC
+	 */
 	private final boolean snp;
 
 	public CosmicRecord(String chrom, int pos, String id, String ref, List<String> alt, int cnt, boolean snp) {
@@ -67,7 +81,7 @@ public class CosmicRecord {
 	@Override
 	public String toString() {
 		return "CosmicRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", cnt=" + cnt + ", snp=" + snp + "]";
+			+ ", cnt=" + cnt + ", snp=" + snp + "]";
 	}
 
 	@Override

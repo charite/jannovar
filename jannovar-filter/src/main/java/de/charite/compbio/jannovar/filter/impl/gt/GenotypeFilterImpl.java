@@ -9,16 +9,24 @@ import htsjdk.variant.variantcontext.Genotype;
  */
 public interface GenotypeFilterImpl {
 
-	/** @return coverage at the genotype call */
+	/**
+	 * @return coverage at the genotype call
+	 */
 	public int getCoverage(Genotype gt);
 
-	/** @return genotype PHRED-scale genotype call */
+	/**
+	 * @return genotype PHRED-scale genotype call
+	 */
 	public int getGenotypeQuality(Genotype gt);
 
-	/** @return overall alternative allele fraction */
+	/**
+	 * @return overall alternative allele fraction
+	 */
 	public double getAlternativeAlleleFraction(Genotype gt);
 
-	/** @return allele fraction for the given <code>alleleNo</code> (0 is reference, 1.. alternative alleles) */
+	/**
+	 * @return allele fraction for the given <code>alleleNo</code> (0 is reference, 1.. alternative alleles)
+	 */
 	public double getAlleleFraction(Genotype gt, int alleleNo);
 
 }

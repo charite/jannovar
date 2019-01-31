@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.protein;
 
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 
 public class ProteinPointLocationTest {
 
@@ -38,7 +37,7 @@ public class ProteinPointLocationTest {
 		Assert.assertEquals("Ala124", location1.toHGVSString());
 		Assert.assertEquals("A124", location1.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124", location1.toHGVSString(AminoAcidCode.THREE_LETTER));
-		
+
 		Assert.assertEquals("Ala124", location1.toHGVSString());
 		Assert.assertEquals("Cys124", location3.toHGVSString());
 		Assert.assertEquals("Cys124+1", location4.toHGVSString());

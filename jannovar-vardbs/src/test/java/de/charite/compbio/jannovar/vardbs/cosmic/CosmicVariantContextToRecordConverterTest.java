@@ -1,16 +1,14 @@
 package de.charite.compbio.jannovar.vardbs.cosmic;
 
-import java.io.File;
-
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFFileReader;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.utils.ResourceUtils;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
+import java.io.File;
 
 public class CosmicVariantContextToRecordConverterTest {
 

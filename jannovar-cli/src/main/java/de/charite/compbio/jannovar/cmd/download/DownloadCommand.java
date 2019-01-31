@@ -34,18 +34,18 @@ public final class DownloadCommand extends JannovarCommand {
 		System.err.println(options.toString());
 
 		DatasourceOptions dsOptions = new DatasourceOptions(options.getHttpProxy(),
-				options.getHttpsProxy(), options.getFtpProxy(), options.isReportProgress());
+			options.getHttpsProxy(), options.getFtpProxy(), options.isReportProgress());
 
 		DataSourceFactory factory =
-				new DataSourceFactory(dsOptions, Lists.reverse(options.dataSourceFiles));
+			new DataSourceFactory(dsOptions, Lists.reverse(options.dataSourceFiles));
 		for (String name : options.getDatabaseNames()) {
 			System.err.println("Downloading/parsing for data source \"" + name + "\"");
 			JannovarData data = factory.getDataSource(name).getDataFactory().build(options.getDownloadDir(),
-					options.isReportProgress(), options.getGeneIdentifiers());
+				options.isReportProgress(), options.getGeneIdentifiers());
 			final String filename;
-			if (options.getOutputFile()  == null || options.getOutputFile().isEmpty()) {
+			if (options.getOutputFile() == null || options.getOutputFile().isEmpty()) {
 				filename = PathUtil.join(options.getDownloadDir(),
-						name.replace('/', '_').replace('\\', '_') + ".ser");
+					name.replace('/', '_').replace('\\', '_') + ".ser");
 			} else {
 				filename = options.getOutputFile();
 			}

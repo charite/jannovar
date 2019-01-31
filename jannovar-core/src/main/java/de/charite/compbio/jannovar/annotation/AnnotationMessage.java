@@ -9,7 +9,9 @@ public enum AnnotationMessage {
 	 * chromosome names in the input file and the chromosome names used in the reference genome.
 	 */
 	ERROR_CHROMOSOME_NOT_FOUND,
-	/** (E2) The variant's genomic coordinate is greater than chromosome's length. */
+	/**
+	 * (E2) The variant's genomic coordinate is greater than chromosome's length.
+	 */
 	ERROR_OUT_OF_CHROMOSOME_RANGE,
 	/**
 	 * (Additional warning) This means that the "REF" field in the input VCF file does not match the reference genome. This warning
@@ -62,6 +64,8 @@ public enum AnnotationMessage {
 	 * this indicates a bug.
 	 */
 	ERROR_PROBLEM_DURING_ANNOTATION,
-	/** AnnotationMessage not encoded in enum. */
+	/**
+	 * AnnotationMessage not encoded in enum.
+	 */
 	OTHER_MESSAGE
 }

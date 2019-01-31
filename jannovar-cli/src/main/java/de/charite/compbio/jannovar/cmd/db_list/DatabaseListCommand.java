@@ -9,7 +9,9 @@ import net.sourceforge.argparse4j.inf.Namespace;
 
 public class DatabaseListCommand extends JannovarCommand {
 
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	private JannovarDBListOptions options;
 
 	public DatabaseListCommand(String argv[], Namespace args) throws CommandLineParsingException {
@@ -26,7 +28,7 @@ public class DatabaseListCommand extends JannovarCommand {
 		System.err.println(options.toString());
 
 		DatasourceOptions dsOptions = new DatasourceOptions(options.getHttpProxy(), options.getHttpsProxy(),
-				options.getFtpProxy(), options.isReportProgress());
+			options.getFtpProxy(), options.isReportProgress());
 
 		DataSourceFactory factory = new DataSourceFactory(dsOptions, options.getDataSourceFiles());
 		System.err.println("Available data sources:\n");

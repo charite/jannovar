@@ -1,24 +1,16 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackInputStream;
-import java.util.zip.GZIPInputStream;
-
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
+import org.ini4j.Profile.Section;
+
+import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Allows loading of {@link ReferenceDictParser} from UCSC and RefSeq data.
- *
+ * <p>
  * The mapping between chromosome names and RefSeq/GeneBank IDs is done using a RefSeq "chr_accessions_*" file and the
  * chromosome information is retrieved from the UCSC chromInfo.txt.gz file.
  *
@@ -26,22 +18,25 @@ import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
  */
 public final class ReferenceDictParser {
 
-	/** path to the chromInfo.txt.gz file */
+	/**
+	 * path to the chromInfo.txt.gz file
+	 */
 	private final String chromInfoPath;
-	/** path to the "chr_accessions_*" file */
+	/**
+	 * path to the "chr_accessions_*" file
+	 */
 	private final String chrAccessionsPath;
-	/** INI section with configuration */
+	/**
+	 * INI section with configuration
+	 */
 	private final Section iniSection;
 
 	/**
 	 * Initialize the parser with the paths to the file to parse.
 	 *
-	 * @param chromInfoPath
-	 *            path to knownGene.txt.gz file.
-	 * @param chrAccessionsPath
-	 *            path to "chr_accessions_*" file.
-	 * @param iniSection
-	 *            {@link Section} with configuration from INI file
+	 * @param chromInfoPath     path to knownGene.txt.gz file.
+	 * @param chrAccessionsPath path to "chr_accessions_*" file.
+	 * @param iniSection        {@link Section} with configuration from INI file
 	 */
 	public ReferenceDictParser(String chromInfoPath, String chrAccessionsPath, Section iniSection) {
 		this.chromInfoPath = chromInfoPath;
@@ -53,8 +48,7 @@ public final class ReferenceDictParser {
 	 * Load accessions and chromInfo file and return resulting ReferenceDictionary.
 	 *
 	 * @return resulting {@link ReferenceDictionary}
-	 * @throws TranscriptParseException
-	 *             on problems loading or parsing data
+	 * @throws TranscriptParseException on problems loading or parsing data
 	 */
 	public ReferenceDictionary parse() throws TranscriptParseException {
 		ReferenceDictionaryBuilder builder = new ReferenceDictionaryBuilder();
@@ -136,11 +130,9 @@ public final class ReferenceDictParser {
 	/**
 	 * Load TSV file into a list of list of strings.
 	 *
-	 * @param path
-	 *            path to the TSV file to load.
+	 * @param path path to the TSV file to load.
 	 * @return the contents of <code>path</code>, split into lists of strings.
-	 * @throws TranscriptParseException
-	 *             on problems parsing the data
+	 * @throws TranscriptParseException on problems parsing the data
 	 */
 	private ImmutableList<ImmutableList<String>> loadTSVFile(String path) throws TranscriptParseException {
 		ImmutableList.Builder<ImmutableList<String>> result = new ImmutableList.Builder<ImmutableList<String>>();
@@ -164,11 +156,9 @@ public final class ReferenceDictParser {
 	/**
 	 * Open a file handle from a gzip-compressed or uncompressed file
 	 *
-	 * @param path
-	 *            Path to the file to be opened
+	 * @param path Path to the file to be opened
 	 * @return Corresponding BufferedReader file handle.
-	 * @throws IOException
-	 *             on I/O errors
+	 * @throws IOException on I/O errors
 	 */
 	private static BufferedReader getBufferedReaderFromFilePath(String path) throws IOException {
 

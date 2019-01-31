@@ -1,17 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
-import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.google.common.io.Files;
-
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -20,6 +9,14 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.samtools.reference.IndexedFastaSequenceFile;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Tests using FBN1 transcript that is on the reverse strand.
@@ -28,13 +25,21 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
  */
 public class NucleotideIndelToGenomeVariantReverseStrandTest {
 
-	/** path to Jannovar database file */
+	/**
+	 * path to Jannovar database file
+	 */
 	static String dbPath;
-	/** path to Jannovar database file */
+	/**
+	 * path to Jannovar database file
+	 */
 	static String fastaPath;
-	/** Jannovar database */
+	/**
+	 * Jannovar database
+	 */
 	JannovarData jannovarData;
-	/** Translation of NucleotideChange to GenomeVariant */
+	/**
+	 * Translation of NucleotideChange to GenomeVariant
+	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
 
 	@BeforeClass

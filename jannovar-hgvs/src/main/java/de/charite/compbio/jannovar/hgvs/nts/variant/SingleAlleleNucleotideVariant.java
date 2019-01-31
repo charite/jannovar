@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.hgvs.nts.variant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Nucleotide change with one allele only.
@@ -23,33 +22,29 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	 * @return nucleotide variant for one change only
 	 */
 	public static SingleAlleleNucleotideVariant makeSingleChangeVariant(SequenceType seqType, String seqID,
-			NucleotideChange change) {
+																		NucleotideChange change) {
 		return new SingleAlleleNucleotideVariant(seqType, seqID, VariantConfiguration.IN_CIS, ImmutableList.of(change));
 	}
 
 	/**
 	 * @return single-change {@link SingleAlleleNucleotideVariant} with the given {@link SequenceType},
-	 *         reference/transcript ID, and {@link VariantConfiguration}
+	 * reference/transcript ID, and {@link VariantConfiguration}
 	 */
 	public static SingleAlleleNucleotideVariant build(SequenceType seqType, String seqID,
-			VariantConfiguration varConfig, NucleotideChange... changes) {
+													  VariantConfiguration varConfig, NucleotideChange... changes) {
 		return new SingleAlleleNucleotideVariant(seqType, seqID, varConfig, ImmutableList.copyOf(changes));
 	}
 
 	/**
 	 * Construct {@link SingleAlleleNucleotideVariant}
 	 *
-	 * @param seqType
-	 *            type of the changed sequence
-	 * @param seqID
-	 *            ID of the reference/transcript that the change is on
-	 * @param varConfig
-	 *            {@link VariantConfiguration} of the {@link NucleotideChange}s in the allele
-	 * @param changes
-	 *            {@link NucleotideChange}s to use for the single allele
+	 * @param seqType   type of the changed sequence
+	 * @param seqID     ID of the reference/transcript that the change is on
+	 * @param varConfig {@link VariantConfiguration} of the {@link NucleotideChange}s in the allele
+	 * @param changes   {@link NucleotideChange}s to use for the single allele
 	 */
 	public SingleAlleleNucleotideVariant(SequenceType seqType, String seqID, VariantConfiguration varConfig,
-			Collection<? extends NucleotideChange> changes) {
+										 Collection<? extends NucleotideChange> changes) {
 		this(seqType, seqID, new NucleotideChangeAllele(varConfig, changes));
 	}
 
@@ -57,7 +52,7 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	 * Construct {@link SingleAlleleNucleotideVariant}
 	 */
 	public SingleAlleleNucleotideVariant(SequenceType seqType, String refID, String proteinID, int transcriptVersion,
-			NucleotideChangeAllele allele) {
+										 NucleotideChangeAllele allele) {
 		super(seqType, refID, proteinID, transcriptVersion);
 		this.allele = allele;
 	}
@@ -65,29 +60,32 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	/**
 	 * Construct {@link SingleAlleleNucleotideVariant}
 	 *
-	 * @param seqType
-	 *            type of the changed sequence
-	 * @param seqID
-	 *            ID of the reference/transcript that the change is on
-	 * @param allele
-	 *            {@link NucleotideChangeAllele} to use
+	 * @param seqType type of the changed sequence
+	 * @param seqID   ID of the reference/transcript that the change is on
+	 * @param allele  {@link NucleotideChangeAllele} to use
 	 */
 	public SingleAlleleNucleotideVariant(SequenceType seqType, String seqID, NucleotideChangeAllele allele) {
 		super(seqType, seqID);
 		this.allele = allele;
 	}
 
-	/** @return <code>true</code> if the variant has only one {@link NucleotideChange}. */
+	/**
+	 * @return <code>true</code> if the variant has only one {@link NucleotideChange}.
+	 */
 	public boolean hasOnlyOneChange() {
 		return (allele.size() == 1);
 	}
 
-	/** @return first change, convenience method for single-change variants */
+	/**
+	 * @return first change, convenience method for single-change variants
+	 */
 	public NucleotideChange getChange() {
 		return allele.get(0);
 	}
 
-	/** @return list of changes */
+	/**
+	 * @return list of changes
+	 */
 	public NucleotideChangeAllele getAllele() {
 		return allele;
 	}

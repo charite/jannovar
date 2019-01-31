@@ -1,11 +1,6 @@
 package de.charite.compbio.jannovar.mendel.impl;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.mendel.ChromosomeType;
 import de.charite.compbio.jannovar.mendel.Genotype;
 import de.charite.compbio.jannovar.mendel.GenotypeCalls;
@@ -14,14 +9,18 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * Implementation of Mendelian compatibility check for autosomal dominant case
- * 
+ *
  * <h2>Compatibility Check</h2>
- * 
+ * <p>
  * For X-chromosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
  * individuals but no unaffected individuals in the pedigree.
- * 
+ *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
@@ -35,7 +34,7 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
 	public ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls) {
 		// Filter to calls on X chromosomes
 		Stream<GenotypeCalls> xCalls = calls.stream()
-				.filter(call -> call.getChromType() == ChromosomeType.X_CHROMOSOMAL);
+			.filter(call -> call.getChromType() == ChromosomeType.X_CHROMOSOMAL);
 		// Filter to calls compatible with AD inheritance
 		Stream<GenotypeCalls> compatibleCalls;
 		if (this.pedigree.getNMembers() == 1)
@@ -47,7 +46,7 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with AD inheritance in the case of a single individual in the
-	 *         pedigree
+	 * pedigree
 	 */
 	private boolean isCompatibleSingleton(GenotypeCalls calls) {
 		if (calls.getNSamples() == 0)
@@ -64,7 +63,7 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with AD inheritance in the case of multiple individuals in the
-	 *         pedigree
+	 * pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
 		int numAffectedWithVar = 0;

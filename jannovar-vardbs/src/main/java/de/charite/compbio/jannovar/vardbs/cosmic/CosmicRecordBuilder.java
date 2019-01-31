@@ -4,20 +4,34 @@ import java.util.ArrayList;
 
 public class CosmicRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String contig;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
 
-	/** Number of samples showing the mutation */
+	/**
+	 * Number of samples showing the mutation
+	 */
 	private int cnt;
-	/** Classified as SNP in COSMIC */
+	/**
+	 * Classified as SNP in COSMIC
+	 */
 	private boolean snp;
 
 	public CosmicRecordBuilder() {
@@ -102,7 +116,7 @@ public class CosmicRecordBuilder {
 	@Override
 	public String toString() {
 		return "CosmicRecordBuilder [contig=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", cnt=" + cnt + ", snp=" + snp + "]";
+			+ ", cnt=" + cnt + ", snp=" + snp + "]";
 	}
 
 }

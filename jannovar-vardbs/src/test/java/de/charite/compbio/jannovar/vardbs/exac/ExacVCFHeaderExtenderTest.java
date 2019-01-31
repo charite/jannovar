@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.vardbs.exac;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ExacVCFHeaderExtenderTest {
 
@@ -61,7 +60,7 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_AFR"));
@@ -86,7 +85,7 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_POPMAX"));
 
@@ -112,7 +111,7 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AN_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_AFR"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_AFR"));
@@ -137,7 +136,7 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_ALL"));
-		
+
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AC_POPMAX"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AF_POPMAX"));
 	}

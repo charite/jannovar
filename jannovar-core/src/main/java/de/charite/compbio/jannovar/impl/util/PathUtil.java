@@ -16,11 +16,10 @@ public final class PathUtil {
 	 * String path = Path.join(&quot;path&quot;, &quot;to&quot;, &quot;file&quot;);
 	 * // =&gt; path == &quot;path/to/file&quot;;
 	 * </pre>
-	 *
+	 * <p>
 	 * Note that this also works fine for joining paths in URLs.
 	 *
-	 * @param components
-	 *            file name components to join
+	 * @param components file name components to join
 	 * @return joint file name components of <code>components</code>
 	 */
 	public static String join(String... components) {

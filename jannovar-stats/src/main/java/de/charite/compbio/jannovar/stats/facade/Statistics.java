@@ -1,42 +1,58 @@
 package de.charite.compbio.jannovar.stats.facade;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.charite.compbio.jannovar.annotation.PutativeImpact;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Collection of statistics by certain properties of the variants
- * 
+ * <p>
  * Note that for impact and predicted functional effect, only the highest-impact ones are registered.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class Statistics {
 
-	/** Counts by putative impact */
+	/**
+	 * Counts by putative impact
+	 */
 	private Map<PutativeImpact, Integer> countPutativeImpacts;
 
-	/** Counts by predicted functional effect */
+	/**
+	 * Counts by predicted functional effect
+	 */
 	private Map<VariantEffect, Integer> countVariantEffects;
 
-	/** Counts by genomic region */
+	/**
+	 * Counts by genomic region
+	 */
 	private Map<GenomeRegion, Integer> countGenomeRegion;
 
-	/** Count of transition/transversion variants of SNVs */
+	/**
+	 * Count of transition/transversion variants of SNVs
+	 */
 	private Map<TsTv, Integer> tsTvCount;
 
-	/** Count of multiallelic sites */
+	/**
+	 * Count of multiallelic sites
+	 */
 	private Map<Integer, Integer> altAlleleCountHist;
 
-	/** Occurences of per-record filters */
+	/**
+	 * Occurences of per-record filters
+	 */
 	private Map<String, Integer> filterCount;
 
-	/** Number of failing/passing variants (any filter is considered failing) */
+	/**
+	 * Number of failing/passing variants (any filter is considered failing)
+	 */
 	private Map<Boolean, Integer> isFilteredCount;
 
-	/** Number of variants on the contigs */
+	/**
+	 * Number of variants on the contigs
+	 */
 	private Map<String, Integer> contigCount;
 
 	// Counts of variant GQ scores should already be in bcftools stats

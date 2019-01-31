@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.protein.change;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ProteinInsertionTest {
 
@@ -23,7 +22,7 @@ public class ProteinInsertionTest {
 	@Test
 	public void testLengthOneWithBlankDeletedSeqSpec() {
 		ProteinInsertion ins = ProteinInsertion.buildWithSeqDescription(true, "A", 123, "C", 124,
-				new ProteinSeqDescription());
+			new ProteinSeqDescription());
 		Assert.assertEquals("(A124_C125ins)", ins.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 

@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.filter.facade;
 
 /**
  * Configuration for {@link PedigreeFilterAnnotator}.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class PedigreeFilterOptions {
@@ -29,7 +29,7 @@ public class PedigreeFilterOptions {
 	private final boolean oneParentGtFilteredFiltersAffected;
 
 	public PedigreeFilterOptions(int deNovoMaxParentAd2, boolean applyParentGtFilteredFilters,
-			boolean oneParentGtFilteredFiltersAffected) {
+								 boolean oneParentGtFilteredFiltersAffected) {
 		this.deNovoMaxParentAd2 = deNovoMaxParentAd2;
 		this.applyParentGtFilteredFilters = applyParentGtFilteredFilters;
 		this.oneParentGtFilteredFiltersAffected = oneParentGtFilteredFiltersAffected;
@@ -38,9 +38,9 @@ public class PedigreeFilterOptions {
 	@Override
 	public String toString() {
 		return "PedigreeFilterOptions [deNovoMaxParentAd2=" + deNovoMaxParentAd2
-				+ ", applyParentGtFilteredFilters=" + applyParentGtFilteredFilters
-				+ ", oneParentGtFilteredFiltersAffected=" + oneParentGtFilteredFiltersAffected
-				+ "]";
+			+ ", applyParentGtFilteredFilters=" + applyParentGtFilteredFilters
+			+ ", oneParentGtFilteredFiltersAffected=" + oneParentGtFilteredFiltersAffected
+			+ "]";
 	}
 
 	public int getDeNovoMaxParentAd2() {

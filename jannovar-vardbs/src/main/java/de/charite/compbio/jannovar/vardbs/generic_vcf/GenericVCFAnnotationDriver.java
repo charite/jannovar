@@ -1,15 +1,11 @@
 package de.charite.compbio.jannovar.vardbs.generic_vcf;
 
-import de.charite.compbio.jannovar.vardbs.base.AbstractDBAnnotationDriver;
-import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
-import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
+import de.charite.compbio.jannovar.vardbs.base.*;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -25,16 +21,16 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 	private GenericVCFHeaderExtender genericVcfHeaderExtender;
 
 	public GenericVCFAnnotationDriver(String vcfPath, String fastaPath, GenericVCFAnnotationOptions options)
-			throws JannovarVarDBException {
+		throws JannovarVarDBException {
 		super(new VCFReaderVariantProvider(options.getPathVcfFile()), fastaPath, options,
-				new GenericVCFVariantContextToRecordConverter());
+			new GenericVCFVariantContextToRecordConverter());
 		this.genericVcfOptions = options;
 	}
 
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<VariantContext>> pickAnnotatingDBRecords(
-			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<VariantContext>> matchToRecord, boolean isMatch) {
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+		HashMap<GenotypeMatch, AnnotatingRecord<VariantContext>> matchToRecord, boolean isMatch) {
 		// Pick annotation for each alternative allele.
 		//
 		// Note that no smart allele picking has been implemented. Rather, the one from the first
@@ -68,8 +64,8 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<VariantContext>> matchRecords,
-			HashMap<Integer, AnnotatingRecord<VariantContext>> overlapRecords) {
+												   HashMap<Integer, AnnotatingRecord<VariantContext>> matchRecords,
+												   HashMap<Integer, AnnotatingRecord<VariantContext>> overlapRecords) {
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
 		// Annotate with records with matching allele
@@ -88,7 +84,7 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 	}
 
 	private void annotate(VariantContext vc, String infix, HashMap<Integer, AnnotatingRecord<VariantContext>> records,
-			String fieldName, VariantContextBuilder builder) {
+						  String fieldName, VariantContextBuilder builder) {
 		final VCFInfoHeaderLine headerLine = genericVcfHeaderExtender.getFileHeader().getInfoHeaderLine(fieldName);
 		final VCFHeaderLineCount countType = headerLine.getCountType();
 
@@ -122,7 +118,7 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 				if (records.containsKey(i) && records.get(i).getRecord().hasAttribute(fieldName)) {
 					final AnnotatingRecord<VariantContext> annoRecord = records.get(i);
 					valueList.add(annoRecord.getRecord().getAttributeAsList(fieldName).get(
-							annoRecord.getAlleleNo() - offset));
+						annoRecord.getAlleleNo() - offset));
 				} else {
 					valueList.add(".");
 				}

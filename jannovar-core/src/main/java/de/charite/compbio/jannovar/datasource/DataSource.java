@@ -1,19 +1,17 @@
 package de.charite.compbio.jannovar.datasource;
 
+import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.hgnc.HGNCParser;
+import org.ini4j.Profile.Section;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.ini4j.Profile.Section;
-
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.data.JannovarData;
-import de.charite.compbio.jannovar.hgnc.HGNCParser;
-
 /**
  * Base class for all data sources.
- *
+ * <p>
  * Data sources combine the information of (1) a name, (2) a list of URLs with files to download, and (3) obtaining a
  * factory for constructing a {@link JannovarData} object from this information.
  *
@@ -21,13 +19,19 @@ import de.charite.compbio.jannovar.hgnc.HGNCParser;
  */
 public abstract class DataSource {
 
-	/** the configuration */
+	/**
+	 * the configuration
+	 */
 	protected final DatasourceOptions options;
 
-	/** the {@link Section} to create the DataSource from */
+	/**
+	 * the {@link Section} to create the DataSource from
+	 */
 	protected final Section iniSection;
 
-	/** @return name of the data source, e.g. "hg19/ucsc" */
+	/**
+	 * @return name of the data source, e.g. "hg19/ucsc"
+	 */
 	public final String getName() {
 		return iniSection.getName();
 	}
@@ -35,9 +39,8 @@ public abstract class DataSource {
 	/**
 	 * @param key The key to get the file name for.
 	 * @return name of file with the given key in the data source, e.g. "knownGene.txt.gz" for
-	 *         "knownGene=http://.../knownGene.txt.gz".
-	 * @throws InvalidDataSourceException
-	 *             if there are problems with retrieving or parsing the URL string
+	 * "knownGene=http://.../knownGene.txt.gz".
+	 * @throws InvalidDataSourceException if there are problems with retrieving or parsing the URL string
 	 */
 	public final String getFileName(String key) throws InvalidDataSourceException {
 		String urlString = iniSection.fetch(key);
@@ -54,17 +57,15 @@ public abstract class DataSource {
 
 	/**
 	 * @return {@link JannovarDataFactory} to use for creating a {@link JannovarData} object from this
-	 *         {@link DataSource} .
+	 * {@link DataSource} .
 	 */
 	public abstract JannovarDataFactory getDataFactory();
 
 	/**
 	 * Construct {@link DataSource} from INI {@link Section}.
 	 *
-	 * @param options
-	 *            configuration to use (for proxy settings)
-	 * @param iniSection
-	 *            data to construct the {@link DataSource} from.
+	 * @param options    configuration to use (for proxy settings)
+	 * @param iniSection data to construct the {@link DataSource} from.
 	 */
 	DataSource(DatasourceOptions options, Section iniSection) {
 		this.options = options;
@@ -91,8 +92,7 @@ public abstract class DataSource {
 	/**
 	 * Check {@link #iniSection} for having key/value pairs for all required URLs
 	 *
-	 * @throws InvalidDataSourceException
-	 *             if a key is missing.
+	 * @throws InvalidDataSourceException if a key is missing.
 	 */
 	protected final void checkURLs() throws InvalidDataSourceException {
 		for (String key : getURLKeys())

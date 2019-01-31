@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.mendel;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
 
 public class GenotypeCallsBuilderTest {
 

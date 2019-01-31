@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.impl.intervals;
 
-import java.util.ArrayList;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 public class IntervalArrayTest {
 

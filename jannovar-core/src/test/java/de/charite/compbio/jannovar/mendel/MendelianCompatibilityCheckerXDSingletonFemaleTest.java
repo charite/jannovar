@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class MendelianCompatibilityCheckerXDSingletonFemaleTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -26,7 +20,7 @@ public class MendelianCompatibilityCheckerXDSingletonFemaleTest extends Mendelia
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.AFFECTED));
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1");

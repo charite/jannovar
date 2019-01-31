@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.pedigree;
 
-import java.util.HashSet;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import de.charite.compbio.jannovar.Immutable;
+
+import java.util.HashSet;
 
 // TODO(holtgrem): Test me!
 
@@ -19,7 +18,9 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public class PedigreeQueryDecorator {
 
-	/** the pedigree */
+	/**
+	 * the pedigree
+	 */
 	private final Pedigree pedigree;
 
 	/**
@@ -29,14 +30,15 @@ public class PedigreeQueryDecorator {
 		this.pedigree = pedigree;
 	}
 
-	/** @return the decorated pedigree */
+	/**
+	 * @return the decorated pedigree
+	 */
 	public Pedigree getPedigree() {
 		return pedigree;
 	}
 
 	/**
-	 * @param person
-	 *            the person to check
+	 * @param person the person to check
 	 * @return <code>true</code> if the nth person in the PED file is parent of an affected child
 	 */
 	public boolean isParentOfAffected(Person person) {
@@ -154,7 +156,7 @@ public class PedigreeQueryDecorator {
 
 	/**
 	 * @return sibling map for each {@link Person} in {@link Pedigree}, both parents must be in {@link Pedigree} and the
-	 *         same pedigree
+	 * same pedigree
 	 */
 	public ImmutableMap<Person, ImmutableList<Person>> buildSiblings() {
 		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();

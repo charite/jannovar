@@ -14,31 +14,47 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 @Immutable
 public class AnnotationLocation {
 
-	/** Enumeration for rank types, exon, intron, or neither (i.e. spans more than one feature). */
+	/**
+	 * Enumeration for rank types, exon, intron, or neither (i.e. spans more than one feature).
+	 */
 	public enum RankType {
 		EXON, INTRON, UNDEFINED
-	};
+	}
 
-	/** Sentinel value for "invalid rank". */
+	;
+
+	/**
+	 * Sentinel value for "invalid rank".
+	 */
 	public static final int INVALID_RANK = -1;
 
-	/** The transcript that this location lies on */
+	/**
+	 * The transcript that this location lies on
+	 */
 	private final TranscriptModel transcript;
 
-	/** The rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions). */
+	/**
+	 * The rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions).
+	 */
 	private final RankType rankType;
 
-	/** Current exon/intron rank, 0-based. */
+	/**
+	 * Current exon/intron rank, 0-based.
+	 */
 	private final int rank;
 
-	/** Total number of exons/introns in transcript */
+	/**
+	 * Total number of exons/introns in transcript
+	 */
 	private final int totalRank;
 
-	/** Location of the change on the transcript, null if outside of transcript */
+	/**
+	 * Location of the change on the transcript, null if outside of transcript
+	 */
 	private final TranscriptInterval txLocation;
 
 	public AnnotationLocation(TranscriptModel transcript, RankType rankType, int rank, int totalRank,
-			TranscriptInterval txLocation) {
+							  TranscriptInterval txLocation) {
 		this.transcript = transcript;
 		this.rankType = rankType;
 		this.rank = rank;
@@ -46,27 +62,37 @@ public class AnnotationLocation {
 		this.txLocation = txLocation;
 	}
 
-	/** @return transcript that this location lies on */
+	/**
+	 * @return transcript that this location lies on
+	 */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 
-	/** @return rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions). */
+	/**
+	 * @return rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions).
+	 */
 	public RankType getRankType() {
 		return rankType;
 	}
 
-	/** @return current exon/intron rank, 0-based. */
+	/**
+	 * @return current exon/intron rank, 0-based.
+	 */
 	public int getRank() {
 		return rank;
 	}
 
-	/** @return total number of exons/introns in transcript */
+	/**
+	 * @return total number of exons/introns in transcript
+	 */
 	public int getTotalRank() {
 		return totalRank;
 	}
 
-	/** @return location of the change on the transcript, null if outside of transcript */
+	/**
+	 * @return location of the change on the transcript, null if outside of transcript
+	 */
 	public TranscriptInterval getTXLocation() {
 		return txLocation;
 	}

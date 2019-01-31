@@ -10,7 +10,9 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public abstract class ProteinChange implements ConvertibleToHGVSString {
 
-	/** change is only predicted and will be kept in parantheses */
+	/**
+	 * change is only predicted and will be kept in parantheses
+	 */
 	private final boolean onlyPredicted;
 
 	/**
@@ -20,12 +22,16 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 		this.onlyPredicted = onlyPredicted;
 	}
 
-	/** @return <code>true</code> if the protein change is only predicted */
+	/**
+	 * @return <code>true</code> if the protein change is only predicted
+	 */
 	public boolean isOnlyPredicted() {
 		return onlyPredicted;
 	}
 
-	/** @return <code>ProteinChange</code> object with prediction state set to the one given by the parameter */
+	/**
+	 * @return <code>ProteinChange</code> object with prediction state set to the one given by the parameter
+	 */
 	abstract public ProteinChange withOnlyPredicted(boolean onlyPredicted);
 
 	@Override
@@ -33,7 +39,9 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 		return toHGVSString(AminoAcidCode.ONE_LETTER);
 	}
 
-	/** @return <code>s</code> wrapped in parantheses if not {@link #onlyPredicted} and plain <code>s</code> otherwise. */
+	/**
+	 * @return <code>s</code> wrapped in parantheses if not {@link #onlyPredicted} and plain <code>s</code> otherwise.
+	 */
 	protected String wrapIfOnlyPredicted(String s) {
 		if (onlyPredicted)
 			return "(" + s + ")";

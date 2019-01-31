@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar;
 
-import java.util.function.BiFunction;
-
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
 import de.charite.compbio.jannovar.cmd.annotate_csv.JannovarAnnotateCSVOptions;
 import de.charite.compbio.jannovar.cmd.annotate_pos.JannovarAnnotatePosOptions;
@@ -16,6 +14,8 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparsers;
+
+import java.util.function.BiFunction;
 
 /**
  * This is the driver class for a program called Jannovar.
@@ -33,7 +33,7 @@ public final class Jannovar {
 		parser.version(getVersion());
 		parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
 		parser.description("Jannovar CLI performs a series of VCF annotation tasks, including predicted "
-				+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
+			+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
 		Subparsers subParsers = parser.addSubparsers();
 		JannovarAnnotatePosOptions.setupParser(subParsers);
 		JannovarAnnotateCSVOptions.setupParser(subParsers);

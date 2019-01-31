@@ -1,3 +1,6 @@
+# Antlr tokens
+*.tokens
+
 # Ignore releases
 */0.*
 

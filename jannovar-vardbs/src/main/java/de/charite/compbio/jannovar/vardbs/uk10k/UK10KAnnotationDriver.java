@@ -1,18 +1,12 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
+import de.charite.compbio.jannovar.vardbs.base.*;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.VariantContextBuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import de.charite.compbio.jannovar.vardbs.base.AbstractDBAnnotationDriver;
-import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
-import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
-import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 /**
  * Annotation driver class for annotations using UK10K data
@@ -22,14 +16,14 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecord> {
 
 	public UK10KAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
-			throws JannovarVarDBException {
+		throws JannovarVarDBException {
 		super(new VCFReaderVariantProvider(vcfPath), fastaPath, options, new UK10KVariantContextToRecordConverter());
 	}
 
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<UK10KRecord>> pickAnnotatingDBRecords(
-			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<UK10KRecord>> matchToRecord, boolean isMatch) {
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+		HashMap<GenotypeMatch, AnnotatingRecord<UK10KRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<UK10KRecord>> annotatingRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
@@ -44,8 +38,8 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 						continue; // no number to update
 
 					if ((isMatch && current.getAltAlleleFrequencies().get(alleleNo - 1) < update
-							.getAltAlleleFrequencies().get(alleleNo - 1))
-							|| (!isMatch && current.highestAlleleCountOverall() < update.highestAlleleCountOverall()))
+						.getAltAlleleFrequencies().get(alleleNo - 1))
+						|| (!isMatch && current.highestAlleleCountOverall() < update.highestAlleleCountOverall()))
 						annotatingRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}
@@ -60,8 +54,8 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> matchRecords,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> overlapRecords) {
+												   HashMap<Integer, AnnotatingRecord<UK10KRecord>> matchRecords,
+												   HashMap<Integer, AnnotatingRecord<UK10KRecord>> overlapRecords) {
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
 		// Annotate with records with matching allele
@@ -80,7 +74,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 	}
 
 	private void annotateChromosomeCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
+										  HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		if (records.isEmpty())
 			return;
 		UK10KRecord first = records.values().iterator().next().getRecord();
@@ -88,7 +82,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 	}
 
 	private void annotateAlleleCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
+									  HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		ArrayList<Integer> acList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) == null) {
@@ -113,7 +107,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 	}
 
 	private void annotateFrequencies(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
+									 HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		ArrayList<Double> afList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) == null) {

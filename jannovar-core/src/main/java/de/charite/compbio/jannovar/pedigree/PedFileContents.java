@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.pedigree;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import de.charite.compbio.jannovar.Immutable;
 
 /**
@@ -13,13 +12,19 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public class PedFileContents {
 
-	/** headers for extra columns (column 7 and beyond) */
+	/**
+	 * headers for extra columns (column 7 and beyond)
+	 */
 	private final ImmutableList<String> extraColumnHeaders;
 
-	/** the individuals in the PED file */
+	/**
+	 * the individuals in the PED file
+	 */
 	private final ImmutableList<PedPerson> individuals;
 
-	/** mapping of name to PedPerson */
+	/**
+	 * mapping of name to PedPerson
+	 */
 	private final ImmutableMap<String, PedPerson> nameToPerson; // TODO(holtgrew): Test this!
 
 	public PedFileContents(ImmutableList<String> extraColumnHeaders, ImmutableList<PedPerson> individuals) {
@@ -32,17 +37,23 @@ public class PedFileContents {
 		this.nameToPerson = builder.build();
 	}
 
-	/** @return headers for extra columns (column 7 and beyond) */
+	/**
+	 * @return headers for extra columns (column 7 and beyond)
+	 */
 	public ImmutableList<String> getExtraColumnHeaders() {
 		return extraColumnHeaders;
 	}
 
-	/** @return the individuals in the PED file */
+	/**
+	 * @return the individuals in the PED file
+	 */
 	public ImmutableList<PedPerson> getIndividuals() {
 		return individuals;
 	}
 
-	/** @return mapping of name to PedPerson */
+	/**
+	 * @return mapping of name to PedPerson
+	 */
 	public ImmutableMap<String, PedPerson> getNameToPerson() {
 		return nameToPerson;
 	}

@@ -1,15 +1,14 @@
 package de.charite.compbio.jannovar.filter.impl.gt;
 
-import java.util.ArrayList;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
-
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.GenotypeBuilder;
+
+import java.util.ArrayList;
 
 /**
  * Facade class for performing annotation on a genotype-wide level
@@ -18,10 +17,14 @@ import htsjdk.variant.variantcontext.GenotypeBuilder;
  */
 public class GenotypeFilterAnnotator {
 
-	/** Mapping from supported variant caller to the actual genotype filter implementation */
+	/**
+	 * Mapping from supported variant caller to the actual genotype filter implementation
+	 */
 	private final ImmutableMap<SupportedVarCaller, GenotypeFilterImpl> impls;
 
-	/** Threshold based filter configuration */
+	/**
+	 * Threshold based filter configuration
+	 */
 	private final ThresholdFilterOptions options;
 
 	public GenotypeFilterAnnotator(ThresholdFilterOptions options) {
@@ -35,7 +38,9 @@ public class GenotypeFilterAnnotator {
 		impls = builder.build();
 	}
 
-	/** Augment genotype with the given filters and return modified GenotypeBuilder */
+	/**
+	 * Augment genotype with the given filters and return modified GenotypeBuilder
+	 */
 	public Genotype gtWithAppliedFilters(Genotype gt) {
 		GenotypeBuilder gtBuilder = new GenotypeBuilder(gt);
 

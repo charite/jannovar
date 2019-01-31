@@ -1,8 +1,7 @@
 package de.charite.compbio.jannovar.datasource;
 
-import org.ini4j.Profile.Section;
-
 import com.google.common.collect.ImmutableList;
+import org.ini4j.Profile.Section;
 
 /**
  * {@link DataSource} implementation for data from UCSC.
@@ -11,9 +10,11 @@ import com.google.common.collect.ImmutableList;
  */
 final class UCSCDataSource extends DataSource {
 
-	/** expected keys in data source configuration file */
+	/**
+	 * expected keys in data source configuration file
+	 */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("knownCanonical", "knownGene", "knownGeneMrna",
-			"kgXref", "knownToLocusLink", "chromInfo", "chrToAccessions");
+		"kgXref", "knownToLocusLink", "chromInfo", "chrToAccessions");
 
 	UCSCDataSource(DatasourceOptions options, Section iniSection) throws InvalidDataSourceException {
 		super(options, iniSection);

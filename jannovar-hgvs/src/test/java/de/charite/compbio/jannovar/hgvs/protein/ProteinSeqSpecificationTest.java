@@ -1,10 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.protein;
 
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import org.junit.Assert;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 public class ProteinSeqSpecificationTest {
 

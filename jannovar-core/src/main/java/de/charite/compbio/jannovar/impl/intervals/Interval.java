@@ -7,19 +7,29 @@ package de.charite.compbio.jannovar.impl.intervals;
  */
 public class Interval<T> implements java.io.Serializable, Comparable<Interval<T>> {
 
-	/** start point of the interval (inclusive) */
+	/**
+	 * start point of the interval (inclusive)
+	 */
 	private final int begin;
 
-	/** end point of the interval (exclusive) */
+	/**
+	 * end point of the interval (exclusive)
+	 */
 	private final int end;
 
-	/** the value stored for the Interval */
+	/**
+	 * the value stored for the Interval
+	 */
 	private final T value;
 
-	/** the maximum of this nodes {@link #end} and both of it children's {@link #end} */
+	/**
+	 * the maximum of this nodes {@link #end} and both of it children's {@link #end}
+	 */
 	private final int maxEnd;
 
-	/** version number for serializing an Interval */
+	/**
+	 * version number for serializing an Interval
+	 */
 	private static final long serialVersionUID = 1L;
 
 	public Interval(MutableInterval<T> other) {
@@ -36,22 +46,30 @@ public class Interval<T> implements java.io.Serializable, Comparable<Interval<T>
 		this.maxEnd = maxEnd;
 	}
 
-	/** @return start point of the interval (inclusive) */
+	/**
+	 * @return start point of the interval (inclusive)
+	 */
 	public int getBegin() {
 		return begin;
 	}
 
-	/** @return end point of the interval (exclusive) */
+	/**
+	 * @return end point of the interval (exclusive)
+	 */
 	public int getEnd() {
 		return end;
 	}
 
-	/** @return the value stored for the Interval */
+	/**
+	 * @return the value stored for the Interval
+	 */
 	public T getValue() {
 		return value;
 	}
 
-	/** @return the maximum of this nodes {@link #end} and both of it children's {@link #end} */
+	/**
+	 * @return the maximum of this nodes {@link #end} and both of it children's {@link #end}
+	 */
 	public int getMaxEnd() {
 		return maxEnd;
 	}

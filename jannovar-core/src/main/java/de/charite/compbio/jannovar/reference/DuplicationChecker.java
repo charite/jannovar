@@ -8,13 +8,9 @@ package de.charite.compbio.jannovar.reference;
 public final class DuplicationChecker {
 
 	/**
-	 * @param ref
-	 *            reference string for insertion
-	 * @param insertion
-	 *            the string to be inserted at <code>pos</code>
-	 * @param pos
-	 *            the 0-based position in <code>ref</code> that <code>insertion</code> is to be inserted
-	 *
+	 * @param ref       reference string for insertion
+	 * @param insertion the string to be inserted at <code>pos</code>
+	 * @param pos       the 0-based position in <code>ref</code> that <code>insertion</code> is to be inserted
 	 * @return <code>true</code> if the described insertion is a duplication
 	 */
 	public static boolean isDuplication(String ref, String insertion, int pos) {

@@ -1,20 +1,14 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
+import de.charite.compbio.jannovar.vardbs.base.*;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.VariantContextBuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import de.charite.compbio.jannovar.vardbs.base.AbstractDBAnnotationDriver;
-import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
-import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
-import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 // TODO: handle MNVs appropriately
 
@@ -26,7 +20,7 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRecord> {
 
 	public GnomadAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
-			throws JannovarVarDBException {
+		throws JannovarVarDBException {
 		super(new VCFReaderVariantProvider(vcfPath), fastaPath, options, new GnomadVariantContextToRecordConverter());
 	}
 
@@ -37,8 +31,8 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<GnomadRecord>> pickAnnotatingDBRecords(
-			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<GnomadRecord>> matchToRecord, boolean isMatch) {
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+		HashMap<GenotypeMatch, AnnotatingRecord<GnomadRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<GnomadRecord>> annotatingGnomadRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
@@ -52,7 +46,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 					if (update.getAlleleFrequencies(GnomadPopulation.ALL).size() < alleleNo)
 						continue;
 					if ((isMatch && current.highestAlleleFreq(alleleNo - 1) < update.highestAlleleFreq(alleleNo - 1))
-							|| (!isMatch && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall()))
+						|| (!isMatch && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall()))
 						annotatingGnomadRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}
@@ -62,8 +56,8 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> matchRecords,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> overlapRecords) {
+												   HashMap<Integer, AnnotatingRecord<GnomadRecord>> matchRecords,
+												   HashMap<Integer, AnnotatingRecord<GnomadRecord>> overlapRecords) {
 		if (matchRecords.isEmpty())
 			return vc;
 
@@ -94,7 +88,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateChromosomeCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+										  HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		if (records.isEmpty())
 			return;
 		GnomadRecord first = records.values().iterator().next().getRecord();
@@ -103,7 +97,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateAlleleCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+									  HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		Map<String, List<Integer>> acLists = new HashMap<>();
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			final String attrID = options.getVCFIdentifierPrefix() + infix + "AC_" + pop;
@@ -132,7 +126,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 							acList.add(0);
 						else
 							acList.add(bestAnnoRecord.getRecord().getAlleleCounts().get(pop)
-									.get(bestAnnoRecord.getAlleleNo() - 1));
+								.get(bestAnnoRecord.getAlleleNo() - 1));
 					}
 			}
 
@@ -146,7 +140,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateAlleleHetCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+										 HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		Map<String, List<Integer>> acLists = new HashMap<>();
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			final String attrID = options.getVCFIdentifierPrefix() + infix + "HET_" + pop;
@@ -161,7 +155,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 					final GnomadRecord record = records.get(i).getRecord();
 					final int alleleNo = records.get(i).getAlleleNo();
 					if (record.getAlleleHetCounts(pop) == null
-							|| (alleleNo - 1 >= record.getAlleleHetCounts(pop).size())) {
+						|| (alleleNo - 1 >= record.getAlleleHetCounts(pop).size())) {
 						acList.add(0);
 					} else {
 						acList.add(record.getAlleleHetCounts(pop).get(alleleNo - 1));
@@ -176,7 +170,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 							acList.add(0);
 						else
 							acList.add(bestAnnoRecord.getRecord().getAlleleHetCounts().get(pop)
-									.get(bestAnnoRecord.getAlleleNo() - 1));
+								.get(bestAnnoRecord.getAlleleNo() - 1));
 					}
 			}
 
@@ -190,7 +184,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateAlleleHomCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+										 HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			final String attrID = options.getVCFIdentifierPrefix() + infix + "HOM_" + pop;
 			ArrayList<Integer> acList = new ArrayList<>();
@@ -204,7 +198,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 					final GnomadRecord record = records.get(i).getRecord();
 					final int alleleNo = records.get(i).getAlleleNo();
 					if (record.getAlleleHomCounts(pop) == null
-							|| (alleleNo - 1 >= record.getAlleleHomCounts(pop).size())) {
+						|| (alleleNo - 1 >= record.getAlleleHomCounts(pop).size())) {
 						acList.add(0);
 					} else {
 						acList.add(record.getAlleleHomCounts(pop).get(alleleNo - 1));
@@ -219,7 +213,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 							acList.add(0);
 						else
 							acList.add(bestAnnoRecord.getRecord().getAlleleHomCounts().get(pop)
-									.get(bestAnnoRecord.getAlleleNo() - 1));
+								.get(bestAnnoRecord.getAlleleNo() - 1));
 					}
 			}
 
@@ -229,7 +223,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateAlleleHemiCounts(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+										  HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		Map<String, List<Integer>> acLists = new HashMap<>();
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			final String attrID = options.getVCFIdentifierPrefix() + infix + "HEMI_" + pop;
@@ -246,7 +240,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 						continue;
 					final int alleleNo = records.get(i).getAlleleNo();
 					if (record.getAlleleHemiCounts(pop) == null
-							|| (alleleNo - 1 >= record.getAlleleHemiCounts(pop).size())) {
+						|| (alleleNo - 1 >= record.getAlleleHemiCounts(pop).size())) {
 						acList.add(0);
 					} else {
 						acList.add(record.getAlleleHemiCounts(pop).get(alleleNo - 1));
@@ -261,7 +255,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 							acList.add(0);
 						else
 							acList.add(bestAnnoRecord.getRecord().getAlleleHemiCounts().get(pop)
-									.get(bestAnnoRecord.getAlleleNo() - 1));
+								.get(bestAnnoRecord.getAlleleNo() - 1));
 					}
 			}
 
@@ -275,7 +269,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotateFrequencies(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+									 HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			final String attrID = options.getVCFIdentifierPrefix() + infix + "AF_" + pop;
 			ArrayList<Double> afList = new ArrayList<>();
@@ -292,7 +286,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 						afList.add(0.0);
 					} else {
 						if (record.getAlleleFrequencies(pop) == null
-								|| (alleleNo - 1 >= record.getAlleleFrequencies(pop).size()))
+							|| (alleleNo - 1 >= record.getAlleleFrequencies(pop).size()))
 							afList.add(0.0);
 						else
 							afList.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
@@ -307,7 +301,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 							afList.add(0.0);
 						else
 							afList.add(bestAnnoRecord.getRecord().getAlleleFrequencies().get(pop)
-									.get(bestAnnoRecord.getAlleleNo() - 1));
+								.get(bestAnnoRecord.getAlleleNo() - 1));
 					}
 			}
 
@@ -317,7 +311,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private void annotatePopmax(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
+								HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, VariantContextBuilder builder, boolean isMatch) {
 		final String attrID = options.getVCFIdentifierPrefix() + infix + "POPMAX";
 		ArrayList<String> popmaxList = new ArrayList<>();
 		if (isMatch) {
@@ -347,7 +341,7 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
 	}
 
 	private AnnotatingRecord<GnomadRecord> pickBestAnnoRecord(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, GnomadPopulation pop) {
+															  HashMap<Integer, AnnotatingRecord<GnomadRecord>> records, GnomadPopulation pop) {
 		AnnotatingRecord<GnomadRecord> result = null;
 		double bestAF = -1;
 		for (int i = 1; i < vc.getNAlleles(); ++i) {

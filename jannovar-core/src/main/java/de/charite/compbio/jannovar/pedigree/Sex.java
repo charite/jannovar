@@ -7,11 +7,17 @@ package de.charite.compbio.jannovar.pedigree;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum Sex {
-	/** sex is unknown */
+	/**
+	 * sex is unknown
+	 */
 	UNKNOWN,
-	/** individual is male */
+	/**
+	 * individual is male
+	 */
 	MALE,
-	/** individual is female */
+	/**
+	 * individual is female
+	 */
 	FEMALE;
 
 	/**
@@ -30,11 +36,9 @@ public enum Sex {
 	/**
 	 * Parse {@link String} into a <code>Sex</code> value.
 	 *
-	 * @param s
-	 *            String to parse
+	 * @param s String to parse
 	 * @return resulting <code>Sex</code> object
-	 * @throws PedParseException
-	 *             if <code>s</code> was not equal to <code>"0"</code>, <code>"1"</code>, or <code>"2"</code>.
+	 * @throws PedParseException if <code>s</code> was not equal to <code>"0"</code>, <code>"1"</code>, or <code>"2"</code>.
 	 */
 	public static Sex toSex(String s) throws PedParseException {
 		if (s.equals("1"))

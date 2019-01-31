@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.hgvs.parser.protein;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSLexer;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Aa_point_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for parsing nucleotide point locations

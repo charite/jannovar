@@ -1,14 +1,15 @@
 package de.charite.compbio.jannovar.reference;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
-
 public class TranscriptModelBuilderTest {
 
-	/** this test uses this static hg19 reference dictionary */
+	/**
+	 * this test uses this static hg19 reference dictionary
+	 */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	TranscriptModelBuilder builder;
@@ -28,7 +29,7 @@ public class TranscriptModelBuilderTest {
 		builder.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, 1, 110, 190, PositionType.ONE_BASED));
 		builder.addExonRegion(new GenomeInterval(refDict, Strand.FWD, 1, 120, 170, PositionType.ONE_BASED));
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 		TranscriptModel info = builder.build();
 

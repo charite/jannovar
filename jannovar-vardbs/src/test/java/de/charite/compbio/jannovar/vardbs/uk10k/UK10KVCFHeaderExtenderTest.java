@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.vcf.VCFHeader;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class UK10KVCFHeaderExtenderTest {
 

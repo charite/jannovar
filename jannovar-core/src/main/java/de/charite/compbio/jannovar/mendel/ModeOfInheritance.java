@@ -7,38 +7,54 @@ package de.charite.compbio.jannovar.mendel;
  * @version 0.1.2 (September 15, 2017)
  */
 public enum ModeOfInheritance {
-	/** autosomal dominant inheritance */
+	/**
+	 * autosomal dominant inheritance
+	 */
 	AUTOSOMAL_DOMINANT,
-	/** autosomal recessive inheritance */
+	/**
+	 * autosomal recessive inheritance
+	 */
 	AUTOSOMAL_RECESSIVE,
-	/** recessive inheritance on X chromosome */
+	/**
+	 * recessive inheritance on X chromosome
+	 */
 	X_RECESSIVE,
-	/** dominant inheritance on X chromosome */
+	/**
+	 * dominant inheritance on X chromosome
+	 */
 	X_DOMINANT,
-	/** Mitochondrial inheritance */
+	/**
+	 * Mitochondrial inheritance
+	 */
 	MITOCHONDRIAL,
-	/** value for encoding uninitialized values */
+	/**
+	 * value for encoding uninitialized values
+	 */
 	ANY;
 
-	/** @return <code>true</code> if is recessive MOI */
+	/**
+	 * @return <code>true</code> if is recessive MOI
+	 */
 	public boolean isRecessive() {
 		switch (this) {
-		case AUTOSOMAL_RECESSIVE:
-		case X_RECESSIVE:
-			return true;
-		default:
-			return false;
+			case AUTOSOMAL_RECESSIVE:
+			case X_RECESSIVE:
+				return true;
+			default:
+				return false;
 		}
 	}
 
-	/** @return <code>true</code> if is recessive MOI */
+	/**
+	 * @return <code>true</code> if is recessive MOI
+	 */
 	public boolean isDominant() {
 		switch (this) {
-		case AUTOSOMAL_DOMINANT:
-		case X_DOMINANT:
-			return true;
-		default:
-			return false;
+			case AUTOSOMAL_DOMINANT:
+			case X_DOMINANT:
+				return true;
+			default:
+				return false;
 		}
 	}
 

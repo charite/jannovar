@@ -1,27 +1,25 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 /**
  * Conversion of {@link VariantContext} to {@link DBSNPRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class DBSNPVariantContextToRecordConverter implements VariantContextToRecordConverter<DBSNPRecord> {
 
 	/**
 	 * Convert {@link VariantContext} to {@link DBSNPRecord}
-	 * 
-	 * @param vc
-	 *            {@link VariantContext} to convert
+	 *
+	 * @param vc {@link VariantContext} to convert
 	 * @return Resulting {@link DBSNPRecord}
 	 */
 	public DBSNPRecord convert(VariantContext vc) {
@@ -53,18 +51,18 @@ final class DBSNPVariantContextToRecordConverter implements VariantContextToReco
 
 		// TODO: can be cleaned up by having methods in Enum
 		switch (vc.getAttributeAsInt("SAO", 0)) {
-		case 0:
-			builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.UNSPECIFIED);
-			break;
-		case 1:
-			builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.GERMLINE);
-			break;
-		case 2:
-			builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.SOMATIC);
-			break;
-		case 3:
-			builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.BOTH);
-			break;
+			case 0:
+				builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.UNSPECIFIED);
+				break;
+			case 1:
+				builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.GERMLINE);
+				break;
+			case 2:
+				builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.SOMATIC);
+				break;
+			case 3:
+				builder.setVariantAlleleOrigin(DBSNPVariantAlleleOrigin.BOTH);
+				break;
 		}
 
 		// TODO: can be cleaned up by having methods in Enum
@@ -132,7 +130,7 @@ final class DBSNPVariantContextToRecordConverter implements VariantContextToReco
 			builder.getAlleleFrequenciesG1K().subList(0, 1).clear();
 		builder.setCommon(vc.hasAttribute("COMMON"));
 		builder.getOldVariants().addAll(
-				vc.getAttributeAsList("OLD_VARIANT").stream().map(x -> (String) x).collect(Collectors.toList()));
+			vc.getAttributeAsList("OLD_VARIANT").stream().map(x -> (String) x).collect(Collectors.toList()));
 
 		return builder.build();
 	}

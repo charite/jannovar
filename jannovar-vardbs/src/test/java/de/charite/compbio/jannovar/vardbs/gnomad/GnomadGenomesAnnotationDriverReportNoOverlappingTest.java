@@ -1,21 +1,19 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFHeader;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFHeader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Test for annotation with ExAC with default options
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GnomadGenomesAnnotationDriverReportNoOverlappingTest extends GnomadGenomesAnnotationDriverBaseTest {
@@ -117,13 +115,13 @@ public class GnomadGenomesAnnotationDriverReportNoOverlappingTest extends Gnomad
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
 		Assert.assertEquals("[AC_AFR, AC_ALL, AC_AMR, AC_ASJ, AC_EAS, AC_FIN, AC_NFE, AC_OTH, AC_POPMAX, "
-				+ "AC_SAS, AF_AFR, AF_ALL, AF_AMR, AF_ASJ, AF_EAS, AF_FIN, AF_NFE, AF_OTH, "
-				+ "AF_POPMAX, AF_SAS, AN_AFR, AN_ALL, AN_AMR, AN_ASJ, AN_EAS, AN_FIN, AN_NFE, "
-				+ "AN_OTH, AN_POPMAX, AN_SAS, HEMI_AFR, HEMI_ALL, HEMI_AMR, "
-				+ "HEMI_ASJ, HEMI_EAS, HEMI_FIN, HEMI_NFE, HEMI_OTH, HEMI_POPMAX, HEMI_SAS, "
-				+ "HET_AFR, HET_ALL, HET_AMR, HET_ASJ, HET_EAS, HET_FIN, HET_NFE, HET_OTH, "
-				+ "HET_POPMAX, HET_SAS, HOM_AFR, HOM_ALL, HOM_AMR, HOM_ASJ, HOM_EAS, HOM_FIN, "
-				+ "HOM_NFE, HOM_OTH, HOM_POPMAX, HOM_SAS, POPMAX]", keys.toString());
+			+ "AC_SAS, AF_AFR, AF_ALL, AF_AMR, AF_ASJ, AF_EAS, AF_FIN, AF_NFE, AF_OTH, "
+			+ "AF_POPMAX, AF_SAS, AN_AFR, AN_ALL, AN_AMR, AN_ASJ, AN_EAS, AN_FIN, AN_NFE, "
+			+ "AN_OTH, AN_POPMAX, AN_SAS, HEMI_AFR, HEMI_ALL, HEMI_AMR, "
+			+ "HEMI_ASJ, HEMI_EAS, HEMI_FIN, HEMI_NFE, HEMI_OTH, HEMI_POPMAX, HEMI_SAS, "
+			+ "HET_AFR, HET_ALL, HET_AMR, HET_ASJ, HET_EAS, HET_FIN, HET_NFE, HET_OTH, "
+			+ "HET_POPMAX, HET_SAS, HOM_AFR, HOM_ALL, HOM_AMR, HOM_ASJ, HOM_EAS, HOM_FIN, "
+			+ "HOM_NFE, HOM_OTH, HOM_POPMAX, HOM_SAS, POPMAX]", keys.toString());
 
 		Assert.assertEquals("[0, 210, 11]", annotated.getAttributeAsString("AC_AFR", null));
 		Assert.assertEquals("[0, 303, 11]", annotated.getAttributeAsString("AC_ALL", null));
@@ -154,9 +152,9 @@ public class GnomadGenomesAnnotationDriverReportNoOverlappingTest extends Gnomad
 		Assert.assertEquals("[0, 0, 0]", annotated.getAttributeAsString("HOM_SAS", null));
 
 		Assert.assertEquals("[0.0, 0.3488372093023256, 0.018272425249169437]",
-				annotated.getAttributeAsString("AF_AFR", null));
+			annotated.getAttributeAsString("AF_AFR", null));
 		Assert.assertEquals("[0.0, 0.04265202702702703, 0.0015484234234234234]",
-				annotated.getAttributeAsString("AF_ALL", null));
+			annotated.getAttributeAsString("AF_ALL", null));
 		Assert.assertEquals("[0.0, 0.013888888888888888, 0.0]", annotated.getAttributeAsString("AF_AMR", null));
 		Assert.assertEquals("[0.0, 0.5571428571428572, 0.0]", annotated.getAttributeAsString("AF_EAS", null));
 		Assert.assertEquals("[0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_FIN", null));

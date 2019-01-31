@@ -33,7 +33,7 @@ public class AnnotationBuilderOptions {
 
 	/**
 	 * @return whether or not to shift variants towards the 3' end of the
-	 *         transcript (default is <code>true</code>)
+	 * transcript (default is <code>true</code>)
 	 */
 	public boolean isNt3PrimeShifting() {
 		return nt3PrimeShifting;
@@ -41,7 +41,7 @@ public class AnnotationBuilderOptions {
 
 	/**
 	 * @return whether or not to override transcript sequence with user input,
-	 *         that is the sequence in the {@link GenomeVariant}
+	 * that is the sequence in the {@link GenomeVariant}
 	 */
 	public boolean isOverrideTxSeqWithGenomeVariantRef() {
 		return overrideTxSeqWithGenomeVariantRef;

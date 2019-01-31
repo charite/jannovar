@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 
@@ -12,27 +11,39 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
  */
 public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 
-	/** range in the protein that has variable length */
+	/**
+	 * range in the protein that has variable length
+	 */
 	private final ProteinRange range;
-	/** lower bound on length, inclusive */
+	/**
+	 * lower bound on length, inclusive
+	 */
 	private final int minCount;
-	/** upper bound on length, inclusive */
+	/**
+	 * upper bound on length, inclusive
+	 */
 	private final int maxCount;
 
-	/** Factory forwards to {@link #build(boolean, ProteinRange, int, int)} */
+	/**
+	 * Factory forwards to {@link #build(boolean, ProteinRange, int, int)}
+	 */
 	public static ProteinShortSequenceRepeatVariability build(boolean onlyPredicted, String firstAA, int firstPos,
-			String lastAA, int lastPos, int minCount, int maxCount) {
+															  String lastAA, int lastPos, int minCount, int maxCount) {
 		return new ProteinShortSequenceRepeatVariability(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA,
-				lastPos), minCount, maxCount);
+			lastPos), minCount, maxCount);
 	}
 
-	/** Factory forwards to {@link #ProteinShortSequenceRepeatVariability(boolean, ProteinRange, int, int)} */
+	/**
+	 * Factory forwards to {@link #ProteinShortSequenceRepeatVariability(boolean, ProteinRange, int, int)}
+	 */
 	public static ProteinShortSequenceRepeatVariability build(boolean onlyPredicted, ProteinRange range, int minCount,
-			int maxCount) {
+															  int maxCount) {
 		return new ProteinShortSequenceRepeatVariability(onlyPredicted, range, minCount, maxCount);
 	}
 
-	/** Construct with the given values */
+	/**
+	 * Construct with the given values
+	 */
 	public ProteinShortSequenceRepeatVariability(boolean onlyPredicted, ProteinRange range, int minCount, int maxCount) {
 		super(onlyPredicted);
 		this.range = range;
@@ -40,17 +51,23 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 		this.maxCount = maxCount;
 	}
 
-	/** @return range of repeat */
+	/**
+	 * @return range of repeat
+	 */
 	public ProteinRange getRange() {
 		return range;
 	}
 
-	/** @return lower bound on count, inclusive */
+	/**
+	 * @return lower bound on count, inclusive
+	 */
 	public int getMinCount() {
 		return minCount;
 	}
 
-	/** @return upper bound on count, inclusive */
+	/**
+	 * @return upper bound on count, inclusive
+	 */
 	public int getMaxCount() {
 		return maxCount;
 	}

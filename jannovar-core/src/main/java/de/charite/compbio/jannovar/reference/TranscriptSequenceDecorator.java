@@ -13,14 +13,18 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class TranscriptSequenceDecorator {
 
-	/** The wrapped {@link TranscriptModel}. */
+	/**
+	 * The wrapped {@link TranscriptModel}.
+	 */
 	private final TranscriptModel transcript;
 
 	public TranscriptSequenceDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
 	}
 
-	/** @return the wrapped {@link TranscriptModel} */
+	/**
+	 * @return the wrapped {@link TranscriptModel}
+	 */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
@@ -29,12 +33,9 @@ public final class TranscriptSequenceDecorator {
 	 * Update the base given by <code>frameShift</code> in the given codon string <code>transcriptCodon</code> to
 	 * <code>targetNC</code> and return updated codon.
 	 *
-	 * @param transcriptCodon
-	 *            the wild type codon nucleotide string from the codon
-	 * @param frameShift
-	 *            the frame within the codon
-	 * @param targetNC
-	 *            the target nucleotide
+	 * @param transcriptCodon the wild type codon nucleotide string from the codon
+	 * @param frameShift      the frame within the codon
+	 * @param targetNC        the target nucleotide
 	 * @return variant codon string
 	 */
 	public static String codonWithUpdatedBase(String transcriptCodon, int frameShift, char targetNC) {
@@ -51,12 +52,9 @@ public final class TranscriptSequenceDecorator {
 	 * Insert the string in <code>insertion</code> at the position given by <code>frameShift</code> in the given codon
 	 * string <code>transcriptCodon</code> to <code>targetNC</code> and return the updated nucleic string.
 	 *
-	 * @param transcriptNTs
-	 *            the wild type nucleotide string from the codon
-	 * @param frameShift
-	 *            the frame within the codon
-	 * @param insertion
-	 *            the String with the nucleotides
+	 * @param transcriptNTs the wild type nucleotide string from the codon
+	 * @param frameShift    the frame within the codon
+	 * @param insertion     the String with the nucleotides
 	 * @return variant codon string
 	 */
 	public static String nucleotidesWithInsertion(String transcriptNTs, int frameShift, String insertion) {
@@ -67,19 +65,16 @@ public final class TranscriptSequenceDecorator {
 			return StringUtil.concatenate(transcriptNTs.charAt(0), insertion, transcriptNTs.substring(1));
 		else
 			return StringUtil.concatenate(transcriptNTs.charAt(0), transcriptNTs.charAt(1), insertion,
-					transcriptNTs.substring(2));
+				transcriptNTs.substring(2));
 	}
 
 	/**
 	 * Returns the codon (String of length 3) for a change at a given position
 	 *
-	 * @param txPos
-	 *            transcript position of the change
-	 * @param cdsPos
-	 *            CDS position of the change
+	 * @param txPos  transcript position of the change
+	 * @param cdsPos CDS position of the change
 	 * @return the codon affected by a change at the given position
-	 * @throws InvalidCodonException
-	 *             if the requested codon is not accessible
+	 * @throws InvalidCodonException if the requested codon is not accessible
 	 */
 	public String getCodonAt(TranscriptPosition txPos, CDSPosition cdsPos) throws InvalidCodonException {
 		int frameShift = cdsPos.getPos() % 3;
@@ -87,23 +82,20 @@ public final class TranscriptSequenceDecorator {
 		int endPos = codonStart + 3;
 		if (transcript.getSequence().length() < endPos)
 			throw new InvalidCodonException("Could not access codon " + codonStart + " - " + endPos
-					+ ", transcript sequence length is " + transcript.getSequence().length());
+				+ ", transcript sequence length is " + transcript.getSequence().length());
 		return transcript.getSequence().substring(codonStart, endPos);
 	}
 
 	/**
 	 * Returns a number of codons (String of length 3 * <code>len</code>) starting from the affected one by the change
 	 * at <code>txPos</code>/<code>cdsPos</code>.
-	 *
+	 * <p>
 	 * If there is not a sufficient number of nucleotides in the transcript string then return fewer, only up to the
 	 * end.
 	 *
-	 * @param txPos
-	 *            transcript position of the change
-	 * @param cdsPos
-	 *            CDS position of the change
-	 * @param count
-	 *            number of codons to return
+	 * @param txPos  transcript position of the change
+	 * @param cdsPos CDS position of the change
+	 * @param count  number of codons to return
 	 * @return the codon affected by a change at the given position
 	 */
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos, int count) {
@@ -119,10 +111,8 @@ public final class TranscriptSequenceDecorator {
 	 * Returns all codons (String of length 3 * <code>len</code>) starting from the affected one by the change at
 	 * <code>txPos</code>/<code>cdsPos</code>.
 	 *
-	 * @param txPos
-	 *            transcript position of the change
-	 * @param cdsPos
-	 *            CDS position of the change
+	 * @param txPos  transcript position of the change
+	 * @param cdsPos CDS position of the change
 	 * @return the codon affected by a change at the given position
 	 */
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos) {

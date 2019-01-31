@@ -22,32 +22,29 @@ class NucleotideSubstitutionToGenomeVariantTranslationImpl extends NucleotideCha
 	/**
 	 * Implementation of translation for {@link NucleotideSubstitution} objects
 	 *
-	 * @param tm
-	 *            {@link TranscriptModel} that <code>ntSub</code> is for
-	 * @param sequenceType
-	 *            {@link SequenceType} that <code>ntSub</code> is for
+	 * @param tm           {@link TranscriptModel} that <code>ntSub</code> is for
+	 * @param sequenceType {@link SequenceType} that <code>ntSub</code> is for
 	 * @return {@link GenomeVariant} with the translation result, possibly annotated with warning messages
-	 * @throws CannotTranslateHGVSVariant
-	 *             in case of translation problems
+	 * @throws CannotTranslateHGVSVariant in case of translation problems
 	 */
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
-			NucleotideSubstitution ntSub) throws CannotTranslateHGVSVariant {
+												 NucleotideSubstitution ntSub) throws CannotTranslateHGVSVariant {
 		final NucleotidePointLocation pos = ntSub.getPosition();
 		final String fromNT = ntSub.getFromNT().toUpperCase();
 		final String toNT = ntSub.getToNT().toUpperCase();
 
 		if (fromNT.length() != 1 || toNT.length() != 1)
 			throw new CannotTranslateHGVSVariant("Both source and target sequence must have length 1 in "
-					+ ntSub.toHGVSString());
+				+ ntSub.toHGVSString());
 
 		final GenomeVariant result = new GenomeVariant(posConverter.translateNucleotidePointLocation(tm, pos,
-				sequenceType), fromNT, toNT, tm.getStrand()).withStrand(Strand.FWD);
+			sequenceType), fromNT, toNT, tm.getStrand()).withStrand(Strand.FWD);
 		final String refSeq = getGenomeSeq(tm.getStrand(), result.getGenomeInterval());
 		if (!refSeq.equals(fromNT)) {
 			final GenomeVariant result2 = new GenomeVariant(posConverter.translateNucleotidePointLocation(tm, pos,
-					sequenceType), refSeq, toNT, tm.getStrand()).withStrand(Strand.FWD);
+				sequenceType), refSeq, toNT, tm.getStrand()).withStrand(Strand.FWD);
 			return ResultWithWarnings.construct(result2, "Invalid reference nucleotides in " + result.toString()
-					+ ", should be " + refSeq + ", auto-correcting.");
+				+ ", should be " + refSeq + ", auto-correcting.");
 		} else {
 			return ResultWithWarnings.construct(result);
 		}

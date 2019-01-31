@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.annotation;
 
 /**
  * Small helper for printing {@link VariantEffect}.
- *
+ * <p>
  * Run directly in Eclipse via right-click and "Run As > Java Application".
  */
 class VariantEffectPrinter {
@@ -20,6 +20,6 @@ class VariantEffectPrinter {
 		for (VariantEffect ve : VariantEffect.values())
 			if (ve.getSequenceOntologyTerm() != null)
 				System.err.println(ve.getSequenceOntologyTerm() + "\t"
-						+ ((ve.getLegacyTerm() == null) ? "-" : ve.getLegacyTerm()));
+					+ ((ve.getLegacyTerm() == null) ? "-" : ve.getLegacyTerm()));
 	}
 }

@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
+import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 
 /**
  * Tests for the HGVSParserDriver that targets parsing of the transcript properties.
@@ -23,7 +22,7 @@ public class HGVSParserDriverTranscriptParsingTest {
 	@Test
 	public void testWithoutVersionWithoutGeneSymbol() {
 		SingleAlleleNucleotideVariant variant = (SingleAlleleNucleotideVariant) driver
-				.parseHGVSString("NM_000138:c.7339G>A");
+			.parseHGVSString("NM_000138:c.7339G>A");
 		Assert.assertEquals("NM_000138", variant.getRefID());
 		Assert.assertEquals("NM_000138", variant.getRefIDWithVersion());
 		Assert.assertEquals(SingleAlleleNucleotideVariant.NO_TRANSCRIPT_VERSION, variant.getTranscriptVersion());
@@ -34,7 +33,7 @@ public class HGVSParserDriverTranscriptParsingTest {
 	@Test
 	public void testWithVersionWithoutGeneSymbol() {
 		SingleAlleleNucleotideVariant variant = (SingleAlleleNucleotideVariant) driver
-				.parseHGVSString("NM_000138.4:c.7339G>A");
+			.parseHGVSString("NM_000138.4:c.7339G>A");
 		Assert.assertEquals("NM_000138", variant.getRefID());
 		Assert.assertEquals("NM_000138.4", variant.getRefIDWithVersion());
 		Assert.assertEquals(4, variant.getTranscriptVersion());
@@ -45,7 +44,7 @@ public class HGVSParserDriverTranscriptParsingTest {
 	@Test
 	public void testWithoutVersionGeneSymbol() {
 		SingleAlleleNucleotideVariant variant = (SingleAlleleNucleotideVariant) driver
-				.parseHGVSString("NM_000138(FBN1):c.7339G>A");
+			.parseHGVSString("NM_000138(FBN1):c.7339G>A");
 		Assert.assertEquals("NM_000138", variant.getRefID());
 		Assert.assertEquals("NM_000138", variant.getRefIDWithVersion());
 		Assert.assertEquals(SingleAlleleNucleotideVariant.NO_TRANSCRIPT_VERSION, variant.getTranscriptVersion());
@@ -56,7 +55,7 @@ public class HGVSParserDriverTranscriptParsingTest {
 	@Test
 	public void testWithVersionWithGeneSymbol() {
 		SingleAlleleNucleotideVariant variant = (SingleAlleleNucleotideVariant) driver
-				.parseHGVSString("NM_000138.4(FBN1):c.7339G>A");
+			.parseHGVSString("NM_000138.4(FBN1):c.7339G>A");
 		Assert.assertEquals("NM_000138", variant.getRefID());
 		Assert.assertEquals("NM_000138.4", variant.getRefIDWithVersion());
 		Assert.assertEquals(4, variant.getTranscriptVersion());

@@ -2,26 +2,34 @@ package de.charite.compbio.jannovar.hgvs.legacy;
 
 /**
  * Base class for legacy changes.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class LegacyChange {
 
-	/** location of the legacy change */
+	/**
+	 * location of the legacy change
+	 */
 	protected final LegacyLocation location;
 
-	/** Initialize members with the given parameters */
+	/**
+	 * Initialize members with the given parameters
+	 */
 	public LegacyChange(LegacyLocation location) {
 		super();
 		this.location = location;
 	}
 
-	/** @return {@link LegacyLocation} of the change */
+	/**
+	 * @return {@link LegacyLocation} of the change
+	 */
 	public LegacyLocation getLocation() {
 		return location;
 	}
 
-	/** @return legacy string descrition of the change */
+	/**
+	 * @return legacy string descrition of the change
+	 */
 	public abstract String toLegacyString();
 
 	@Override

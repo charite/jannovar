@@ -3,10 +3,6 @@ package de.charite.compbio.jannovar.pedigree;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Sex;
-
 public class PedPersonTest {
 
 	@Test

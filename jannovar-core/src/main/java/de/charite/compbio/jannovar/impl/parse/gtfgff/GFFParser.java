@@ -1,57 +1,63 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackInputStream;
-import java.util.zip.GZIPInputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 // TODO: interpret only curated flag
 
 /**
  * A class for parsing a stream of GFFRecord objects from a GTF or GFF file.
- * 
+ * <p>
  * This class is state-ful and not thread safe.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GFFParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GFFParser.class);
 
-	/** Enum type for describing the GFF version */
+	/**
+	 * Enum type for describing the GFF version
+	 */
 	public enum GFFVersion {
-		/** Value for GTF ("GFF2") */
+		/**
+		 * Value for GTF ("GFF2")
+		 */
 		GTF,
-		/** Value for GFF3 */
+		/**
+		 * Value for GFF3
+		 */
 		GFF3
 	}
 
-	/** Data is read line by line from this reader */
+	/**
+	 * Data is read line by line from this reader
+	 */
 	private final BufferedReader reader;
 
-	/** The version of the input stream, as determined when creating the parser */
+	/**
+	 * The version of the input stream, as determined when creating the parser
+	 */
 	private final GFFVersion gffVersion;
 
-	/** A Buffer with the current line, null in the beginning */
+	/**
+	 * A Buffer with the current line, null in the beginning
+	 */
 	private String lastLine = null;
 
-	/** Object for parsing GFF records */
+	/**
+	 * Object for parsing GFF records
+	 */
 	private final FeatureRecordParser recordParser;
 
 	/**
 	 * Initialize with a file, gzip compression is automatically recognized.
-	 * 
-	 * @param file
-	 *            The file to read from
-	 * @throws IOException
-	 *             on I/O problems
+	 *
+	 * @param file The file to read from
+	 * @throws IOException on I/O problems
 	 */
 	public GFFParser(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -59,10 +65,9 @@ public class GFFParser {
 
 	/**
 	 * Reads next record from the GFF file and return it, <code>null</code> when the file is at its end.
-	 * 
+	 *
 	 * @return GFFRecord or <code>null</code>
-	 * @throws IOException
-	 *             on problems with reading the GFF files
+	 * @throws IOException on problems with reading the GFF files
 	 */
 	public FeatureRecord next() throws IOException {
 		if (lastLine == null)
@@ -76,11 +81,9 @@ public class GFFParser {
 
 	/**
 	 * Initialize from a {@link InputStream}, gzip compression is automatically recognized.
-	 * 
-	 * @param stream
-	 *            {@link InputStream} to read from
-	 * @throws IOException
-	 *             on I/O problems
+	 *
+	 * @param stream {@link InputStream} to read from
+	 * @throws IOException on I/O problems
 	 */
 	public GFFParser(InputStream stream) throws IOException {
 		this.reader = new BufferedReader(new InputStreamReader(openStream(stream)));
@@ -93,10 +96,9 @@ public class GFFParser {
 
 	/**
 	 * Open the {@link InputStream} as a {@link BufferedReader}
-	 * 
+	 *
 	 * @return {@link InputStream}, wrapping a gzip reading stream if <code>stream</code> is gzip compressed
-	 * @throws IOException
-	 *             on I/O problems
+	 * @throws IOException on I/O problems
 	 */
 	private InputStream openStream(InputStream stream) throws IOException {
 		PushbackInputStream pb = new PushbackInputStream(stream, 2);
@@ -111,10 +113,9 @@ public class GFFParser {
 
 	/**
 	 * Skip over header of {@link #reader} and read version if any.
-	 * 
+	 *
 	 * @return GFFVersion as determined from the stream (GFF3 is required to have a header)
-	 * @throws IOException
-	 *             on problems with reading the file
+	 * @throws IOException on problems with reading the file
 	 */
 	private GFFVersion initializeStream() throws IOException {
 		GFFVersion result = GFFVersion.GTF;
@@ -130,12 +131,14 @@ public class GFFParser {
 			}
 		}
 
-		LOGGER.info("Determined GTF/GFF file version to be {}", new Object[] { result });
+		LOGGER.info("Determined GTF/GFF file version to be {}", new Object[]{result});
 
 		return result;
 	}
 
-	/** @return GFF version detected from the stream */
+	/**
+	 * @return GFF version detected from the stream
+	 */
 	public GFFVersion getGFFVersion() {
 		return gffVersion;
 	}

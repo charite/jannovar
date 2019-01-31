@@ -1,11 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 import org.junit.Test;
 
 // TODO(holtgrewe): Add support for "c.[83G=/83G>C]"
@@ -28,7 +23,7 @@ public class AntlrHGVSParserJustParseTest extends AntlrHGVSJustParseAndLexBase {
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
+										int charPositionInLine, String msg, RecognitionException e) {
 					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 				}
 			});
@@ -49,7 +44,7 @@ public class AntlrHGVSParserJustParseTest extends AntlrHGVSJustParseAndLexBase {
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
+										int charPositionInLine, String msg, RecognitionException e) {
 					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 				}
 			});
@@ -71,7 +66,7 @@ public class AntlrHGVSParserJustParseTest extends AntlrHGVSJustParseAndLexBase {
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-						int charPositionInLine, String msg, RecognitionException e) {
+										int charPositionInLine, String msg, RecognitionException e) {
 					throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 				}
 			});

@@ -1,30 +1,25 @@
 package de.charite.compbio.jannovar.mendel.impl;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-
-import de.charite.compbio.jannovar.mendel.ChromosomeType;
-import de.charite.compbio.jannovar.mendel.Genotype;
-import de.charite.compbio.jannovar.mendel.GenotypeCalls;
-import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
-import de.charite.compbio.jannovar.mendel.MendelianInheritanceChecker;
+import de.charite.compbio.jannovar.mendel.*;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Helper class for checking a {@link GenotypeCalls} for compatibility with a
  * {@link Pedigree} and XR homozygous mode
  *
  * <h2>Compatibility Check</h2>
- *
+ * <p>
  * In the case of a single individual, we require hom. alt.
- *
+ * <p>
  * In the case of multiple individuals, we require that the affects are
  * compatible, that the unaffected parents of hom. alt. unaffected females are
  * not are not hom. ref., and that all unaffected individuals are not hom. alt.
@@ -44,10 +39,10 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
 
 	@Override
 	public ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls)
-			throws IncompatiblePedigreeException {
+		throws IncompatiblePedigreeException {
 		// Filter to calls on X chromosome
 		Stream<GenotypeCalls> xCalls = calls.stream()
-				.filter(call -> call.getChromType() == ChromosomeType.X_CHROMOSOMAL);
+			.filter(call -> call.getChromType() == ChromosomeType.X_CHROMOSOMAL);
 
 		// Filter to calls compatible with AD inheritance
 		Stream<GenotypeCalls> compatibleCalls;
@@ -60,7 +55,7 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with XR homozygous
-	 *         inheritance in the case of a single individual in the pedigree
+	 * inheritance in the case of a single individual in the pedigree
 	 */
 	private boolean isCompatibleSingleton(GenotypeCalls calls) {
 		if (calls.getNSamples() == 0)
@@ -75,7 +70,7 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
 
 	/**
 	 * @return whether <code>calls</code> is compatible with XR homozygous
-	 *         inheritance in the case of multiple individuals in the pedigree
+	 * inheritance in the case of multiple individuals in the pedigree
 	 */
 	private boolean isCompatibleFamily(GenotypeCalls calls) {
 		return (affectedsAreCompatible(calls) && parentsAreCompatible(calls) && unaffectedsAreCompatible(calls));
@@ -109,12 +104,12 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
 	/**
 	 * We only have to look for the parents of the female affected for inherited
 	 * variants. Here the variant must be inherited from both!
-	 * 
+	 * <p>
 	 * For the parents of male affected it is really special. Because it can be
 	 * inherited from the mother or the father! Not from both. Because we do not
 	 * know the specific parents of one affected (only all of them) at this part we
 	 * have to skip the parents of male affected.
-	 * 
+	 *
 	 * @param calls
 	 * @return
 	 */

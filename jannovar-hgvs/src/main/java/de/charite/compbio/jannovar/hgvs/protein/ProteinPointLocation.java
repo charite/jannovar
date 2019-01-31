@@ -11,13 +11,21 @@ import de.charite.compbio.jannovar.hgvs.Translator;
  */
 public class ProteinPointLocation implements ConvertibleToHGVSString {
 
-	/** 1-letter code of the AA at this position */
+	/**
+	 * 1-letter code of the AA at this position
+	 */
 	private final String aa;
-	/** 0-based position in the protein */
+	/**
+	 * 0-based position in the protein
+	 */
 	private final int pos;
-	/** offset for changes in intronic or upstream regions, 0 for no offset */
+	/**
+	 * offset for changes in intronic or upstream regions, 0 for no offset
+	 */
 	private final int offset;
-	/** positions is downstream of the translational terminal codon, e.g. for <code>Gln*1</code> */
+	/**
+	 * positions is downstream of the translational terminal codon, e.g. for <code>Gln*1</code>
+	 */
 	private final boolean downstreamOfTerminal;
 
 	public static ProteinPointLocation build(String aa, int pos) {
@@ -34,12 +42,9 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 
 
 	/**
-	 * @param aa
-	 *            1-letter code of the amino acid
-	 * @param pos
-	 *            0-based position in the protein
-	 * @param offset
-	 *            for changes in intronic or upstream regions, 0 for no offset
+	 * @param aa     1-letter code of the amino acid
+	 * @param pos    0-based position in the protein
+	 * @param offset for changes in intronic or upstream regions, 0 for no offset
 	 */
 	public ProteinPointLocation(String aa, int pos, int offset, boolean downstreamOfTerminal) {
 		this.aa = aa;
@@ -48,22 +53,30 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 		this.downstreamOfTerminal = downstreamOfTerminal;
 	}
 
-	/** @return 0-based position in the amino acid */
+	/**
+	 * @return 0-based position in the amino acid
+	 */
 	public int getPos() {
 		return pos;
 	}
 
-	/** @return 1-letter code of the amino acid */
+	/**
+	 * @return 1-letter code of the amino acid
+	 */
 	public String getAA() {
 		return aa;
 	}
 
-	/** @return offset for changes in intronic or upstream regions, 0 for no offset */
+	/**
+	 * @return offset for changes in intronic or upstream regions, 0 for no offset
+	 */
 	public int getOffset() {
 		return offset;
 	}
 
-	/** @return positions is downstream of the translational terminal codon, e.g. for <code>Gln*1</code> */
+	/**
+	 * @return positions is downstream of the translational terminal codon, e.g. for <code>Gln*1</code>
+	 */
 	public boolean isDownstreamOfTerminal() {
 		return downstreamOfTerminal;
 	}
@@ -96,7 +109,7 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 	@Override
 	public String toString() {
 		return "ProteinPointLocation [aa=" + aa + ", pos=" + pos + ", offset=" + offset + ", downstreamOfTerminal="
-				+ downstreamOfTerminal + "]";
+			+ downstreamOfTerminal + "]";
 	}
 
 	@Override

@@ -1,77 +1,98 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 public class NucleotideIndel extends NucleotideChange {
 
-	/** range that is to deleted */
+	/**
+	 * range that is to deleted
+	 */
 	private final NucleotideRange range;
-	/** description of the to be deleted sequence */
+	/**
+	 * description of the to be deleted sequence
+	 */
 	private final NucleotideSeqDescription delSeq;
-	/** description of the to be inserted sequence */
+	/**
+	 * description of the to be inserted sequence
+	 */
 	private final NucleotideSeqDescription insSeq;
 
-	/** Build without any sequence description */
+	/**
+	 * Build without any sequence description
+	 */
 	public static NucleotideIndel buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int firstOffset, int lastPos, int lastOffset) {
+																	   int firstOffset, int lastPos, int lastOffset) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
-				new NucleotideSeqDescription(), new NucleotideSeqDescription());
+			new NucleotideSeqDescription(), new NucleotideSeqDescription());
 	}
 
-	/** Build with length information */
+	/**
+	 * Build with length information
+	 */
 	public static NucleotideIndel buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstOffset,
-			int lastPos, int lastOffset, int deletedLength, int insertedLength) {
+															int lastPos, int lastOffset, int deletedLength, int insertedLength) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
-				new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
+			new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
 	}
 
-	/** Build with sequence information */
+	/**
+	 * Build with sequence information
+	 */
 	public static NucleotideIndel buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos, int firstOffset,
-			int lastPos, int lastOffset, String deletedSeq, String insertedSeq) {
+															  int lastPos, int lastOffset, String deletedSeq, String insertedSeq) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
-				new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
+			new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
 	}
 
-	/** Build with sequence description */
+	/**
+	 * Build with sequence description
+	 */
 	public static NucleotideIndel buildWithOffsetWithSeqDescription(boolean onlyPredicted, int firstPos,
-			int firstOffset, int lastPos, int lastOffset, NucleotideSeqDescription delDesc,
-			NucleotideSeqDescription insDesc) {
+																	int firstOffset, int lastPos, int lastOffset, NucleotideSeqDescription delDesc,
+																	NucleotideSeqDescription insDesc) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
-				delDesc, insDesc);
+			delDesc, insDesc);
 	}
 
-	/** Build without offset and any sequence description */
+	/**
+	 * Build without offset and any sequence description
+	 */
 	public static NucleotideIndel buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription(), new NucleotideSeqDescription());
+			new NucleotideSeqDescription(), new NucleotideSeqDescription());
 	}
 
-	/** Build without offset and with length information */
+	/**
+	 * Build without offset and with length information
+	 */
 	public static NucleotideIndel buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int deletedLength,
-			int insertedLength) {
+												  int insertedLength) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
+			new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
 	}
 
-	/** Build without offset and with sequence information */
+	/**
+	 * Build without offset and with sequence information
+	 */
 	public static NucleotideIndel buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos,
-			String deletedSeq, String insertedSeq) {
+													String deletedSeq, String insertedSeq) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
-				new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
+			new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
 	}
 
-	/** Build without offset and with sequence description */
+	/**
+	 * Build without offset and with sequence description
+	 */
 	public static NucleotideIndel buildWithSeqDescription(boolean onlyPredicted, int firstPos, int lastPos,
-			NucleotideSeqDescription delDesc, NucleotideSeqDescription insDesc) {
+														  NucleotideSeqDescription delDesc, NucleotideSeqDescription insDesc) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), delDesc,
-				insDesc);
+			insDesc);
 	}
 
 	public NucleotideIndel(boolean onlyPredicted, NucleotideRange range, NucleotideSeqDescription delSeq,
-			NucleotideSeqDescription insSeq) {
+						   NucleotideSeqDescription insSeq) {
 		super(onlyPredicted);
 		this.range = range;
 		this.delSeq = delSeq;
@@ -88,7 +109,7 @@ public class NucleotideIndel extends NucleotideChange {
 		String open = isOnlyPredicted() ? "(" : "";
 		String close = isOnlyPredicted() ? ")" : "";
 		return Joiner.on("").skipNulls()
-				.join(open, range.toHGVSString(), "del", delSeq.toHGVSString(), "ins", insSeq.toHGVSString(), close);
+			.join(open, range.toHGVSString(), "del", delSeq.toHGVSString(), "ins", insSeq.toHGVSString(), close);
 	}
 
 	@Override

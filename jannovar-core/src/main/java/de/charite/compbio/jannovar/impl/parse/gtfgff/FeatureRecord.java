@@ -1,60 +1,84 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import java.util.Map;
-
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
+import java.util.Map;
+
 /**
  * Immutable class for describing a record from a GFF or GTF file.
- * 
+ * <p>
  * When comparing, features on the forward strand come before features on the reverse strand.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class FeatureRecord implements Comparable<FeatureRecord> {
 
-	/** Type for describing record strand */
+	/**
+	 * Type for describing record strand
+	 */
 	public enum Strand {
-		/** Record is on forward strand */
+		/**
+		 * Record is on forward strand
+		 */
 		FORWARD,
-		/** Record is on reverse strand */
+		/**
+		 * Record is on reverse strand
+		 */
 		REVERSE
 	}
 
-	/** Sequence ID of the record */
+	/**
+	 * Sequence ID of the record
+	 */
 	private final String seqID;
 
-	/** Source of the record */
+	/**
+	 * Source of the record
+	 */
 	private final String source;
 
-	/** Type of the record */
+	/**
+	 * Type of the record
+	 */
 	private final String type;
 
-	/** 0-based begin position of the record */
+	/**
+	 * 0-based begin position of the record
+	 */
 	private final int begin;
 
-	/** End position of the record */
+	/**
+	 * End position of the record
+	 */
 	private final int end;
 
-	/** Score value of the record */
+	/**
+	 * Score value of the record
+	 */
 	private final String score;
 
-	/** Strand of the record */
+	/**
+	 * Strand of the record
+	 */
 	private final Strand strand;
 
-	/** Record's phase, 0, 1, or 2 */
+	/**
+	 * Record's phase, 0, 1, or 2
+	 */
 	private final int phase;
 
-	/** Record's attributes */
+	/**
+	 * Record's attributes
+	 */
 	private final ImmutableMap<String, String> attributes;
 
 	/**
 	 * Initialize the <code>GFFRecord</code>
 	 */
 	public FeatureRecord(String seqID, String source, String type, int begin, int end, String score, Strand strand,
-			int phase, Map<String, String> attributes) {
+						 int phase, Map<String, String> attributes) {
 		this.seqID = seqID;
 		this.source = source;
 		this.type = type;
@@ -105,8 +129,8 @@ public final class FeatureRecord implements Comparable<FeatureRecord> {
 	@Override
 	public String toString() {
 		return "FeatureRecord [seqID=" + seqID + ", source=" + source + ", type=" + type + ", begin=" + begin + ", end="
-				+ end + ", score=" + score + ", strand=" + strand + ", phase=" + phase + ", attributes="
-				+ ImmutableSortedMap.copyOf(attributes) + "]";
+			+ end + ", score=" + score + ", strand=" + strand + ", phase=" + phase + ", attributes="
+			+ ImmutableSortedMap.copyOf(attributes) + "]";
 	}
 
 	@Override
@@ -173,7 +197,7 @@ public final class FeatureRecord implements Comparable<FeatureRecord> {
 	@Override
 	public int compareTo(FeatureRecord o) {
 		return ComparisonChain.start().compare(seqID, o.seqID).compare(strand, o.strand).compare(begin, o.begin)
-				.compare(end, o.end).result();
+			.compare(end, o.end).result();
 	}
 
 }

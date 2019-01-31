@@ -4,21 +4,31 @@ import de.charite.compbio.jannovar.Immutable;
 
 /**
  * Information about a DBSNP VCF file
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
 final public class DBSNPInfo {
 
-	/** File creation date */
+	/**
+	 * File creation date
+	 */
 	final String fileDate;
-	/** Source */
+	/**
+	 * Source
+	 */
 	final String source;
-	/** dbSNP build ID */
+	/**
+	 * dbSNP build ID
+	 */
 	final int dbSNPBuildID;
-	/** Reference name */
+	/**
+	 * Reference name
+	 */
 	final String reference;
-	/** State of phasing */
+	/**
+	 * State of phasing
+	 */
 	final String phasing;
 
 	public DBSNPInfo(String fileDate, String source, int dbSNPBuildID, String reference, String phasing) {
@@ -52,7 +62,7 @@ final public class DBSNPInfo {
 	@Override
 	public String toString() {
 		return "DBSNPInfo [fileDate=" + fileDate + ", source=" + source + ", dbSNPBuildID=" + dbSNPBuildID
-				+ ", reference=" + reference + ", phasing=" + phasing + "]";
+			+ ", reference=" + reference + ", phasing=" + phasing + "]";
 	}
 
 	@Override

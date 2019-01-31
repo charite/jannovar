@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -34,7 +28,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 		individuals.add(new PedPerson("ped", "III.2", "II.3", "II.4", Sex.FEMALE, Disease.UNAFFECTED)); // mother
 		individuals.add(new PedPerson("ped", "IV.1", "III.1", "III.2", Sex.FEMALE, Disease.AFFECTED)); // child
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2", "II.3", "II.4", "III.1", "III.2", "IV.1");
@@ -275,7 +269,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, ALT, REF, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -289,7 +283,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants2() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, ALT, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -303,7 +297,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants3() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, HET, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -317,7 +311,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants4() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, REF, ALT),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, UKN), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -331,7 +325,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants5() throws IncompatiblePedigreeException {
 		// If someone unaffected is alt for a comp. het => do not consider
 		gcList = getGenotypeCallsList(lst(HET, ALT, REF, HET, REF, REF, HET, REF, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -345,7 +339,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCaseNegativesTwoVariants6() throws IncompatiblePedigreeException {
 		// If a second trio is in the pedigree, the same comp, het should not be available
 		gcList = getGenotypeCallsList(lst(REF, HET, REF, HET, REF, REF, HET, REF, HET),
-				lst(HET, REF, REF, HET, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -539,7 +533,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants1() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, REF, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -553,7 +547,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants2() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, REF, REF, HET, REF, HET, HET),
-				lst(HET, REF, REF, HET, REF, REF, HET, REF, HET), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, REF, REF, HET, REF, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -567,7 +561,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants3() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, HET, HET, REF, REF, HET, REF, HET),
-				lst(REF, HET, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, HET, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -581,7 +575,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants4() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, HET, HET, REF, HET),
-				lst(REF, REF, HET, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, HET, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -595,7 +589,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants5() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, HET, HET, HET, HET, REF, HET, REF, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -609,7 +603,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants6() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, REF, HET),
-				lst(REF, HET, HET, REF, HET, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, HET, HET, REF, HET, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -623,7 +617,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants7() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, UKN, REF, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -637,7 +631,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants8() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, UKN, HET),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -651,7 +645,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants9() throws IncompatiblePedigreeException {
 		// Compound heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, REF, HET),
-				lst(UKN, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(UKN, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -665,7 +659,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants10() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, REF, HET, REF, UKN),
-				lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
+			lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -679,7 +673,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants11() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, HET, REF, REF, ALT, HET),
-				lst(HET, REF, REF, HET, HET, REF, HET, HET, ALT), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, HET, REF, HET, HET, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -693,7 +687,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants12() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, HET, REF, ALT, REF, HET),
-				lst(HET, REF, REF, HET, HET, REF, HET, UKN, ALT), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, HET, REF, HET, UKN, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -707,7 +701,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants13() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, HET, REF, HET, HET, HET),
-				lst(HET, REF, REF, HET, HET, REF, UKN, HET, ALT), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, HET, REF, UKN, HET, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -721,7 +715,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants14() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, HET, REF, REF, HET, HET),
-				lst(HET, REF, REF, HET, HET, REF, UKN, UKN, ALT), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, HET, REF, UKN, UKN, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
@@ -735,7 +729,7 @@ public class MendelianCompatibilityCheckerARMediumTest extends MendelianCompatib
 	public void testCasePositiveTwoVariants15() throws IncompatiblePedigreeException {
 		// Homozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, HET, REF, UKN, UKN, ALT),
-				lst(HET, REF, REF, HET, HET, REF, UKN, UKN, ALT), ChromosomeType.AUTOSOMAL);
+			lst(HET, REF, REF, HET, HET, REF, UKN, UKN, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
 		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());

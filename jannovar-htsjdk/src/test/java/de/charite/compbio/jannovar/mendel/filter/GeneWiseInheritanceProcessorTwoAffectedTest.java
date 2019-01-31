@@ -1,34 +1,27 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.factories.TestJannovarDataFactory;
+import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
+import de.charite.compbio.jannovar.pedigree.*;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFFileReader;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
-import de.charite.compbio.jannovar.data.JannovarData;
-import de.charite.compbio.jannovar.factories.TestJannovarDataFactory;
-import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
-
 /**
  * Test for annotating compatible modes of inheritance
- * 
+ * <p>
  * This test case uses one trio for the test
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GeneWiseInheritanceProcessorTwoAffectedTest {
@@ -36,13 +29,21 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 	final static String KEY = MendelVCFHeaderExtender.key();
 	final static String KEY_SUB = MendelVCFHeaderExtender.keySub();
 
-	/** Pedigree with two affected children */
+	/**
+	 * Pedigree with two affected children
+	 */
 	private Pedigree trio;
-	/** Jannovar DB */
+	/**
+	 * Jannovar DB
+	 */
 	private JannovarData jannovarDB;
-	/** Variants to filter */
+	/**
+	 * Variants to filter
+	 */
 	private List<VariantContext> variants;
-	/** The VCF file reader to use */
+	/**
+	 * The VCF file reader to use
+	 */
 	private VCFFileReader reader;
 
 	@Before
@@ -53,7 +54,7 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 		individuals.add(new PedPerson("ped", "Adam", "0", "0", Sex.MALE, Disease.AFFECTED)); // Father
 		individuals.add(new PedPerson("ped", "Seth", "Adam", "Eva", Sex.MALE, Disease.AFFECTED)); // Child
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		trio = new Pedigree(pedFileContents, "ped");
 
 		// Load test Jannovar data
@@ -74,7 +75,7 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 
 		ArrayList<VariantContext> result = new ArrayList<>();
 		try (GeneWiseMendelianAnnotationProcessor proc = new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB,
-				vc -> result.add(vc), false)) {
+			vc -> result.add(vc), false)) {
 			for (VariantContext vc : variants)
 				proc.put(vc);
 		}
@@ -123,7 +124,7 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 
 		ArrayList<VariantContext> result = new ArrayList<>();
 		try (GeneWiseMendelianAnnotationProcessor proc = new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB,
-				vc -> result.add(vc), false)) {
+			vc -> result.add(vc), false)) {
 			for (VariantContext vc : variants)
 				proc.put(vc);
 		}

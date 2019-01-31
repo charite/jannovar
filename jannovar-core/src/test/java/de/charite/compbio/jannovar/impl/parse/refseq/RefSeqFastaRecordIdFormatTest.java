@@ -7,7 +7,9 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.junit.Assert.assertEquals;
 
-/** Tests for {@link RefSeqFastaRecordIdFormat}. */
+/**
+ * Tests for {@link RefSeqFastaRecordIdFormat}.
+ */
 public class RefSeqFastaRecordIdFormatTest {
 
 	@Test

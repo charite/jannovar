@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -94,7 +88,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCaseNegativesTwoVariants1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF), lst(REF), ChromosomeType.MITOCHONDRIAL);
@@ -107,8 +101,8 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
-	
+
+
 	@Test
 	public void testCaseNegativesTwoVariants2() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN), lst(REF), ChromosomeType.MITOCHONDRIAL);
@@ -121,7 +115,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCaseNegativesTwoVariants3() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN), lst(UKN), ChromosomeType.MITOCHONDRIAL);
@@ -134,7 +128,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositivesTwoVariants1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF), lst(ALT), ChromosomeType.MITOCHONDRIAL);
@@ -160,7 +154,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositivesTwoVariants3() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN), lst(HET), ChromosomeType.MITOCHONDRIAL);
@@ -173,7 +167,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositivesTwoVariants4() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET), lst(ALT), ChromosomeType.MITOCHONDRIAL);
@@ -186,7 +180,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositivesTwoVariants5() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(ALT), lst(ALT), ChromosomeType.MITOCHONDRIAL);
@@ -199,7 +193,7 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	@Test
 	public void testCasePositivesTwoVariants6() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(ALT), lst(HET), ChromosomeType.MITOCHONDRIAL);
@@ -212,7 +206,6 @@ public class InheritanceCheckerMTSinglePersonTest extends MendelianCompatibility
 		Assert.assertEquals(2, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
 		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
-
 
 
 }

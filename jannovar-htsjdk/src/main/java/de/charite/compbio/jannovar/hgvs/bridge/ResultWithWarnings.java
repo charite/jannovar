@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
+
+import java.util.Collection;
 
 /**
  * Helper class that allows annotating a result type with warning messages.
@@ -11,13 +11,17 @@ import com.google.common.collect.ImmutableList;
  */
 class ResultWithWarnings<V> {
 
-	/** wrapped value */
+	/**
+	 * wrapped value
+	 */
 	private final V value;
-	/** list of warning messages */
+	/**
+	 * list of warning messages
+	 */
 	private final ImmutableList<String> warnings;
 
 	public static <V> ResultWithWarnings<V> construct(V value) {
-		return new ResultWithWarnings<V>(value, ImmutableList.<String> of());
+		return new ResultWithWarnings<V>(value, ImmutableList.<String>of());
 	}
 
 	public static <V> ResultWithWarnings<V> construct(V value, String... warnings) {

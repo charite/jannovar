@@ -1,21 +1,14 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import de.charite.compbio.jannovar.vardbs.base.*;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.VariantContextBuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-
-import de.charite.compbio.jannovar.vardbs.base.AbstractDBAnnotationDriver;
-import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
-import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
-import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
-import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
-import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.base.VCFReaderVariantProvider;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 /**
  * Annotation driver class for annotations using dbSNP
@@ -24,34 +17,33 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
  */
 final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSNPRecord> {
 
-	/** Information about the dbSNP VCF file */
+	/**
+	 * Information about the dbSNP VCF file
+	 */
 	final private DBSNPInfo dbSNPInfo;
 
 	/**
 	 * Create annotation driver for a coordinate-sorted, bgzip-compressed, dbSNP VCF file
-	 * 
-	 * @param fastaPath
-	 *            FAI-indexed FASTA file with reference
-	 * @param vcfPath
-	 *            Path to VCF file with dbSNP.
-	 * @throws JannovarVarDBException
-	 *             on problems loading the reference FASTA/FAI file or incompatible dbSNP version
+	 *
+	 * @param fastaPath FAI-indexed FASTA file with reference
+	 * @param vcfPath   Path to VCF file with dbSNP.
+	 * @throws JannovarVarDBException on problems loading the reference FASTA/FAI file or incompatible dbSNP version
 	 */
 	public DBSNPAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
-			throws JannovarVarDBException {
+		throws JannovarVarDBException {
 		super(new VCFReaderVariantProvider(vcfPath), fastaPath, options, new DBSNPVariantContextToRecordConverter());
 		VCFReaderVariantProvider vcfProvider = (VCFReaderVariantProvider) this.variantProvider;
 
 		this.dbSNPInfo = new DBSNPInfoFactory().build(vcfProvider.getVcfReader().getFileHeader());
 		if (dbSNPInfo.dbSNPBuildID != 147)
 			throw new JannovarVarDBException(
-					"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b147");
+				"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b147");
 	}
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> matchRecords,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> overlapRecords) {
+												   HashMap<Integer, AnnotatingRecord<DBSNPRecord>> matchRecords,
+												   HashMap<Integer, AnnotatingRecord<DBSNPRecord>> overlapRecords) {
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
 		annotateIDs(vc, matchRecords, builder);
@@ -78,7 +70,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoG5A(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+								 HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idG5A = options.getVCFIdentifierPrefix() + infix + "G5A";
 		ArrayList<Integer> g5AList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -98,7 +90,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoG5(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+								HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idG5 = options.getVCFIdentifierPrefix() + infix + "G5";
 		ArrayList<Integer> g5List = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -118,7 +110,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoCAF(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+								 HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idCAF = options.getVCFIdentifierPrefix() + infix + "CAF";
 		ArrayList<Double> cafList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -149,7 +141,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoOrigin(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+									HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idOrigin = options.getVCFIdentifierPrefix() + infix + "SAO";
 		ArrayList<String> originList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -169,7 +161,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoCommon(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+									HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idCommon = options.getVCFIdentifierPrefix() + infix + "COMMON";
 		ArrayList<Integer> commonList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -189,7 +181,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateInfoIDs(VariantContext vc, String infix,
-			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+								 HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idIDs = options.getVCFIdentifierPrefix() + infix + "IDS";
 		ArrayList<ArrayList<String>> matchList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
@@ -218,7 +210,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	private void annotateIDs(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
-			VariantContextBuilder builder) {
+							 VariantContextBuilder builder) {
 		ArrayList<String> idList = Lists.newArrayList(vc.getID().split(";"));
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) != null) {
@@ -238,8 +230,8 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<DBSNPRecord>> pickAnnotatingDBRecords(
-			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<DBSNPRecord>> matchToRecord, boolean isMatch) {
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+		HashMap<GenotypeMatch, AnnotatingRecord<DBSNPRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<DBSNPRecord>> annotatingDBSNPRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
@@ -253,10 +245,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 					if (update.getAlleleFrequenciesG1K().size() <= alleleNo)
 						continue; // no number to update
 					if ((isMatch && (current.getAlleleFrequenciesG1K().size() <= alleleNo
-							|| current.getAlleleFrequenciesG1K().get(alleleNo - 1) < update.getAlleleFrequenciesG1K()
-									.get(alleleNo - 1)))
-							|| (!isMatch
-									&& current.highestAlleleFreqG1KOverall() < update.highestAlleleFreqG1KOverall()))
+						|| current.getAlleleFrequenciesG1K().get(alleleNo - 1) < update.getAlleleFrequenciesG1K()
+						.get(alleleNo - 1)))
+						|| (!isMatch
+						&& current.highestAlleleFreqG1KOverall() < update.highestAlleleFreqG1KOverall()))
 						annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}
@@ -264,7 +256,9 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 		return annotatingDBSNPRecord;
 	}
 
-	/** @return Information about the used dbSNP VCF file */
+	/**
+	 * @return Information about the used dbSNP VCF file
+	 */
 	public DBSNPInfo getDbSNPInfo() {
 		return dbSNPInfo;
 	}

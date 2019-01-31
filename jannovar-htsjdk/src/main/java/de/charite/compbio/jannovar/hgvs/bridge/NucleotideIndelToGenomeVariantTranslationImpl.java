@@ -24,18 +24,14 @@ class NucleotideIndelToGenomeVariantTranslationImpl extends NucleotideChangeToGe
 	/**
 	 * Implementation of translation for {@link NucleotideIndel} objects
 	 *
-	 * @param tm
-	 *            {@link TranscriptModel} that <code>ntSub</code> is for
-	 * @param sequenceType
-	 *            {@link SequenceType} that <code>ntSub</code> is for
-	 * @param ntIndel
-	 *            {@link NucleotideIndel} to convert
+	 * @param tm           {@link TranscriptModel} that <code>ntSub</code> is for
+	 * @param sequenceType {@link SequenceType} that <code>ntSub</code> is for
+	 * @param ntIndel      {@link NucleotideIndel} to convert
 	 * @return {@link GenomeVariant} with the translation result, possibly annotated with warning messages
-	 * @throws CannotTranslateHGVSVariant
-	 *             in case of translation problems
+	 * @throws CannotTranslateHGVSVariant in case of translation problems
 	 */
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType, NucleotideIndel ntIndel)
-			throws CannotTranslateHGVSVariant {
+		throws CannotTranslateHGVSVariant {
 		final NucleotideRange range = ntIndel.getRange();
 		final NucleotideSeqDescription insertedNTDesc = ntIndel.getInsSeq();
 		final NucleotideSeqDescription deletedNTDesc = ntIndel.getDelSeq();
@@ -51,9 +47,9 @@ class NucleotideIndelToGenomeVariantTranslationImpl extends NucleotideChangeToGe
 		if (deletedNTs == null) {
 			deletedNTs = getGenomeSeq(tm.getStrand(), gItv);
 			if (deletedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-					&& deletedNTDesc.length() != deletedNTs.length())
+				&& deletedNTDesc.length() != deletedNTs.length())
 				warningMsg = "Invalid reference nucleotide count in " + ntIndel.toHGVSString() + ", expected "
-						+ deletedNTs.length();
+					+ deletedNTs.length();
 		} else {
 			final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
 			if (!refSeq.equals(deletedNTs))
@@ -62,7 +58,7 @@ class NucleotideIndelToGenomeVariantTranslationImpl extends NucleotideChangeToGe
 		}
 
 		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos(), deletedNTs,
-				insertedNTDesc.getNucleotides(), tm.getStrand()).withStrand(Strand.FWD);
+			insertedNTDesc.getNucleotides(), tm.getStrand()).withStrand(Strand.FWD);
 		if (warningMsg != null)
 			return ResultWithWarnings.construct(result, warningMsg);
 		else

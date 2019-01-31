@@ -1,16 +1,14 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import java.io.File;
-
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFFileReader;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.utils.ResourceUtils;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
+import java.io.File;
 
 public class UK10KVariantContextToRecordConverterTest {
 
@@ -35,9 +33,9 @@ public class UK10KVariantContextToRecordConverterTest {
 
 		UK10KRecord record = converter.convert(vc);
 		Assert.assertEquals(
-				"UK10KRecord [chrom=1, pos=28589, id=., ref=T, alt=[TTGG], filter=[], "
-						+ "altAlleleCounts=[7226], chromCount=7562, altAlleleFrequencies=[0.9555673102353874]]",
-				record.toString());
+			"UK10KRecord [chrom=1, pos=28589, id=., ref=T, alt=[TTGG], filter=[], "
+				+ "altAlleleCounts=[7226], chromCount=7562, altAlleleFrequencies=[0.9555673102353874]]",
+			record.toString());
 	}
 
 }

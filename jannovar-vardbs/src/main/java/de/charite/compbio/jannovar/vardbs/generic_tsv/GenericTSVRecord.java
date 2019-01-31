@@ -1,11 +1,12 @@
 package de.charite.compbio.jannovar.vardbs.generic_tsv;
 
 import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 /**
  * Store entries for one column of a generic TSV file.
- * 
+ * <p>
  * Here, we currently only have support for one alternative allele. This reflects more dbNSFP or the
  * CADD score files than VCF files.
  *
@@ -13,10 +14,14 @@ import java.util.List;
  */
 public class GenericTSVRecord {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	final private String contig;
 
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	final private int pos;
 
 	/**
@@ -29,7 +34,9 @@ public class GenericTSVRecord {
 	 */
 	final private String alt;
 
-	/** Values for each value column from configuration. */
+	/**
+	 * Values for each value column from configuration.
+	 */
 	final private ImmutableList<Object> values;
 
 	public GenericTSVRecord(String contig, int pos, String ref, String alt, List<Object> values) {
@@ -63,7 +70,7 @@ public class GenericTSVRecord {
 	@Override
 	public String toString() {
 		return "GenericTSVRecord [chrom=" + contig + ", pos=" + pos + ", ref=" + ref + ", alt=" + alt + ", values="
-				+ values + "]";
+			+ values + "]";
 	}
 
 	@Override

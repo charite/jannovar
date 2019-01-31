@@ -5,11 +5,12 @@ import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
+
 import java.io.File;
 
 /**
  * Helper class for extending {@link VCFHeader}s for UK10K annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericVCFHeaderExtender extends VCFHeaderExtender {
@@ -46,16 +47,16 @@ public class GenericVCFHeaderExtender extends VCFHeaderExtender {
 			VCFInfoHeaderLine line;
 			if (countType == VCFHeaderLineCount.R) {
 				line = new VCFInfoHeaderLine(prefix + infix + fieldName, VCFHeaderLineCount.R, headerLine.getType(),
-						"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
+					"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
 			} else if (countType == VCFHeaderLineCount.A) {
 				line = new VCFInfoHeaderLine(prefix + infix + fieldName, VCFHeaderLineCount.A, headerLine.getType(),
-						"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
+					"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
 			} else if (countType == VCFHeaderLineCount.INTEGER) {
 				if (headerLine.getCount() != 1) {
 					throw new RuntimeException("Unsupported integer count " + headerLine.getCount());
 				}
 				line = new VCFInfoHeaderLine(prefix + infix + fieldName, 1, headerLine.getType(),
-						"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
+					"Field " + fieldName + " from file " + genericVcfOptions.getPathVcfFile() + note);
 			} else {
 				throw new RuntimeException("Unsupported count type " + countType);
 			}

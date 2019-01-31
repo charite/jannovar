@@ -1,19 +1,6 @@
 package de.charite.compbio.jannovar.cmd.hgvs_to_vcf;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 import com.google.common.collect.Lists;
-
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
@@ -33,28 +20,36 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.variantcontext.writer.Options;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
-import htsjdk.variant.vcf.VCFContigHeaderLine;
-import htsjdk.variant.vcf.VCFFilterHeaderLine;
-import htsjdk.variant.vcf.VCFHeader;
-import htsjdk.variant.vcf.VCFHeaderLineType;
-import htsjdk.variant.vcf.VCFInfoHeaderLine;
-import htsjdk.variant.vcf.VCFSimpleHeaderLine;
+import htsjdk.variant.vcf.*;
 import net.sourceforge.argparse4j.inf.Namespace;
+
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Project transcript to chromosomal changes
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	private ProjectTranscriptToChromosomeOptions options;
 
-	/** FAI-indexed FASTA file to use */
+	/**
+	 * FAI-indexed FASTA file to use
+	 */
 	IndexedFastaSequenceFile fasta;
 
-	/** Translation of variants */
+	/**
+	 * Translation of variants
+	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
 
 	public ProjectTranscriptToChromosome(Namespace args) throws CommandLineParsingException {
@@ -78,7 +73,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 
 	private VariantContextWriter openOutputFile() {
 		VariantContextWriterBuilder builder = new VariantContextWriterBuilder()
-				.setReferenceDictionary(fasta.getSequenceDictionary()).setOutputFile(options.getPathOutputVCF());
+			.setReferenceDictionary(fasta.getSequenceDictionary()).setOutputFile(options.getPathOutputVCF());
 		if (options.getPathOutputVCF().endsWith(".gz") || options.getPathOutputVCF().endsWith(".bcf"))
 			builder.setOption(Options.INDEX_ON_THE_FLY);
 		else
@@ -96,10 +91,10 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 
 		header.addMetaDataLine(new VCFSimpleHeaderLine("ALT", "ERROR", "Error in conversion"));
 		header.addMetaDataLine(new VCFFilterHeaderLine("PARSE_ERROR",
-				"Problem in parsing original HGVS variant string, written out as variant at 1:g.1N>N"));
+			"Problem in parsing original HGVS variant string, written out as variant at 1:g.1N>N"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ERROR_MESSAGE", 1, VCFHeaderLineType.String, "Error message"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ORIG_VAR", 1, VCFHeaderLineType.String,
-				"Original HGVS variant string from input file to hgvs-to-vcf"));
+			"Original HGVS variant string from input file to hgvs-to-vcf"));
 
 		writer.writeHeader(header);
 
@@ -114,8 +109,8 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		}
 		if (this.fasta.getSequenceDictionary() == null) {
 			throw new UncheckedJannovarException(
-					"FASTA sequence dictionary empty, you have a REFERENCE.dict file (create with Picard "
-							+ "or samtools dict, version >=1.3)");
+				"FASTA sequence dictionary empty, you have a REFERENCE.dict file (create with Picard "
+					+ "or samtools dict, version >=1.3)");
 		}
 
 		this.translator = new NucleotideChangeToGenomeVariantTranslator(jannovarData, fasta);
@@ -128,8 +123,8 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		Allele alleleRef = Allele.create("N", true);
 		Allele alleleAlt = Allele.create("<ERROR>", false);
 		return new VariantContextBuilder().loc("1", 1, 1).alleles(Lists.newArrayList(alleleRef, alleleAlt))
-				.filter("PARSE_ERROR").attribute("ORIG_VAR", urlEncode(origString))
-				.attribute("ERROR_MESSAGE", urlEncode(message)).make();
+			.filter("PARSE_ERROR").attribute("ORIG_VAR", urlEncode(origString))
+			.attribute("ERROR_MESSAGE", urlEncode(message)).make();
 	}
 
 	private String urlEncode(String s) {
@@ -179,7 +174,9 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		}
 	}
 
-	/** Map contig name (from genome variant) to contig name in FASTA */
+	/**
+	 * Map contig name (from genome variant) to contig name in FASTA
+	 */
 	private String mapContigToFasta(String contigName) {
 		// Map genome variant's contig to unique ID
 		Integer contigID = jannovarData.getRefDict().getContigNameToID().get(contigName);
@@ -206,7 +203,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		if (genomeVar.getRef().isEmpty() || genomeVar.getAlt().isEmpty()) {
 			shift = -1;
 			String left = fasta.getSubsequenceAt(nameInFasta, genomeVar.getPos(), genomeVar.getPos())
-					.getBaseString();
+				.getBaseString();
 			alleles.add(Allele.create(left + genomeVar.getRef(), true));
 			alleles.add(Allele.create(left + genomeVar.getAlt(), false));
 		} else {
@@ -216,7 +213,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 
 		VariantContextBuilder builder = new VariantContextBuilder();
 		builder.chr(genomeVar.getChrName()).start(genomeVar.getPos() + shift + 1)
-				.computeEndFromAlleles(alleles, genomeVar.getPos() + shift + 1).alleles(alleles);
+			.computeEndFromAlleles(alleles, genomeVar.getPos() + shift + 1).alleles(alleles);
 
 		writer.add(builder.make());
 	}

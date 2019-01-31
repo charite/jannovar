@@ -1,18 +1,17 @@
 package de.charite.compbio.jannovar.vardbs.g1k;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link ThousandGenomesRecord} objects
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class ThousandGenomesVariantContextToRecordConverter implements VariantContextToRecordConverter<ThousandGenomesRecord> {
@@ -42,7 +41,7 @@ final class ThousandGenomesVariantContextToRecordConverter implements VariantCon
 			if (pop == ThousandGenomesPopulation.POPMAX) {
 				final List<String> lst = vc.getAttributeAsStringList("POPMAX_AN", ".");
 				builder.getChromCounts().put(pop, ImmutableList.copyOf(
-						lst.stream().map(s -> ".".equals(s) ? 0 : Integer.parseInt(s)).collect(Collectors.toList())));
+					lst.stream().map(s -> ".".equals(s) ? 0 : Integer.parseInt(s)).collect(Collectors.toList())));
 			} else {
 				int an = vc.getAttributeAsInt(pop + "_AN", 0);
 				builder.getChromCounts().put(pop, ImmutableList.of(an));
@@ -69,7 +68,7 @@ final class ThousandGenomesVariantContextToRecordConverter implements VariantCon
 
 			// AC
 			List<Integer> acLst = vc.getAttributeAsList(pop + "_AC").stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!acLst.isEmpty()) {
 				builder.getAlleleCounts().put(pop, acLst);
 				if (pop != ThousandGenomesPopulation.POPMAX)
@@ -79,7 +78,7 @@ final class ThousandGenomesVariantContextToRecordConverter implements VariantCon
 
 			// Hom
 			List<Integer> homLst = vc.getAttributeAsList(pop + "_Hom").stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!homLst.isEmpty()) {
 				builder.getAlleleHomCounts().put(pop, homLst);
 				if (pop != ThousandGenomesPopulation.POPMAX)
@@ -89,7 +88,7 @@ final class ThousandGenomesVariantContextToRecordConverter implements VariantCon
 
 			// Hemi
 			List<Integer> hemiLst = vc.getAttributeAsList(pop + "_Hemi").stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!hemiLst.isEmpty()) {
 				builder.getAlleleHemiCounts().put(pop, hemiLst);
 				if (pop != ThousandGenomesPopulation.POPMAX)
@@ -99,7 +98,7 @@ final class ThousandGenomesVariantContextToRecordConverter implements VariantCon
 
 			// Het
 			List<Integer> hetLst = vc.getAttributeAsList(pop + "_Het").stream()
-					.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
+				.map(x -> ".".equals(x) ? 0 : Integer.parseInt((String) x)).collect(Collectors.toList());
 			if (!hetLst.isEmpty()) {
 				builder.getAlleleHemiCounts().put(pop, hemiLst);
 				if (pop != ThousandGenomesPopulation.POPMAX)

@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.protein.change;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ProteinIndelTest {
 
@@ -29,7 +28,7 @@ public class ProteinIndelTest {
 	@Test
 	public void testDeletionOfLengthOneWithInsertionOfLengthTwoWithSeqDescription() {
 		ProteinIndel del = ProteinIndel.buildWithSeqDescription(true, "A", 123, "A", 123,
-				new ProteinSeqDescription("A"), new ProteinSeqDescription("CT"));
+			new ProteinSeqDescription("A"), new ProteinSeqDescription("CT"));
 		Assert.assertEquals("(A124delAinsCT)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
@@ -54,7 +53,7 @@ public class ProteinIndelTest {
 	@Test
 	public void testDeletionOfLengthTwoWithInsertionOfLengthOneWithSeqDescription() {
 		ProteinIndel del = ProteinIndel.buildWithSeqDescription(true, "A", 123, "C", 124, new ProteinSeqDescription(
-				"AC"), new ProteinSeqDescription("T"));
+			"AC"), new ProteinSeqDescription("T"));
 		Assert.assertEquals("(A124_C125delACinsT)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 

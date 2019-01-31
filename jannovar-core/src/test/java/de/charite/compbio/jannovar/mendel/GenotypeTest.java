@@ -1,15 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:j.jacobsen@qmul.ac.uk">Jules Jacobsen</a>
@@ -158,7 +156,7 @@ public class GenotypeTest {
 		assertFalse(genotype.isHomRef());
 		assertFalse(genotype.isHomAlt());
 	}
-	
+
 	@Test
 	public void testDiploidMultiSampleMixed1() {
 		Genotype genotype = new Genotype(Arrays.asList(-1, 2));
@@ -167,15 +165,15 @@ public class GenotypeTest {
 		assertFalse(genotype.isHomRef());
 		assertTrue(genotype.isHomAlt());
 	}
-	
-    @Test
-    public void testDiploidMultiSampleMixed2() {
-	Genotype genotype = new Genotype(Arrays.asList(2, -1));
-	assertEquals(2, genotype.getPloidy());
-	assertTrue(genotype.isHet());
-	assertFalse(genotype.isHomRef());
-	assertTrue(genotype.isHomAlt());
-    }
+
+	@Test
+	public void testDiploidMultiSampleMixed2() {
+		Genotype genotype = new Genotype(Arrays.asList(2, -1));
+		assertEquals(2, genotype.getPloidy());
+		assertTrue(genotype.isHet());
+		assertFalse(genotype.isHomRef());
+		assertTrue(genotype.isHomAlt());
+	}
 
 	@Test
 	public void testDiploidMultiSampleHomAlt() {

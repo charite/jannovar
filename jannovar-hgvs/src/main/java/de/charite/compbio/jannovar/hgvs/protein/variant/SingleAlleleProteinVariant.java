@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.hgvs.protein.variant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Protein change with one allele only.
@@ -28,40 +27,43 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
 
 	/**
 	 * @return single-change {@link SingleAlleleProteinVariant} with the given protein ID and
-	 *         {@link VariantConfiguration}
+	 * {@link VariantConfiguration}
 	 */
 	public static SingleAlleleProteinVariant build(String proteinID, VariantConfiguration varConfig,
-			ProteinChange... changes) {
+												   ProteinChange... changes) {
 		return new SingleAlleleProteinVariant(proteinID, varConfig, ImmutableList.copyOf(changes));
 	}
 
 	/**
 	 * Construct {@link SingleAlleleProteinVariant}
 	 *
-	 * @param proteinID
-	 *            ID of the protein that the change is on
-	 * @param varConfig
-	 *            {@link VariantConfiguration} of the {@link ProteinChange}s in the allele
-	 * @param changes
-	 *            {@link ProteinChange}s to use for the single allele
+	 * @param proteinID ID of the protein that the change is on
+	 * @param varConfig {@link VariantConfiguration} of the {@link ProteinChange}s in the allele
+	 * @param changes   {@link ProteinChange}s to use for the single allele
 	 */
 	public SingleAlleleProteinVariant(String proteinID, VariantConfiguration varConfig,
-			Collection<? extends ProteinChange> changes) {
+									  Collection<? extends ProteinChange> changes) {
 		super(proteinID);
 		this.allele = new ProteinChangeAllele(varConfig, changes);
 	}
 
-	/** @return <code>true</code> if the variant has only one {@link ProteinChange}. */
+	/**
+	 * @return <code>true</code> if the variant has only one {@link ProteinChange}.
+	 */
 	public boolean hasOnlyOneChange() {
 		return (allele.size() == 1);
 	}
 
-	/** @return first change, convenience method for single-change variants */
+	/**
+	 * @return first change, convenience method for single-change variants
+	 */
 	public ProteinChange getChange() {
 		return allele.get(0);
 	}
 
-	/** @return list of changes */
+	/**
+	 * @return list of changes
+	 */
 	public ProteinChangeAllele getAllele() {
 		return allele;
 	}

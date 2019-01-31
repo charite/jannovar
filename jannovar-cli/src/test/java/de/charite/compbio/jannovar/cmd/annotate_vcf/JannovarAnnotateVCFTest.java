@@ -1,21 +1,19 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.Jannovar;
+import de.charite.compbio.jannovar.JannovarException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.Jannovar;
-import de.charite.compbio.jannovar.JannovarException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * This test runs the annotation command.
@@ -38,8 +36,8 @@ public class JannovarAnnotateVCFTest {
 	public void testOnSmallExample() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate-vcf", "-o", outFolder.toString() + "/small.jv.vcf", "-d",
-				pathToSmallSer, "-i", inputFilePath };
+		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/small.jv.vcf", "-d",
+			pathToSmallSer, "-i", inputFilePath};
 		System.err.println(Joiner.on(" ").join(argv));
 
 		Jannovar.main(argv);
@@ -50,7 +48,7 @@ public class JannovarAnnotateVCFTest {
 		final File expectedFile = new File(this.getClass().getResource("/small.jv.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
-				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
+			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -61,8 +59,8 @@ public class JannovarAnnotateVCFTest {
 	public void testOnTrailingSemicolons() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/semicolons.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate-vcf", "-o", outFolder.toString() + "/semicolons.jv.vcf", "-d",
-				pathToSmallSer, "-i", inputFilePath };
+		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/semicolons.jv.vcf", "-d",
+			pathToSmallSer, "-i", inputFilePath};
 		System.err.println(Joiner.on(" ").join(argv));
 
 		Jannovar.main(argv);
@@ -73,7 +71,7 @@ public class JannovarAnnotateVCFTest {
 		final File expectedFile = new File(this.getClass().getResource("/semicolons.jv.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
-				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
+			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
 

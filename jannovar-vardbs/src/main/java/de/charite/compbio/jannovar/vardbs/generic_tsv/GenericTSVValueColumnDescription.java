@@ -26,14 +26,14 @@ public class GenericTSVValueColumnDescription {
 	}
 
 	public GenericTSVValueColumnDescription(int columnIndex, VCFHeaderLineType valueType,
-			String fieldName, String fieldDescription,
-			GenericTSVAccumulationStrategy accumulationStrategy) {
+											String fieldName, String fieldDescription,
+											GenericTSVAccumulationStrategy accumulationStrategy) {
 		this(columnIndex, valueType, fieldName, fieldDescription, accumulationStrategy, fieldName);
 	}
 
 	public GenericTSVValueColumnDescription(int columnIndex, VCFHeaderLineType valueType,
-			String fieldName, String fieldDescription,
-			GenericTSVAccumulationStrategy accumulationStrategy, String refField) {
+											String fieldName, String fieldDescription,
+											GenericTSVAccumulationStrategy accumulationStrategy, String refField) {
 		this.columnIndex = columnIndex;
 		this.valueType = valueType;
 		this.fieldName = fieldName;
@@ -93,8 +93,8 @@ public class GenericTSVValueColumnDescription {
 	@Override
 	public String toString() {
 		return "GenericTSVValueColumnDescription [columnIndex=" + columnIndex + ", valueType="
-				+ valueType + ", fieldName=" + fieldName + ", fieldDescription=" + fieldDescription
-				+ ", accumulationStrategy=" + accumulationStrategy + ", refField=" + refField + "]";
+			+ valueType + ", fieldName=" + fieldName + ", fieldDescription=" + fieldDescription
+			+ ", accumulationStrategy=" + accumulationStrategy + ", refField=" + refField + "]";
 	}
 
 }

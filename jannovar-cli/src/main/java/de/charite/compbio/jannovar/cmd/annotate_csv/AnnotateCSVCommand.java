@@ -1,25 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_csv;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
-import de.charite.compbio.jannovar.annotation.AnnotationException;
-import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
-import de.charite.compbio.jannovar.annotation.VariantAnnotations;
-import de.charite.compbio.jannovar.annotation.VariantAnnotationsTextGenerator;
-import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
@@ -29,6 +11,18 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Allows the annotation of a CVF file.
@@ -37,7 +31,9 @@ import net.sourceforge.argparse4j.inf.Namespace;
  */
 public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 
-	/** Configuration */
+	/**
+	 * Configuration
+	 */
 	private JannovarAnnotateCSVOptions options;
 
 	/**
@@ -53,8 +49,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	/**
 	 * This function will simply annotate a csv file where positions are set
 	 *
-	 * @throws AnnotationException
-	 *             on problems in the annotation process
+	 * @throws AnnotationException on problems in the annotation process
 	 */
 	@Override
 	public void run() throws JannovarException {
@@ -79,7 +74,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 					header.add(entry.getValue(), entry.getKey());
 				}
 				header.add(parser.getHeaderMap().size(), "HGVS");
-				header.add(parser.getHeaderMap().size()+1, "FunctionalClass");
+				header.add(parser.getHeaderMap().size() + 1, "FunctionalClass");
 
 				printer.printRecord(header);
 			}
@@ -110,7 +105,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 					textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
 
 				printer.print(textGenerator.buildHGVSText(options.isUseThreeLetterAminoAcidCode()
-						? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER));
+					? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER));
 				printer.print(annoList.getHighestImpactEffect());
 				printer.println();
 			}
@@ -125,7 +120,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 
 	private String getChromosomalChange(CSVRecord record) {
 		return record.get(options.getChr()) + ":" + record.get(options.getPos()) + record.get(options.getRef())
-				+ ">" + record.get(options.getAlt());
+			+ ">" + record.get(options.getAlt());
 	}
 
 	private GenomeVariant parseGenomeChange(String changeStr) throws JannovarException {
@@ -134,7 +129,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 
 		if (!match.matches())
 			throw new JannovarException("[ERROR] Input string for the chromosomal change " + changeStr
-					+ " does not fit the regular expression ... :(");
+				+ " does not fit the regular expression ... :(");
 
 		int chr = refDict.getContigNameToID().get(match.group(1));
 		int pos = Integer.parseInt(match.group(2));

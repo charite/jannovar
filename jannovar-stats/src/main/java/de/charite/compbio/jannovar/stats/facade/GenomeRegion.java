@@ -6,18 +6,32 @@ package de.charite.compbio.jannovar.stats.facade;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum GenomeRegion {
-	/** Upstream */
+	/**
+	 * Upstream
+	 */
 	UPSTREAM,
-	/** 5' UTR */
+	/**
+	 * 5' UTR
+	 */
 	UTR5,
-	/** Exonic */
+	/**
+	 * Exonic
+	 */
 	EXONIC,
-	/** Intronic */
+	/**
+	 * Intronic
+	 */
 	INTRONIC,
-	/** 3' UTR */
+	/**
+	 * 3' UTR
+	 */
 	UTR3,
-	/** Downstream */
+	/**
+	 * Downstream
+	 */
 	DOWNSTREAM,
-	/** Intergenic */
+	/**
+	 * Intergenic
+	 */
 	INTERGENIC;
 }

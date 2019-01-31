@@ -1,15 +1,13 @@
 package de.charite.compbio.jannovar.filter.impl.gt;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests for GenotypeFilterAnnotator
@@ -29,12 +27,12 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	public void testHighCoverage() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
 		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\t"
-				+ "GT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:20001:10000\n";
+			+ "GT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:20001:10000\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -45,7 +43,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -56,7 +54,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -67,7 +65,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -78,7 +76,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -89,7 +87,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -100,7 +98,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 	@Test
@@ -111,7 +109,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 
 		Genotype gt = variant.getGenotype("individual");
 		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF),
-				annotator.getFiltersFor(gt));
+			annotator.getFiltersFor(gt));
 	}
 
 }

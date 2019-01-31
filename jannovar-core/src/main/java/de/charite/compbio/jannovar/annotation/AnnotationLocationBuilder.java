@@ -13,17 +13,25 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 @Immutable
 public class AnnotationLocationBuilder {
 
-	/** {@link AnnotationLocation#transcript} of next build {@link AnnotationLocation}. */
+	/**
+	 * {@link AnnotationLocation#transcript} of next build {@link AnnotationLocation}.
+	 */
 	public TranscriptModel transcript = null;
 
-	/** {@link AnnotationLocation#rankType} of next build {@link AnnotationLocation}. */
+	/**
+	 * {@link AnnotationLocation#rankType} of next build {@link AnnotationLocation}.
+	 */
 	public RankType rankType = RankType.UNDEFINED;
 
-	/** {@link AnnotationLocation#rank} of next build {@link AnnotationLocation}. */
+	/**
+	 * {@link AnnotationLocation#rank} of next build {@link AnnotationLocation}.
+	 */
 	public int rank = AnnotationLocation.INVALID_RANK;
 
 	// TODO(holtgrem): transcript location probably does not belong here!
-	/** {@link AnnotationLocation#txLocation} of next build {@link AnnotationLocation}. */
+	/**
+	 * {@link AnnotationLocation#txLocation} of next build {@link AnnotationLocation}.
+	 */
 	public TranscriptInterval txLocation = null;
 
 	/**

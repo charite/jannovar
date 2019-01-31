@@ -4,29 +4,39 @@ import com.google.common.base.Joiner;
 
 /**
  * Representation of a legacy notation substitution.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacySubstitution extends LegacyChange {
 
-	/** source string */
+	/**
+	 * source string
+	 */
 	private final String fromSeq;
-	/** target string */
+	/**
+	 * target string
+	 */
 	private final String toSeq;
 
-	/** Construct new legacy substitution with the given values */
+	/**
+	 * Construct new legacy substitution with the given values
+	 */
 	public LegacySubstitution(LegacyLocation location, String fromSeq, String toSeq) {
 		super(location);
 		this.fromSeq = fromSeq;
 		this.toSeq = toSeq;
 	}
 
-	/** @return replaced sequence */
+	/**
+	 * @return replaced sequence
+	 */
 	public String getFromSeq() {
 		return fromSeq;
 	}
 
-	/** @return sequence to replace with */
+	/**
+	 * @return sequence to replace with
+	 */
 	public String getToSeq() {
 		return toSeq;
 	}

@@ -1,14 +1,12 @@
 package de.charite.compbio.jannovar.hgvs.protein.variant;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ProteinChangeAlleleTest {
 
@@ -18,21 +16,21 @@ public class ProteinChangeAlleleTest {
 	@Before
 	public void setUp() {
 		singletonAllele = new ProteinChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(ProteinSubstitution
-				.build(false, "L", 100, "R")));
+			.build(false, "L", 100, "R")));
 		multiChangeAllele = new ProteinChangeAllele(VariantConfiguration.CHIMERIC, ImmutableList.of(
-				ProteinSubstitution.build(false, "L", 100, "R"), ProteinSubstitution.build(false, "A", 99, "G")));
+			ProteinSubstitution.build(false, "L", 100, "R"), ProteinSubstitution.build(false, "A", 99, "G")));
 	}
 
 	@Test
 	public void testSingletonStaticFactory() {
 		Assert.assertEquals(singletonAllele,
-				ProteinChangeAllele.singleChangeAllele(ProteinSubstitution.build(false, "L", 100, "R")));
+			ProteinChangeAllele.singleChangeAllele(ProteinSubstitution.build(false, "L", 100, "R")));
 	}
 
 	@Test
 	public void testMultiChangeStaticFactory() {
 		Assert.assertEquals(multiChangeAllele, ProteinChangeAllele.build(VariantConfiguration.CHIMERIC,
-				ProteinSubstitution.build(false, "L", 100, "R"), ProteinSubstitution.build(false, "A", 99, "G")));
+			ProteinSubstitution.build(false, "L", 100, "R"), ProteinSubstitution.build(false, "A", 99, "G")));
 	}
 
 	@Test

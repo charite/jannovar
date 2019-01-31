@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  * Taken from http://stackoverflow.com/a/10034633/84349
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class VersionComparator implements Comparator<String> {

@@ -11,21 +11,31 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class CDSInterval {
 
-	/** the transcript that this position is relative to */
+	/**
+	 * the transcript that this position is relative to
+	 */
 	private final TranscriptModel transcript;
-	/** the begin position within the transcript */
+	/**
+	 * the begin position within the transcript
+	 */
 	private final int beginPos;
-	/** the end position within the transcript */
+	/**
+	 * the end position within the transcript
+	 */
 	private final int endPos;
 
-	/** construct transcript interval with one-based coordinate system */
+	/**
+	 * construct transcript interval with one-based coordinate system
+	 */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
 		this.transcript = transcript;
 		this.beginPos = beginPos;
 		this.endPos = endPos;
 	}
 
-	/** construct transcript interval with selected coordinate system */
+	/**
+	 * construct transcript interval with selected coordinate system
+	 */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
 		this.transcript = transcript;
 		if (positionType == PositionType.ONE_BASED)
@@ -35,22 +45,30 @@ public final class CDSInterval {
 		this.endPos = endPos;
 	}
 
-	/** @return the transcript that this position is relative to */
+	/**
+	 * @return the transcript that this position is relative to
+	 */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 
-	/** @return the begin position within the transcript */
+	/**
+	 * @return the begin position within the transcript
+	 */
 	public int getBeginPos() {
 		return beginPos;
 	}
 
-	/** @return the end position within the transcript */
+	/**
+	 * @return the end position within the transcript
+	 */
 	public int getEndPos() {
 		return endPos;
 	}
 
-	/** returns length of the interval */
+	/**
+	 * returns length of the interval
+	 */
 	public int length() {
 		return this.endPos - this.beginPos;
 	}

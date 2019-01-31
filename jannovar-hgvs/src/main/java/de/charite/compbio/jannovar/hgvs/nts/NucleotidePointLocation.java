@@ -1,22 +1,25 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
 import com.google.common.base.Joiner;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
 /**
  * Position in a nucleotide string.
- *
+ * <p>
  * Characterized by a 1-based position in the current coordinate system (e.g. CDS) with an offset into the exon/intron.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class NucleotidePointLocation implements ConvertibleToHGVSString {
 
-	/** 0-based base position */
+	/**
+	 * 0-based base position
+	 */
 	final int basePos;
-	/** 1-based offset into the "gaps" of the coordinate system */
+	/**
+	 * 1-based offset into the "gaps" of the coordinate system
+	 */
 	final int offset;
 	/**
 	 * <code>true</code> if the position if downstream of the CDS end (3' UTR), use negative {@link #basePos} for 5'
@@ -39,8 +42,7 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	/**
 	 * Construct with given base position.
 	 *
-	 * @param basePos
-	 *            0-based position in the nucleotide string
+	 * @param basePos 0-based position in the nucleotide string
 	 */
 	@Deprecated
 	// in favour of full constructor
@@ -54,12 +56,9 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	/**
 	 * Construct with given base position and offset
 	 *
-	 * @param basePos
-	 *            0-based position in the nucleotide string
-	 * @param offset
-	 *            1-based offset (only non-0 values are allowed)
-	 * @param downstreamOfCDS
-	 *            <code>true</code> if downstream of CDS
+	 * @param basePos         0-based position in the nucleotide string
+	 * @param offset          1-based offset (only non-0 values are allowed)
+	 * @param downstreamOfCDS <code>true</code> if downstream of CDS
 	 */
 	public NucleotidePointLocation(int basePos, int offset, boolean downstreamOfCDS) {
 		super();
@@ -102,7 +101,7 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	@Override
 	public String toString() {
 		return "NucleotidePointLocation [basePos=" + basePos + ", offset=" + offset + ", downstreamOfCDS="
-				+ downstreamOfCDS + "]";
+			+ downstreamOfCDS + "]";
 	}
 
 	@Override

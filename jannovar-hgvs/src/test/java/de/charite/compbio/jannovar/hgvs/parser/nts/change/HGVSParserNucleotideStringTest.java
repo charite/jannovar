@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.hgvs.parser.nts.change;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSLexer;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_stringContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test parsing of nucleotide strings.

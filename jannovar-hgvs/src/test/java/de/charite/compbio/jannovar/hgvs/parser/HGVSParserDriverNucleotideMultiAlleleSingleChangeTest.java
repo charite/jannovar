@@ -1,17 +1,16 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
+import de.charite.compbio.jannovar.hgvs.HGVSVariant;
+import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.HGVSVariant;
-import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
 
 // TODO(holtgrew): Test with onlyPredicted flag ("(...)") once this works
 
 /**
  * Tests for the HGVSParserDriver for parsing nucleotide substitutions.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
@@ -25,7 +24,7 @@ public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 
 	@Test
 	public void testOnlyPredicted() {
-		String hgvsStrings[] = new String[] { "1:r.[(123C>T)];[(123C>T)]" };
+		String hgvsStrings[] = new String[]{"1:r.[(123C>T)];[(123C>T)]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -37,7 +36,7 @@ public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 
 	@Test
 	public void test() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T];[123C>T]" };
+		String hgvsStrings[] = new String[]{"1:r.[123C>T];[123C>T]"};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);

@@ -1,12 +1,11 @@
 package de.charite.compbio.jannovar.hgvs.protein.variant;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Protein variant having multiple alleles.
@@ -15,7 +14,9 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
  */
 public class MultiAlleleProteinVariant extends ProteinVariant {
 
-	/** alleles */
+	/**
+	 * alleles
+	 */
 	protected final ImmutableList<ProteinChangeAllele> alleles;
 
 	/**
@@ -25,13 +26,17 @@ public class MultiAlleleProteinVariant extends ProteinVariant {
 		return new MultiAlleleProteinVariant(proteinID, ImmutableList.copyOf(alleles));
 	}
 
-	/** Construct with the given protein ID and collection of {@link ProteinChangeAllele}s. */
+	/**
+	 * Construct with the given protein ID and collection of {@link ProteinChangeAllele}s.
+	 */
 	public MultiAlleleProteinVariant(String proteinID, Collection<ProteinChangeAllele> alleles) {
 		super(proteinID);
 		this.alleles = ImmutableList.copyOf(alleles);
 	}
 
-	/** @return the alleles */
+	/**
+	 * @return the alleles
+	 */
 	public ImmutableList<ProteinChangeAllele> getAlleles() {
 		return alleles;
 	}

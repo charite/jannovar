@@ -4,24 +4,42 @@ import java.util.ArrayList;
 
 public class UK10KRecordBuilder {
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	private String contig;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	private ArrayList<String> alt;
-	/** Filters, NC: inconsistent genotype submission for at least one sample */
+	/**
+	 * Filters, NC: inconsistent genotype submission for at least one sample
+	 */
 	private ArrayList<String> filter;
 
-	/** Chromosome count, number of chromosomes with coverage in UK10K data */
+	/**
+	 * Chromosome count, number of chromosomes with coverage in UK10K data
+	 */
 	private int chromCount;
-	/** Number of observed allele, including reference */
+	/**
+	 * Number of observed allele, including reference
+	 */
 	private ArrayList<Integer> alleleCounts;
-	/** Allele frequencies, including reference */
+	/**
+	 * Allele frequencies, including reference
+	 */
 	private ArrayList<Double> alleleFrequencies;
 
 	public UK10KRecordBuilder() {
@@ -116,8 +134,8 @@ public class UK10KRecordBuilder {
 	@Override
 	public String toString() {
 		return "UK10KRecordBuilder [contig=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", chromCount=" + chromCount
-				+ ", alleleFrequencies=" + alleleFrequencies + "]";
+			+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", chromCount=" + chromCount
+			+ ", alleleFrequencies=" + alleleFrequencies + "]";
 	}
 
 }

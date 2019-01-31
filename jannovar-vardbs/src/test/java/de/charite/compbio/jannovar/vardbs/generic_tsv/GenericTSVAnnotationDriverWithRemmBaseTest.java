@@ -6,15 +6,16 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions.MultipleMatchBehaviour;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
+import org.junit.Before;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Before;
 
 /**
  * Test base for generic TSV annotation, using the head of ReMM v0.3.1
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenericTSVAnnotationDriverWithRemmBaseTest {
@@ -44,16 +45,16 @@ public class GenericTSVAnnotationDriverWithRemmBaseTest {
 		// Construct options
 		Map<String, GenericTSVValueColumnDescription> descriptions = new HashMap<>();
 		descriptions.put("REMM_SCORE", new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Float, "REMM_SCORE",
-				"ReMM Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
+			"ReMM Score", GenericTSVAccumulationStrategy.CHOOSE_MAX));
 		this.options = new GenericTSVAnnotationOptions(true, false, "", MultipleMatchBehaviour.BEST_ONLY,
-				new File(genericTsvPath), GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0, true,
-				ImmutableList.of("REMM_SCORE"), descriptions);
+			new File(genericTsvPath), GenericTSVAnnotationTarget.VARIANT, true, 1, 2, 2, 0, 0, true,
+			ImmutableList.of("REMM_SCORE"), descriptions);
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(true);
 
 		// Write out file to use in the test
 		String vcfHeader = "##fileformat=VCFv4.0\n"
-				+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
+			+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
 		String testVCFPath = tmpDir + "/test_var_in_dbnsfp_tsv.vcf";
 		PrintWriter writer = new PrintWriter(testVCFPath);
 		writer.write(vcfHeader);

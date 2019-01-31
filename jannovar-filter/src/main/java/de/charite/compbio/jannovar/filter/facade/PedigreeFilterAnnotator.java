@@ -5,17 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
-import htsjdk.variant.variantcontext.Allele;
-import htsjdk.variant.variantcontext.Genotype;
-import htsjdk.variant.variantcontext.GenotypeBuilder;
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.VariantContextBuilder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import htsjdk.variant.variantcontext.*;
+
+import java.util.*;
 
 /**
  * Further pedigree-based filters (beyond mode of inheritance).
@@ -34,10 +26,14 @@ import java.util.Set;
  */
 public class PedigreeFilterAnnotator {
 
-	/** Filter configuration */
+	/**
+	 * Filter configuration
+	 */
 	private final PedigreeFilterOptions options;
 
-	/** Mapping from individual to {@link Pedigree} */
+	/**
+	 * Mapping from individual to {@link Pedigree}
+	 */
 	private final Pedigree pedigree;
 
 	public PedigreeFilterAnnotator(PedigreeFilterOptions options, Pedigree pedigree) {
@@ -82,7 +78,7 @@ public class PedigreeFilterAnnotator {
 
 				// Add flag with support in parents
 				final int maxCountInParent =
-						getMaxCountInParents(vc, gt.getSampleName(), deNovoAllele);
+					getMaxCountInParents(vc, gt.getSampleName(), deNovoAllele);
 				if (maxCountInParent > options.getDeNovoMaxParentAd2()) {
 					sampleFts.add(PedigreeFilterHeaderExtender.FILTER_GT_DE_NOVO_PARENT_AD2);
 				}
@@ -115,7 +111,7 @@ public class PedigreeFilterAnnotator {
 
 			final Allele deNovoAllele = getDeNovoAllele(vc, gt.getSampleName());
 			gtBuilder.attribute(PedigreeFilterHeaderExtender.FORMAT_GT_DE_NOVO,
-					(deNovoAllele != null) ? "Y" : "N");
+				(deNovoAllele != null) ? "Y" : "N");
 
 			if (areParentsRef(vc, gt.getSampleName())) {
 				gtBuilder.attribute(PedigreeFilterHeaderExtender.FORMAT_PARENTS_REF, "Y");
@@ -130,7 +126,7 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Query whether parents show reference allele.
 	 *
-	 * @param vc {@link VariantContext} to check.
+	 * @param vc         {@link VariantContext} to check.
 	 * @param sampleName Name of the sample to check.
 	 * @return {@code true} if the parents are reference homozygous, {@code false} otherwise.
 	 */
@@ -159,13 +155,13 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Return number of filtered genotypes in parents of {@code sampleName}.
 	 *
-	 * @param vc {@link VariantContext} with the variant.
-	 * @param extraFts Additional filters to add for each sample name.
+	 * @param vc         {@link VariantContext} with the variant.
+	 * @param extraFts   Additional filters to add for each sample name.
 	 * @param sampleName The name of the child to consider.
 	 * @return The number of parents with filtered VC.
 	 */
 	private int filteredParentGtCount(VariantContext vc, Map<String, List<String>> extraFts,
-			String sampleName) {
+									  String sampleName) {
 		final Person person = this.pedigree.getNameToMember().get(sampleName).getPerson();
 
 		final int valFather;
@@ -173,7 +169,7 @@ public class PedigreeFilterAnnotator {
 			final String fatherName = person.getFather().getName();
 			final Genotype gtFather = vc.getGenotype(fatherName);
 			valFather = (gtFather != null
-					&& (gtFather.isFiltered() || !extraFts.get(fatherName).isEmpty())) ? 1 : 0;
+				&& (gtFather.isFiltered() || !extraFts.get(fatherName).isEmpty())) ? 1 : 0;
 		} else {
 			valFather = 0;
 		}
@@ -183,7 +179,7 @@ public class PedigreeFilterAnnotator {
 			final String motherName = person.getMother().getName();
 			final Genotype gtMother = vc.getGenotype(motherName);
 			valMother = (gtMother != null
-					&& (gtMother.isFiltered() || !extraFts.get(motherName).isEmpty())) ? 1 : 0;
+				&& (gtMother.isFiltered() || !extraFts.get(motherName).isEmpty())) ? 1 : 0;
 		} else {
 			valMother = 0;
 		}
@@ -204,7 +200,7 @@ public class PedigreeFilterAnnotator {
 
 		int result = 0;
 
-		for (int[] ad : new int[][] {adFather, adMother}) {
+		for (int[] ad : new int[][]{adFather, adMother}) {
 			if (ad != null && ad.length > alleleIdx) {
 				result = Math.max(result, ad[alleleIdx]);
 			}
@@ -214,13 +210,13 @@ public class PedigreeFilterAnnotator {
 	}
 
 	private boolean deNovoGtSharedWithSibling(VariantContext vc, String sampleName,
-			Allele deNovoAllele) {
+											  Allele deNovoAllele) {
 		// This is only called when de novo, thus genotypes of parents exit and fit
 		final Person index = this.pedigree.getNameToMember().get(sampleName).getPerson();
 
 		final PedigreeQueryDecorator pedigreeDecorator = new PedigreeQueryDecorator(pedigree);
 		final ImmutableMap<Person, ImmutableList<Person>> siblings =
-				pedigreeDecorator.buildSiblings();
+			pedigreeDecorator.buildSiblings();
 		for (Person sibling : siblings.get(index)) {
 			final Genotype gtSibling = vc.getGenotype(sibling.getName());
 			if (gtSibling.countAllele(deNovoAllele) != 0) {
@@ -234,7 +230,7 @@ public class PedigreeFilterAnnotator {
 	/**
 	 * Get de novo allele in <code>sampleName</code> or <code>null</code> if there is none
 	 *
-	 * @param vc {@link VariantContext} to query
+	 * @param vc         {@link VariantContext} to query
 	 * @param sampleName Name of the sample
 	 * @return De novo allele
 	 */
@@ -246,7 +242,7 @@ public class PedigreeFilterAnnotator {
 		final Genotype gtFather = vc.getGenotype(person.getFather().getName());
 		final Genotype gtMother = vc.getGenotype(person.getMother().getName());
 		if (gtPerson == null || gtPerson.isNoCall() || gtFather == null || gtFather.isNoCall()
-				|| gtMother == null || gtMother.isNoCall())
+			|| gtMother == null || gtMother.isNoCall())
 			return null; // cannot make any judgement
 		if (!gtPerson.isHet())
 			return null; // impossible or too unlikely

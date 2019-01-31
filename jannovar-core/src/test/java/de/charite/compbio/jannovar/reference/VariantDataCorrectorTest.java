@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.reference;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.reference.VariantDataCorrector;
-
 /**
  * Test for the VariantCorrectorData class.
  *
@@ -12,7 +10,9 @@ import de.charite.compbio.jannovar.reference.VariantDataCorrector;
  */
 public class VariantDataCorrectorTest {
 
-	/** Test with SNV data. */
+	/**
+	 * Test with SNV data.
+	 */
 	@Test
 	public void testSingleNucleotide() {
 		VariantDataCorrector corr = new VariantDataCorrector("C", "T", 100);
@@ -21,7 +21,9 @@ public class VariantDataCorrectorTest {
 		Assert.assertEquals(corr.alt, "T");
 	}
 
-	/** Test with insertion data. */
+	/**
+	 * Test with insertion data.
+	 */
 	@Test
 	public void testInsertion() {
 		VariantDataCorrector corr = new VariantDataCorrector("CGAT", "C", 100);
@@ -30,7 +32,9 @@ public class VariantDataCorrectorTest {
 		Assert.assertEquals(corr.alt, "");
 	}
 
-	/** Test with substitution data. */
+	/**
+	 * Test with substitution data.
+	 */
 	@Test
 	public void testSubstitution() {
 		VariantDataCorrector corr = new VariantDataCorrector("CCGA", "CGAT", 100);
@@ -39,7 +43,9 @@ public class VariantDataCorrectorTest {
 		Assert.assertEquals(corr.alt, "GAT");
 	}
 
-	/** Test with deletion data. */
+	/**
+	 * Test with deletion data.
+	 */
 	@Test
 	public void testDeletion() {
 		VariantDataCorrector corr = new VariantDataCorrector("C", "CGAT", 100);

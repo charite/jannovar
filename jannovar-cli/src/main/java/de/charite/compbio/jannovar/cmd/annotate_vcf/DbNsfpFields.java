@@ -23,237 +23,238 @@ public class DbNsfpFields {
 
 	static {
 		ImmutableMap.Builder<String,
-				GenericTSVValueColumnDescription> builder = ImmutableMap.builder();
+			GenericTSVValueColumnDescription> builder = ImmutableMap.builder();
 
 		builder.put("hg38_chr",
-				new GenericTSVValueColumnDescription(1, VCFHeaderLineType.String, "hg38_chr",
-						"Value of dbNSFP column 'chr'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(1, VCFHeaderLineType.String, "hg38_chr",
+				"Value of dbNSFP column 'chr'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("hg38_pos",
-				new GenericTSVValueColumnDescription(2, VCFHeaderLineType.Integer, "hg38_pos",
-						"Value of dbNSFP column 'pos'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(2, VCFHeaderLineType.Integer, "hg38_pos",
+				"Value of dbNSFP column 'pos'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("ref",
-				new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Character, "ref",
-						"Value of dbNSFP column 'ref'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(3, VCFHeaderLineType.Character, "ref",
+				"Value of dbNSFP column 'ref'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("alt",
-				new GenericTSVValueColumnDescription(4, VCFHeaderLineType.Character, "alt",
-						"Value of dbNSFP column 'alt'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(4, VCFHeaderLineType.Character, "alt",
+				"Value of dbNSFP column 'alt'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("aaref",
-				new GenericTSVValueColumnDescription(5, VCFHeaderLineType.Character, "aaref",
-						"Value of dbNSFP column 'aaref'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(5, VCFHeaderLineType.Character, "aaref",
+				"Value of dbNSFP column 'aaref'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("aaalt",
-				new GenericTSVValueColumnDescription(6, VCFHeaderLineType.Character, "aaalt",
-						"Value of dbNSFP column 'aaalt'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(6, VCFHeaderLineType.Character, "aaalt",
+				"Value of dbNSFP column 'aaalt'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("rs_dbSNP147",
-				new GenericTSVValueColumnDescription(7, VCFHeaderLineType.String, "rs_dbSNP147",
-						"Value of dbNSFP column 'rs_dbSNP147'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(7, VCFHeaderLineType.String, "rs_dbSNP147",
+				"Value of dbNSFP column 'rs_dbSNP147'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("hg19_chr",
-				new GenericTSVValueColumnDescription(8, VCFHeaderLineType.String, "hg19_chr",
-						"Value of dbNSFP column 'chr'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(8, VCFHeaderLineType.String, "hg19_chr",
+				"Value of dbNSFP column 'chr'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("hg19_pos",
-				new GenericTSVValueColumnDescription(9, VCFHeaderLineType.Integer, "hg19_pos",
-						"Value of dbNSFP column 'hg19_pos'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(9, VCFHeaderLineType.Integer, "hg19_pos",
+				"Value of dbNSFP column 'hg19_pos'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("hg18_chr",
-				new GenericTSVValueColumnDescription(10, VCFHeaderLineType.String, "hg18_chr",
-						"Value of dbNSFP column 'hg18_chr'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(10, VCFHeaderLineType.String, "hg18_chr",
+				"Value of dbNSFP column 'hg18_chr'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("hg18_pos",
-				new GenericTSVValueColumnDescription(11, VCFHeaderLineType.Integer, "hg18_pos",
-						"Value of dbNSFP column 'hg18_pos'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(11, VCFHeaderLineType.Integer, "hg18_pos",
+				"Value of dbNSFP column 'hg18_pos'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("genename",
-				new GenericTSVValueColumnDescription(12, VCFHeaderLineType.String, "genename",
-						"Value of dbNSFP column 'genename'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(12, VCFHeaderLineType.String, "genename",
+				"Value of dbNSFP column 'genename'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("cds_strand",
-				new GenericTSVValueColumnDescription(13, VCFHeaderLineType.Character, "cds_strand",
-						"Value of dbNSFP column 'cds_strand'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(13, VCFHeaderLineType.Character, "cds_strand",
+				"Value of dbNSFP column 'cds_strand'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("refcodon",
-				new GenericTSVValueColumnDescription(14, VCFHeaderLineType.String, "refcodon",
-						"Value of dbNSFP column 'refcodon'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(14, VCFHeaderLineType.String, "refcodon",
+				"Value of dbNSFP column 'refcodon'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("codonpos",
-				new GenericTSVValueColumnDescription(15, VCFHeaderLineType.Integer, "codonpos",
-						"Value of dbNSFP column 'codonpos'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(15, VCFHeaderLineType.Integer, "codonpos",
+				"Value of dbNSFP column 'codonpos'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("codon_degeneracy",
-				new GenericTSVValueColumnDescription(16, VCFHeaderLineType.Integer,
-						"codon_degeneracy", "Value of dbNSFP column 'codon_degeneracy'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(16, VCFHeaderLineType.Integer,
+				"codon_degeneracy", "Value of dbNSFP column 'codon_degeneracy'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("Ancestral_allele",
-				new GenericTSVValueColumnDescription(17, VCFHeaderLineType.String,
-						"Ancestral_allele", "Value of dbNSFP column 'Ancestral_allele'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(17, VCFHeaderLineType.String,
+				"Ancestral_allele", "Value of dbNSFP column 'Ancestral_allele'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("AltaiNeandertal",
-				new GenericTSVValueColumnDescription(18, VCFHeaderLineType.String,
-						"AltaiNeandertal", "Value of dbNSFP column 'AltaiNeandertal'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(18, VCFHeaderLineType.String,
+				"AltaiNeandertal", "Value of dbNSFP column 'AltaiNeandertal'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("Denisova",
-				new GenericTSVValueColumnDescription(19, VCFHeaderLineType.String, "Denisova",
-						"Value of dbNSFP column 'Denisova'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(19, VCFHeaderLineType.String, "Denisova",
+				"Value of dbNSFP column 'Denisova'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("Ensembl_geneid",
-				new GenericTSVValueColumnDescription(20, VCFHeaderLineType.String, "Ensembl_geneid",
-						"Value of dbNSFP column 'Ensembl_geneid'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(20, VCFHeaderLineType.String, "Ensembl_geneid",
+				"Value of dbNSFP column 'Ensembl_geneid'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("Ensembl_transcriptid",
-				new GenericTSVValueColumnDescription(21, VCFHeaderLineType.String,
-						"Ensembl_transcriptid", "Value of dbNSFP column 'Ensembl_transcriptid'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(21, VCFHeaderLineType.String,
+				"Ensembl_transcriptid", "Value of dbNSFP column 'Ensembl_transcriptid'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("Ensembl_proteinid",
-				new GenericTSVValueColumnDescription(22, VCFHeaderLineType.String,
-						"Ensembl_proteinid", "Value of dbNSFP column 'Ensembl_proteinid'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(22, VCFHeaderLineType.String,
+				"Ensembl_proteinid", "Value of dbNSFP column 'Ensembl_proteinid'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 		builder.put("aapos",
-				new GenericTSVValueColumnDescription(23, VCFHeaderLineType.Integer, "aapos",
-						"Value of dbNSFP column 'aapos'",
-						GenericTSVAccumulationStrategy.CHOOSE_FIRST));
+			new GenericTSVValueColumnDescription(23, VCFHeaderLineType.Integer, "aapos",
+				"Value of dbNSFP column 'aapos'",
+				GenericTSVAccumulationStrategy.CHOOSE_FIRST));
 
 		builder.put("SIFT_score",
-				new GenericTSVValueColumnDescription(24, VCFHeaderLineType.Float, "SIFT_score",
-						"Value of dbNSFP column 'SIFT_score', If a score is smaller than 0.05 the "
-								+ "corresponding NS is predicted as \"D(amaging)\" therwise it is "
-								+ "predicted as \"T(olerated)\".",
-						GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
+			new GenericTSVValueColumnDescription(24, VCFHeaderLineType.Float, "SIFT_score",
+				"Value of dbNSFP column 'SIFT_score', If a score is smaller than 0.05 the "
+					+ "corresponding NS is predicted as \"D(amaging)\" therwise it is "
+					+ "predicted as \"T(olerated)\".",
+				GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
 		builder.put("SIFT_converted_rankscore",
-				new GenericTSVValueColumnDescription(25, VCFHeaderLineType.Float,
-						"SIFT_converted_rankscore",
-						"Value of dbNSFP column 'SIFT_converted_rankscore', SIFTnew=1-SIFTori. "
-								+ "The larger the more damaging.",
-						GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
+			new GenericTSVValueColumnDescription(25, VCFHeaderLineType.Float,
+				"SIFT_converted_rankscore",
+				"Value of dbNSFP column 'SIFT_converted_rankscore', SIFTnew=1-SIFTori. "
+					+ "The larger the more damaging.",
+				GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
 		builder.put("SIFT_pred",
-				new GenericTSVValueColumnDescription(26, VCFHeaderLineType.Character, "SIFT_pred",
-						"Value of dbNSFP column 'SIFT_pred' (Damaging/Tolerated). If SIFTori is smaller "
-								+ "than 0.05 (SIFTnew>0.95) the corresponding NS is predicted as "
-								+ "\"D(amaging)\"; otherwise it is predicted as \"T(olerated)\".",
-						GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
+			new GenericTSVValueColumnDescription(26, VCFHeaderLineType.Character, "SIFT_pred",
+				"Value of dbNSFP column 'SIFT_pred' (Damaging/Tolerated). If SIFTori is smaller "
+					+ "than 0.05 (SIFTnew>0.95) the corresponding NS is predicted as "
+					+ "\"D(amaging)\"; otherwise it is predicted as \"T(olerated)\".",
+				GenericTSVAccumulationStrategy.CHOOSE_MIN, "SIFT_score"));
 
 		builder.put("Uniprot_acc_Polyphen2",
-				new GenericTSVValueColumnDescription(27, VCFHeaderLineType.String,
-						"Uniprot_acc_Polyphen2", "Value of dbNSFP column 'Uniprot_acc_Polyphen2'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(27, VCFHeaderLineType.String,
+				"Uniprot_acc_Polyphen2", "Value of dbNSFP column 'Uniprot_acc_Polyphen2'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Uniprot_id_Polyphen2",
-				new GenericTSVValueColumnDescription(28, VCFHeaderLineType.String,
-						"Uniprot_id_Polyphen2", "Value of dbNSFP column 'Uniprot_id_Polyphen2'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(28, VCFHeaderLineType.String,
+				"Uniprot_id_Polyphen2", "Value of dbNSFP column 'Uniprot_id_Polyphen2'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Uniprot_aapos_Polyphen2",
-				new GenericTSVValueColumnDescription(29, VCFHeaderLineType.Integer,
-						"Uniprot_aapos_Polyphen2",
-						"Value of dbNSFP column 'Uniprot_aapos_Polyphen2'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(29, VCFHeaderLineType.Integer,
+				"Uniprot_aapos_Polyphen2",
+				"Value of dbNSFP column 'Uniprot_aapos_Polyphen2'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HDIV_score",
-				new GenericTSVValueColumnDescription(30, VCFHeaderLineType.Integer,
-						"Polyphen2_HDIV_score", "Value of dbNSFP column 'Polyphen2_HDIV_score'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(30, VCFHeaderLineType.Integer,
+				"Polyphen2_HDIV_score", "Value of dbNSFP column 'Polyphen2_HDIV_score'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HDIV_rankscore",
-				new GenericTSVValueColumnDescription(31, VCFHeaderLineType.Integer,
-						"Polyphen2_HDIV_rankscore",
-						"Value of dbNSFP column 'Polyphen2_HDIV_rankscore'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(31, VCFHeaderLineType.Integer,
+				"Polyphen2_HDIV_rankscore",
+				"Value of dbNSFP column 'Polyphen2_HDIV_rankscore'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HDIV_pred",
-				new GenericTSVValueColumnDescription(32, VCFHeaderLineType.String,
-						"Polyphen2_HDIV_pred", "Value of dbNSFP column 'Polyphen2_HDIV_pred'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_pred"));
+			new GenericTSVValueColumnDescription(32, VCFHeaderLineType.String,
+				"Polyphen2_HDIV_pred", "Value of dbNSFP column 'Polyphen2_HDIV_pred'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_pred"));
 		builder.put("Polyphen2_HVAR_score",
-				new GenericTSVValueColumnDescription(33, VCFHeaderLineType.Integer,
-						"Polyphen2_HVAR_score", "Value of dbNSFP column 'Polyphen2_HVAR_score'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(33, VCFHeaderLineType.Integer,
+				"Polyphen2_HVAR_score", "Value of dbNSFP column 'Polyphen2_HVAR_score'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HVAR_rankscore",
-				new GenericTSVValueColumnDescription(34, VCFHeaderLineType.Integer,
-						"Polyphen2_HVAR_rankscore",
-						"Value of dbNSFP column 'Polyphen2_HVAR_rankscore'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(34, VCFHeaderLineType.Integer,
+				"Polyphen2_HVAR_rankscore",
+				"Value of dbNSFP column 'Polyphen2_HVAR_rankscore'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 		builder.put("Polyphen2_HVAR_pred",
-				new GenericTSVValueColumnDescription(35, VCFHeaderLineType.Integer,
-						"Polyphen2_HVAR_pred", "Value of dbNSFP column 'Polyphen2_HVAR_pred'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
+			new GenericTSVValueColumnDescription(35, VCFHeaderLineType.Integer,
+				"Polyphen2_HVAR_pred", "Value of dbNSFP column 'Polyphen2_HVAR_pred'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "Polyphen2_HDIV_score"));
 
 		builder.put("LRT_score",
-				new GenericTSVValueColumnDescription(36, VCFHeaderLineType.Integer, "LRT_score",
-						"Value of dbNSFP column 'LRT_score', first in case of multiple",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
+			new GenericTSVValueColumnDescription(36, VCFHeaderLineType.Integer, "LRT_score",
+				"Value of dbNSFP column 'LRT_score', first in case of multiple",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
 		builder.put("LRT_converted_rankscore",
-				new GenericTSVValueColumnDescription(37, VCFHeaderLineType.Integer,
-						"LRT_converted_rankscore",
-						"Value of dbNSFP column 'LRT_converted_rankscore', first in case of multiple",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
+			new GenericTSVValueColumnDescription(37, VCFHeaderLineType.Integer,
+				"LRT_converted_rankscore",
+				"Value of dbNSFP column 'LRT_converted_rankscore', first in case of multiple",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
 		builder.put("LRT_pred",
-				new GenericTSVValueColumnDescription(38, VCFHeaderLineType.Integer, "LRT_pred",
-						"Value of dbNSFP column 'LRT_pred', first in case of multiple",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
+			new GenericTSVValueColumnDescription(38, VCFHeaderLineType.Integer, "LRT_pred",
+				"Value of dbNSFP column 'LRT_pred', first in case of multiple",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
 		builder.put("LRT_Omega",
-				new GenericTSVValueColumnDescription(39, VCFHeaderLineType.Integer, "LRT_Omega",
-						"Value of dbNSFP column 'LRT_Omega', first in case of multiple",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
+			new GenericTSVValueColumnDescription(39, VCFHeaderLineType.Integer, "LRT_Omega",
+				"Value of dbNSFP column 'LRT_Omega', first in case of multiple",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "LRT_score"));
 
 		builder.put("MutationTaster_score",
-				new GenericTSVValueColumnDescription(40, VCFHeaderLineType.Float,
-						"MutationTaster_score",
-						"Value of dbNSFP column 'MutationTaster_score', lower is more pathogenic",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
+			new GenericTSVValueColumnDescription(40, VCFHeaderLineType.Float,
+				"MutationTaster_score",
+				"Value of dbNSFP column 'MutationTaster_score', lower is more pathogenic",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
 		builder.put("MutationTaster_converted_rankscore",
-				new GenericTSVValueColumnDescription(41, VCFHeaderLineType.Float,
-						"MutationTaster_converted_rankscore",
-						"Value of dbNSFP column 'MutationTaster_converted_rankscore', lower is more pathogenic",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
+			new GenericTSVValueColumnDescription(41, VCFHeaderLineType.Float,
+				"MutationTaster_converted_rankscore",
+				"Value of dbNSFP column 'MutationTaster_converted_rankscore', lower is more pathogenic",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
 		builder.put("MutationTaster_pred",
-				new GenericTSVValueColumnDescription(42, VCFHeaderLineType.Character,
-						"MutationTaster_pred", "Value of dbNSFP column 'MutationTaster_pred'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
+			new GenericTSVValueColumnDescription(42, VCFHeaderLineType.Character,
+				"MutationTaster_pred", "Value of dbNSFP column 'MutationTaster_pred'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
 		builder.put("MutationTaster_model",
-				new GenericTSVValueColumnDescription(43, VCFHeaderLineType.String,
-						"MutationTaster_model", "Value of dbNSFP column 'MutationTaster_model'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
+			new GenericTSVValueColumnDescription(43, VCFHeaderLineType.String,
+				"MutationTaster_model", "Value of dbNSFP column 'MutationTaster_model'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
 		builder.put("MutationTaster_AAE",
-				new GenericTSVValueColumnDescription(44, VCFHeaderLineType.String,
-						"MutationTaster_AAE", "Value of dbNSFP column 'MutationTaster_AAE'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
+			new GenericTSVValueColumnDescription(44, VCFHeaderLineType.String,
+				"MutationTaster_AAE", "Value of dbNSFP column 'MutationTaster_AAE'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationTaster_score"));
 
 		builder.put("MutationAssessor_UniprotID",
-				new GenericTSVValueColumnDescription(45, VCFHeaderLineType.String,
-						"MutationAssessor_UniprotID",
-						"Value of dbNSFP column 'MutationAssessor_UniprotID'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
+			new GenericTSVValueColumnDescription(45, VCFHeaderLineType.String,
+				"MutationAssessor_UniprotID",
+				"Value of dbNSFP column 'MutationAssessor_UniprotID'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
 		builder.put("MutationAssessor_variant",
-				new GenericTSVValueColumnDescription(46, VCFHeaderLineType.String,
-						"MutationAssessor_variant",
-						"Value of dbNSFP column 'MutationAssessor_variant'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
+			new GenericTSVValueColumnDescription(46, VCFHeaderLineType.String,
+				"MutationAssessor_variant",
+				"Value of dbNSFP column 'MutationAssessor_variant'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
 		builder.put("MutationAssessor_score",
-				new GenericTSVValueColumnDescription(47, VCFHeaderLineType.Float,
-						"MutationAssessor_score", "Value of dbNSFP column 'MutationAssessor_score'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
+			new GenericTSVValueColumnDescription(47, VCFHeaderLineType.Float,
+				"MutationAssessor_score", "Value of dbNSFP column 'MutationAssessor_score'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
 		builder.put("MutationAssessor_score_rankscore",
-				new GenericTSVValueColumnDescription(48, VCFHeaderLineType.Float,
-						"MutationAssessor_score_rankscore",
-						"Value of dbNSFP column 'MutationAssessor_score_rankscore'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
+			new GenericTSVValueColumnDescription(48, VCFHeaderLineType.Float,
+				"MutationAssessor_score_rankscore",
+				"Value of dbNSFP column 'MutationAssessor_score_rankscore'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
 		builder.put("MutationAssessor_pred",
-				new GenericTSVValueColumnDescription(49, VCFHeaderLineType.String,
-						"MutationAssessor_pred", "Value of dbNSFP column 'MutationAssessor_pred'",
-						GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
+			new GenericTSVValueColumnDescription(49, VCFHeaderLineType.String,
+				"MutationAssessor_pred", "Value of dbNSFP column 'MutationAssessor_pred'",
+				GenericTSVAccumulationStrategy.CHOOSE_MAX, "MutationAssessor_score"));
 
 		// TODO: add remaining ~150 columns
 
 		DBNSFP_FIELDS = builder.build();
 	}
+
 	public static String hg38_chr = "chr";
 	public static String hg38_pos = "pos(1-based)";
 	public static String ref = "ref";

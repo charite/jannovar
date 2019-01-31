@@ -9,7 +9,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
  * Helper class for extending {@link VCFHeader}s for UK10K annotations.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class UK10KVCFHeaderExtender extends VCFHeaderExtender {
@@ -32,15 +32,15 @@ public class UK10KVCFHeaderExtender extends VCFHeaderExtender {
 
 	public void addHeadersInfixes(VCFHeader header, String prefix, String infix, String note) {
 		VCFInfoHeaderLine anLine = new VCFInfoHeaderLine(prefix + infix + "AN", 1, VCFHeaderLineType.Integer,
-				"Number of chromosomes with coverage in UK10K genomes" + note);
+			"Number of chromosomes with coverage in UK10K genomes" + note);
 		header.addMetaDataLine(anLine);
 
 		VCFInfoHeaderLine acLine = new VCFInfoHeaderLine(prefix + infix + "AC", VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Number of chromosomes showing the given allele in UK10K genomes" + note);
+			VCFHeaderLineType.Integer, "Number of chromosomes showing the given allele in UK10K genomes" + note);
 		header.addMetaDataLine(acLine);
 
 		VCFInfoHeaderLine afLine = new VCFInfoHeaderLine(prefix + infix + "AF", VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer, "Allele frequency in UK10K genomes" + note);
+			VCFHeaderLineType.Integer, "Allele frequency in UK10K genomes" + note);
 		header.addMetaDataLine(afLine);
 	}
 

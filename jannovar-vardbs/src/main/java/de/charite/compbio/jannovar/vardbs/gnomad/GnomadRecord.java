@@ -1,63 +1,87 @@
 package de.charite.compbio.jannovar.vardbs.gnomad;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedMap;
-
 // TODO: somehow share code bewteen exac and gnomad?
 
 /**
  * Represents on entry in the gnomAD VCF database file
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GnomadRecord {
 
 	// Fields up to the INFO column
 
-	/** Name of the chromosome */
+	/**
+	 * Name of the chromosome
+	 */
 	final private String chrom;
-	/** Position of the variant, 0-based */
+	/**
+	 * Position of the variant, 0-based
+	 */
 	final private int pos;
-	/** ID of the variant */
+	/**
+	 * ID of the variant
+	 */
 	final private String id;
-	/** Reference sequence */
+	/**
+	 * Reference sequence
+	 */
 	final private String ref;
-	/** Alternative alleles in cluster */
+	/**
+	 * Alternative alleles in cluster
+	 */
 	final private ImmutableList<String> alt;
 	/**
 	 * Filters, RF: failed random forest, AC0: Allele count is zero, InbreedingCoeff: InbreedingCoeff < threshold, LCR:
 	 * in a low-complexity region, SEGDUP: in a segmental duplication region
 	 */
 	final private ImmutableList<String> filter;
-	/** POPMAX for each alternative allele */
+	/**
+	 * POPMAX for each alternative allele
+	 */
 	final private ImmutableList<String> popmax;
 
 	// Entries of the INFO column
 
-	/** Observed alternative allele counts for each population */
+	/**
+	 * Observed alternative allele counts for each population
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Integer>> alleleCounts;
-	/** Observed alternative allele het counts for each population */
+	/**
+	 * Observed alternative allele het counts for each population
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Integer>> alleleHetCounts;
-	/** Observed alternative allele hom counts for each population */
+	/**
+	 * Observed alternative allele hom counts for each population
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Integer>> alleleHomCounts;
-	/** Observed alternative allele hemi counts for each population */
+	/**
+	 * Observed alternative allele hemi counts for each population
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Integer>> alleleHemiCounts;
-	/** Chromsome counts for each population, for all but POPMAX, one-element list, otherwise multiple */
+	/**
+	 * Chromsome counts for each population, for all but POPMAX, one-element list, otherwise multiple
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Integer>> chromCounts;
-	/** Observed alternative allele frequencies for each population */
+	/**
+	 * Observed alternative allele frequencies for each population
+	 */
 	final private ImmutableSortedMap<GnomadPopulation, ImmutableList<Double>> alleleFrequencies;
 
 	public GnomadRecord(String chrom, int pos, String id, String ref, List<String> alt, Collection<String> filter,
-			List<String> popmax, Map<GnomadPopulation, List<Integer>> alleleCounts,
-			Map<GnomadPopulation, List<Integer>> alleleHetCounts, Map<GnomadPopulation, List<Integer>> alleleHomCounts,
-			Map<GnomadPopulation, List<Integer>> alleleHemiCounts,
-			Map<GnomadPopulation, ImmutableList<Integer>> chromCounts) {
+						List<String> popmax, Map<GnomadPopulation, List<Integer>> alleleCounts,
+						Map<GnomadPopulation, List<Integer>> alleleHetCounts, Map<GnomadPopulation, List<Integer>> alleleHomCounts,
+						Map<GnomadPopulation, List<Integer>> alleleHemiCounts,
+						Map<GnomadPopulation, ImmutableList<Integer>> chromCounts) {
 		this.chrom = chrom;
 		this.pos = pos;
 		this.id = id;
@@ -67,22 +91,22 @@ public class GnomadRecord {
 		this.popmax = ImmutableList.copyOf(popmax);
 
 		ImmutableSortedMap.Builder<GnomadPopulation, ImmutableList<Integer>> acBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<GnomadPopulation, List<Integer>> e : alleleCounts.entrySet())
 			acBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleCounts = acBuilder.build();
 		ImmutableSortedMap.Builder<GnomadPopulation, ImmutableList<Integer>> acHetBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<GnomadPopulation, List<Integer>> e : alleleHetCounts.entrySet())
 			acHetBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHetCounts = acHetBuilder.build();
 		ImmutableSortedMap.Builder<GnomadPopulation, ImmutableList<Integer>> acHomBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<GnomadPopulation, List<Integer>> e : alleleHomCounts.entrySet())
 			acHomBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHomCounts = acHomBuilder.build();
 		ImmutableSortedMap.Builder<GnomadPopulation, ImmutableList<Integer>> acHemiBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<GnomadPopulation, List<Integer>> e : alleleHemiCounts.entrySet())
 			acHemiBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleHemiCounts = acHemiBuilder.build();
@@ -90,7 +114,7 @@ public class GnomadRecord {
 		this.chromCounts = ImmutableSortedMap.copyOf(chromCounts.entrySet());
 
 		ImmutableSortedMap.Builder<GnomadPopulation, ImmutableList<Double>> afBuilder = ImmutableSortedMap
-				.naturalOrder();
+			.naturalOrder();
 		for (Entry<GnomadPopulation, ImmutableList<Integer>> e : this.alleleCounts.entrySet()) {
 			final GnomadPopulation pop = e.getKey();
 			final ImmutableList<Integer> counts = chromCounts.get(pop);
@@ -166,22 +190,30 @@ public class GnomadRecord {
 		return alleleFrequencies;
 	}
 
-	/** @return Allele count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleCounts(GnomadPopulation pop) {
 		return alleleCounts.get(pop);
 	}
 
-	/** @return Allele het count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele het count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHetCounts(GnomadPopulation pop) {
 		return alleleHetCounts.get(pop);
 	}
 
-	/** @return Allele hom count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele hom count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHomCounts(GnomadPopulation pop) {
 		return alleleHomCounts.get(pop);
 	}
 
-	/** @return Allele hemi count for the given population <code>pop</code>, for each allele, including reference one */
+	/**
+	 * @return Allele hemi count for the given population <code>pop</code>, for each allele, including reference one
+	 */
 	public ImmutableList<Integer> getAlleleHemiCounts(GnomadPopulation pop) {
 		return alleleHemiCounts.get(pop);
 	}
@@ -193,21 +225,23 @@ public class GnomadRecord {
 		return chromCounts.get(pop);
 	}
 
-	/** @return Alternative allele frequency for the given population, for each allele, including the reference one */
+	/**
+	 * @return Alternative allele frequency for the given population, for each allele, including the reference one
+	 */
 	public ImmutableList<Double> getAlleleFrequencies(GnomadPopulation pop) {
 		return alleleFrequencies.get(pop);
 	}
 
 	/**
 	 * @return {@link GnomadPopulation} with highest allele frequency for the given allele index (0 is first alternative
-	 *         allele)
+	 * allele)
 	 */
 	public GnomadPopulation popWithHighestAlleleFreq(int alleleNo) {
 		double bestFreq = -1;
 		GnomadPopulation bestPop = GnomadPopulation.ALL;
 		for (GnomadPopulation pop : GnomadPopulation.values()) {
 			if (alleleFrequencies.get(pop) != null && alleleNo < alleleFrequencies.get(pop).size()
-					&& alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
+				&& alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
 				bestFreq = alleleFrequencies.get(pop).get(alleleNo);
 				bestPop = pop;
 			}
@@ -215,26 +249,30 @@ public class GnomadRecord {
 		return bestPop;
 	}
 
-	/** @return Highest frequency of the given allele, 0 is first alternative allele */
+	/**
+	 * @return Highest frequency of the given allele, 0 is first alternative allele
+	 */
 	public double highestAlleleFreq(int alleleNo) {
 		return getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo);
 	}
 
-	/** @return Highest frequency of any allele in any population */
+	/**
+	 * @return Highest frequency of any allele in any population
+	 */
 	public double highestAlleleFreqOverall() {
 		double maxAlleleFreq = 0;
 		for (int alleleNo = 0; alleleNo < alt.size(); ++alleleNo)
 			maxAlleleFreq = Math.max(maxAlleleFreq,
-					getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo));
+				getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo));
 		return maxAlleleFreq;
 	}
 
 	@Override
 	public String toString() {
 		return "GnomadRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
-				+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
-				+ ", chromCounts=" + chromCounts + ", alleleFrequencies=" + alleleFrequencies + "]";
+			+ ", filter=" + filter + ", popmax=" + popmax + ", alleleCounts=" + alleleCounts + ", alleleHetCounts="
+			+ alleleHetCounts + ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts
+			+ ", chromCounts=" + chromCounts + ", alleleFrequencies=" + alleleFrequencies + "]";
 	}
 
 	@Override

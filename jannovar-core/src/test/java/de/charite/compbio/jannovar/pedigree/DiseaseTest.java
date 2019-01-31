@@ -1,11 +1,8 @@
 package de.charite.compbio.jannovar.pedigree;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
+import static org.junit.Assert.assertEquals;
 
 public class DiseaseTest {
 

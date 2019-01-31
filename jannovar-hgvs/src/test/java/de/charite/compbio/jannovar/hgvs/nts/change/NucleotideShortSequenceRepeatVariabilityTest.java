@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 
 public class NucleotideShortSequenceRepeatVariabilityTest {
 

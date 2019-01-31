@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.reference;
 
 /**
  * Container for constants of transcript support levels.
- *
+ * <p>
  * In the case that the transcript support level is not available, <code>6</code> is used as a substitute for
  * transcripts that are marked as primary in UCSC, <code>7</code> for the longest transcript (in absence of both level
  * and UCSC primary marking), and <code>8</code> for transcripts that fall neither into pseudo-level <code>6</code> and

@@ -1,19 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import de.charite.compbio.jannovar.pedigree.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
+import java.util.List;
 
 public class MendelianCompatibilityCheckerXRSmallMaleTest extends MendelianCompatibilityCheckerTestBase {
 
@@ -29,7 +23,7 @@ public class MendelianCompatibilityCheckerXRSmallMaleTest extends MendelianCompa
 		individuals.add(new PedPerson("ped", "II.1", "I.1", "I.2", Sex.MALE, Disease.AFFECTED)); // son
 		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.UNAFFECTED)); // daughter
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
-				individuals.build());
+			individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2");
@@ -345,7 +339,7 @@ public class MendelianCompatibilityCheckerXRSmallMaleTest extends MendelianCompa
 		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
 		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
-	
+
 	// to catch a bug in jannovar 0.23 (issue #363)
 	@Test
 	public void testCaseNegativesOneVariant26() throws IncompatiblePedigreeException {

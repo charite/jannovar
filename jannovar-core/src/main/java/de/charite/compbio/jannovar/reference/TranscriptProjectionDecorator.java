@@ -10,19 +10,24 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class TranscriptProjectionDecorator {
 
-	/** constant for invalid exon index */
+	/**
+	 * constant for invalid exon index
+	 */
 	public static final int INVALID_EXON_ID = -1;
-	/** constant for invalid intron index */
+	/**
+	 * constant for invalid intron index
+	 */
 	public static final int INVALID_INTRON_ID = -1;
 
-	/** the transcript information to perform the projection upon. */
+	/**
+	 * the transcript information to perform the projection upon.
+	 */
 	private final TranscriptModel transcript;
 
 	/**
 	 * Initialize the object with the given {@link TranscriptModel}
 	 *
-	 * @param transcript
-	 *            the {@link TranscriptModel} to decorate
+	 * @param transcript the {@link TranscriptModel} to decorate
 	 */
 	public TranscriptProjectionDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
@@ -63,16 +68,14 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Coordinate conversion from genome position to transcript position.
 	 *
-	 * @param pos
-	 *            genome position to convert
+	 * @param pos genome position to convert
 	 * @return position on transcript corresponding to <code>pos</code>
-	 * @throws ProjectionException
-	 *             if the genome position was not valid
+	 * @throws ProjectionException if the genome position was not valid
 	 */
 	public TranscriptPosition genomeToTranscriptPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.getTXRegion().contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the transcript region "
-					+ transcript.getTXRegion());
+				+ transcript.getTXRegion());
 		pos = pos.withStrand(transcript.getStrand());
 
 		// Look through all exons, find containing one, and compute the position.
@@ -94,14 +97,12 @@ public final class TranscriptProjectionDecorator {
 
 	/**
 	 * Coordinate conversion from genome position to CDS position.
-	 *
+	 * <p>
 	 * This is computed from the transcript position and the offset of the CDS start position.
 	 *
-	 * @param pos
-	 *            genome position to convert
+	 * @param pos genome position to convert
 	 * @return position on transcript corresponding to <code>pos</code>
-	 * @throws ProjectionException
-	 *             if the genome position was not valid
+	 * @throws ProjectionException if the genome position was not valid
 	 */
 	public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.getCDSRegion().contains(pos)) // guard against incorrect position
@@ -118,8 +119,7 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Coordinate conversion from CDS to transcript position.
 	 *
-	 * @param pos
-	 *            the position in the CDS transcript
+	 * @param pos the position in the CDS transcript
 	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
 	 */
 	public TranscriptPosition cdsToTranscriptPos(CDSPosition pos) {
@@ -141,12 +141,9 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Coordinate conversion from CDS to genome position.
 	 *
-	 * @param pos
-	 *            the position in the CDS transcript
+	 * @param pos the position in the CDS transcript
 	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
-	 *
-	 * @throws ProjectionException
-	 *             on problems with the coordinate transformation (outside of the transcript)
+	 * @throws ProjectionException on problems with the coordinate transformation (outside of the transcript)
 	 */
 	public GenomePosition cdsToGenomePos(CDSPosition pos) throws ProjectionException {
 		return transcriptToGenomePos(cdsToTranscriptPos(pos));
@@ -155,12 +152,9 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Coordinate conversion from transcript to genome position.
 	 *
-	 * @param pos
-	 *            the position on the transcript
+	 * @param pos the position on the transcript
 	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
-	 *
-	 * @throws ProjectionException
-	 *             on problems with the coordinate transformation (outside of the transcript)
+	 * @throws ProjectionException on problems with the coordinate transformation (outside of the transcript)
 	 */
 	public GenomePosition transcriptToGenomePos(TranscriptPosition pos) throws ProjectionException {
 		final int targetPos = pos.getPos(); // 0-based target pos
@@ -186,9 +180,8 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Returns the index of the (0-based) exon in the reference (forward) order.
 	 *
-	 * @param exonID
-	 *            the 0-based exonID in transcript order (reverse order in the case of transcripts on the reverse
-	 *            strand)
+	 * @param exonID the 0-based exonID in transcript order (reverse order in the case of transcripts on the reverse
+	 *               strand)
 	 * @return the exon ID in reference (forward order)
 	 */
 	public int exonIDInReferenceOrder(int exonID) {
@@ -201,10 +194,9 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Returns (0-based) index of the intron (in the order determined by the transcript's strand).
 	 *
-	 * @param pos
-	 *            the {@link GenomePosition} to use for querying
-	 * @return (0-based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt> is not in exonic
-	 *         region but in transcript interval
+	 * @param pos the {@link GenomePosition} to use for querying
+	 * @return (0 - based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt> is not in exonic
+	 * region but in transcript interval
 	 */
 	public int locateIntron(GenomePosition pos) {
 		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
@@ -232,10 +224,9 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Returns (0-based) index of the exon (in the order determined by the transcript's strand).
 	 *
-	 * @param pos
-	 *            the {@link GenomePosition} to use for querying
-	 * @return (0-based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
-	 *         but in transcript interval
+	 * @param pos the {@link GenomePosition} to use for querying
+	 * @return (0 - based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
+	 * but in transcript interval
 	 */
 	public int locateExon(GenomePosition pos) {
 		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
@@ -262,12 +253,10 @@ public final class TranscriptProjectionDecorator {
 	/**
 	 * Returns (0-based) index of the exon (in the order determined by the transcript's strand).
 	 *
-	 * @param pos
-	 *            the {@link TranscriptPosition} to use for querying
-	 * @return (0-based) index of the selected exon
-	 * @throws ProjectionException
-	 *             if there was a problem with pos (somehow falls out of transcript region, can only happen if negative
-	 *             or right of transcript end)
+	 * @param pos the {@link TranscriptPosition} to use for querying
+	 * @return (0 - based) index of the selected exon
+	 * @throws ProjectionException if there was a problem with pos (somehow falls out of transcript region, can only happen if negative
+	 *                             or right of transcript end)
 	 */
 	public int locateExon(TranscriptPosition pos) throws ProjectionException {
 		// handle the case of transcript position being negative
@@ -291,12 +280,11 @@ public final class TranscriptProjectionDecorator {
 
 	/**
 	 * Translate {@link GenomePosition} to {@link CDSPosition} for {@link #transcript}.
-	 *
+	 * <p>
 	 * Positions upstream of CDS region are projected to the CDS begin position, downstream of CDS are projected to the
 	 * CDS end, positions in CDS introns are projected to first position of the next CDS exon.
 	 *
-	 * @param pos
-	 *            the position to translate
+	 * @param pos the position to translate
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public CDSPosition projectGenomeToCDSPosition(GenomePosition pos) {
@@ -325,12 +313,11 @@ public final class TranscriptProjectionDecorator {
 
 	/**
 	 * Translate {@link GenomeInterval} to {@link CDSInterval} for {@link #transcript}.
-	 *
+	 * <p>
 	 * Positions upstream of CDS region are projected to the CDS begin position, downstream of CDS are projected to the
 	 * CDS end.
 	 *
-	 * @param interval
-	 *            the {@link GenomeInterval} to project
+	 * @param interval the {@link GenomeInterval} to project
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public CDSInterval projectGenomeToCDSInterval(GenomeInterval interval) {
@@ -341,12 +328,11 @@ public final class TranscriptProjectionDecorator {
 
 	/**
 	 * Translate {@link GenomePosition} to {@link TranscriptPosition} for {@link #transcript}.
-	 *
+	 * <p>
 	 * Positions upstream of TX region are projected to the TX begin position, downstream of TX are projected to the TX
 	 * end, positions in introns are projected to first position of the next CDS exon.
 	 *
-	 * @param pos
-	 *            the position to translate
+	 * @param pos the position to translate
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public TranscriptPosition projectGenomeToTXPosition(GenomePosition pos) {
@@ -367,7 +353,7 @@ public final class TranscriptProjectionDecorator {
 			} else { // lies in intron, project to begin position of next exon
 				int intronNum = projector.locateIntron(pos);
 				return projector.genomeToTranscriptPos(transcript.getExonRegions().get(intronNum + 1)
-						.getGenomeBeginPos());
+					.getGenomeBeginPos());
 			}
 		} catch (ProjectionException e) {
 			throw new Error("Bug: must be able to convert TX exon position! " + e.getMessage());
@@ -376,18 +362,17 @@ public final class TranscriptProjectionDecorator {
 
 	/**
 	 * Translate {@link GenomeInterval} to {@link TranscriptInterval} for {@link #transcript}.
-	 *
+	 * <p>
 	 * Positions upstream of TX region are projected to the TX begin position, downstream of TX are projected to the TX
 	 * end.
 	 *
-	 * @param interval
-	 *            the {@link GenomeInterval} to project
+	 * @param interval the {@link GenomeInterval} to project
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public TranscriptInterval projectGenomeToTXInterval(GenomeInterval interval) {
 		final TranscriptPosition txBeginPos = projectGenomeToTXPosition(interval.getGenomeBeginPos());
 		final TranscriptPosition txEndPos = projectGenomeToTXPosition(interval.getGenomeEndPos().shifted(-1))
-				.shifted(1);
+			.shifted(1);
 		return new TranscriptInterval(transcript, txBeginPos.getPos(), txEndPos.getPos(), PositionType.ZERO_BASED);
 	}
 

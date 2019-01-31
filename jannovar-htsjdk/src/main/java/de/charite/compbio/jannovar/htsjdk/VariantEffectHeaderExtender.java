@@ -17,17 +17,16 @@ public class VariantEffectHeaderExtender {
 
 	/**
 	 * Add header entries.
-	 * 
-	 * @param header
-	 *            The {@link VCFHeader} to extend.
+	 *
+	 * @param header The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
 		// add INFO line for standardized ANN field
 		header.addMetaDataLine(
-				new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String, Annotation.VCF_ANN_DESCRIPTION_STRING));
+			new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String, Annotation.VCF_ANN_DESCRIPTION_STRING));
 		// add FILTER line for standardized OffExome filter
 		header.addMetaDataLine(
-				new VCFFilterHeaderLine(FILTER_EFFECT_OFF_EXOME, "Variant off-exome in all effect predictions"));
+			new VCFFilterHeaderLine(FILTER_EFFECT_OFF_EXOME, "Variant off-exome in all effect predictions"));
 	}
 
 }

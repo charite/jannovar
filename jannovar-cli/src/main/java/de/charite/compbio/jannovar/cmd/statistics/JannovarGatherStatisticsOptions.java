@@ -1,37 +1,38 @@
 package de.charite.compbio.jannovar.cmd.statistics;
 
-import java.util.function.BiFunction;
-
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarBaseOptions;
-import net.sourceforge.argparse4j.inf.ArgumentGroup;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-import net.sourceforge.argparse4j.inf.Subparsers;
+import net.sourceforge.argparse4j.inf.*;
+
+import java.util.function.BiFunction;
 
 /**
  * Configuration for the <code>statistics</code> command
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class JannovarGatherStatisticsOptions extends JannovarBaseOptions {
 
-	/** Path to database file */
+	/**
+	 * Path to database file
+	 */
 	private String databaseFilePath = null;
 
-	/** Path to input VCF file */
+	/**
+	 * Path to input VCF file
+	 */
 	private String pathInputVCF = null;
 
-	/** Path to output report TXT file */
+	/**
+	 * Path to output report TXT file
+	 */
 	private String pathOutputReport = null;
 
 	/**
 	 * Setup {@link ArgumentParser}
-	 * 
-	 * @param subParsers
-	 *            {@link Subparsers} to setup
+	 *
+	 * @param subParsers {@link Subparsers} to setup
 	 */
 	public static void setupParser(Subparsers subParsers) {
 		BiFunction<String[], Namespace, GatherStatisticsCommand> handler = (argv, args) -> {
@@ -43,7 +44,7 @@ public class JannovarGatherStatisticsOptions extends JannovarBaseOptions {
 		};
 
 		Subparser subParser = subParsers.addParser("statistics", true).help("compute statistics about VCF file")
-				.setDefault("cmd", handler);
+			.setDefault("cmd", handler);
 		subParser.description("Compute statistics about variants in VCF file");
 
 		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
@@ -90,7 +91,7 @@ public class JannovarGatherStatisticsOptions extends JannovarBaseOptions {
 	@Override
 	public String toString() {
 		return "JannovarGatherStatisticsOptions [databaseFilePath=" + databaseFilePath + ", pathInputVCF="
-				+ pathInputVCF + ", pathOutputReport=" + pathOutputReport + "]";
+			+ pathInputVCF + ", pathOutputReport=" + pathOutputReport + "]";
 	}
 
 }

@@ -1,17 +1,9 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
 
 /**
  * Unit tests for the {@link Pedigree} class.

@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.hgvs;
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 /**
  * This singleton class helps to translate DNA sequences.
@@ -13,16 +13,26 @@ import com.google.common.collect.ImmutableMap;
  */
 public final class Translator {
 
-	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
+	/**
+	 * Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code)
+	 */
 	private ImmutableMap<String, String> codon1 = null;
-	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code) */
+	/**
+	 * Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code)
+	 */
 	private ImmutableMap<String, String> codon3 = null;
-	/** Map of IUPAC ambiguity codes. */
+	/**
+	 * Map of IUPAC ambiguity codes.
+	 */
 	@SuppressWarnings("unused")
 	private ImmutableMap<String, String> iupac = null;
-	/** Map of short AA codes to long ones */
+	/**
+	 * Map of short AA codes to long ones
+	 */
 	private ImmutableMap<String, String> shortToLong = null;
-	/** Map of long AA codes to short ones */
+	/**
+	 * Map of long AA codes to short ones
+	 */
 	private ImmutableMap<String, String> longToShort = null;
 
 	private static Translator translator = null;
@@ -48,13 +58,12 @@ public final class Translator {
 
 	/**
 	 * Translates a DNA sequence. Assume the sequence is upper case with no ambiguous bases.
-	 * <P>
+	 * <p>
 	 * Currently, there is no need to translate more than a single codon. However, some portions of the code are trying
 	 * to translate DNA that is not a multiple of 3 nt long (from indel code). Therefore, we will translate as much as
 	 * possible here. This may need refactoring in the future. (TODO).
 	 *
-	 * @param dnaseq
-	 *            A DNA sequence that is to be translated
+	 * @param dnaseq A DNA sequence that is to be translated
 	 * @return corresonding aminoacid sequence
 	 */
 	public String translateDNA(String dnaseq) {
@@ -67,8 +76,7 @@ public final class Translator {
 	}
 
 	/**
-	 * @param shortAASeq
-	 *            amino acid sequence with one-character representation of amino acids
+	 * @param shortAASeq amino acid sequence with one-character representation of amino acids
 	 * @return String with long versions of short AA seqs.
 	 */
 	public String toLong(String shortAASeq) {
@@ -79,8 +87,7 @@ public final class Translator {
 	}
 
 	/**
-	 * @param c
-	 *            short amino acid representation to conver to long representation
+	 * @param c short amino acid representation to conver to long representation
 	 * @return String with long versions of short AA char.
 	 */
 	public String toLong(char c) {

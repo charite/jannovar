@@ -1,8 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser.nts;
 
-import org.junit.Test;
-
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParsingTestBase;
+import org.junit.Test;
 
 /**
  * Systematically test parsing of nucleotide changes.
@@ -15,8 +14,8 @@ public class NucleotideParsingTest extends HGVSParsingTestBase {
 
 	@Test
 	public void testNucleotideSingleVarSubstitution() {
-		String[] types = { "c.", "m.", "n.", "g.", "r." };
-		String[] changes = { "76A>C", "-14G>C", "88+1G>T", "89-2A>C", "*46T>C" };
+		String[] types = {"c.", "m.", "n.", "g.", "r."};
+		String[] changes = {"76A>C", "-14G>C", "88+1G>T", "89-2A>C", "*46T>C"};
 		for (String t : types)
 			for (String s : changes)
 				parseString(PREFIX + t + s);

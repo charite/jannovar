@@ -1,24 +1,22 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.io.Files;
+import de.charite.compbio.jannovar.Jannovar;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.io.Files;
-
-import de.charite.compbio.jannovar.Jannovar;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Test for annotating VCF files with compatible mode of inheritance
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class JannovarAnnotateVCFInheritanceTest {
@@ -39,8 +37,8 @@ public class JannovarAnnotateVCFInheritanceTest {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputVCFPath = this.getClass().getResource("/pedigree_vars.vcf").toURI().getPath();
 		final String inputPEDPath = this.getClass().getResource("/pedigree_ar.ped").toURI().getPath();
-		String[] argv = new String[] { "annotate-vcf", "-o", outFolder.toString() + "/pedigree_vars.jv_ar.vcf", "-d",
-				pathToSmallSer, "-i", inputVCFPath, "--pedigree-file", inputPEDPath };
+		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/pedigree_vars.jv_ar.vcf", "-d",
+			pathToSmallSer, "-i", inputVCFPath, "--pedigree-file", inputPEDPath};
 		System.err.println(Joiner.on(" ").join(argv));
 
 		Jannovar.main(argv);
@@ -51,7 +49,7 @@ public class JannovarAnnotateVCFInheritanceTest {
 		final File expectedFile = new File(this.getClass().getResource("/pedigree_vars.jv_ar.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
-				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
+			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -60,8 +58,8 @@ public class JannovarAnnotateVCFInheritanceTest {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputVCFPath = this.getClass().getResource("/pedigree_vars.vcf").toURI().getPath();
 		final String inputPEDPath = this.getClass().getResource("/pedigree_ad.ped").toURI().getPath();
-		String[] argv = new String[] { "annotate-vcf", "-o", outFolder.toString() + "/pedigree_vars.jv_ad.vcf", "-d",
-				pathToSmallSer, "-i", inputVCFPath, "--pedigree-file", inputPEDPath };
+		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/pedigree_vars.jv_ad.vcf", "-d",
+			pathToSmallSer, "-i", inputVCFPath, "--pedigree-file", inputPEDPath};
 		System.err.println(Joiner.on(" ").join(argv));
 
 		Jannovar.main(argv);
@@ -72,7 +70,7 @@ public class JannovarAnnotateVCFInheritanceTest {
 		final File expectedFile = new File(this.getClass().getResource("/pedigree_vars.jv_ad.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
-				.replaceAll("##jannovarVersion.*", "##jannovarVersion");
+			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
 		Assert.assertEquals(expected, actual);
 	}
 
