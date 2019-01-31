@@ -46,16 +46,18 @@ class NucleotideDeletionToGenomeVariantTranslationImpl
     if (deletedNTs == null) {
       deletedNTs = getGenomeSeq(tm.getStrand(), gItv);
       if (deletedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-          && deletedNTDesc.length() != deletedNTs.length())
+          && deletedNTDesc.length() != deletedNTs.length()) {
         warningMsg =
             "Invalid nucleotide count in "
                 + ntDel.toHGVSString()
                 + ", expected "
                 + deletedNTs.length();
+      }
     } else {
       final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-      if (!refSeq.equals(deletedNTs))
+      if (!refSeq.equals(deletedNTs)) {
         warningMsg = "Invalid nucleotides in " + ntDel.toHGVSString() + ", expected " + refSeq;
+      }
       deletedNTs = refSeq;
     }
 
@@ -63,7 +65,10 @@ class NucleotideDeletionToGenomeVariantTranslationImpl
         new GenomeVariant(
                 gItv.withStrand(tm.getStrand()).getGenomeBeginPos(), deletedNTs, "", tm.getStrand())
             .withStrand(Strand.FWD);
-    if (warningMsg != null) return ResultWithWarnings.construct(result, warningMsg);
-    else return ResultWithWarnings.construct(result);
+    if (warningMsg != null) {
+      return ResultWithWarnings.construct(result, warningMsg);
+    } else {
+      return ResultWithWarnings.construct(result);
+    }
   }
 }

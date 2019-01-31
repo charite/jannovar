@@ -131,29 +131,61 @@ public class ClinVarRecordBuilder {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ClinVarRecordBuilder other = (ClinVarRecordBuilder) obj;
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (annotations == null) {
-      if (other.annotations != null) return false;
-    } else if (!annotations.equals(other.annotations)) return false;
+      if (other.annotations != null) {
+        return false;
+      }
+    } else if (!annotations.equals(other.annotations)) {
+      return false;
+    }
     if (contig == null) {
-      if (other.contig != null) return false;
-    } else if (!contig.equals(other.contig)) return false;
+      if (other.contig != null) {
+        return false;
+      }
+    } else if (!contig.equals(other.contig)) {
+      return false;
+    }
     if (filter == null) {
-      if (other.filter != null) return false;
-    } else if (!filter.equals(other.filter)) return false;
+      if (other.filter != null) {
+        return false;
+      }
+    } else if (!filter.equals(other.filter)) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null) return false;
-    } else if (!id.equals(other.id)) return false;
-    if (pos != other.pos) return false;
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     return true;
   }
 }

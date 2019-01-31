@@ -13,7 +13,6 @@ public class GenotypeFilterTestBase {
    *
    * @param vcfHeaderLines Additional VCF headers to write
    * @param vcfLine VCF line to write
-   * @return
    * @throws Exception in case of any problems
    */
   protected VariantContext writeAndReadVcfLine(String vcfLine, String vcfHeaderLines)

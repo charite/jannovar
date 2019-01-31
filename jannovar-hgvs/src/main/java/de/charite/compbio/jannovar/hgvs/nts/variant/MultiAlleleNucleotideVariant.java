@@ -59,8 +59,11 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
     parts.add(seqType.getPrefix());
     boolean first = true;
     for (NucleotideChangeAllele allele : alleles) {
-      if (first) first = false;
-      else parts.add(";");
+      if (first) {
+        first = false;
+      } else {
+        parts.add(";");
+      }
       parts.add(allele.toHGVSString());
     }
     return Joiner.on("").join(parts);
@@ -81,13 +84,23 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     MultiAlleleNucleotideVariant other = (MultiAlleleNucleotideVariant) obj;
     if (alleles == null) {
-      if (other.alleles != null) return false;
-    } else if (!alleles.equals(other.alleles)) return false;
+      if (other.alleles != null) {
+        return false;
+      }
+    } else if (!alleles.equals(other.alleles)) {
+      return false;
+    }
     return true;
   }
 }

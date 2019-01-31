@@ -65,17 +65,20 @@ public class NucleotideChangeToGenomeVariantTranslator {
       throws CannotTranslateHGVSVariant {
     // perform sanity checks and get corresponding TranscriptModel from JannovarData
     if (variant.getSeqType() != SequenceType.CODING_DNA
-        && variant.getSeqType() != SequenceType.NON_CODING_DNA)
+        && variant.getSeqType() != SequenceType.NON_CODING_DNA) {
       throw new CannotTranslateHGVSVariant(
           "Currently only coding DNA (\"c.\") and non-coding DNA (\"n.\") "
               + "coordinates are supported.");
-    if (variant.getAllele().size() != 1)
+    }
+    if (variant.getAllele().size() != 1) {
       throw new CannotTranslateHGVSVariant(
           "Too many alles in variant " + variant.toHGVSString() + ", must be one allele.");
+    }
     TranscriptModel tm = jvDB.getTmByAccession().get(variant.getRefIDWithVersion());
-    if (tm == null)
+    if (tm == null) {
       throw new CannotTranslateHGVSVariant(
           "No transcript found for id " + variant.getRefIDWithVersion());
+    }
 
     // get NucleotideChange from only entry in only allele
     NucleotideChange ntChange = variant.getAllele().get(0);
@@ -111,13 +114,16 @@ public class NucleotideChangeToGenomeVariantTranslator {
           "Currently unsupported HGVS variant type in " + ntChange.toHGVSString());
     }
 
-    if (!result.getWarnings().isEmpty() && !autocorrect)
+    if (!result.getWarnings().isEmpty() && !autocorrect) {
       throw new CannotTranslateHGVSVariant(
           "Had to auto-correct variant in translation: "
               + Joiner.on("; ").join(result.getWarnings()));
+    }
 
     // handle any warning messages and return result value
-    for (String msg : result.getWarnings()) LOGGER.warn(msg);
+    for (String msg : result.getWarnings()) {
+      LOGGER.warn(msg);
+    }
     return result.getValue();
   }
 }

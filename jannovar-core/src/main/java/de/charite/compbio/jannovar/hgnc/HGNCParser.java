@@ -35,8 +35,11 @@ public class HGNCParser {
 
   /** @return entry in the given index or the empty string */
   private static String getField(String[] arr, int idx) {
-    if (idx >= arr.length) return "";
-    else return arr[idx];
+    if (idx >= arr.length) {
+      return "";
+    } else {
+      return arr[idx];
+    }
   }
 
   /**
@@ -51,12 +54,16 @@ public class HGNCParser {
     try (BufferedReader br = new BufferedReader(new FileReader(path))) {
       String line;
       while ((line = br.readLine()) != null) {
-        if (line.trim().isEmpty()) continue; // skip
+        if (line.trim().isEmpty()) {
+          continue; // skip
+        }
         if (header == null) {
           // read header
           header = new HashMap<String, Integer>();
           int i = 0;
-          for (String s : line.split("\t")) header.put(s, i++);
+          for (String s : line.split("\t")) {
+            header.put(s, i++);
+          }
         } else {
           // parse fields
           final String[] arr = line.split("\t");

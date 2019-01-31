@@ -35,8 +35,8 @@ public final class GenomeVariantNormalizer {
    * <p>The algorithm works as follows. <code>String alt = change.getAlt()</code> is inserted into
    * <code>transcript.sequence</code> at the position <code>int pos = txPos.getPos()</code>. Then,
    * <code>pos</code> is incremented as long as <code>
-   * pos + alt.length() &lt; transcript.sequence.length()</code> and <code>
-   * transcript.sequence[pos] = transcript.sequence[pos + alt.length()]</code>. The last <code>pos
+   * pos + alt.length() &lt; transcript.sequence.length()</code> and <code> transcript.sequence[pos]
+   * = transcript.sequence[pos + alt.length()]</code>. The last <code>pos
    * </code> fulfilling this condition is then used to construct the resulting {@link
    * GenomeVariant}.
    *
@@ -54,7 +54,9 @@ public final class GenomeVariantNormalizer {
     assert (change.getRef().length() == 0);
     if (change.getGenomePos().getStrand()
         != transcript.getStrand()) // ensure that we have the correct strand
-    change = change.withStrand(transcript.getStrand());
+    {
+      change = change.withStrand(transcript.getStrand());
+    }
 
     // Insert the ALT bases at the position indicated by txPos.
     int pos = txPos.getPos();
@@ -83,8 +85,11 @@ public final class GenomeVariantNormalizer {
     }
 
     if (shift == 0) // only rebuild if shift > 0
-    return change;
-    else return new GenomeVariant(shiftedPos, "", seq.substring(pos, pos + LEN));
+    {
+      return change;
+    } else {
+      return new GenomeVariant(shiftedPos, "", seq.substring(pos, pos + LEN));
+    }
   }
 
   /**
@@ -108,7 +113,9 @@ public final class GenomeVariantNormalizer {
     assert (change.getRef().length() != 0 && change.getAlt().length() == 0);
     if (change.getGenomePos().getStrand()
         != transcript.getStrand()) // ensure that we have the correct strand
-    change = change.withStrand(transcript.getStrand());
+    {
+      change = change.withStrand(transcript.getStrand());
+    }
 
     // Shift the deletion to the 3' (right) end of the transcript.
     int pos = txPos.getPos();
@@ -122,9 +129,11 @@ public final class GenomeVariantNormalizer {
     }
 
     if (shift == 0) // only rebuild if shift > 0
-    return change;
-    else
+    {
+      return change;
+    } else {
       return new GenomeVariant(
           change.getGenomePos().shifted(shift), seq.substring(pos, pos + LEN), "");
+    }
   }
 }

@@ -50,16 +50,30 @@ public class LegacyVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacyVariant other = (LegacyVariant) obj;
     if (change == null) {
-      if (other.change != null) return false;
-    } else if (!change.equals(other.change)) return false;
+      if (other.change != null) {
+        return false;
+      }
+    } else if (!change.equals(other.change)) {
+      return false;
+    }
     if (reference == null) {
-      if (other.reference != null) return false;
-    } else if (!reference.equals(other.reference)) return false;
+      if (other.reference != null) {
+        return false;
+      }
+    } else if (!reference.equals(other.reference)) {
+      return false;
+    }
     return true;
   }
 }

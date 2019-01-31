@@ -47,6 +47,7 @@ public final class VariantContextAnnotator {
    * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
    */
   public static class Options {
+
     /**
      * Whether or not to trim each annotation list to the first (one with highest putative impact),
      * defaults to <code>true</code>
@@ -92,7 +93,7 @@ public final class VariantContextAnnotator {
      *     highest putative impact), defaults to <code>true</code>
      * @param code HGVS protein output in three or one letter
      * @param escapeAnnField whether or not to escape values in the ANN field (defaults to <code>
-     *     true</code>)
+     * true</code>)
      * @param nt3PrimeShifting whether or not to perform shifting towards the 3' end of the
      *     transcript (defaults to <code>true</code>)
      * @param offTargetFilterEnabled whether or not off target filter application is abled
@@ -226,9 +227,10 @@ public final class VariantContextAnnotator {
     // case
     // for the "random" and "alternative locus" contigs etc.
     Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
-    if (boxedInt == null)
+    if (boxedInt == null) {
       throw new InvalidCoordinatesException(
           "Unknown reference " + vc.getContig(), AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+    }
     int chr = boxedInt.intValue();
 
     // Build the GenomeChange object.
@@ -354,7 +356,9 @@ public final class VariantContextAnnotator {
 
     // If a VC builder is used before the attributes can be unmodifiable.
     Map<String, Object> attributes = new HashMap<>(vc.getAttributes());
-    if (!annotations.isEmpty()) attributes.put("ANN", Joiner.on(',').join(annotations));
+    if (!annotations.isEmpty()) {
+      attributes.put("ANN", Joiner.on(',').join(annotations));
+    }
     vc.getCommonInfo().setAttributes(attributes);
 
     return vc;

@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class AnnotationBuilderOptions {
+
   /**
    * whether or not to shift variants towards the 3' end of the transcript (default is <code>true
    * </code>)

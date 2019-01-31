@@ -30,8 +30,9 @@ public final class GenomeRegionList {
 
   /** @return Number of bases up to position (contig, pos). */
   public long lengthUpTo(String contig, int pos) {
-    if (getGenomeRegion(contig) == null)
+    if (getGenomeRegion(contig) == null) {
       throw new IllegalArgumentException("Contig " + contig + " not found");
+    }
 
     long result = 0;
     for (GenomeRegion region : genomeRegions) {
@@ -89,16 +90,30 @@ public final class GenomeRegionList {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     GenomeRegionList other = (GenomeRegionList) obj;
     if (genomeRegions == null) {
-      if (other.genomeRegions != null) return false;
-    } else if (!genomeRegions.equals(other.genomeRegions)) return false;
+      if (other.genomeRegions != null) {
+        return false;
+      }
+    } else if (!genomeRegions.equals(other.genomeRegions)) {
+      return false;
+    }
     if (nameToRegion == null) {
-      if (other.nameToRegion != null) return false;
-    } else if (!nameToRegion.equals(other.nameToRegion)) return false;
+      if (other.nameToRegion != null) {
+        return false;
+      }
+    } else if (!nameToRegion.equals(other.nameToRegion)) {
+      return false;
+    }
     return true;
   }
 }

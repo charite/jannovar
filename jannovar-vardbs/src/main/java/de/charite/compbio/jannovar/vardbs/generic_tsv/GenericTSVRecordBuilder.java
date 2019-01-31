@@ -97,23 +97,47 @@ public class GenericTSVRecordBuilder {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     GenericTSVRecordBuilder other = (GenericTSVRecordBuilder) obj;
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (contig == null) {
-      if (other.contig != null) return false;
-    } else if (!contig.equals(other.contig)) return false;
-    if (pos != other.pos) return false;
+      if (other.contig != null) {
+        return false;
+      }
+    } else if (!contig.equals(other.contig)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     if (values == null) {
-      if (other.values != null) return false;
-    } else if (!values.equals(other.values)) return false;
+      if (other.values != null) {
+        return false;
+      }
+    } else if (!values.equals(other.values)) {
+      return false;
+    }
     return true;
   }
 }

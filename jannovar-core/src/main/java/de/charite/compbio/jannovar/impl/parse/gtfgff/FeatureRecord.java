@@ -148,29 +148,63 @@ public final class FeatureRecord implements Comparable<FeatureRecord> {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     FeatureRecord other = (FeatureRecord) obj;
     if (attributes == null) {
-      if (other.attributes != null) return false;
-    } else if (!attributes.equals(other.attributes)) return false;
-    if (begin != other.begin) return false;
-    if (end != other.end) return false;
-    if (phase != other.phase) return false;
+      if (other.attributes != null) {
+        return false;
+      }
+    } else if (!attributes.equals(other.attributes)) {
+      return false;
+    }
+    if (begin != other.begin) {
+      return false;
+    }
+    if (end != other.end) {
+      return false;
+    }
+    if (phase != other.phase) {
+      return false;
+    }
     if (score == null) {
-      if (other.score != null) return false;
-    } else if (!score.equals(other.score)) return false;
+      if (other.score != null) {
+        return false;
+      }
+    } else if (!score.equals(other.score)) {
+      return false;
+    }
     if (seqID == null) {
-      if (other.seqID != null) return false;
-    } else if (!seqID.equals(other.seqID)) return false;
+      if (other.seqID != null) {
+        return false;
+      }
+    } else if (!seqID.equals(other.seqID)) {
+      return false;
+    }
     if (source == null) {
-      if (other.source != null) return false;
-    } else if (!source.equals(other.source)) return false;
-    if (strand != other.strand) return false;
+      if (other.source != null) {
+        return false;
+      }
+    } else if (!source.equals(other.source)) {
+      return false;
+    }
+    if (strand != other.strand) {
+      return false;
+    }
     if (type == null) {
-      if (other.type != null) return false;
-    } else if (!type.equals(other.type)) return false;
+      if (other.type != null) {
+        return false;
+      }
+    } else if (!type.equals(other.type)) {
+      return false;
+    }
     return true;
   }
 

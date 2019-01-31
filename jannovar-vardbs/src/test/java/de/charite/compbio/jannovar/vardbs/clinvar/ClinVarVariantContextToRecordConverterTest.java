@@ -31,7 +31,9 @@ public class ClinVarVariantContextToRecordConverterTest {
     ClinVarVariantContextToRecordConverter converter = new ClinVarVariantContextToRecordConverter();
     CloseableIterator<VariantContext> it = vcfReader.iterator();
     VariantContext vc = null;
-    while (vc == null || !vc.getID().equals("rs387907305")) vc = it.next();
+    while (vc == null || !vc.getID().equals("rs387907305")) {
+      vc = it.next();
+    }
 
     ClinVarRecord record = converter.convert(vc);
     Assert.assertEquals(

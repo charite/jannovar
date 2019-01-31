@@ -13,8 +13,9 @@ public class GenomeRegionListFactoryFromSAMSequenceDictionary {
 
   public GenomeRegionList construct(SAMSequenceDictionary seqDict) {
     ArrayList<GenomeRegion> regions = new ArrayList<>();
-    for (SAMSequenceRecord record : seqDict.getSequences())
+    for (SAMSequenceRecord record : seqDict.getSequences()) {
       regions.add(new GenomeRegion(record.getSequenceName(), 0, record.getSequenceLength()));
+    }
     return new GenomeRegionList(regions);
   }
 }

@@ -82,19 +82,39 @@ public final class GenotypeMatch {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     GenotypeMatch other = (GenotypeMatch) obj;
-    if (dbAllele != other.dbAllele) return false;
+    if (dbAllele != other.dbAllele) {
+      return false;
+    }
     if (dbVC == null) {
-      if (other.dbVC != null) return false;
-    } else if (!dbVC.equals(other.dbVC)) return false;
-    if (isMatch != other.isMatch) return false;
+      if (other.dbVC != null) {
+        return false;
+      }
+    } else if (!dbVC.equals(other.dbVC)) {
+      return false;
+    }
+    if (isMatch != other.isMatch) {
+      return false;
+    }
     if (obsVC == null) {
-      if (other.obsVC != null) return false;
-    } else if (!obsVC.equals(other.obsVC)) return false;
-    if (observedAllele != other.observedAllele) return false;
+      if (other.obsVC != null) {
+        return false;
+      }
+    } else if (!obsVC.equals(other.obsVC)) {
+      return false;
+    }
+    if (observedAllele != other.observedAllele) {
+      return false;
+    }
     return true;
   }
 }

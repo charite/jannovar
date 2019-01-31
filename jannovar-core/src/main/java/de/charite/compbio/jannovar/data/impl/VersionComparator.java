@@ -48,13 +48,21 @@ public class VersionComparator implements Comparator<String> {
       boolean empty1 = suffix1.length() == 0;
       boolean empty2 = suffix2.length() == 0;
 
-      if (empty1 && empty2) continue; // No suffixes
-      if (empty1) return 1; // First suffix is empty (1.2 > 1.2b)
-      if (empty2) return -1; // Second suffix is empty (1.2a < 1.2)
+      if (empty1 && empty2) {
+        continue; // No suffixes
+      }
+      if (empty1) {
+        return 1; // First suffix is empty (1.2 > 1.2b)
+      }
+      if (empty2) {
+        return -1; // Second suffix is empty (1.2a < 1.2)
+      }
 
       // Lexical comparison of suffixes
       int result = suffix1.compareTo(suffix2);
-      if (result != 0) return result;
+      if (result != 0) {
+        return result;
+      }
     }
     if (tokenizer2.MoveNext()) {
       do {

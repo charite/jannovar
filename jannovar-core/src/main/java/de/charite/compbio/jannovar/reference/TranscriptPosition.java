@@ -78,14 +78,26 @@ public final class TranscriptPosition {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     TranscriptPosition other = (TranscriptPosition) obj;
-    if (pos != other.pos) return false;
+    if (pos != other.pos) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     return true;
   }
 }

@@ -6,6 +6,7 @@ package de.charite.compbio.jannovar.data.impl;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class VersionTokenizer {
+
   private final String _versionString;
   private final int _length;
 
@@ -27,7 +28,9 @@ public class VersionTokenizer {
   }
 
   public VersionTokenizer(String versionString) {
-    if (versionString == null) throw new IllegalArgumentException("versionString is null");
+    if (versionString == null) {
+      throw new IllegalArgumentException("versionString is null");
+    }
 
     _versionString = versionString;
     _length = versionString.length();
@@ -39,13 +42,17 @@ public class VersionTokenizer {
     _hasValue = false;
 
     // No more characters
-    if (_position >= _length) return false;
+    if (_position >= _length) {
+      return false;
+    }
 
     _hasValue = true;
 
     while (_position < _length) {
       char c = _versionString.charAt(_position);
-      if (c < '0' || c > '9') break;
+      if (c < '0' || c > '9') {
+        break;
+      }
       _number = _number * 10 + (c - '0');
       _position++;
     }
@@ -54,13 +61,17 @@ public class VersionTokenizer {
 
     while (_position < _length) {
       char c = _versionString.charAt(_position);
-      if (c == '.') break;
+      if (c == '.') {
+        break;
+      }
       _position++;
     }
 
     _suffix = _versionString.substring(suffixStart, _position);
 
-    if (_position < _length) _position++;
+    if (_position < _length) {
+      _position++;
+    }
 
     return true;
   }

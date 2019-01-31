@@ -48,9 +48,11 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
 
     // Filter to calls compatible with AD inheritance
     Stream<GenotypeCalls> compatibleCalls;
-    if (this.pedigree.getNMembers() == 1)
+    if (this.pedigree.getNMembers() == 1) {
       compatibleCalls = xCalls.filter(this::isCompatibleSingleton);
-    else compatibleCalls = xCalls.filter(this::isCompatibleFamily);
+    } else {
+      compatibleCalls = xCalls.filter(this::isCompatibleFamily);
+    }
     return ImmutableList.copyOf(compatibleCalls.collect(Collectors.toList()));
   }
 
@@ -59,11 +61,17 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
    *     a single individual in the pedigree
    */
   private boolean isCompatibleSingleton(GenotypeCalls calls) {
-    if (calls.getNSamples() == 0) return false; // no calls!
-    if (calls.getGenotypeBySampleNo(0).isHomAlt()) return true;
-    else if (pedigree.getMembers().get(0).getSex() != Sex.FEMALE
-        && calls.getGenotypeBySampleNo(0).isHet()) return true;
-    else return false;
+    if (calls.getNSamples() == 0) {
+      return false; // no calls!
+    }
+    if (calls.getGenotypeBySampleNo(0).isHomAlt()) {
+      return true;
+    } else if (pedigree.getMembers().get(0).getSex() != Sex.FEMALE
+        && calls.getGenotypeBySampleNo(0).isHet()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -108,9 +116,6 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
    * <p>For the parents of male affected it is really special. Because it can be inherited from the
    * mother or the father! Not from both. Because we do not know the specific parents of one
    * affected (only all of them) at this part we have to skip the parents of male affected.
-   *
-   * @param calls
-   * @return
    */
   private boolean parentsAreCompatible(GenotypeCalls calls) {
     final ImmutableSet<String> femaleParentNames = queryDecorator.getAffectedFemaleParentNames();
@@ -141,9 +146,11 @@ public class MendelianCheckerXRHom extends AbstractMendelianChecker {
         final Genotype gt = calls.getGenotypeForSample(p.getName());
         // Strict handling. Males cannot be called heterozygous (will be seen as a
         // homozygous mutation)
-        if (p.isMale() && (gt.isHet() || gt.isHomAlt())) return false;
-        else if (gt.isHomAlt())
+        if (p.isMale() && (gt.isHet() || gt.isHomAlt())) {
+          return false;
+        } else if (gt.isHomAlt()) {
           return false; // cannot be disease-causing mutation (female or unknown)
+        }
       }
     }
 

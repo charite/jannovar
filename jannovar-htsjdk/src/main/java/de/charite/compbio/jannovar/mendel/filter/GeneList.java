@@ -31,17 +31,19 @@ class GeneList {
   private ImmutableMap<Integer, IntervalArray<Gene>> buildIntervalTree() {
     HashMap<Integer, ArrayList<Gene>> chrToGene = new HashMap<Integer, ArrayList<Gene>>();
     for (Gene gene : genes) {
-      if (!chrToGene.containsKey(gene.getRegion().getChr()))
+      if (!chrToGene.containsKey(gene.getRegion().getChr())) {
         chrToGene.put(gene.getRegion().getChr(), new ArrayList<Gene>());
+      }
       chrToGene.get(gene.getRegion().getChr()).add(gene);
     }
 
     ImmutableMap.Builder<Integer, IntervalArray<Gene>> builder =
         new ImmutableMap.Builder<Integer, IntervalArray<Gene>>();
-    for (Map.Entry<Integer, ArrayList<Gene>> entry : chrToGene.entrySet())
+    for (Map.Entry<Integer, ArrayList<Gene>> entry : chrToGene.entrySet()) {
       builder.put(
           entry.getKey(),
           new IntervalArray<Gene>(entry.getValue(), new GeneIntervalEndExtractor()));
+    }
     return builder.build();
   }
 }

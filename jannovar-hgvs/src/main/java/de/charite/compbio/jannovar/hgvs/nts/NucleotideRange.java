@@ -30,10 +30,7 @@ public class NucleotideRange implements ConvertibleToHGVSString {
         NucleotidePointLocation.build(firstPos), NucleotidePointLocation.build(lastPos));
   }
 
-  /**
-   * @param firstPos
-   * @param lastPost
-   */
+  /** */
   public NucleotideRange(NucleotidePointLocation firstPos, NucleotidePointLocation lastPost) {
     super();
     this.firstPos = firstPos;
@@ -50,8 +47,11 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 
   @Override
   public String toHGVSString() {
-    if (firstPos.equals(lastPos)) return firstPos.toHGVSString();
-    else return Joiner.on("").join(firstPos.toHGVSString(), "_", lastPos.toHGVSString());
+    if (firstPos.equals(lastPos)) {
+      return firstPos.toHGVSString();
+    } else {
+      return Joiner.on("").join(firstPos.toHGVSString(), "_", lastPos.toHGVSString());
+    }
   }
 
   @Override
@@ -75,16 +75,30 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideRange other = (NucleotideRange) obj;
     if (firstPos == null) {
-      if (other.firstPos != null) return false;
-    } else if (!firstPos.equals(other.firstPos)) return false;
+      if (other.firstPos != null) {
+        return false;
+      }
+    } else if (!firstPos.equals(other.firstPos)) {
+      return false;
+    }
     if (lastPos == null) {
-      if (other.lastPos != null) return false;
-    } else if (!lastPos.equals(other.lastPos)) return false;
+      if (other.lastPos != null) {
+        return false;
+      }
+    } else if (!lastPos.equals(other.lastPos)) {
+      return false;
+    }
     return true;
   }
 }

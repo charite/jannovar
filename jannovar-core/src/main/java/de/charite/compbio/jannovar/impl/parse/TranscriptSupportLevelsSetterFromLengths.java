@@ -46,7 +46,9 @@ public class TranscriptSupportLevelsSetterFromLengths {
       final boolean haveSameLength = (longestRegion.length() == txRegion.length());
       final boolean isLeftOf =
           (longestRegion.getGenomeBeginPos().isLt(txRegion.getGenomeBeginPos()));
-      if (isShorter || (haveSameLength && isLeftOf)) longest.put(geneID, builder);
+      if (isShorter || (haveSameLength && isLeftOf)) {
+        longest.put(geneID, builder);
+      }
     }
 
     // update level of longest
@@ -66,7 +68,8 @@ public class TranscriptSupportLevelsSetterFromLengths {
    *     TranscriptSupportLevels.LOW_PRIORITY}.
    */
   private static void setDefaultLevels(Collection<TranscriptModelBuilder> builders) {
-    for (TranscriptModelBuilder builder : builders)
+    for (TranscriptModelBuilder builder : builders) {
       builder.setTranscriptSupportLevel(TranscriptSupportLevels.LOW_PRIORITY);
+    }
   }
 }

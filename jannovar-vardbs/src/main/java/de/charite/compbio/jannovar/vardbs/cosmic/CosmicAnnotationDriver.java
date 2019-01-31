@@ -46,8 +46,9 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
         } else {
           final CosmicRecord current = annotatingRecord.get(alleleNo).getRecord();
           final CosmicRecord update = matchToRecord.get(m).getRecord();
-          if (current.getCnt() < update.getCnt())
+          if (current.getCnt() < update.getCnt()) {
             annotatingRecord.put(alleleNo, matchToRecord.get(m));
+          }
         }
       }
     }
@@ -92,13 +93,19 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
       if (records.get(i) != null) {
         CosmicRecord record = records.get(i).getRecord();
         final String id = record.getId();
-        if (!idList.contains(id)) idList.add(id);
+        if (!idList.contains(id)) {
+          idList.add(id);
+        }
       }
     }
 
-    if (idList.size() > 1) idList.remove(".");
+    if (idList.size() > 1) {
+      idList.remove(".");
+    }
 
-    if (!idList.isEmpty()) builder.id(Joiner.on(";").join(idList));
+    if (!idList.isEmpty()) {
+      builder.id(Joiner.on(";").join(idList));
+    }
   }
 
   private void annotateInfoCnt(
@@ -106,7 +113,9 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
       String infix,
       HashMap<Integer, AnnotatingRecord<CosmicRecord>> records,
       VariantContextBuilder builder) {
-    if (records.isEmpty()) return;
+    if (records.isEmpty()) {
+      return;
+    }
     CosmicRecord first = records.values().iterator().next().getRecord();
     builder.attribute(options.getVCFIdentifierPrefix() + infix + "CNT", first.getCnt());
   }
@@ -116,9 +125,13 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
       String infix,
       HashMap<Integer, AnnotatingRecord<CosmicRecord>> records,
       VariantContextBuilder builder) {
-    if (records.isEmpty()) return;
+    if (records.isEmpty()) {
+      return;
+    }
     CosmicRecord first = records.values().iterator().next().getRecord();
-    if (first.isSnp()) builder.attribute(options.getVCFIdentifierPrefix() + infix + "SNP", true);
+    if (first.isSnp()) {
+      builder.attribute(options.getVCFIdentifierPrefix() + infix + "SNP", true);
+    }
   }
 
   private void annotateInfoID(
@@ -133,18 +146,25 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
       if (records.get(i) != null) {
         final CosmicRecord record = records.get(i).getRecord();
         final String id = record.getId();
-        if (!lst.contains(id)) lst.add(id);
+        if (!lst.contains(id)) {
+          lst.add(id);
+        }
       }
       matchList.add(lst);
     }
 
     ArrayList<String> vals = new ArrayList<>();
     for (int i = 1; i < vc.getNAlleles(); ++i) {
-      if (matchList.get(i - 1).isEmpty()) vals.add(".");
-      else vals.add(Joiner.on('|').join(matchList.get(i - 1)));
+      if (matchList.get(i - 1).isEmpty()) {
+        vals.add(".");
+      } else {
+        vals.add(Joiner.on('|').join(matchList.get(i - 1)));
+      }
     }
 
-    if (vals.stream().allMatch(s -> ".".equals(s))) return; // do not set list of "."
+    if (vals.stream().allMatch(s -> ".".equals(s))) {
+      return; // do not set list of "."
+    }
 
     builder.attribute(idIDs, vals);
   }

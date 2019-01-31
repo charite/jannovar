@@ -237,8 +237,9 @@ public class PedigreeFilterAnnotator {
    */
   private Allele getDeNovoAllele(VariantContext vc, String sampleName) {
     final Person person = this.pedigree.getNameToMember().get(sampleName).getPerson();
-    if (person.getFather() == null || person.getMother() == null)
+    if (person.getFather() == null || person.getMother() == null) {
       return null; // cannot make any judgement
+    }
     final Genotype gtPerson = vc.getGenotype(sampleName);
     final Genotype gtFather = vc.getGenotype(person.getFather().getName());
     final Genotype gtMother = vc.getGenotype(person.getMother().getName());
@@ -247,8 +248,12 @@ public class PedigreeFilterAnnotator {
         || gtFather == null
         || gtFather.isNoCall()
         || gtMother == null
-        || gtMother.isNoCall()) return null; // cannot make any judgement
-    if (!gtPerson.isHet()) return null; // impossible or too unlikely
+        || gtMother.isNoCall()) {
+      return null; // cannot make any judgement
+    }
+    if (!gtPerson.isHet()) {
+      return null; // impossible or too unlikely
+    }
     // Count non-reference alleles not yet seen in parents. Should be exactly one.
     final Set<Allele> personAlleles = new HashSet<>(gtPerson.getAlleles());
     personAlleles.remove(vc.getReference());

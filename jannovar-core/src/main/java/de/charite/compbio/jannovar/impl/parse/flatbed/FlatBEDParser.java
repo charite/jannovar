@@ -80,7 +80,9 @@ public class FlatBEDParser implements TranscriptParser {
 
     // Create final list of TranscriptModels.
     ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
-    for (TranscriptModelBuilder builder : builders) result.add(builder.build());
+    for (TranscriptModelBuilder builder : builders) {
+      result.add(builder.build());
+    }
     return result.build();
   }
 
@@ -97,8 +99,9 @@ public class FlatBEDParser implements TranscriptParser {
       String line;
       while ((line = br.readLine()) != null) {
         String[] arr = line.trim().split("\t");
-        if (!arr[5].equals("+") && !arr[5].equals("-"))
+        if (!arr[5].equals("+") && !arr[5].equals("-")) {
           throw new RuntimeException("Invalid strand value " + arr[5]);
+        }
 
         Strand strand = (arr[5] == "+") ? Strand.FWD : Strand.REV;
         int chr = refDict.getContigNameToID().get(arr[0]);
@@ -129,8 +132,7 @@ public class FlatBEDParser implements TranscriptParser {
   }
 
   /**
-   * @param key
-   *            name of the INI entry
+   * @param key name of the INI entry
    * @return file name from INI <code>key</code.
    */
   private String getINIFileName(String key) {

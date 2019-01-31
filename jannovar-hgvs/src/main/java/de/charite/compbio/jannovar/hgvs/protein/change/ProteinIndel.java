@@ -126,19 +126,37 @@ public class ProteinIndel extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinIndel other = (ProteinIndel) obj;
     if (delSeq == null) {
-      if (other.delSeq != null) return false;
-    } else if (!delSeq.equals(other.delSeq)) return false;
+      if (other.delSeq != null) {
+        return false;
+      }
+    } else if (!delSeq.equals(other.delSeq)) {
+      return false;
+    }
     if (insSeq == null) {
-      if (other.insSeq != null) return false;
-    } else if (!insSeq.equals(other.insSeq)) return false;
+      if (other.insSeq != null) {
+        return false;
+      }
+    } else if (!insSeq.equals(other.insSeq)) {
+      return false;
+    }
     if (range == null) {
-      if (other.range != null) return false;
-    } else if (!range.equals(other.range)) return false;
+      if (other.range != null) {
+        return false;
+      }
+    } else if (!range.equals(other.range)) {
+      return false;
+    }
     return true;
   }
 

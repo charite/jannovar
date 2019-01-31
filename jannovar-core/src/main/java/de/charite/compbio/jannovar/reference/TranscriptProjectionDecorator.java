@@ -67,8 +67,10 @@ public final class TranscriptProjectionDecorator {
    */
   public TranscriptPosition genomeToTranscriptPos(GenomePosition pos) throws ProjectionException {
     if (!transcript.getTXRegion().contains(pos)) // guard against incorrect position
-    throw new ProjectionException(
+    {
+      throw new ProjectionException(
           "Position " + pos + " is not in the transcript region " + transcript.getTXRegion());
+    }
     pos = pos.withStrand(transcript.getStrand());
 
     // Look through all exons, find containing one, and compute the position.
@@ -101,8 +103,10 @@ public final class TranscriptProjectionDecorator {
    */
   public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
     if (!transcript.getCDSRegion().contains(pos)) // guard against incorrect position
-    throw new ProjectionException(
+    {
+      throw new ProjectionException(
           "Position " + pos + " is not in the CDS region " + transcript.getCDSRegion());
+    }
     pos = pos.withStrand(transcript.getStrand());
 
     // first convert from genome to transcript position
@@ -158,12 +162,15 @@ public final class TranscriptProjectionDecorator {
    */
   public GenomePosition transcriptToGenomePos(TranscriptPosition pos) throws ProjectionException {
     final int targetPos = pos.getPos(); // 0-based target pos
-    if (targetPos < 0) throw new ProjectionException("Invalid transcript position " + targetPos);
+    if (targetPos < 0) {
+      throw new ProjectionException("Invalid transcript position " + targetPos);
+    }
 
     int currPos = 0; // relative begin position of current exon
     for (GenomeInterval region : transcript.getExonRegions()) {
-      if (targetPos < currPos + region.length())
+      if (targetPos < currPos + region.length()) {
         return region.getGenomeBeginPos().shifted(targetPos - currPos);
+      }
       currPos += region.length();
     }
 
@@ -171,7 +178,9 @@ public final class TranscriptProjectionDecorator {
     // TODO(holtgrewe): add test for this
     GenomeInterval lastRegion =
         transcript.getExonRegions().get(transcript.getExonRegions().size() - 1);
-    if (targetPos == currPos) return lastRegion.getGenomeEndPos();
+    if (targetPos == currPos) {
+      return lastRegion.getGenomeEndPos();
+    }
 
     throw new ProjectionException("Invalid transcript position " + targetPos);
   }
@@ -184,32 +193,44 @@ public final class TranscriptProjectionDecorator {
    * @return the exon ID in reference (forward order)
    */
   public int exonIDInReferenceOrder(int exonID) {
-    if (transcript.getStrand().isForward()) return exonID;
-    else return transcript.getExonRegions().size() - exonID - 1;
+    if (transcript.getStrand().isForward()) {
+      return exonID;
+    } else {
+      return transcript.getExonRegions().size() - exonID - 1;
+    }
   }
 
   /**
    * Returns (0-based) index of the intron (in the order determined by the transcript's strand).
    *
    * @param pos the {@link GenomePosition} to use for querying
-   * @return (0-based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt>
+   * @return (0 - based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt>
    *     is not in exonic region but in transcript interval
    */
   public int locateIntron(GenomePosition pos) {
     if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
-    return INVALID_INTRON_ID;
+    {
+      return INVALID_INTRON_ID;
+    }
     if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
-    pos = pos.withStrand(transcript.getStrand());
+    {
+      pos = pos.withStrand(transcript.getStrand());
+    }
 
     // handle the case that the position is outside the transcript region
-    if (transcript.getTXRegion().isLeftOf(pos) || transcript.getTXRegion().isRightOf(pos))
+    if (transcript.getTXRegion().isLeftOf(pos) || transcript.getTXRegion().isRightOf(pos)) {
       return INVALID_INTRON_ID;
+    }
 
     // find exon containing pos or return null
     int i = 0;
     for (GenomeInterval region : transcript.getExonRegions()) {
-      if (region.isRightOf(pos)) return i - 1;
-      if (region.contains(pos)) return INVALID_INTRON_ID; // not in intron
+      if (region.isRightOf(pos)) {
+        return i - 1;
+      }
+      if (region.contains(pos)) {
+        return INVALID_INTRON_ID; // not in intron
+      }
       ++i;
     }
 
@@ -220,24 +241,31 @@ public final class TranscriptProjectionDecorator {
    * Returns (0-based) index of the exon (in the order determined by the transcript's strand).
    *
    * @param pos the {@link GenomePosition} to use for querying
-   * @return (0-based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is
+   * @return (0 - based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is
    *     not in exonic region but in transcript interval
    */
   public int locateExon(GenomePosition pos) {
     if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
-    return INVALID_EXON_ID;
+    {
+      return INVALID_EXON_ID;
+    }
     if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
-    pos = pos.withStrand(transcript.getStrand());
+    {
+      pos = pos.withStrand(transcript.getStrand());
+    }
 
     // handle the case that the position is outside the transcript region
-    if (transcript.getTXRegion().isLeftOf(pos) || transcript.getTXRegion().isRightOf(pos))
+    if (transcript.getTXRegion().isLeftOf(pos) || transcript.getTXRegion().isRightOf(pos)) {
       return INVALID_EXON_ID;
+    }
 
     // find exon containing pos or return null
     GenomeInterval posBase = new GenomeInterval(pos, 1); // region of referenced base
     int i = 0;
     for (GenomeInterval region : transcript.getExonRegions()) {
-      if (region.contains(posBase)) return i;
+      if (region.contains(posBase)) {
+        return i;
+      }
       ++i;
     }
 
@@ -248,21 +276,24 @@ public final class TranscriptProjectionDecorator {
    * Returns (0-based) index of the exon (in the order determined by the transcript's strand).
    *
    * @param pos the {@link TranscriptPosition} to use for querying
-   * @return (0-based) index of the selected exon
+   * @return (0 - based) index of the selected exon
    * @throws ProjectionException if there was a problem with pos (somehow falls out of transcript
    *     region, can only happen if negative or right of transcript end)
    */
   public int locateExon(TranscriptPosition pos) throws ProjectionException {
     // handle the case of transcript position being negative
-    if (pos.getPos() < 0)
+    if (pos.getPos() < 0) {
       throw new ProjectionException("Problem with transcript position " + pos + " (< 0)");
+    }
 
     // find exon containing pos or return null
     int currEndPos = 0; // current end position of exon in transcript
     int i = 0;
     for (GenomeInterval region : transcript.getExonRegions()) {
       int regionLength = region.length();
-      if (pos.getPos() < currEndPos + regionLength) return i;
+      if (pos.getPos() < currEndPos + regionLength) {
+        return i;
+      }
       ++i;
       currEndPos += regionLength;
     }

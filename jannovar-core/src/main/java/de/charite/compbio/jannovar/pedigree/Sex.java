@@ -16,11 +16,15 @@ public enum Sex {
 
   /** @return <code>int</code> representation for the pedigree file. */
   public int toInt() {
-    if (this == UNKNOWN) return 0;
-    else if (this == MALE) return 1;
-    else
-      // if (this == FEMALE)
+    if (this == UNKNOWN) {
+      return 0;
+    } else if (this == MALE) {
+      return 1;
+    } else
+    // if (this == FEMALE)
+    {
       return 2;
+    }
   }
 
   /**
@@ -32,8 +36,12 @@ public enum Sex {
    *     , or <code>"2"</code>.
    */
   public static Sex toSex(String s) throws PedParseException {
-    if (s.equals("1")) return MALE;
-    else if (s.equals("2")) return FEMALE;
-    else return UNKNOWN;
+    if (s.equals("1")) {
+      return MALE;
+    } else if (s.equals("2")) {
+      return FEMALE;
+    } else {
+      return UNKNOWN;
+    }
   }
 }

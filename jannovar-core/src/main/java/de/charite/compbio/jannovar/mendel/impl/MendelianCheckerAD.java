@@ -37,9 +37,11 @@ public class MendelianCheckerAD extends AbstractMendelianChecker {
         calls.stream().filter(call -> call.getChromType() == ChromosomeType.AUTOSOMAL);
     // Filter to calls compatible with AD inheritance
     Stream<GenotypeCalls> compatibleCalls;
-    if (this.pedigree.getNMembers() == 1)
+    if (this.pedigree.getNMembers() == 1) {
       compatibleCalls = autosomalCalls.filter(this::isCompatibleSingleton);
-    else compatibleCalls = autosomalCalls.filter(this::isCompatibleFamily);
+    } else {
+      compatibleCalls = autosomalCalls.filter(this::isCompatibleFamily);
+    }
     return ImmutableList.copyOf(compatibleCalls.collect(Collectors.toList()));
   }
 
@@ -48,7 +50,9 @@ public class MendelianCheckerAD extends AbstractMendelianChecker {
    *     individual in the pedigree
    */
   private boolean isCompatibleSingleton(GenotypeCalls calls) {
-    if (calls.getNSamples() == 0) return false; // no calls!
+    if (calls.getNSamples() == 0) {
+      return false; // no calls!
+    }
     return calls.getGenotypeBySampleNo(0).isHet();
   }
 
@@ -64,10 +68,15 @@ public class MendelianCheckerAD extends AbstractMendelianChecker {
       final Disease d = p.getDisease();
 
       if (d == Disease.AFFECTED) {
-        if (gt.isHomRef() || gt.isHomAlt()) return false;
-        else if (gt.isHet()) numAffectedWithHet++;
+        if (gt.isHomRef() || gt.isHomAlt()) {
+          return false;
+        } else if (gt.isHet()) {
+          numAffectedWithHet++;
+        }
       } else if (d == Disease.UNAFFECTED) {
-        if (gt.isHet() || gt.isHomAlt()) return false;
+        if (gt.isHet() || gt.isHomAlt()) {
+          return false;
+        }
       }
     }
 

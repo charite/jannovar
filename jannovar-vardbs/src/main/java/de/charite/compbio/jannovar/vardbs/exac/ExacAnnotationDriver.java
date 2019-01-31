@@ -53,13 +53,16 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         } else {
           final ExacRecord current = annotatingExacRecord.get(alleleNo).getRecord();
           final ExacRecord update = matchToRecord.get(m).getRecord();
-          if (update.getAlleleFrequencies(ExacPopulation.ALL).size() < alleleNo) continue;
+          if (update.getAlleleFrequencies(ExacPopulation.ALL).size() < alleleNo) {
+            continue;
+          }
           if ((isMatch
                   && current.highestAlleleFreq(alleleNo - 1)
                       < update.highestAlleleFreq(alleleNo - 1))
               || (!isMatch
-                  && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall()))
+                  && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall())) {
             annotatingExacRecord.put(alleleNo, matchToRecord.get(m));
+          }
         }
       }
     }
@@ -71,7 +74,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
       VariantContext vc,
       HashMap<Integer, AnnotatingRecord<ExacRecord>> matchRecords,
       HashMap<Integer, AnnotatingRecord<ExacRecord>> overlapRecords) {
-    if (matchRecords.isEmpty()) return vc;
+    if (matchRecords.isEmpty()) {
+      return vc;
+    }
 
     VariantContextBuilder builder = new VariantContextBuilder(vc);
 
@@ -127,11 +132,14 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
       String infix,
       HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
       VariantContextBuilder builder) {
-    if (records.isEmpty()) return;
+    if (records.isEmpty()) {
+      return;
+    }
     ExacRecord first = records.values().iterator().next().getRecord();
-    for (ExacPopulation pop : ExacPopulation.values())
+    for (ExacPopulation pop : ExacPopulation.values()) {
       builder.attribute(
           options.getVCFIdentifierPrefix() + infix + "AN_" + pop, first.getChromCount(pop));
+    }
   }
 
   private void annotateAlleleCounts(
@@ -159,7 +167,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         }
       }
 
-      if (use && !acList.isEmpty()) acLists.put(attrID, acList);
+      if (use && !acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -192,7 +202,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         }
       }
 
-      if (use && !acList.isEmpty()) acLists.put(attrID, acList);
+      if (use && !acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -224,7 +236,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         }
       }
 
-      if (use) builder.attribute(attrID, acList);
+      if (use) {
+        builder.attribute(attrID, acList);
+      }
 
       builder.attribute(attrID, acList);
     }
@@ -246,7 +260,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
           continue;
         }
         final ExacRecord record = records.get(i).getRecord();
-        if (record.getAlleleHemiCounts().isEmpty()) continue;
+        if (record.getAlleleHemiCounts().isEmpty()) {
+          continue;
+        }
         final int alleleNo = records.get(i).getAlleleNo();
         if (record.getAlleleHemiCounts(pop).isEmpty()) {
           acList.add(0);
@@ -256,7 +272,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         }
       }
 
-      if (use && !acList.isEmpty()) acLists.put(attrID, acList);
+      if (use && !acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -286,7 +304,9 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
         }
       }
 
-      if (!afList.isEmpty()) builder.attribute(attrID, afList);
+      if (!afList.isEmpty()) {
+        builder.attribute(attrID, afList);
+      }
     }
   }
 }

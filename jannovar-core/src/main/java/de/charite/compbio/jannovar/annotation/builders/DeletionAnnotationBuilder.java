@@ -44,8 +44,9 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
     super(transcript, change, options);
 
     // Guard against invalid genome change.
-    if (change.getRef().length() == 0 || change.getAlt().length() != 0)
+    if (change.getRef().length() == 0 || change.getAlt().length() != 0) {
       throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe a deletion.");
+    }
   }
 
   @Override
@@ -54,22 +55,29 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
     // each of them
     // where applicable.
 
-    if (!transcript.isCoding()) return buildNonCodingAnnotation();
+    if (!transcript.isCoding()) {
+      return buildNonCodingAnnotation();
+    }
 
     final GenomeInterval changeInterval = change.getGenomeInterval();
     if (so.containsExon(changeInterval)) // deletion of whole exon
-    return buildFeatureAblationAnnotation();
-    else if (so.overlapsWithTranslationalStartSite(changeInterval))
+    {
+      return buildFeatureAblationAnnotation();
+    } else if (so.overlapsWithTranslationalStartSite(changeInterval)) {
       return buildStartLossAnnotation();
-    else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval))
+    } else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval)) {
       return new CDSExonicAnnotationBuilder().build(); // can affect amino acids
-    else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
+    } else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval)) {
       return buildIntronicAnnotation(); // intron but no exon => intronic variant
-    else if (so.overlapsWithFivePrimeUTR(changeInterval)
-        || so.overlapsWithThreePrimeUTR(changeInterval)) return buildUTRAnnotation();
-    else if (so.overlapsWithUpstreamRegion(changeInterval)
-        || so.overlapsWithDownstreamRegion(changeInterval)) return buildUpOrDownstreamAnnotation();
-    else return buildIntergenicAnnotation();
+    } else if (so.overlapsWithFivePrimeUTR(changeInterval)
+        || so.overlapsWithThreePrimeUTR(changeInterval)) {
+      return buildUTRAnnotation();
+    } else if (so.overlapsWithUpstreamRegion(changeInterval)
+        || so.overlapsWithDownstreamRegion(changeInterval)) {
+      return buildUpOrDownstreamAnnotation();
+    } else {
+      return buildIntergenicAnnotation();
+    }
   }
 
   @Override
@@ -108,6 +116,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
    * etc.
    */
   private class CDSExonicAnnotationBuilder {
+
     final GenomeInterval changeInterval;
 
     final Translator t = Translator.getTranslator();
@@ -166,8 +175,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
     }
 
     public Annotation build() {
-      if (delFrameShift == 0) handleNonFrameShiftCase();
-      else handleFrameShiftCase();
+      if (delFrameShift == 0) {
+        handleNonFrameShiftCase();
+      } else {
+        handleFrameShiftCase();
+      }
 
       return new Annotation(
           transcript,
@@ -189,26 +201,31 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
       //
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.overlapsWithSpliceDonorSite(changeInterval))
+      if (so.overlapsWithSpliceDonorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+      } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.overlapsWithSpliceRegion(changeInterval))
+      } else if (so.overlapsWithSpliceRegion(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check whether the variant overlaps with the stop site.
-      if (so.overlapsWithTranslationalStopSite(changeInterval))
+      if (so.overlapsWithTranslationalStopSite(changeInterval)) {
         varTypes.add(VariantEffect.STOP_LOST);
+      }
 
       // Differentiate the cases disruptive and a non-disruptive deletions.
-      if (changeBeginPos.getPos() % 3 == 0) varTypes.add(VariantEffect.INFRAME_DELETION);
-      else varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_DELETION);
+      if (changeBeginPos.getPos() % 3 == 0) {
+        varTypes.add(VariantEffect.INFRAME_DELETION);
+      } else {
+        varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_DELETION);
+      }
 
       // Differentiate between the cases where we have a stop codon and those where we don't.
       if (varAAStopPos >= 0) {
         String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
         String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
         if (aaChange.getPos() == aaChange.getLastPos()) {
-          if (aaChange.getAlt().length() > 0)
+          if (aaChange.getAlt().length() > 0) {
             proteinChange =
                 ProteinIndel.buildWithSeqDescription(
                     true,
@@ -218,7 +235,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
                     aaChange.getPos(),
                     new ProteinSeqDescription(),
                     new ProteinSeqDescription(aaChange.getAlt()));
-          else
+          } else {
             proteinChange =
                 ProteinDeletion.buildWithSequence(
                     true,
@@ -227,8 +244,9 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
                     wtAAFirst,
                     aaChange.getPos(),
                     aaChange.getAlt());
+          }
         } else {
-          if (aaChange.getAlt().length() > 0)
+          if (aaChange.getAlt().length() > 0) {
             proteinChange =
                 ProteinIndel.buildWithSeqDescription(
                     true,
@@ -238,7 +256,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
                     aaChange.getLastPos(),
                     new ProteinSeqDescription(),
                     new ProteinSeqDescription(aaChange.getAlt()));
-          else
+          } else {
             proteinChange =
                 ProteinDeletion.buildWithSequence(
                     true,
@@ -247,6 +265,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
                     wtAALast,
                     aaChange.getLastPos(),
                     aaChange.getAlt());
+          }
         }
       } else {
         // There is no stop codon any more! Create a "probably no protein is produced".
@@ -263,29 +282,35 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
       //
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.overlapsWithSpliceDonorSite(changeInterval))
+      if (so.overlapsWithSpliceDonorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+      } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.overlapsWithSpliceRegion(changeInterval))
+      } else if (so.overlapsWithSpliceRegion(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check whether the variant overlaps with the stop site.
-      if (so.overlapsWithTranslationalStopSite(changeInterval))
+      if (so.overlapsWithTranslationalStopSite(changeInterval)) {
         varTypes.add(VariantEffect.STOP_LOST);
+      }
 
       // A nucleotide deletion can lead to an elongation of the transcript, annotate the specific
       // case.
-      if (varAASeq.length() > wtAASeq.length()) varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
-      else if (varAASeq.length() < wtAASeq.length())
+      if (varAASeq.length() > wtAASeq.length()) {
+        varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
+      } else if (varAASeq.length() < wtAASeq.length()) {
         varTypes.add(VariantEffect.FRAMESHIFT_TRUNCATION);
-      else varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
+      } else {
+        varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
+      }
 
       // Normalize the amino acid change, shifting to the right as long as change ref char equals
       // var ref char.
       while (aaChange.getRef().length() > 0
           && aaChange.getPos() < varAASeq.length()
-          && aaChange.getRef().charAt(0) == varAASeq.charAt(aaChange.getPos()))
+          && aaChange.getRef().charAt(0) == varAASeq.charAt(aaChange.getPos())) {
         aaChange = aaChange.shiftRight();
+      }
 
       // Handle the case of deleting a stop codon at the very last entry of the translated amino
       // acid string and
@@ -301,14 +326,15 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
       if (aaChange.getLastPos() >= varAASeq.length()) {
         final String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
         final String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
-        if (aaChange.getRef().length() == 1)
+        if (aaChange.getRef().length() == 1) {
           proteinChange =
               ProteinDeletion.buildWithoutSeqDescription(
                   true, wtAAFirst, aaChange.getPos(), wtAAFirst, aaChange.getPos());
-        else
+        } else {
           proteinChange =
               ProteinDeletion.buildWithoutSeqDescription(
                   true, wtAAFirst, aaChange.getPos(), wtAALast, aaChange.getLastPos());
+        }
         return;
       }
 
@@ -319,19 +345,21 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
       // Compute suffix for HGVS protein annotation.
       if (varAAStopPos >= 0) {
         final int stopCodonOffset = varAAStopPos - aaChange.getPos() + delta;
-        if (varTypes.contains(VariantEffect.STOP_LOST))
+        if (varTypes.contains(VariantEffect.STOP_LOST)) {
           proteinChange =
               ProteinExtension.build(true, "*", aaChange.getPos(), varAA, stopCodonOffset);
-        else
+        } else {
           proteinChange =
               ProteinFrameshift.build(true, wtAA, aaChange.getPos(), varAA, stopCodonOffset);
+        }
       } else {
-        if (varTypes.contains(VariantEffect.STOP_LOST))
+        if (varTypes.contains(VariantEffect.STOP_LOST)) {
           proteinChange =
               ProteinExtension.buildWithoutTerminal(true, "*", aaChange.getPos(), varAA);
-        else
+        } else {
           proteinChange =
               ProteinFrameshift.buildWithoutTerminal(true, wtAA, aaChange.getPos(), varAA);
+        }
       }
     }
   }

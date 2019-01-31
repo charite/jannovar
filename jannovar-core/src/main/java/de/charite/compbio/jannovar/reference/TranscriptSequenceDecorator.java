@@ -36,12 +36,13 @@ public final class TranscriptSequenceDecorator {
    */
   public static String codonWithUpdatedBase(String transcriptCodon, int frameShift, char targetNC) {
     assert (0 <= frameShift && frameShift <= 2);
-    if (frameShift == 0)
+    if (frameShift == 0) {
       return StringUtil.concatenate(targetNC, transcriptCodon.charAt(1), transcriptCodon.charAt(2));
-    else if (frameShift == 1)
+    } else if (frameShift == 1) {
       return StringUtil.concatenate(transcriptCodon.charAt(0), targetNC, transcriptCodon.charAt(2));
-    else
+    } else {
       return StringUtil.concatenate(transcriptCodon.charAt(0), transcriptCodon.charAt(1), targetNC);
+    }
   }
 
   /**
@@ -57,12 +58,14 @@ public final class TranscriptSequenceDecorator {
   public static String nucleotidesWithInsertion(
       String transcriptNTs, int frameShift, String insertion) {
     assert (0 <= frameShift && frameShift <= 2);
-    if (frameShift == 0) return StringUtil.concatenate(insertion, transcriptNTs);
-    else if (frameShift == 1)
+    if (frameShift == 0) {
+      return StringUtil.concatenate(insertion, transcriptNTs);
+    } else if (frameShift == 1) {
       return StringUtil.concatenate(transcriptNTs.charAt(0), insertion, transcriptNTs.substring(1));
-    else
+    } else {
       return StringUtil.concatenate(
           transcriptNTs.charAt(0), transcriptNTs.charAt(1), insertion, transcriptNTs.substring(2));
+    }
   }
 
   /**
@@ -78,7 +81,7 @@ public final class TranscriptSequenceDecorator {
     int frameShift = cdsPos.getPos() % 3;
     int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
     int endPos = codonStart + 3;
-    if (transcript.getSequence().length() < endPos)
+    if (transcript.getSequence().length() < endPos) {
       throw new InvalidCodonException(
           "Could not access codon "
               + codonStart
@@ -86,6 +89,7 @@ public final class TranscriptSequenceDecorator {
               + endPos
               + ", transcript sequence length is "
               + transcript.getSequence().length());
+    }
     return transcript.getSequence().substring(codonStart, endPos);
   }
 
@@ -105,7 +109,9 @@ public final class TranscriptSequenceDecorator {
     int frameShift = cdsPos.getPos() % 3;
     int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
     int endPos = codonStart + 3 * count;
-    if (endPos > transcript.getSequence().length()) endPos = transcript.getSequence().length();
+    if (endPos > transcript.getSequence().length()) {
+      endPos = transcript.getSequence().length();
+    }
     return transcript.getSequence().substring(codonStart, endPos);
   }
 

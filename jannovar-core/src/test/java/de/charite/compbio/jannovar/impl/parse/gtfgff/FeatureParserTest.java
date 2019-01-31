@@ -37,7 +37,9 @@ public class FeatureParserTest {
 
     ArrayList<FeatureRecord> records = new ArrayList<>();
     FeatureRecord record;
-    while ((record = parser.next()) != null) records.add(record);
+    while ((record = parser.next()) != null) {
+      records.add(record);
+    }
 
     Assert.assertEquals(12, records.size());
     Assert.assertEquals(

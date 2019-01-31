@@ -137,8 +137,9 @@ public class EnsemblParser implements TranscriptParser {
       throws TranscriptParseException {
     // First, build mapping from RNA accession to builder
     Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
-    for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
+    for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
       txMap.put(entry.getValue().getSequence(), entry.getValue());
+    }
 
     // We must remove variants for which we did not find any sequence;
     Set<String> missingSequence = new HashSet<>();
@@ -195,8 +196,9 @@ public class EnsemblParser implements TranscriptParser {
   private Map<String, TranscriptModelBuilder> recordsToBuilders(
       HashMap<String, ArrayList<FeatureRecord>> recordsByGene) {
     Map<String, TranscriptModelBuilder> result = new HashMap<>();
-    for (Entry<String, ArrayList<FeatureRecord>> entry : recordsByGene.entrySet())
+    for (Entry<String, ArrayList<FeatureRecord>> entry : recordsByGene.entrySet()) {
       result.putAll(processGeneGFFRecords(entry.getValue()));
+    }
     return result;
   }
 
@@ -212,9 +214,14 @@ public class EnsemblParser implements TranscriptParser {
           (record.getAttributes().get("transcript_id") != null)
               ? record.getAttributes().get("transcript_id")
               : record.getAttributes().get("transcript_name");
-      if (txID == null) continue; // skip, no transcript ID
-      if (!recordsForTX.containsKey(txID)) recordsForTX.put(txID, Lists.newArrayList(record));
-      else recordsForTX.get(txID).add(record);
+      if (txID == null) {
+        continue; // skip, no transcript ID
+      }
+      if (!recordsForTX.containsKey(txID)) {
+        recordsForTX.put(txID, Lists.newArrayList(record));
+      } else {
+        recordsForTX.get(txID).add(record);
+      }
     }
 
     // Now, build TranscriptModelBuilder for each transcript
@@ -254,8 +261,11 @@ public class EnsemblParser implements TranscriptParser {
           GenomeInterval exon =
               new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
           exon = exon.withStrand(strand);
-          if (txRegion == null) txRegion = exon;
-          else txRegion = txRegion.union(exon);
+          if (txRegion == null) {
+            txRegion = exon;
+          } else {
+            txRegion = txRegion.union(exon);
+          }
           builder.addExonRegion(exon);
         } else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
           GenomeInterval cds =
@@ -266,11 +276,16 @@ public class EnsemblParser implements TranscriptParser {
                   record.getBegin(),
                   record.getEnd());
           cds = cds.withStrand(strand);
-          if (cdsRegion == null) cdsRegion = cds;
-          else cdsRegion = cdsRegion.union(cds);
+          if (cdsRegion == null) {
+            cdsRegion = cds;
+          } else {
+            cdsRegion = cdsRegion.union(cds);
+          }
         }
       }
-      if (wrongContig) continue; // skip, on wrong contig
+      if (wrongContig) {
+        continue; // skip, on wrong contig
+      }
       if (txRegion == null) {
         // Only warn if a transcript and not a gene, we only allow exons to be parts of genes as
         // this is
@@ -279,7 +294,9 @@ public class EnsemblParser implements TranscriptParser {
         continue;
       }
       builder.setTXRegion(txRegion);
-      if (cdsRegion == null) cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
+      if (cdsRegion == null) {
+        cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
+      }
       builder.setCDSRegion(cdsRegion);
 
       result.put(txID, builder);
@@ -319,8 +336,11 @@ public class EnsemblParser implements TranscriptParser {
         numRecords += 1;
 
         final String geneID = record.getAttributes().get("gene_id");
-        if (!result.containsKey(geneID)) result.put(geneID, Lists.newArrayList(record));
-        else result.get(geneID).add(record);
+        if (!result.containsKey(geneID)) {
+          result.put(geneID, Lists.newArrayList(record));
+        } else {
+          result.get(geneID).add(record);
+        }
       }
     } catch (IOException e) {
       throw new TranscriptParseException("Problem parsing GFF file", e);
@@ -332,8 +352,7 @@ public class EnsemblParser implements TranscriptParser {
   }
 
   /**
-   * @param key
-   *            name of the INI entry
+   * @param key name of the INI entry
    * @return file name from INI <code>key</code.
    */
   private String getINIFileName(String key) {

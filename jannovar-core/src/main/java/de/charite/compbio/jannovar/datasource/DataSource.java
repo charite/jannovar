@@ -38,8 +38,9 @@ public abstract class DataSource {
    */
   public final String getFileName(String key) throws InvalidDataSourceException {
     String urlString = iniSection.fetch(key);
-    if (urlString == null || urlString.equals(""))
+    if (urlString == null || urlString.equals("")) {
       throw new InvalidDataSourceException("Cannot retrieve URL for key " + key);
+    }
     URL url;
     try {
       url = new URL(urlString);
@@ -72,7 +73,9 @@ public abstract class DataSource {
   /** @return list of URLs with files to download for this data source */
   public final ImmutableList<String> getDownloadURLs() {
     ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
-    for (String key : getURLKeys()) builder.add(iniSection.fetch(key));
+    for (String key : getURLKeys()) {
+      builder.add(iniSection.fetch(key));
+    }
     // Always download hgnc_complete_set.txt
     builder.add(HGNCParser.DOWNLOAD_URL);
     return builder.build();
@@ -84,9 +87,11 @@ public abstract class DataSource {
    * @throws InvalidDataSourceException if a key is missing.
    */
   protected final void checkURLs() throws InvalidDataSourceException {
-    for (String key : getURLKeys())
-      if (!iniSection.containsKey(key))
+    for (String key : getURLKeys()) {
+      if (!iniSection.containsKey(key)) {
         throw new InvalidDataSourceException(
             "Section " + iniSection.getName() + " does not contain key " + key);
+      }
+    }
   }
 }

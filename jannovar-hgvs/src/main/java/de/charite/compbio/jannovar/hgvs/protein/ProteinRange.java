@@ -73,8 +73,11 @@ public class ProteinRange implements ConvertibleToHGVSString {
 
   @Override
   public String toHGVSString(AminoAcidCode code) {
-    if (first.equals(last)) return first.toHGVSString(code);
-    else return first.toHGVSString(code) + "_" + last.toHGVSString(code);
+    if (first.equals(last)) {
+      return first.toHGVSString(code);
+    } else {
+      return first.toHGVSString(code) + "_" + last.toHGVSString(code);
+    }
   }
 
   @Override
@@ -93,16 +96,30 @@ public class ProteinRange implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinRange other = (ProteinRange) obj;
     if (first == null) {
-      if (other.first != null) return false;
-    } else if (!first.equals(other.first)) return false;
+      if (other.first != null) {
+        return false;
+      }
+    } else if (!first.equals(other.first)) {
+      return false;
+    }
     if (last == null) {
-      if (other.last != null) return false;
-    } else if (!last.equals(other.last)) return false;
+      if (other.last != null) {
+        return false;
+      }
+    } else if (!last.equals(other.last)) {
+      return false;
+    }
     return true;
   }
 }

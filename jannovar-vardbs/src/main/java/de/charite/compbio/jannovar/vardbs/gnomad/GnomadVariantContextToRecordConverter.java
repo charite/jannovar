@@ -25,7 +25,9 @@ final class GnomadVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
     builder.getPopmax().addAll(vc.getAttributeAsStringList("POPMAX", "."));
 
@@ -34,7 +36,9 @@ final class GnomadVariantContextToRecordConverter
     // AN: Chromosome count
     int allAN = 0;
     for (GnomadPopulation pop : GnomadPopulation.values()) {
-      if (pop == GnomadPopulation.ALL) continue; // skip
+      if (pop == GnomadPopulation.ALL) {
+        continue; // skip
+      }
 
       if (pop == GnomadPopulation.POPMAX) {
         final List<String> lst = vc.getAttributeAsStringList("AN_POPMAX", ".");
@@ -49,7 +53,9 @@ final class GnomadVariantContextToRecordConverter
       } else {
         int an = vc.getAttributeAsInt("AN_" + pop, 0);
         builder.getChromCounts().put(pop, ImmutableList.of(an));
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) allAN += an;
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
+          allAN += an;
+        }
       }
     }
     builder.getChromCounts().put(GnomadPopulation.ALL, ImmutableList.of(allAN));
@@ -66,7 +72,9 @@ final class GnomadVariantContextToRecordConverter
       allHemi.add(0);
     }
     for (GnomadPopulation pop : GnomadPopulation.values()) {
-      if (pop == GnomadPopulation.ALL) continue; // skip
+      if (pop == GnomadPopulation.ALL) {
+        continue; // skip
+      }
 
       // AC
       List<Integer> acLst =
@@ -75,9 +83,11 @@ final class GnomadVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!acLst.isEmpty()) {
         builder.getAlleleCounts().put(pop, acLst);
-        if (pop != GnomadPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != GnomadPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allAC.set(i, allAC.get(i) + acLst.get(i));
+          }
+        }
       }
 
       // Hom
@@ -87,9 +97,11 @@ final class GnomadVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!homLst.isEmpty()) {
         builder.getAlleleHomCounts().put(pop, homLst);
-        if (pop != GnomadPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != GnomadPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHom.set(i, allHom.get(i) + homLst.get(i));
+          }
+        }
       }
 
       // Hemi
@@ -99,9 +111,11 @@ final class GnomadVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!hemiLst.isEmpty()) {
         builder.getAlleleHemiCounts().put(pop, hemiLst);
-        if (pop != GnomadPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != GnomadPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHemi.set(i, allHemi.get(i) + hemiLst.get(i));
+          }
+        }
       }
 
       // Het
@@ -109,24 +123,33 @@ final class GnomadVariantContextToRecordConverter
       if (!acLst.isEmpty()) {
         for (int i = 0; i < acLst.size(); ++i) {
           int het = acLst.get(i);
-          if (homLst.size() > i) het -= 2 * homLst.get(i);
-          if (hemiLst.size() > i) het -= hemiLst.get(i);
+          if (homLst.size() > i) {
+            het -= 2 * homLst.get(i);
+          }
+          if (hemiLst.size() > i) {
+            het -= hemiLst.get(i);
+          }
           hetList.add(het);
         }
         builder.getAlleleHetCounts().put(pop, hetList);
-        if (pop != GnomadPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != GnomadPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHet.set(i, allHet.get(i) + hetList.get(i));
+          }
+        }
       }
     }
 
     builder.getAlleleCounts().put(GnomadPopulation.ALL, allAC);
-    if (!builder.getAlleleHetCounts().isEmpty())
+    if (!builder.getAlleleHetCounts().isEmpty()) {
       builder.getAlleleHetCounts().put(GnomadPopulation.ALL, allHet);
-    if (!builder.getAlleleHomCounts().isEmpty())
+    }
+    if (!builder.getAlleleHomCounts().isEmpty()) {
       builder.getAlleleHomCounts().put(GnomadPopulation.ALL, allHom);
-    if (!builder.getAlleleHemiCounts().isEmpty())
+    }
+    if (!builder.getAlleleHemiCounts().isEmpty()) {
       builder.getAlleleHemiCounts().put(GnomadPopulation.ALL, allHemi);
+    }
 
     return builder.build();
   }

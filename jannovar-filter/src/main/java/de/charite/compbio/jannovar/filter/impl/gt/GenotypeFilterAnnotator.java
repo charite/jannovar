@@ -38,7 +38,9 @@ public class GenotypeFilterAnnotator {
     GenotypeBuilder gtBuilder = new GenotypeBuilder(gt);
 
     ArrayList<String> filters = new ArrayList<>();
-    if (gt.isFiltered()) filters.add(gt.getFilters());
+    if (gt.isFiltered()) {
+      filters.add(gt.getFilters());
+    }
     filters.addAll(getFiltersFor(gt));
     gtBuilder.filters(filters);
 
@@ -56,33 +58,41 @@ public class GenotypeFilterAnnotator {
 
   private void checkCoverage(Genotype gt, Builder<String> builder, GenotypeFilterImpl impl) {
     if (gt.isHet()) {
-      if (impl.getCoverage(gt) < options.getMinGtCovHet())
+      if (impl.getCoverage(gt) < options.getMinGtCovHet()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET);
+      }
     } else if (!gt.isHomRef()) {
-      if (impl.getCoverage(gt) < options.getMinGtCovHomAlt())
+      if (impl.getCoverage(gt) < options.getMinGtCovHomAlt()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT);
+      }
     }
-    if (impl.getCoverage(gt) > options.getMaxCov())
+    if (impl.getCoverage(gt) > options.getMaxCov()) {
       builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV);
+    }
   }
 
   private void checkGenotypeQuality(Genotype gt, Builder<String> builder, GenotypeFilterImpl impl) {
-    if (impl.getGenotypeQuality(gt) < options.getMinGtGq())
+    if (impl.getGenotypeQuality(gt) < options.getMinGtGq()) {
       builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ);
+    }
   }
 
   private void checkAaf(Genotype gt, Builder<String> builder, GenotypeFilterImpl impl) {
     if (gt.isHet()) {
-      if (impl.getAlternativeAlleleFraction(gt) < options.getMinGtAafHet())
+      if (impl.getAlternativeAlleleFraction(gt) < options.getMinGtAafHet()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET);
-      if (impl.getAlternativeAlleleFraction(gt) > options.getMaxGtAafHet())
+      }
+      if (impl.getAlternativeAlleleFraction(gt) > options.getMaxGtAafHet()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET);
+      }
     } else if (gt.isHomRef()) {
-      if (impl.getAlternativeAlleleFraction(gt) > options.getMaxGtAafHomRef())
+      if (impl.getAlternativeAlleleFraction(gt) > options.getMaxGtAafHomRef()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF);
+      }
     } else {
-      if (impl.getAlternativeAlleleFraction(gt) < options.getMinGtAafHomAlt())
+      if (impl.getAlternativeAlleleFraction(gt) < options.getMinGtAafHomAlt()) {
         builder.add(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT);
+      }
     }
   }
 }

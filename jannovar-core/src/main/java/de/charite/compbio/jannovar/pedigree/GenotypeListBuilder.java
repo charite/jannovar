@@ -10,6 +10,7 @@ import java.util.List;
  */
 @Deprecated
 public class GenotypeListBuilder {
+
   private final String geneID;
   private boolean isXChromosomal;
   private final ImmutableList<String> names;

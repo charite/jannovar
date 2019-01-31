@@ -530,86 +530,222 @@ public final class DBSNPRecord {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     DBSNPRecord other = (DBSNPRecord) obj;
     if (alleleFrequenciesG1K == null) {
-      if (other.alleleFrequenciesG1K != null) return false;
-    } else if (!alleleFrequenciesG1K.equals(other.alleleFrequenciesG1K)) return false;
+      if (other.alleleFrequenciesG1K != null) {
+        return false;
+      }
+    } else if (!alleleFrequenciesG1K.equals(other.alleleFrequenciesG1K)) {
+      return false;
+    }
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
-    if (assemblyConflict != other.assemblyConflict) return false;
-    if (assemblySpecific != other.assemblySpecific) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
+    if (assemblyConflict != other.assemblyConflict) {
+      return false;
+    }
+    if (assemblySpecific != other.assemblySpecific) {
+      return false;
+    }
     if (chrom == null) {
-      if (other.chrom != null) return false;
-    } else if (!chrom.equals(other.chrom)) return false;
-    if (clinicalDiagnosticAssay != other.clinicalDiagnosticAssay) return false;
-    if (common != other.common) return false;
-    if (contigAlelleNotVariant != other.contigAlelleNotVariant) return false;
-    if (dbSNPBuildID != other.dbSNPBuildID) return false;
+      if (other.chrom != null) {
+        return false;
+      }
+    } else if (!chrom.equals(other.chrom)) {
+      return false;
+    }
+    if (clinicalDiagnosticAssay != other.clinicalDiagnosticAssay) {
+      return false;
+    }
+    if (common != other.common) {
+      return false;
+    }
+    if (contigAlelleNotVariant != other.contigAlelleNotVariant) {
+      return false;
+    }
+    if (dbSNPBuildID != other.dbSNPBuildID) {
+      return false;
+    }
     if (filter == null) {
-      if (other.filter != null) return false;
-    } else if (!filter.equals(other.filter)) return false;
-    if (fivePercentAll != other.fivePercentAll) return false;
-    if (fivePercentOne != other.fivePercentOne) return false;
-    if (g1kPhase1 != other.g1kPhase1) return false;
-    if (g1kPhase3 != other.g1kPhase3) return false;
+      if (other.filter != null) {
+        return false;
+      }
+    } else if (!filter.equals(other.filter)) {
+      return false;
+    }
+    if (fivePercentAll != other.fivePercentAll) {
+      return false;
+    }
+    if (fivePercentOne != other.fivePercentOne) {
+      return false;
+    }
+    if (g1kPhase1 != other.g1kPhase1) {
+      return false;
+    }
+    if (g1kPhase3 != other.g1kPhase3) {
+      return false;
+    }
     if (geneInfos == null) {
-      if (other.geneInfos != null) return false;
-    } else if (!geneInfos.equals(other.geneInfos)) return false;
-    if (genotypesAvailable != other.genotypesAvailable) return false;
-    if (hasOMIMOrOMIA != other.hasOMIMOrOMIA) return false;
-    if (highDensityGenotyping != other.highDensityGenotyping) return false;
+      if (other.geneInfos != null) {
+        return false;
+      }
+    } else if (!geneInfos.equals(other.geneInfos)) {
+      return false;
+    }
+    if (genotypesAvailable != other.genotypesAvailable) {
+      return false;
+    }
+    if (hasOMIMOrOMIA != other.hasOMIMOrOMIA) {
+      return false;
+    }
+    if (highDensityGenotyping != other.highDensityGenotyping) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null) return false;
-    } else if (!id.equals(other.id)) return false;
-    if (inAcceptor != other.inAcceptor) return false;
-    if (inDonor != other.inDonor) return false;
-    if (inFivePrime != other.inFivePrime) return false;
-    if (inFivePrimeUTR != other.inFivePrimeUTR) return false;
-    if (inIntron != other.inIntron) return false;
-    if (inThreePrime != other.inThreePrime) return false;
-    if (inThreePrimeUTR != other.inThreePrimeUTR) return false;
-    if (locusSpecificDatabase != other.locusSpecificDatabase) return false;
-    if (microattributionThirdParty != other.microattributionThirdParty) return false;
-    if (mutation != other.mutation) return false;
-    if (nonOverlappingAlleleSet != other.nonOverlappingAlleleSet) return false;
-    if (nonSynonymousFrameShift != other.nonSynonymousFrameShift) return false;
-    if (nonSynonymousMissense != other.nonSynonymousMissense) return false;
-    if (nonSynonymousNonsense != other.nonSynonymousNonsense) return false;
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (inAcceptor != other.inAcceptor) {
+      return false;
+    }
+    if (inDonor != other.inDonor) {
+      return false;
+    }
+    if (inFivePrime != other.inFivePrime) {
+      return false;
+    }
+    if (inFivePrimeUTR != other.inFivePrimeUTR) {
+      return false;
+    }
+    if (inIntron != other.inIntron) {
+      return false;
+    }
+    if (inThreePrime != other.inThreePrime) {
+      return false;
+    }
+    if (inThreePrimeUTR != other.inThreePrimeUTR) {
+      return false;
+    }
+    if (locusSpecificDatabase != other.locusSpecificDatabase) {
+      return false;
+    }
+    if (microattributionThirdParty != other.microattributionThirdParty) {
+      return false;
+    }
+    if (mutation != other.mutation) {
+      return false;
+    }
+    if (nonOverlappingAlleleSet != other.nonOverlappingAlleleSet) {
+      return false;
+    }
+    if (nonSynonymousFrameShift != other.nonSynonymousFrameShift) {
+      return false;
+    }
+    if (nonSynonymousMissense != other.nonSynonymousMissense) {
+      return false;
+    }
+    if (nonSynonymousNonsense != other.nonSynonymousNonsense) {
+      return false;
+    }
     if (oldVariants == null) {
-      if (other.oldVariants != null) return false;
-    } else if (!oldVariants.equals(other.oldVariants)) return false;
-    if (otherVariant != other.otherVariant) return false;
-    if (pos != other.pos) return false;
-    if (precious != other.precious) return false;
-    if (pubMedCentral != other.pubMedCentral) return false;
+      if (other.oldVariants != null) {
+        return false;
+      }
+    } else if (!oldVariants.equals(other.oldVariants)) {
+      return false;
+    }
+    if (otherVariant != other.otherVariant) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
+    if (precious != other.precious) {
+      return false;
+    }
+    if (pubMedCentral != other.pubMedCentral) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
-    if (reference != other.reference) return false;
-    if (reversed != other.reversed) return false;
-    if (rsID != other.rsID) return false;
-    if (rsPos != other.rsPos) return false;
-    if (submitterLinkOut != other.submitterLinkOut) return false;
-    if (synonymous != other.synonymous) return false;
-    if (thirdPartyAnnotation != other.thirdPartyAnnotation) return false;
-    if (threeDStructure != other.threeDStructure) return false;
-    if (validated != other.validated) return false;
-    if (variantAlleleOrigin != other.variantAlleleOrigin) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
+    if (reference != other.reference) {
+      return false;
+    }
+    if (reversed != other.reversed) {
+      return false;
+    }
+    if (rsID != other.rsID) {
+      return false;
+    }
+    if (rsPos != other.rsPos) {
+      return false;
+    }
+    if (submitterLinkOut != other.submitterLinkOut) {
+      return false;
+    }
+    if (synonymous != other.synonymous) {
+      return false;
+    }
+    if (thirdPartyAnnotation != other.thirdPartyAnnotation) {
+      return false;
+    }
+    if (threeDStructure != other.threeDStructure) {
+      return false;
+    }
+    if (validated != other.validated) {
+      return false;
+    }
+    if (variantAlleleOrigin != other.variantAlleleOrigin) {
+      return false;
+    }
     if (variantProperty == null) {
-      if (other.variantProperty != null) return false;
-    } else if (!variantProperty.equals(other.variantProperty)) return false;
+      if (other.variantProperty != null) {
+        return false;
+      }
+    } else if (!variantProperty.equals(other.variantProperty)) {
+      return false;
+    }
     if (variantSuspectReasonCode == null) {
-      if (other.variantSuspectReasonCode != null) return false;
-    } else if (!variantSuspectReasonCode.equals(other.variantSuspectReasonCode)) return false;
+      if (other.variantSuspectReasonCode != null) {
+        return false;
+      }
+    } else if (!variantSuspectReasonCode.equals(other.variantSuspectReasonCode)) {
+      return false;
+    }
     if (variationClass == null) {
-      if (other.variationClass != null) return false;
-    } else if (!variationClass.equals(other.variationClass)) return false;
-    if (weights != other.weights) return false;
-    if (withdrawn != other.withdrawn) return false;
+      if (other.variationClass != null) {
+        return false;
+      }
+    } else if (!variationClass.equals(other.variationClass)) {
+      return false;
+    }
+    if (weights != other.weights) {
+      return false;
+    }
+    if (withdrawn != other.withdrawn) {
+      return false;
+    }
     return true;
   }
 

@@ -90,8 +90,11 @@ public final class GenomeVariant implements VariantDescription {
     }
 
     int delta = 0;
-    if (strand != pos.getStrand() && ref.length() == 0) delta = -1;
-    else if (strand != pos.getStrand() /* && ref.length() != 0 */) delta = ref.length() - 1;
+    if (strand != pos.getStrand() && ref.length() == 0) {
+      delta = -1;
+    } else if (strand != pos.getStrand() /* && ref.length() != 0 */) {
+      delta = ref.length() - 1;
+    }
 
     this.pos =
         new GenomePosition(
@@ -115,7 +118,9 @@ public final class GenomeVariant implements VariantDescription {
    *     described in one line).
    */
   private static boolean wouldBeSymbolicAllele(String allele) {
-    if (allele.length() <= 1) return false;
+    if (allele.length() <= 1) {
+      return false;
+    }
     return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>')
         || // symbolic or large insertion
         (allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.')
@@ -158,7 +163,9 @@ public final class GenomeVariant implements VariantDescription {
   public GenomeInterval getGenomeInterval() {
     // note - it is not worth caching this as an instance field as this leads to worse GC
     // performance
-    if (isSymbolic()) return new GenomeInterval(pos, 1);
+    if (isSymbolic()) {
+      return new GenomeInterval(pos, 1);
+    }
 
     return new GenomeInterval(pos, ref.length());
   }
@@ -180,17 +187,21 @@ public final class GenomeVariant implements VariantDescription {
   /** @return human-readable {@link String} describing the genome change */
   @Override
   public String toString() {
-    if (pos.getStrand() != Strand.FWD) return withStrand(Strand.FWD).toString();
-    else if (ref.equals("")) // handle insertion as special case
-    return Joiner.on("").join(getChrName(), ":g.", getPos(), "_", getPos() + 1, "ins", alt);
-    else if (alt.equals("") && ref.length() == 1) // single-base deletion
-    return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref);
-    else if (alt.equals("") && ref.length() > 1) // multi-base deletion
-    return Joiner.on("")
+    if (pos.getStrand() != Strand.FWD) {
+      return withStrand(Strand.FWD).toString();
+    } else if (ref.equals("")) // handle insertion as special case
+    {
+      return Joiner.on("").join(getChrName(), ":g.", getPos(), "_", getPos() + 1, "ins", alt);
+    } else if (alt.equals("") && ref.length() == 1) // single-base deletion
+    {
+      return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref);
+    } else if (alt.equals("") && ref.length() > 1) // multi-base deletion
+    {
+      return Joiner.on("")
           .join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref);
-    else if (ref.length() == 1 && alt.length() > 1)
+    } else if (ref.length() == 1 && alt.length() > 1) {
       return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref, "ins", alt);
-    else if (ref.length() > 1 && alt.length() != 0)
+    } else if (ref.length() > 1 && alt.length() != 0) {
       return Joiner.on("")
           .join(
               getChrName(),
@@ -202,17 +213,23 @@ public final class GenomeVariant implements VariantDescription {
               ref,
               "ins",
               alt);
-    else
+    } else {
       return Joiner.on("")
           .join(pos, (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
+    }
   }
 
   /** @return the {@link GenomeVariantType} of this GenomeChange */
   public GenomeVariantType getType() {
-    if (ref.length() > 0 && alt.length() == 0) return GenomeVariantType.DELETION;
-    else if (ref.length() == 0 && alt.length() > 0) return GenomeVariantType.INSERTION;
-    else if (ref.length() == 1 && alt.length() == 1) return GenomeVariantType.SNV;
-    else return GenomeVariantType.BLOCK_SUBSTITUTION;
+    if (ref.length() > 0 && alt.length() == 0) {
+      return GenomeVariantType.DELETION;
+    } else if (ref.length() == 0 && alt.length() > 0) {
+      return GenomeVariantType.INSERTION;
+    } else if (ref.length() == 1 && alt.length() == 1) {
+      return GenomeVariantType.SNV;
+    } else {
+      return GenomeVariantType.BLOCK_SUBSTITUTION;
+    }
   }
 
   /**
@@ -222,13 +239,21 @@ public final class GenomeVariant implements VariantDescription {
    * @return true if the variant is a SNV and a transition.
    */
   public boolean isTransition() {
-    if (getType() != GenomeVariantType.SNV) return false;
+    if (getType() != GenomeVariantType.SNV) {
+      return false;
+    }
     // purine to purine change
-    if (this.ref.equals("A") && this.alt.equals("G")) return true;
-    else if (this.ref.equals("G") && this.alt.equals("A")) return true;
+    if (this.ref.equals("A") && this.alt.equals("G")) {
+      return true;
+    } else if (this.ref.equals("G") && this.alt.equals("A")) {
+      return true;
+    }
     // pyrimidine to pyrimidine change
-    if (this.ref.equals("C") && this.alt.equals("T")) return true;
-    else if (this.ref.equals("T") && this.alt.equals("C")) return true;
+    if (this.ref.equals("C") && this.alt.equals("T")) {
+      return true;
+    } else if (this.ref.equals("T") && this.alt.equals("C")) {
+      return true;
+    }
     // If we get here, the variant must be a transversion.
     return false;
   }
@@ -239,13 +264,21 @@ public final class GenomeVariant implements VariantDescription {
    * @return true if the variant is a SNV and a transversion.
    */
   public boolean isTransversion() {
-    if (getType() != GenomeVariantType.SNV) return false;
+    if (getType() != GenomeVariantType.SNV) {
+      return false;
+    }
     // purine to purine change
-    if (this.ref.equals("A") && this.alt.equals("G")) return false;
-    else if (this.ref.equals("G") && this.alt.equals("A")) return false;
+    if (this.ref.equals("A") && this.alt.equals("G")) {
+      return false;
+    } else if (this.ref.equals("G") && this.alt.equals("A")) {
+      return false;
+    }
     // pyrimidine to pyrimidine change
-    if (this.ref.equals("C") && this.alt.equals("T")) return false;
-    else if (this.ref.equals("T") && this.alt.equals("C")) return false;
+    if (this.ref.equals("C") && this.alt.equals("T")) {
+      return false;
+    } else if (this.ref.equals("T") && this.alt.equals("C")) {
+      return false;
+    }
     // If we get here, the variant must be a SNV and a transversion.
     return true;
   }
@@ -257,8 +290,9 @@ public final class GenomeVariant implements VariantDescription {
    */
   @Override
   public int hashCode() {
-    if (pos != null && pos.getStrand() != null && pos.getStrand().isReverse())
+    if (pos != null && pos.getStrand() != null && pos.getStrand().isReverse()) {
       return withStrand(Strand.FWD).hashCode();
+    }
     final int prime = 31;
     int result = 1;
     result = prime * result + ((alt == null) ? 0 : alt.hashCode());
@@ -274,23 +308,43 @@ public final class GenomeVariant implements VariantDescription {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 
     GenomeVariant other = (GenomeVariant) obj;
-    if (pos != null && pos.getStrand() != Strand.FWD) return withStrand(Strand.FWD).equals(obj);
+    if (pos != null && pos.getStrand() != Strand.FWD) {
+      return withStrand(Strand.FWD).equals(obj);
+    }
     other = other.withStrand(Strand.FWD);
 
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (pos == null) {
-      if (other.pos != null) return false;
-    } else if (!pos.equals(other.pos)) return false;
+      if (other.pos != null) {
+        return false;
+      }
+    } else if (!pos.equals(other.pos)) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     return true;
   }
 

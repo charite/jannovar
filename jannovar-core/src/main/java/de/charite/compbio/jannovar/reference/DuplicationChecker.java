@@ -17,11 +17,15 @@ public final class DuplicationChecker {
   public static boolean isDuplication(String ref, String insertion, int pos) {
     if (pos + insertion.length() <= ref.length()) {
       // can be duplication with string after pos
-      if (ref.substring(pos, pos + insertion.length()).equals(insertion)) return true;
+      if (ref.substring(pos, pos + insertion.length()).equals(insertion)) {
+        return true;
+      }
     }
     if (pos >= insertion.length()) {
       // can be duplication with string before pos
-      if (ref.substring(pos - insertion.length(), pos).equals(insertion)) return true;
+      if (ref.substring(pos - insertion.length(), pos).equals(insertion)) {
+        return true;
+      }
     }
     return false;
   }

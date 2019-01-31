@@ -24,7 +24,9 @@ public final class PathUtil {
    */
   public static String join(String... components) {
     File file = new File(components[0]);
-    for (int i = 1; i < components.length; ++i) file = new File(file, components[i]);
+    for (int i = 1; i < components.length; ++i) {
+      file = new File(file, components[i]);
+    }
     return file.getPath();
   }
 }

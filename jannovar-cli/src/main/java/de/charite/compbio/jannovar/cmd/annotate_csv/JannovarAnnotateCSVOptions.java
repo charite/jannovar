@@ -108,7 +108,9 @@ public class JannovarAnnotateCSVOptions extends JannovarAnnotationOptions {
     ref = args.getInt("ref") - 1;
     alt = args.getInt("alt") - 1;
     header = args.getBoolean("header");
-    if (header) format = format.withFirstRecordAsHeader().withSkipHeaderRecord();
+    if (header) {
+      format = format.withFirstRecordAsHeader().withSkipHeaderRecord();
+    }
   }
 
   /** @return the set position of the chr in the CSV file (0 based) */

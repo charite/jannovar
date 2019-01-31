@@ -45,7 +45,9 @@ public class HGVSParser {
     parser.addParseListener(listener);
     parser.setTrace(debug);
     ParseTree tree = parser.hgvs_variant();
-    if (debug) System.err.println(tree.toStringTree(parser));
+    if (debug) {
+      System.err.println(tree.toStringTree(parser));
+    }
     return listener.getHGVSVariant();
   }
 
@@ -59,7 +61,9 @@ public class HGVSParser {
       HGVSLexer lexer = new HGVSLexer(CharStreams.fromString(inputString));
       // lexer.pushMode(mode);
       System.err.println("Lexer tokens");
-      for (Token t : lexer.getAllTokens()) System.err.println("\t" + t.getText() + "\t" + t);
+      for (Token t : lexer.getAllTokens()) {
+        System.err.println("\t" + t.getText() + "\t" + t);
+      }
       System.err.println("END OF LEXER TOKENS");
     }
     CodePointCharStream inputStream = CharStreams.fromString(inputString);

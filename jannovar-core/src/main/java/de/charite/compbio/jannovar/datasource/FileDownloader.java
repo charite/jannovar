@@ -32,6 +32,7 @@ final class FileDownloader {
   private static final Logger LOGGER = LoggerFactory.getLogger(FileDownloader.class);
 
   public static class ProxyOptions {
+
     public String host = null;
     public int port = -1;
     public String user = null;
@@ -40,6 +41,7 @@ final class FileDownloader {
 
   /** Configuration for the {@link FileDownloader}. */
   public static class Options {
+
     public boolean printProgressBar = false;
     public ProxyOptions http = new ProxyOptions();
     public ProxyOptions https = new ProxyOptions();
@@ -64,15 +66,19 @@ final class FileDownloader {
    * @throws FileDownloadException on problems with downloading
    */
   public boolean copyURLToFile(URL src, File dest) throws FileDownloadException {
-    if (dest.exists()) return false;
+    if (dest.exists()) {
+      return false;
+    }
     if (!dest.getParentFile().exists()) {
       LOGGER.info("Creating directory {}", dest.getParentFile());
       dest.getParentFile().mkdirs();
     }
 
-    if (src.getProtocol().equals("ftp") && options.ftp.host != null)
+    if (src.getProtocol().equals("ftp") && options.ftp.host != null) {
       return copyURLToFileWithFTP(src, dest);
-    else return copyURLToFileThroughURL(src, dest);
+    } else {
+      return copyURLToFileThroughURL(src, dest);
+    }
   }
 
   private boolean copyURLToFileWithFTP(URL src, File dest) throws FileDownloadException {
@@ -80,11 +86,17 @@ final class FileDownloader {
     ftp.enterLocalPassiveMode(); // passive mode for firewalls
 
     try {
-      if (src.getPort() != -1) ftp.connect(src.getHost(), src.getPort());
-      else ftp.connect(src.getHost());
-      if (!ftp.login("anonymous", "anonymous@example.com"))
+      if (src.getPort() != -1) {
+        ftp.connect(src.getHost(), src.getPort());
+      } else {
+        ftp.connect(src.getHost());
+      }
+      if (!ftp.login("anonymous", "anonymous@example.com")) {
         throw new IOException("Could not login with anonymous:anonymous@example.com");
-      if (!ftp.isConnected()) LOGGER.error("Weird, not connected!");
+      }
+      if (!ftp.isConnected()) {
+        LOGGER.error("Weird, not connected!");
+      }
     } catch (SocketException e) {
       throw new FileDownloadException("ERROR: problem connecting when downloading file.", e);
     } catch (IOException e) {
@@ -110,36 +122,50 @@ final class FileDownloader {
     try {
       final String parentDir = new File(src.getPath()).getParent().substring(1);
       final String fileName = new File(src.getPath()).getName();
-      if (!ftp.changeWorkingDirectory(parentDir))
+      if (!ftp.changeWorkingDirectory(parentDir)) {
         throw new FileNotFoundException("Could not change directory to " + parentDir);
+      }
       // Try to get file size.
       FTPFile[] files = ftp.listFiles(fileName);
       long fileSize = -1;
-      for (int i = 0; i < files.length; ++i)
-        if (files[i].getName().equals(fileName)) fileSize = files[i].getSize();
+      for (int i = 0; i < files.length; ++i) {
+        if (files[i].getName().equals(fileName)) {
+          fileSize = files[i].getSize();
+        }
+      }
       ftp.pwd();
       ProgressBar pb = null;
-      if (fileSize != -1) pb = new ProgressBar(0, fileSize, options.printProgressBar);
-      else LOGGER.info("(server did not tell us the file size, no progress bar)");
+      if (fileSize != -1) {
+        pb = new ProgressBar(0, fileSize, options.printProgressBar);
+      } else {
+        LOGGER.info("(server did not tell us the file size, no progress bar)");
+      }
       // Download file.
       in = ftp.retrieveFileStream(fileName);
-      if (in == null)
+      if (in == null) {
         throw new FileNotFoundException("Could not open connection for file " + fileName);
+      }
       out = new FileOutputStream(dest);
       BufferedInputStream inBf = new BufferedInputStream(in);
       byte buffer[] = new byte[128 * 1024];
       int readCount;
       long pos = 0;
-      if (pb != null) pb.print(pos);
+      if (pb != null) {
+        pb.print(pos);
+      }
 
       while ((readCount = inBf.read(buffer)) > 0) {
         out.write(buffer, 0, readCount);
         pos += readCount;
-        if (pb != null) pb.print(pos);
+        if (pb != null) {
+          pb.print(pos);
+        }
       }
       in.close();
       out.close();
-      if (pb != null && pos != pb.getMax()) pb.print(fileSize);
+      if (pb != null && pos != pb.getMax()) {
+        pb.print(fileSize);
+      }
       // if (!ftp.completePendingCommand())
       // throw new IOException("Could not finish download!");
 
@@ -214,23 +240,32 @@ final class FileDownloader {
       out = new FileOutputStream(dest);
 
       ProgressBar pb = null;
-      if (fileSize != -1) pb = new ProgressBar(0, fileSize, options.printProgressBar);
-      else LOGGER.info("(server did not tell us the file size, no progress bar)");
+      if (fileSize != -1) {
+        pb = new ProgressBar(0, fileSize, options.printProgressBar);
+      } else {
+        LOGGER.info("(server did not tell us the file size, no progress bar)");
+      }
 
       // Download file.
       byte buffer[] = new byte[128 * 1024];
       int readCount;
       long pos = 0;
-      if (pb != null) pb.print(pos);
+      if (pb != null) {
+        pb.print(pos);
+      }
 
       while ((readCount = in.read(buffer)) > 0) {
         out.write(buffer, 0, readCount);
         pos += readCount;
-        if (pb != null) pb.print(pos);
+        if (pb != null) {
+          pb.print(pos);
+        }
       }
       in.close();
       out.close();
-      if (pb != null && pos != pb.getMax()) pb.print(fileSize);
+      if (pb != null && pos != pb.getMax()) {
+        pb.print(fileSize);
+      }
     } catch (IOException e) {
       throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());
     }
@@ -239,24 +274,43 @@ final class FileDownloader {
 
   /** Set system properties from {@link #options}. */
   private void setProxyProperties() {
-    if (options.ftp.host != null) System.setProperty("ftp.proxyHost", options.ftp.host);
-    if (options.ftp.port != -1)
+    if (options.ftp.host != null) {
+      System.setProperty("ftp.proxyHost", options.ftp.host);
+    }
+    if (options.ftp.port != -1) {
       System.setProperty("ftp.proxyPort", Integer.toString(options.ftp.port));
-    if (options.ftp.user != null) System.setProperty("ftp.proxyUser", options.ftp.user);
-    if (options.ftp.password != null) System.setProperty("ftp.proxyPassword", options.ftp.password);
+    }
+    if (options.ftp.user != null) {
+      System.setProperty("ftp.proxyUser", options.ftp.user);
+    }
+    if (options.ftp.password != null) {
+      System.setProperty("ftp.proxyPassword", options.ftp.password);
+    }
 
-    if (options.http.host != null) System.setProperty("http.proxyHost", options.http.host);
-    if (options.http.port != -1)
+    if (options.http.host != null) {
+      System.setProperty("http.proxyHost", options.http.host);
+    }
+    if (options.http.port != -1) {
       System.setProperty("http.proxyPort", Integer.toString(options.http.port));
-    if (options.http.user != null) System.setProperty("http.proxyUser", options.http.user);
-    if (options.http.password != null)
+    }
+    if (options.http.user != null) {
+      System.setProperty("http.proxyUser", options.http.user);
+    }
+    if (options.http.password != null) {
       System.setProperty("http.proxyPassword", options.http.password);
+    }
 
-    if (options.https.host != null) System.setProperty("https.proxyHost", options.https.host);
-    if (options.https.port != -1)
+    if (options.https.host != null) {
+      System.setProperty("https.proxyHost", options.https.host);
+    }
+    if (options.https.port != -1) {
       System.setProperty("https.proxyPort", Integer.toString(options.https.port));
-    if (options.https.user != null) System.setProperty("https.proxyUser", options.https.user);
-    if (options.https.password != null)
+    }
+    if (options.https.user != null) {
+      System.setProperty("https.proxyUser", options.https.user);
+    }
+    if (options.https.password != null) {
       System.setProperty("https.proxyPassword", options.https.password);
+    }
   }
 }

@@ -135,10 +135,13 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
         Interval itv = RegionParser.parse(options.getInterval());
         int end = 1000 * 1000 * 1000; // "some large number"
         for (VCFContigHeaderLine line : vcfHeader.getContigLines()) {
-          if (line.getID().equals(itv.getContig()))
+          if (line.getID().equals(itv.getContig())) {
             end = line.getSAMSequenceRecord().getSequenceLength();
+          }
         }
-        if (itv.getStart() == 0 && itv.getEnd() == 0) itv = new Interval(itv.getContig(), 1, end);
+        if (itv.getStart() == 0 && itv.getEnd() == 0) {
+          itv = new Interval(itv.getContig(), 1, end);
+        }
         iter = vcfReader.query(itv.getContig(), itv.getStart(), itv.getEnd());
         System.err.println("Will read interval " + itv.toString());
       } else {
@@ -316,7 +319,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
             return;
           }
           for (Person person : pedigree.getMembers()) {
-            if (person.isAffected()) affecteds.add(person.getName());
+            if (person.isAffected()) {
+              affecteds.add(person.getName());
+            }
           }
           if (affecteds.isEmpty()) {
             System.err.println(
@@ -444,8 +449,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
                   vcfHeader, options.getPathOutputVCF(), jvHeaderLines);
           VariantContextProcessor sink = buildMendelianProcessors(vcfWriter, vcfHeader)) {
         // Make current VC available to progress printer
-        if (this.progressReporter != null)
+        if (this.progressReporter != null) {
           stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
+        }
 
         stream.forEachOrdered(sink::put);
       } catch (IOException e) {
@@ -459,14 +465,15 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
               "Annotation and writing took %.2f sec.",
               (endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
     } catch (IncompatiblePedigreeException e) {
-      if (options.pathPedFile != null)
+      if (options.pathPedFile != null) {
         System.err.println(
             "VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
-      else
+      } else {
         System.err.println(
             "VCF file "
                 + vcfPath
                 + " is not compatible with singleton pedigree annotation (do you have exactly one sample in VCF file?)");
+      }
       System.err.println(e.getMessage());
       System.err.println("\n");
       e.printStackTrace(System.err);
@@ -481,7 +488,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
       return;
     }
 
-    if (progressReporter != null) progressReporter.done();
+    if (progressReporter != null) {
+      progressReporter.done();
+    }
   }
 
   /**
@@ -498,9 +507,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
       final PedFileContents pedContents = pedReader.read();
       return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
     } else {
-      if (vcfHeader.getSampleNamesInOrder().size() != 1)
+      if (vcfHeader.getSampleNamesInOrder().size() != 1) {
         throw new IncompatiblePedigreeException(
             "VCF file does not have exactly one sample but required for singleton pedigree construction");
+      }
       final String sampleName = vcfHeader.getSampleNamesInOrder().get(0);
       final PedPerson pedPerson =
           new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN, Disease.AFFECTED);
@@ -548,9 +558,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
         vcfHeader.getGenotypeSamples().stream()
             .filter(x -> !pedigree.getNames().contains(x))
             .collect(Collectors.toList());
-    if (!missing.isEmpty())
+    if (!missing.isEmpty()) {
       throw new IncompatiblePedigreeException(
           "The VCF file has the following sample names not present in Pedigree: "
               + Joiner.on(", ").join(missing));
+    }
   }
 }

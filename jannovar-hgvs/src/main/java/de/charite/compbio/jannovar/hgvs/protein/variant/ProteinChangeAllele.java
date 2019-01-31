@@ -77,8 +77,11 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
     parts.add("[");
     boolean first = true;
     for (ProteinChange change : changes) {
-      if (first) first = false;
-      else parts.add(varConfig.toHGVSSeparator());
+      if (first) {
+        first = false;
+      } else {
+        parts.add(varConfig.toHGVSSeparator());
+      }
       parts.add(change.toHGVSString(code));
     }
     parts.add("]");
@@ -102,14 +105,26 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinChangeAllele other = (ProteinChangeAllele) obj;
     if (changes == null) {
-      if (other.changes != null) return false;
-    } else if (!changes.equals(other.changes)) return false;
-    if (varConfig != other.varConfig) return false;
+      if (other.changes != null) {
+        return false;
+      }
+    } else if (!changes.equals(other.changes)) {
+      return false;
+    }
+    if (varConfig != other.varConfig) {
+      return false;
+    }
     return true;
   }
 

@@ -81,7 +81,9 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
     // TODO(holtgrewe): using Optional<> here would make handling empty return values more elegant
     // in the calling
     // code such that the behaviour could change then
-    if (result == null) return GT_NO_CALL;
+    if (result == null) {
+      return GT_NO_CALL;
+    }
     return result;
   }
 
@@ -139,7 +141,9 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null) return false;
+    if (obj == null) {
+      return false;
+    }
     // Yes, we really need object identity here
     return (this.hashCode() == obj.hashCode());
   }

@@ -80,13 +80,25 @@ public class LegacyLocation {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacyLocation other = (LegacyLocation) obj;
-    if (baseOffset != other.baseOffset) return false;
-    if (featureNo != other.featureNo) return false;
-    if (locationType != other.locationType) return false;
+    if (baseOffset != other.baseOffset) {
+      return false;
+    }
+    if (featureNo != other.featureNo) {
+      return false;
+    }
+    if (locationType != other.locationType) {
+      return false;
+    }
     return true;
   }
 }

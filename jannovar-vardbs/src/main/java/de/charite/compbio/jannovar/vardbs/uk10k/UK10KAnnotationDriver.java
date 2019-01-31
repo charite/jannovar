@@ -44,14 +44,17 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
         } else {
           final UK10KRecord current = annotatingRecord.get(alleleNo).getRecord();
           final UK10KRecord update = matchToRecord.get(m).getRecord();
-          if (update.getAltAlleleFrequencies().size() <= alleleNo) continue; // no number to update
+          if (update.getAltAlleleFrequencies().size() <= alleleNo) {
+            continue; // no number to update
+          }
 
           if ((isMatch
                   && current.getAltAlleleFrequencies().get(alleleNo - 1)
                       < update.getAltAlleleFrequencies().get(alleleNo - 1))
               || (!isMatch
-                  && current.highestAlleleCountOverall() < update.highestAlleleCountOverall()))
+                  && current.highestAlleleCountOverall() < update.highestAlleleCountOverall())) {
             annotatingRecord.put(alleleNo, matchToRecord.get(m));
+          }
         }
       }
     }
@@ -90,7 +93,9 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
       String infix,
       HashMap<Integer, AnnotatingRecord<UK10KRecord>> records,
       VariantContextBuilder builder) {
-    if (records.isEmpty()) return;
+    if (records.isEmpty()) {
+      return;
+    }
     UK10KRecord first = records.values().iterator().next().getRecord();
     builder.attribute(options.getVCFIdentifierPrefix() + infix + "AN", first.getChromCount());
   }
@@ -115,10 +120,14 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
       }
     }
 
-    if (acList.stream().allMatch(i -> (i == 0))) return; // do not set list of zeroes
+    if (acList.stream().allMatch(i -> (i == 0))) {
+      return; // do not set list of zeroes
+    }
 
     final String attrID = options.getVCFIdentifierPrefix() + infix + "AC";
-    if (!acList.isEmpty()) builder.attribute(attrID, acList);
+    if (!acList.isEmpty()) {
+      builder.attribute(attrID, acList);
+    }
   }
 
   private void annotateFrequencies(
@@ -141,9 +150,13 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
       }
     }
 
-    if (afList.stream().allMatch(i -> (i == 0.0))) return; // do not set list of zeroes
+    if (afList.stream().allMatch(i -> (i == 0.0))) {
+      return; // do not set list of zeroes
+    }
 
     final String attrID = options.getVCFIdentifierPrefix() + infix + "AF";
-    if (!afList.isEmpty()) builder.attribute(attrID, afList);
+    if (!afList.isEmpty()) {
+      builder.attribute(attrID, afList);
+    }
   }
 }

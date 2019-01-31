@@ -68,16 +68,30 @@ public class LegacyIndel extends LegacyChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacyIndel other = (LegacyIndel) obj;
     if (deletedSeq == null) {
-      if (other.deletedSeq != null) return false;
-    } else if (!deletedSeq.equals(other.deletedSeq)) return false;
+      if (other.deletedSeq != null) {
+        return false;
+      }
+    } else if (!deletedSeq.equals(other.deletedSeq)) {
+      return false;
+    }
     if (insertedSeq == null) {
-      if (other.insertedSeq != null) return false;
-    } else if (!insertedSeq.equals(other.insertedSeq)) return false;
+      if (other.insertedSeq != null) {
+        return false;
+      }
+    } else if (!insertedSeq.equals(other.insertedSeq)) {
+      return false;
+    }
     return true;
   }
 }

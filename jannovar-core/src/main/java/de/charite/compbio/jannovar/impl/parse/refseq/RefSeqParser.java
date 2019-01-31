@@ -233,8 +233,9 @@ public class RefSeqParser implements TranscriptParser {
   private Map<String, TranscriptModelBuilder> recordsToBuilders(
       Map<String, List<FeatureRecord>> recordsByGene) {
     Map<String, TranscriptModelBuilder> result = new HashMap<>();
-    for (Entry<String, List<FeatureRecord>> entry : recordsByGene.entrySet())
+    for (Entry<String, List<FeatureRecord>> entry : recordsByGene.entrySet()) {
       result.putAll(processGeneGFFRecords(entry.getValue()));
+    }
     return result;
   }
 
@@ -262,7 +263,9 @@ public class RefSeqParser implements TranscriptParser {
     for (FeatureRecord record : records) {
       if (record.getType().equals("exon") || record.getType().equals("CDS")) {
         for (String parent : Splitter.on(',').split(record.getAttributes().get("Parent"))) {
-          if (recordsForMRNA.get(parent) != null) recordsForMRNA.get(parent).add(record);
+          if (recordsForMRNA.get(parent) != null) {
+            recordsForMRNA.get(parent).add(record);
+          }
         }
       }
     }
@@ -302,8 +305,11 @@ public class RefSeqParser implements TranscriptParser {
           GenomeInterval exon =
               new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
           exon = exon.withStrand(strand);
-          if (txRegion == null) txRegion = exon;
-          else txRegion = txRegion.union(exon);
+          if (txRegion == null) {
+            txRegion = exon;
+          } else {
+            txRegion = txRegion.union(exon);
+          }
           builder.addExonRegion(exon);
         } else if (record.getType().equals("CDS")) {
           GenomeInterval cds =
@@ -314,21 +320,29 @@ public class RefSeqParser implements TranscriptParser {
                   record.getBegin(),
                   record.getEnd());
           cds = cds.withStrand(strand);
-          if (cdsRegion == null) cdsRegion = cds;
-          else cdsRegion = cdsRegion.union(cds);
+          if (cdsRegion == null) {
+            cdsRegion = cds;
+          } else {
+            cdsRegion = cdsRegion.union(cds);
+          }
         }
       }
-      if (wrongContig) continue; // skip, on wrong contig
+      if (wrongContig) {
+        continue; // skip, on wrong contig
+      }
       if (txRegion == null) {
         // Only warn if a transcript and not a gene, we only allow exons to be parts of genes as
         // this is
         // observed in RefSeq
-        if (!mrnaRecord.getType().equals("gene"))
+        if (!mrnaRecord.getType().equals("gene")) {
           LOGGER.error("No transcript region for {}; skipping", new Object[] {mrnaEntry});
+        }
         continue;
       }
       builder.setTXRegion(txRegion);
-      if (cdsRegion == null) cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
+      if (cdsRegion == null) {
+        cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
+      }
       builder.setCDSRegion(cdsRegion);
 
       if (onlyCurated() && (mrnaName == null || mrnaName.startsWith("X"))) {
@@ -349,11 +363,17 @@ public class RefSeqParser implements TranscriptParser {
    * @param geneRecord {@link FeatureRecord} with the gene information
    */
   private void parseGeneID(TranscriptModelBuilder builder, FeatureRecord geneRecord) {
-    if (!geneRecord.getAttributes().containsKey("Dbxref")) return;
+    if (!geneRecord.getAttributes().containsKey("Dbxref")) {
+      return;
+    }
     for (String token : Splitter.on(',').split(geneRecord.getAttributes().get("Dbxref"))) {
       List<String> keyValue = Splitter.on(':').limit(2).splitToList(token);
-      if (keyValue.size() != 2) continue;
-      if (keyValue.get(0).equals("GeneID")) builder.setGeneID(keyValue.get(1));
+      if (keyValue.size() != 2) {
+        continue;
+      }
+      if (keyValue.get(0).equals("GeneID")) {
+        builder.setGeneID(keyValue.get(1));
+      }
     }
   }
 
@@ -396,9 +416,13 @@ public class RefSeqParser implements TranscriptParser {
           result.put(id, Lists.newArrayList(record));
         } else {
           final String parent = record.getAttributes().get("Parent");
-          if (parent == null) continue; // ignore
+          if (parent == null) {
+            continue; // ignore
+          }
           final String top = featureToGene.get(parent);
-          if (top == null) continue; // ignore, no gene entry
+          if (top == null) {
+            continue; // ignore, no gene entry
+          }
           LOGGER.debug("-> parent = {}", new Object[] {parent});
           LOGGER.debug("-> top = {}", new Object[] {top});
           featureToGene.put(id, top); // register mapping
@@ -427,16 +451,21 @@ public class RefSeqParser implements TranscriptParser {
   }
 
   private static boolean checkFlagInSection(String value) {
-    if (value == null) return false;
+    if (value == null) {
+      return false;
+    }
     value = value.toLowerCase();
     ImmutableList<String> list = ImmutableList.of("true", "1", "yes");
-    for (String s : list) if (s.equals(value)) return true;
+    for (String s : list) {
+      if (s.equals(value)) {
+        return true;
+      }
+    }
     return false;
   }
 
   /**
-   * @param key
-   *            name of the INI entry
+   * @param key name of the INI entry
    * @return file name from INI <code>key</code.
    */
   private String getINIFileName(String key) {

@@ -195,41 +195,86 @@ public class ExacRecordBuilder {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ExacRecordBuilder other = (ExacRecordBuilder) obj;
     if (alleleCounts == null) {
-      if (other.alleleCounts != null) return false;
+      if (other.alleleCounts != null) {
+        return false;
+      }
     } else if (alleleHetCounts == null) {
-      if (other.alleleHetCounts != null) return false;
+      if (other.alleleHetCounts != null) {
+        return false;
+      }
     } else if (alleleHomCounts == null) {
-      if (other.alleleHomCounts != null) return false;
+      if (other.alleleHomCounts != null) {
+        return false;
+      }
     } else if (alleleHemiCounts == null) {
-      if (other.alleleHemiCounts != null) return false;
-    } else if (!alleleCounts.equals(other.alleleCounts)) return false;
-    else if (!alleleHetCounts.equals(other.alleleHetCounts)) return false;
-    else if (!alleleHomCounts.equals(other.alleleHomCounts)) return false;
-    else if (!alleleHemiCounts.equals(other.alleleHemiCounts)) return false;
+      if (other.alleleHemiCounts != null) {
+        return false;
+      }
+    } else if (!alleleCounts.equals(other.alleleCounts)) {
+      return false;
+    } else if (!alleleHetCounts.equals(other.alleleHetCounts)) {
+      return false;
+    } else if (!alleleHomCounts.equals(other.alleleHomCounts)) {
+      return false;
+    } else if (!alleleHemiCounts.equals(other.alleleHemiCounts)) {
+      return false;
+    }
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (contig == null) {
-      if (other.contig != null) return false;
-    } else if (!contig.equals(other.contig)) return false;
+      if (other.contig != null) {
+        return false;
+      }
+    } else if (!contig.equals(other.contig)) {
+      return false;
+    }
     if (chromCounts == null) {
-      if (other.chromCounts != null) return false;
-    } else if (!chromCounts.equals(other.chromCounts)) return false;
+      if (other.chromCounts != null) {
+        return false;
+      }
+    } else if (!chromCounts.equals(other.chromCounts)) {
+      return false;
+    }
     if (filter == null) {
-      if (other.filter != null) return false;
-    } else if (!filter.equals(other.filter)) return false;
+      if (other.filter != null) {
+        return false;
+      }
+    } else if (!filter.equals(other.filter)) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null) return false;
-    } else if (!id.equals(other.id)) return false;
-    if (pos != other.pos) return false;
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     return true;
   }
 }

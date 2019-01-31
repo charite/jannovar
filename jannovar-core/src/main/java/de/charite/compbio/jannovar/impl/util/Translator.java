@@ -78,8 +78,9 @@ public final class Translator {
    */
   public String toLong(String shortAASeq) {
     StringBuilder result = new StringBuilder();
-    for (int i = 0; i < shortAASeq.length(); ++i)
+    for (int i = 0; i < shortAASeq.length(); ++i) {
       result.append(shortToLong.get(shortAASeq.substring(i, i + 1)));
+    }
     return result.toString();
   }
 
@@ -305,8 +306,9 @@ public final class Translator {
     longToShort.put("*", "*");
 
     this.longToShort = longToShort.build();
-    for (Map.Entry<String, String> entry : this.longToShort.entrySet())
+    for (Map.Entry<String, String> entry : this.longToShort.entrySet()) {
       shortToLong.put(entry.getValue(), entry.getKey());
+    }
 
     this.codon1 = codon1.build();
     this.codon3 = codon3.build();

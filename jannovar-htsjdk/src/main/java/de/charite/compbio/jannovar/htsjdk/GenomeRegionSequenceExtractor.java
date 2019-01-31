@@ -51,7 +51,9 @@ public class GenomeRegionSequenceExtractor {
   private String mapContigToFasta(String contigName) {
     // Map genome variant's contig to unique ID
     Integer contigID = jannovarData.getRefDict().getContigNameToID().get(contigName);
-    if (contigID == null) throw new UncheckedJannovarException("Unknown contig name " + contigName);
+    if (contigID == null) {
+      throw new UncheckedJannovarException("Unknown contig name " + contigName);
+    }
     // Try to find matching contig in fasta
     String nameInFasta = null;
     for (SAMSequenceRecord record : indexedFile.getSequenceDictionary().getSequences()) {
@@ -63,9 +65,10 @@ public class GenomeRegionSequenceExtractor {
         }
       }
     }
-    if (nameInFasta == null)
+    if (nameInFasta == null) {
       throw new UncheckedJannovarException(
           "Could not find corresponding contig in FASTA for " + contigName);
+    }
 
     return nameInFasta;
   }

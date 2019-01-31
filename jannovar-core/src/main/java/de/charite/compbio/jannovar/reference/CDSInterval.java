@@ -29,8 +29,11 @@ public final class CDSInterval {
   public CDSInterval(
       TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
     this.transcript = transcript;
-    if (positionType == PositionType.ONE_BASED) this.beginPos = beginPos - 1;
-    else this.beginPos = beginPos;
+    if (positionType == PositionType.ONE_BASED) {
+      this.beginPos = beginPos - 1;
+    } else {
+      this.beginPos = beginPos;
+    }
     this.endPos = endPos;
   }
 
@@ -86,15 +89,29 @@ public final class CDSInterval {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     CDSInterval other = (CDSInterval) obj;
-    if (beginPos != other.beginPos) return false;
-    if (endPos != other.endPos) return false;
+    if (beginPos != other.beginPos) {
+      return false;
+    }
+    if (endPos != other.endPos) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     return true;
   }
 }

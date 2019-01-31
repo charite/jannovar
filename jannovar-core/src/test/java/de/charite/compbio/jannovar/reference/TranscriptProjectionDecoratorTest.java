@@ -295,14 +295,18 @@ public class TranscriptProjectionDecoratorTest {
   public void testExonIDInReferenceOrderForward() {
     TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
-    for (int i = 0; i < 11; ++i) Assert.assertEquals(i, projector.exonIDInReferenceOrder(i));
+    for (int i = 0; i < 11; ++i) {
+      Assert.assertEquals(i, projector.exonIDInReferenceOrder(i));
+    }
   }
 
   @Test
   public void testExonIDInReferenceOrderReverse() {
     TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
-    for (int i = 0; i < 4; ++i) Assert.assertEquals(3 - i, projector.exonIDInReferenceOrder(i));
+    for (int i = 0; i < 4; ++i) {
+      Assert.assertEquals(3 - i, projector.exonIDInReferenceOrder(i));
+    }
   }
 
   @Test

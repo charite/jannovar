@@ -26,7 +26,7 @@ public class TranslatorTest {
     Assert.assertEquals("", translator.translateDNA("AC"));
   }
 
-  /** Test for translateDNA() with short input */
+  /** Test for translateDNA() with short input. */
   @Test
   public void testTranslateDna_short() throws AnnotationException {
     Assert.assertEquals("T", translator.translateDNA("ACT"));

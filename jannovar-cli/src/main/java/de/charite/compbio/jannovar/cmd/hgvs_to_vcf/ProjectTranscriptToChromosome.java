@@ -79,9 +79,11 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
         new VariantContextWriterBuilder()
             .setReferenceDictionary(fasta.getSequenceDictionary())
             .setOutputFile(options.getPathOutputVCF());
-    if (options.getPathOutputVCF().endsWith(".gz") || options.getPathOutputVCF().endsWith(".bcf"))
+    if (options.getPathOutputVCF().endsWith(".gz") || options.getPathOutputVCF().endsWith(".bcf")) {
       builder.setOption(Options.INDEX_ON_THE_FLY);
-    else builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    } else {
+      builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    }
     VariantContextWriter writer = builder.build();
 
     VCFHeader header = new VCFHeader();
@@ -193,7 +195,9 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
   private String mapContigToFasta(String contigName) {
     // Map genome variant's contig to unique ID
     Integer contigID = jannovarData.getRefDict().getContigNameToID().get(contigName);
-    if (contigID == null) throw new UncheckedJannovarException("Unknown contig name " + contigName);
+    if (contigID == null) {
+      throw new UncheckedJannovarException("Unknown contig name " + contigName);
+    }
     // Try to find matching contig in fasta
     String nameInFasta = null;
     for (SAMSequenceRecord record : fasta.getSequenceDictionary().getSequences()) {
@@ -202,9 +206,10 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
         break;
       }
     }
-    if (nameInFasta == null)
+    if (nameInFasta == null) {
       throw new UncheckedJannovarException(
           "Could not find corresponding contig in FASTA for " + contigName);
+    }
 
     return nameInFasta;
   }

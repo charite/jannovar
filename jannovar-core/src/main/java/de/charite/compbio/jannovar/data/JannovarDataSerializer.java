@@ -69,8 +69,9 @@ public final class JannovarDataSerializer {
     logger.info(StringUtil.concatenate("Serializing JannovarData to ", filename));
     final long startTime = System.nanoTime();
 
-    if (data == null || data.getRefDict().getContigNameToID().isEmpty())
+    if (data == null || data.getRefDict().getContigNameToID().isEmpty()) {
       throw new SerializationException("Attempting to serialize empty data set");
+    }
 
     // This is waiting for Java 7 to be improved. Also see:
     // http://stackoverflow.com/questions/4092914
@@ -92,20 +93,24 @@ public final class JannovarDataSerializer {
     } catch (IOException i) {
       error = String.format("Could not serialize data file list: %s", i.toString());
     } finally {
-      if (oos != null)
+      if (oos != null) {
         try {
           oos.close();
           fos.close();
         } catch (IOException e) {
           // swallow, nothing we can do
         }
-      if (fos != null)
+      }
+      if (fos != null) {
         try {
           fos.close();
         } catch (IOException e) {
           // swallow, nothing we can do
         }
-      if (error != null) throw new SerializationException(error);
+      }
+      if (error != null) {
+        throw new SerializationException(error);
+      }
     }
 
     logger.info(
@@ -136,20 +141,22 @@ public final class JannovarDataSerializer {
       // check magic bytes at top of file
       byte[] word = new byte[4];
       fileIn.read(word);
-      if (!Arrays.equals(word, MAGIC_BYTES))
+      if (!Arrays.equals(word, MAGIC_BYTES)) {
         throw new UncheckedJannovarException(
             filename + " does not look like a Jannovar database, magic number incorrect!");
+      }
       gzIn = new GZIPInputStream(fileIn);
       in = new ObjectInputStream(gzIn);
       String dbVersion = (String) in.readObject();
       VersionComparator comp = new VersionComparator();
-      if (comp.compare(dbVersion, minVersion) < 0)
+      if (comp.compare(dbVersion, minVersion) < 0) {
         throw new UncheckedJannovarException(
             filename
                 + " was created by Jannovar "
                 + dbVersion
                 + " but we need at least "
                 + minVersion);
+      }
       result = (JannovarData) in.readObject();
     } catch (IOException i) {
       error = String.format("Could not deserialize data list: %s", i.toString());
@@ -157,16 +164,22 @@ public final class JannovarDataSerializer {
       error = String.format("Could not deserialized class definition: %s", c.toString());
     } finally {
       try {
-        if (in != null) in.close();
+        if (in != null) {
+          in.close();
+        }
       } catch (IOException e) {
         // swallow, nothing we can do
       }
       try {
-        if (fileIn != null) fileIn.close();
+        if (fileIn != null) {
+          fileIn.close();
+        }
       } catch (IOException e) {
         // swallow, nothing we can do
       }
-      if (error != null) throw new SerializationException(error);
+      if (error != null) {
+        throw new SerializationException(error);
+      }
     }
 
     logger.info(

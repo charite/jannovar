@@ -38,13 +38,14 @@ class GeneBuilder {
     // transcript matches.
     final int MORE_PADDING = 10000;
     final GenomeInterval tmRegion = tm.getTXRegion().withMorePadding(MORE_PADDING);
-    for (TranscriptModel model : tmpModels)
+    for (TranscriptModel model : tmpModels) {
       if (model.getTXRegion().overlapsWith(tmRegion)) {
         LOGGER.trace("Adding next transcript {} to gene {}.", new Object[] {tm, name});
         builder.add(tm);
         tmpModels.add(tm);
         return;
       }
+    }
     LOGGER.trace(
         "Transcript {} does not fit to previous transcripts of {}.", new Object[] {tm, name});
   }

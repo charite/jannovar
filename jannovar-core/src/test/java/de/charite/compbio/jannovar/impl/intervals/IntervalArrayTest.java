@@ -25,7 +25,9 @@ public class IntervalArrayTest {
 
     public int compareTo(Triple o) {
       final int result = (beginPos - o.beginPos);
-      if (result != 0) return result;
+      if (result != 0) {
+        return result;
+      }
       return (endPos - o.endPos);
     }
 
@@ -42,16 +44,32 @@ public class IntervalArrayTest {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj) return true;
-      if (obj == null) return false;
-      if (getClass() != obj.getClass()) return false;
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
       Triple other = (Triple) obj;
-      if (!getOuterType().equals(other.getOuterType())) return false;
-      if (beginPos != other.beginPos) return false;
-      if (endPos != other.endPos) return false;
+      if (!getOuterType().equals(other.getOuterType())) {
+        return false;
+      }
+      if (beginPos != other.beginPos) {
+        return false;
+      }
+      if (endPos != other.endPos) {
+        return false;
+      }
       if (text == null) {
-        if (other.text != null) return false;
-      } else if (!text.equals(other.text)) return false;
+        if (other.text != null) {
+          return false;
+        }
+      } else if (!text.equals(other.text)) {
+        return false;
+      }
       return true;
     }
 

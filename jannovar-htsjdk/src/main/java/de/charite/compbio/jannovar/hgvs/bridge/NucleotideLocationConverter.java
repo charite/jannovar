@@ -53,9 +53,10 @@ public class NucleotideLocationConverter {
     if (pos.getBasePos() < 0) {
       // handle 5' UTR case
       txPos = projector.cdsToTranscriptPos(new CDSPosition(tm, 0));
-      if (txPos.getPos() < -pos.getBasePos())
+      if (txPos.getPos() < -pos.getBasePos()) {
         throw new CannotTranslateHGVSVariant(
             "Invalid CDS position " + pos.toHGVSString() + " as it lies upstream of 5' UTR");
+      }
       txPos = new TranscriptPosition(tm, txPos.getPos() + pos.getBasePos());
     } else if (pos.isDownstreamOfCDS()) {
       // handle 3' UTR case
@@ -66,9 +67,10 @@ public class NucleotideLocationConverter {
       // This is the case for the SHIFT below.
       final int SHIFT = -3;
       txPos = txPos.shifted(pos.getBasePos() + 1 + SHIFT);
-      if (txPos.getPos() >= tm.transcriptLength())
+      if (txPos.getPos() >= tm.transcriptLength()) {
         throw new CannotTranslateHGVSVariant(
             "Invalid CDS position " + pos.toHGVSString() + " as it lies downstream of 3' UTR");
+      }
     } else {
       // handle CDS case
       final CDSPosition cdsPos = new CDSPosition(tm, pos.getBasePos());

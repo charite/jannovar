@@ -43,9 +43,10 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
     VCFReaderVariantProvider vcfProvider = (VCFReaderVariantProvider) this.variantProvider;
 
     this.dbSNPInfo = new DBSNPInfoFactory().build(vcfProvider.getVcfReader().getFileHeader());
-    if (dbSNPInfo.dbSNPBuildID != 147)
+    if (dbSNPInfo.dbSNPBuildID != 147) {
       throw new JannovarVarDBException(
           "Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b147");
+    }
   }
 
   @Override
@@ -94,9 +95,13 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       }
     }
 
-    if (g5AList.stream().allMatch(i -> (i == 0))) return; // do not set list of zeroes
+    if (g5AList.stream().allMatch(i -> (i == 0))) {
+      return; // do not set list of zeroes
+    }
 
-    if (!g5AList.isEmpty()) builder.attribute(idG5A, g5AList);
+    if (!g5AList.isEmpty()) {
+      builder.attribute(idG5A, g5AList);
+    }
   }
 
   private void annotateInfoG5(
@@ -115,9 +120,13 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       }
     }
 
-    if (g5List.stream().allMatch(i -> (i == 0))) return; // do not set list of zeroes
+    if (g5List.stream().allMatch(i -> (i == 0))) {
+      return; // do not set list of zeroes
+    }
 
-    if (!g5List.isEmpty()) builder.attribute(idG5, g5List);
+    if (!g5List.isEmpty()) {
+      builder.attribute(idG5, g5List);
+    }
   }
 
   private void annotateInfoCAF(
@@ -129,25 +138,33 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
     ArrayList<Double> cafList = new ArrayList<>();
     for (int i = 1; i < vc.getNAlleles(); ++i) {
       DBSNPRecord record = null;
-      if (records.get(i) != null) record = records.get(i).getRecord();
+      if (records.get(i) != null) {
+        record = records.get(i).getRecord();
+      }
       if (record != null && !record.getAlleleFrequenciesG1K().isEmpty()) {
         final int alleleNo = records.get(i).getAlleleNo();
-        if (alleleNo - 1 < record.getAlleleFrequenciesG1K().size())
+        if (alleleNo - 1 < record.getAlleleFrequenciesG1K().size()) {
           cafList.add(record.getAlleleFrequenciesG1K().get(alleleNo - 1));
-        else cafList.add(0.0);
+        } else {
+          cafList.add(0.0);
+        }
       } else {
         cafList.add(0.0);
       }
     }
 
-    if (cafList.stream().allMatch(i -> (i == 0.0))) return; // do not set list of zeroes
+    if (cafList.stream().allMatch(i -> (i == 0.0))) {
+      return; // do not set list of zeroes
+    }
 
     // Prepend reference frequency
     double afRef = 1.0 - cafList.stream().mapToDouble(x -> x).sum();
     afRef = Math.max(afRef, 0); // no negative values
     cafList.add(0, afRef);
 
-    if (!cafList.isEmpty()) builder.attribute(idCAF, cafList);
+    if (!cafList.isEmpty()) {
+      builder.attribute(idCAF, cafList);
+    }
   }
 
   private void annotateInfoOrigin(
@@ -166,10 +183,13 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       }
     }
 
-    if (originList.stream().allMatch(s -> ("UNSPECIFIED".equals(s))))
+    if (originList.stream().allMatch(s -> ("UNSPECIFIED".equals(s)))) {
       return; // do not set list of zeroes
+    }
 
-    if (!originList.isEmpty()) builder.attribute(idOrigin, originList);
+    if (!originList.isEmpty()) {
+      builder.attribute(idOrigin, originList);
+    }
   }
 
   private void annotateInfoCommon(
@@ -188,9 +208,13 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       }
     }
 
-    if (commonList.stream().allMatch(i -> (i == 0))) return; // do not set list of zeroes
+    if (commonList.stream().allMatch(i -> (i == 0))) {
+      return; // do not set list of zeroes
+    }
 
-    if (!commonList.isEmpty()) builder.attribute(idCommon, commonList);
+    if (!commonList.isEmpty()) {
+      builder.attribute(idCommon, commonList);
+    }
   }
 
   private void annotateInfoIDs(
@@ -205,18 +229,25 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       if (records.get(i) != null) {
         final DBSNPRecord record = records.get(i).getRecord();
         final String id = record.getId();
-        if (!lst.contains(id)) lst.add(id);
+        if (!lst.contains(id)) {
+          lst.add(id);
+        }
       }
       matchList.add(lst);
     }
 
     ArrayList<String> vals = new ArrayList<>();
     for (int i = 1; i < vc.getNAlleles(); ++i) {
-      if (matchList.get(i - 1).isEmpty()) vals.add(".");
-      else vals.add(Joiner.on('|').join(matchList.get(i - 1)));
+      if (matchList.get(i - 1).isEmpty()) {
+        vals.add(".");
+      } else {
+        vals.add(Joiner.on('|').join(matchList.get(i - 1)));
+      }
     }
 
-    if (vals.stream().allMatch(s -> ".".equals(s))) return; // do not set list of "."
+    if (vals.stream().allMatch(s -> ".".equals(s))) {
+      return; // do not set list of "."
+    }
 
     builder.attribute(idIDs, vals);
   }
@@ -230,13 +261,19 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
       if (records.get(i) != null) {
         DBSNPRecord record = records.get(i).getRecord();
         final String id = record.getId();
-        if (!idList.contains(id)) idList.add(id);
+        if (!idList.contains(id)) {
+          idList.add(id);
+        }
       }
     }
 
-    if (idList.size() > 1) idList.remove(".");
+    if (idList.size() > 1) {
+      idList.remove(".");
+    }
 
-    if (!idList.isEmpty()) builder.id(Joiner.on(";").join(idList));
+    if (!idList.isEmpty()) {
+      builder.id(Joiner.on(";").join(idList));
+    }
   }
 
   @Override
@@ -254,14 +291,18 @@ public final class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
         } else {
           final DBSNPRecord current = annotatingDBSNPRecord.get(alleleNo).getRecord();
           final DBSNPRecord update = matchToRecord.get(m).getRecord();
-          if (update.getAlleleFrequenciesG1K().size() <= alleleNo) continue; // no number to update
+          if (update.getAlleleFrequenciesG1K().size() <= alleleNo) {
+            continue; // no number to update
+          }
           if ((isMatch
                   && (current.getAlleleFrequenciesG1K().size() <= alleleNo
                       || current.getAlleleFrequenciesG1K().get(alleleNo - 1)
                           < update.getAlleleFrequenciesG1K().get(alleleNo - 1)))
               || (!isMatch
-                  && current.highestAlleleFreqG1KOverall() < update.highestAlleleFreqG1KOverall()))
+                  && current.highestAlleleFreqG1KOverall()
+                      < update.highestAlleleFreqG1KOverall())) {
             annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
+          }
         }
       }
     }

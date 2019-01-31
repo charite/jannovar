@@ -40,8 +40,9 @@ public final class VariantContextWriterConstructionHelper {
     // construct VariantContextWriter and write out header
     VariantContextWriter out = builder.build();
     final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header));
-    for (VCFHeaderLine headerLine : additionalHeaderLines)
+    for (VCFHeaderLine headerLine : additionalHeaderLines) {
       updatedHeader.addMetaDataLine(headerLine);
+    }
     out.writeHeader(updatedHeader);
     return out;
   }
@@ -77,13 +78,16 @@ public final class VariantContextWriterConstructionHelper {
       boolean generateIndex) {
     VariantContextWriterBuilder builder = makeBuilder(header);
     builder.setOutputFile(new File(fileName));
-    if (!generateIndex) builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    if (!generateIndex) {
+      builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    }
 
     // construct VariantContextWriter and write out header
     VariantContextWriter out = builder.build();
     final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header));
-    for (VCFHeaderLine headerLine : additionalHeaderLines)
+    for (VCFHeaderLine headerLine : additionalHeaderLines) {
       updatedHeader.addMetaDataLine(headerLine);
+    }
     out.writeHeader(updatedHeader);
     return out;
   }
@@ -100,7 +104,9 @@ public final class VariantContextWriterConstructionHelper {
     builder.setOption(Options.ALLOW_MISSING_FIELDS_IN_HEADER);
     // Disable on-the-fly generation of Tribble index if the input file does not have a sequence
     // dictionary.
-    if (header.getSequenceDictionary() == null) builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    if (header.getSequenceDictionary() == null) {
+      builder.unsetOption(Options.INDEX_ON_THE_FLY);
+    }
     return builder;
   }
 

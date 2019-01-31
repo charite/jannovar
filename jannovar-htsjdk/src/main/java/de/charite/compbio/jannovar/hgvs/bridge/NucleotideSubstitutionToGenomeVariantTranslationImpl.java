@@ -37,9 +37,10 @@ class NucleotideSubstitutionToGenomeVariantTranslationImpl
     final String fromNT = ntSub.getFromNT().toUpperCase();
     final String toNT = ntSub.getToNT().toUpperCase();
 
-    if (fromNT.length() != 1 || toNT.length() != 1)
+    if (fromNT.length() != 1 || toNT.length() != 1) {
       throw new CannotTranslateHGVSVariant(
           "Both source and target sequence must have length 1 in " + ntSub.toHGVSString());
+    }
 
     final GenomeVariant result =
         new GenomeVariant(

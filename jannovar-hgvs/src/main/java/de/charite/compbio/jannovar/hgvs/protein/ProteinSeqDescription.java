@@ -67,10 +67,14 @@ public class ProteinSeqDescription implements ConvertibleToHGVSString {
 
   @Override
   public String toHGVSString(AminoAcidCode code) {
-    if (isBlank()) return "";
-    else if (this.aas != null && code == AminoAcidCode.ONE_LETTER) return this.aas;
-    else if (this.aas != null && code == AminoAcidCode.THREE_LETTER)
+    if (isBlank()) {
+      return "";
+    } else if (this.aas != null && code == AminoAcidCode.ONE_LETTER) {
+      return this.aas;
+    } else if (this.aas != null && code == AminoAcidCode.THREE_LETTER) {
       return Translator.getTranslator().toLong(this.aas);
-    else return Integer.toString(this.aaCount);
+    } else {
+      return Integer.toString(this.aaCount);
+    }
   }
 }

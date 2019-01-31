@@ -143,11 +143,7 @@ public final class GenericTSVAnnotationDriver implements DBAnnotationDriver {
     }
   }
 
-  /**
-   * Annotate <code>vc</code> with the annotating database records.
-   *
-   * @param refDesc
-   */
+  /** Annotate <code>vc</code> with the annotating database records. */
   private void annotateWith(
       VariantContext vc,
       String infix,

@@ -26,7 +26,9 @@ final class ThousandGenomesVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
     builder.getPopmax().addAll(vc.getAttributeAsStringList("POPMAX", "."));
 
@@ -35,7 +37,9 @@ final class ThousandGenomesVariantContextToRecordConverter
     // AN: Chromosome count
     int allAN = 0;
     for (ThousandGenomesPopulation pop : ThousandGenomesPopulation.values()) {
-      if (pop == ThousandGenomesPopulation.ALL) continue; // skip
+      if (pop == ThousandGenomesPopulation.ALL) {
+        continue; // skip
+      }
 
       if (pop == ThousandGenomesPopulation.POPMAX) {
         final List<String> lst = vc.getAttributeAsStringList("POPMAX_AN", ".");
@@ -50,7 +54,9 @@ final class ThousandGenomesVariantContextToRecordConverter
       } else {
         int an = vc.getAttributeAsInt(pop + "_AN", 0);
         builder.getChromCounts().put(pop, ImmutableList.of(an));
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) allAN += an;
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
+          allAN += an;
+        }
       }
     }
     builder.getChromCounts().put(ThousandGenomesPopulation.ALL, ImmutableList.of(allAN));
@@ -67,7 +73,9 @@ final class ThousandGenomesVariantContextToRecordConverter
       allHemi.add(0);
     }
     for (ThousandGenomesPopulation pop : ThousandGenomesPopulation.values()) {
-      if (pop == ThousandGenomesPopulation.ALL) continue; // skip
+      if (pop == ThousandGenomesPopulation.ALL) {
+        continue; // skip
+      }
 
       // AC
       List<Integer> acLst =
@@ -76,9 +84,11 @@ final class ThousandGenomesVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!acLst.isEmpty()) {
         builder.getAlleleCounts().put(pop, acLst);
-        if (pop != ThousandGenomesPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != ThousandGenomesPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allAC.set(i, allAC.get(i) + acLst.get(i));
+          }
+        }
       }
 
       // Hom
@@ -88,9 +98,11 @@ final class ThousandGenomesVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!homLst.isEmpty()) {
         builder.getAlleleHomCounts().put(pop, homLst);
-        if (pop != ThousandGenomesPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != ThousandGenomesPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHom.set(i, allHom.get(i) + homLst.get(i));
+          }
+        }
       }
 
       // Hemi
@@ -100,9 +112,11 @@ final class ThousandGenomesVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!hemiLst.isEmpty()) {
         builder.getAlleleHemiCounts().put(pop, hemiLst);
-        if (pop != ThousandGenomesPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != ThousandGenomesPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHemi.set(i, allHemi.get(i) + hemiLst.get(i));
+          }
+        }
       }
 
       // Het
@@ -112,19 +126,24 @@ final class ThousandGenomesVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!hetLst.isEmpty()) {
         builder.getAlleleHemiCounts().put(pop, hemiLst);
-        if (pop != ThousandGenomesPopulation.POPMAX)
-          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        if (pop != ThousandGenomesPopulation.POPMAX) {
+          for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
             allHet.set(i, allHet.get(i) + hetLst.get(i));
+          }
+        }
       }
     }
 
     builder.getAlleleCounts().put(ThousandGenomesPopulation.ALL, allAC);
-    if (!builder.getAlleleHetCounts().isEmpty())
+    if (!builder.getAlleleHetCounts().isEmpty()) {
       builder.getAlleleHetCounts().put(ThousandGenomesPopulation.ALL, allHet);
-    if (!builder.getAlleleHomCounts().isEmpty())
+    }
+    if (!builder.getAlleleHomCounts().isEmpty()) {
       builder.getAlleleHomCounts().put(ThousandGenomesPopulation.ALL, allHom);
-    if (!builder.getAlleleHemiCounts().isEmpty())
+    }
+    if (!builder.getAlleleHemiCounts().isEmpty()) {
       builder.getAlleleHemiCounts().put(ThousandGenomesPopulation.ALL, allHemi);
+    }
 
     return builder.build();
   }

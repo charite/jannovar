@@ -68,7 +68,9 @@ public final class ReferenceDictParser {
     // default_sources.ini file.
     ImmutableList<ImmutableList<String>> accessionLines = loadTSVFile(chrAccessionsPath);
     String chrToAccessionsFormat = iniSection.fetch("chrToAccessions.format");
-    if (chrToAccessionsFormat == null) chrToAccessionsFormat = "chr_accessions";
+    if (chrToAccessionsFormat == null) {
+      chrToAccessionsFormat = "chr_accessions";
+    }
     int chrID = 1; // always start at 1 to get natural mapping of chr1 <-> 1
     if ("chr_accessions".equals(chrToAccessionsFormat)) {
       final int CA_CHROMOSOME = 0;
@@ -88,7 +90,9 @@ public final class ReferenceDictParser {
       final int CA_CHROMOSOME = 0;
       final int CA_REFSEQ_ACCESSION = 1;
       for (ImmutableList<String> line : accessionLines) {
-        if (!line.get(line.size() - 1).equals(filterPattern)) continue; // skip, does not match
+        if (!line.get(line.size() - 1).equals(filterPattern)) {
+          continue; // skip, does not match
+        }
         builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
         builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
         builder.putContigID(
@@ -100,22 +104,26 @@ public final class ReferenceDictParser {
 
     // Add aliases from INI file.
     String[] aliases = iniSection.fetchAll("alias", String[].class);
-    if (aliases != null)
+    if (aliases != null) {
       for (int i = 0; i < aliases.length; ++i) {
         String[] fields = aliases[i].split(",");
         if (fields != null) {
           if (builder.getContigID(fields[0]) == null) {
             builder.putContigName(chrID, fields[0]);
             builder.putContigID(fields[0], chrID);
-            if (!fields[0].startsWith("chr")) builder.putContigID("chr" + fields[0], chrID++);
+            if (!fields[0].startsWith("chr")) {
+              builder.putContigID("chr" + fields[0], chrID++);
+            }
           }
           for (int j = 1; j < fields.length; ++j) {
             builder.putContigID(fields[j], builder.getContigID(fields[0]));
-            if (!fields[j].startsWith("chr"))
+            if (!fields[j].startsWith("chr")) {
               builder.putContigID("chr" + fields[j], builder.getContigID(fields[0]));
+            }
           }
         }
       }
+    }
 
     // Process chromosome info file.
     ImmutableList<ImmutableList<String>> chromInfoLines = loadTSVFile(chromInfoPath);
@@ -123,7 +131,9 @@ public final class ReferenceDictParser {
     final int CI_LENGTH = 1;
     for (ImmutableList<String> line : chromInfoLines) {
       Integer theID = builder.getContigID(line.get(CI_CHROMOSOME));
-      if (theID == null) continue; // unknown
+      if (theID == null) {
+        continue; // unknown
+      }
       builder.putContigLength(theID.intValue(), Integer.parseInt(line.get(CI_LENGTH)));
     }
 
@@ -146,7 +156,9 @@ public final class ReferenceDictParser {
     try {
       BufferedReader reader = getBufferedReaderFromFilePath(path);
       while ((line = reader.readLine()) != null) {
-        if (line.startsWith("#")) continue; // skip comments
+        if (line.startsWith("#")) {
+          continue; // skip comments
+        }
         result.add(ImmutableList.copyOf(line.split("\t")));
       }
     } catch (IOException e) {
@@ -173,9 +185,11 @@ public final class ReferenceDictParser {
     pb.read(signature);
     pb.unread(signature);
     InputStream stream;
-    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b)
+    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) {
       stream = new GZIPInputStream(pb);
-    else stream = new DataInputStream(pb);
+    } else {
+      stream = new DataInputStream(pb);
+    }
 
     BufferedReader br = new BufferedReader(new InputStreamReader(stream));
     return br;

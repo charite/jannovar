@@ -30,7 +30,9 @@ final class DBSNPVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
 
     // Fields from INFO VCF field
@@ -40,7 +42,9 @@ final class DBSNPVariantContextToRecordConverter
     builder.setVariantProperty(null); // TODO
     for (String strGeneInfo : Splitter.on("|").split(vc.getAttributeAsString("GENEINFO", ""))) {
       strGeneInfo = strGeneInfo.trim();
-      if (strGeneInfo.isEmpty()) continue;
+      if (strGeneInfo.isEmpty()) {
+        continue;
+      }
       ArrayList<String> arr = Lists.newArrayList(Splitter.on(":").split(strGeneInfo));
       assert arr.size() == 2;
       builder.getGeneInfos().add(new DBSNPGeneInfo(arr.get(0), Integer.parseInt(arr.get(1))));
@@ -68,18 +72,24 @@ final class DBSNPVariantContextToRecordConverter
     if (suspectCode == 0) {
       builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.UNSPECIFIED);
     } else {
-      if ((suspectCode & 1) == 1)
+      if ((suspectCode & 1) == 1) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.PARALOG);
-      if ((suspectCode & 2) == 2)
+      }
+      if ((suspectCode & 2) == 2) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.BY_EST);
-      if ((suspectCode & 4) == 4)
+      }
+      if ((suspectCode & 4) == 4) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.OLD_ALIGN);
-      if ((suspectCode & 8) == 8)
+      }
+      if ((suspectCode & 8) == 8) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.PARA_EST);
-      if ((suspectCode & 16) == 16)
+      }
+      if ((suspectCode & 16) == 16) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.G1K_FAILED);
-      if ((suspectCode & 1024) == 1024)
+      }
+      if ((suspectCode & 1024) == 1024) {
         builder.getVariantSuspectReasonCode().add(DBSNPVariantSuspectReasonCode.OTHER);
+      }
     }
 
     builder.setWeights(vc.getAttributeAsInt("WGT", 0));
@@ -124,12 +134,16 @@ final class DBSNPVariantContextToRecordConverter
             vc.getAttributeAsList("CAF").stream()
                 .map(
                     x -> {
-                      if (".".equals(x)) return 0.0;
-                      else return (Double) Double.parseDouble((String) x);
+                      if (".".equals(x)) {
+                        return 0.0;
+                      } else {
+                        return (Double) Double.parseDouble((String) x);
+                      }
                     })
                 .collect(Collectors.toList()));
-    if (!builder.getAlleleFrequenciesG1K().isEmpty())
+    if (!builder.getAlleleFrequenciesG1K().isEmpty()) {
       builder.getAlleleFrequenciesG1K().subList(0, 1).clear();
+    }
     builder.setCommon(vc.hasAttribute("COMMON"));
     builder
         .getOldVariants()

@@ -79,15 +79,29 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideShortSequenceRepeatVariability other = (NucleotideShortSequenceRepeatVariability) obj;
-    if (maxCount != other.maxCount) return false;
-    if (minCount != other.minCount) return false;
+    if (maxCount != other.maxCount) {
+      return false;
+    }
+    if (minCount != other.minCount) {
+      return false;
+    }
     if (range == null) {
-      if (other.range != null) return false;
-    } else if (!range.equals(other.range)) return false;
+      if (other.range != null) {
+        return false;
+      }
+    } else if (!range.equals(other.range)) {
+      return false;
+    }
     return true;
   }
 }

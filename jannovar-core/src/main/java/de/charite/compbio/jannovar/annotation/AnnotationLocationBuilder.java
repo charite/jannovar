@@ -29,8 +29,11 @@ public class AnnotationLocationBuilder {
   /** @return {@link AnnotationLocation} from the builder's state. */
   public AnnotationLocation build() {
     int totalRank = -1;
-    if (rankType == RankType.EXON) totalRank = transcript.getExonRegions().size();
-    else if (rankType == RankType.INTRON) totalRank = transcript.getExonRegions().size() - 1;
+    if (rankType == RankType.EXON) {
+      totalRank = transcript.getExonRegions().size();
+    } else if (rankType == RankType.INTRON) {
+      totalRank = transcript.getExonRegions().size() - 1;
+    }
     return new AnnotationLocation(transcript, rankType, rank, totalRank, txLocation);
   }
 

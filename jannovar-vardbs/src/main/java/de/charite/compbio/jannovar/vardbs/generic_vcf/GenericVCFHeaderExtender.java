@@ -30,9 +30,10 @@ public class GenericVCFHeaderExtender extends VCFHeaderExtender {
   @Override
   public void addHeaders(VCFHeader header, String prefix) {
     addHeadersInfixes(header, prefix, "", "");
-    if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching())
+    if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
       addHeadersInfixes(
           header, prefix, "OVL_", " (requiring no genotype match, only position overlap)");
+    }
   }
 
   public void addHeadersInfixes(VCFHeader header, String prefix, String infix, String note) {

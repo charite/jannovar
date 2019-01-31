@@ -37,7 +37,9 @@ public class MendelianCompatibilityCheckerTestBase {
   /** @return a {@link com.google.common.collect.ImmutableList} object. */
   protected ImmutableList<SimpleGenotype> lst(SimpleGenotype... gts) {
     ImmutableList.Builder<SimpleGenotype> builder = new ImmutableList.Builder<SimpleGenotype>();
-    for (int i = 0; i < gts.length; ++i) builder.add(gts[i]);
+    for (int i = 0; i < gts.length; ++i) {
+      builder.add(gts[i]);
+    }
     return builder.build();
   }
 

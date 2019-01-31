@@ -63,11 +63,15 @@ public class Genotype {
 
   /**
    * @return <code>true</code> if the sample is heterozygous. One call can be no_call, <code>false
-   *     </code> otherwise
+   * </code> otherwise
    */
   public boolean isHet() {
-    if (!isDiploid()) return false; // only diploid genotypes cann be heterozygous
-    if (isNotObserved()) return false; // we want to have at least one observed call
+    if (!isDiploid()) {
+      return false; // only diploid genotypes cann be heterozygous
+    }
+    if (isNotObserved()) {
+      return false; // we want to have at least one observed call
+    }
     return !alleleNumbers.get(0).equals(alleleNumbers.get(1));
   }
 
@@ -76,24 +80,36 @@ public class Genotype {
    *     #NO_CALL}, <code>false</code> otherwise
    */
   public boolean isHomRef() {
-    if (alleleNumbers.isEmpty()) return false; // empty calls are nothing
-    if (isNotObserved()) return false; // we want to have at least one observed call
+    if (alleleNumbers.isEmpty()) {
+      return false; // empty calls are nothing
+    }
+    if (isNotObserved()) {
+      return false; // we want to have at least one observed call
+    }
     return alleleNumbers.stream().allMatch(x -> x == REF_CALL || x == NO_CALL);
   }
 
   /** @return <code>true</code> if the sample is homozygous alt, <code>false</code> otherwise */
   public boolean isHomAlt() {
-    if (alleleNumbers.isEmpty()) return false; // empty calls are nothing
-    if (isNotObserved()) return false; // we want to have at least one observed call
+    if (alleleNumbers.isEmpty()) {
+      return false; // empty calls are nothing
+    }
+    if (isNotObserved()) {
+      return false; // we want to have at least one observed call
+    }
 
     boolean noRefCall = alleleNumbers.stream().noneMatch(x -> x == REF_CALL);
-    if (!noRefCall) return false;
+    if (!noRefCall) {
+      return false;
+    }
 
     List<Integer> calledAlts =
         alleleNumbers.stream().filter(n -> n != NO_CALL).collect(Collectors.toList());
     Integer alt = calledAlts.get(0);
     for (Integer otherAlt : calledAlts) {
-      if (!alt.equals(otherAlt)) return false;
+      if (!alt.equals(otherAlt)) {
+        return false;
+      }
     }
     return true;
   }
@@ -118,13 +134,23 @@ public class Genotype {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     Genotype other = (Genotype) obj;
     if (alleleNumbers == null) {
-      if (other.alleleNumbers != null) return false;
-    } else if (!alleleNumbers.equals(other.alleleNumbers)) return false;
+      if (other.alleleNumbers != null) {
+        return false;
+      }
+    } else if (!alleleNumbers.equals(other.alleleNumbers)) {
+      return false;
+    }
     return true;
   }
 }

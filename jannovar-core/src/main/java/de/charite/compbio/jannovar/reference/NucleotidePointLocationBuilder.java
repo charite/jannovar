@@ -32,14 +32,19 @@ public final class NucleotidePointLocationBuilder {
   public NucleotidePointLocation getNucleotidePointLocation(GenomePosition pos) {
     // Guard against cases upstream/downstream of transcription region.
     if (transcript.getTXRegion().isRightOf(pos)) // upstream of transcription region
-    return getCDNANucleotidePointLocationForUpstreamPos(pos);
-    else if (transcript.getTXRegion().isLeftOf(pos)) // downstream of transcription region
-    return getCDNANucleotidePointLocationForDownstreamPos(pos);
+    {
+      return getCDNANucleotidePointLocationForUpstreamPos(pos);
+    } else if (transcript.getTXRegion().isLeftOf(pos)) // downstream of transcription region
+    {
+      return getCDNANucleotidePointLocationForDownstreamPos(pos);
+    }
 
     // The main difference now is between intronic and exonic regions.
-    if (soDecorator.liesInExon(new GenomeInterval(pos, 0)))
+    if (soDecorator.liesInExon(new GenomeInterval(pos, 0))) {
       return getCDNANucleotidePointLocationForExonPos(pos);
-    else return getCDNANucleotidePointLocationForIntronPos(pos);
+    } else {
+      return getCDNANucleotidePointLocationForIntronPos(pos);
+    }
   }
 
   /**
@@ -83,8 +88,9 @@ public final class NucleotidePointLocationBuilder {
     // HGVS,
     // generate offset position within exon.
     final int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
-    if (exonNumber == TranscriptProjectionDecorator.INVALID_INTRON_ID)
+    if (exonNumber == TranscriptProjectionDecorator.INVALID_INTRON_ID) {
       throw new Error("Bug: position must lie in CDS at this point.");
+    }
     GenomePosition exonEndPos = transcript.getExonRegions().get(exonNumber).getGenomeEndPos();
     GenomePosition nextExonBeginPos =
         transcript.getExonRegions().get(exonNumber + 1).getGenomeBeginPos();
@@ -138,7 +144,10 @@ public final class NucleotidePointLocationBuilder {
 
   /** @return the CDS region for a coding and the TX region for a non-coding transcript */
   private GenomeInterval getCDSRegion() {
-    if (transcript.isCoding()) return transcript.getCDSRegion();
-    else return transcript.getTXRegion();
+    if (transcript.isCoding()) {
+      return transcript.getCDSRegion();
+    } else {
+      return transcript.getTXRegion();
+    }
   }
 }

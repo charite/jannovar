@@ -88,19 +88,37 @@ public class NucleotideSubstitution extends NucleotideChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideSubstitution other = (NucleotideSubstitution) obj;
     if (fromNT == null) {
-      if (other.fromNT != null) return false;
-    } else if (!fromNT.equals(other.fromNT)) return false;
+      if (other.fromNT != null) {
+        return false;
+      }
+    } else if (!fromNT.equals(other.fromNT)) {
+      return false;
+    }
     if (position == null) {
-      if (other.position != null) return false;
-    } else if (!position.equals(other.position)) return false;
+      if (other.position != null) {
+        return false;
+      }
+    } else if (!position.equals(other.position)) {
+      return false;
+    }
     if (toNT == null) {
-      if (other.toNT != null) return false;
-    } else if (!toNT.equals(other.toNT)) return false;
+      if (other.toNT != null) {
+        return false;
+      }
+    } else if (!toNT.equals(other.toNT)) {
+      return false;
+    }
     return true;
   }
 }

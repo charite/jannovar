@@ -132,16 +132,20 @@ public class UCSCParser implements TranscriptParser {
     final String kgXrefPath = PathUtil.join(basePath, getINIFileName("kgXref"));
     final String knownToLocusLinkPath = PathUtil.join(basePath, getINIFileName("knownToLocusLink"));
     String knownCanonicalPath = null;
-    if (getINIFileName("knownCanonical") != null && !"".equals(getINIFileName("knownCanonical")))
+    if (getINIFileName("knownCanonical") != null && !"".equals(getINIFileName("knownCanonical"))) {
       knownCanonicalPath = PathUtil.join(basePath, getINIFileName("knownCanonical"));
+    }
 
     // Parse the UCSC files.
     parseKnownGeneFile(knownGenePath);
     parseKnownGeneMrna(knownGeneMrnaPath);
     parseKnownGeneXref(kgXrefPath);
     parseKnown2LocusLink(knownToLocusLinkPath);
-    if (knownCanonicalPath != null) parseKnownCanonical(knownCanonicalPath);
-    else TranscriptSupportLevelsSetterFromLengths.run(this.knownGeneMap.values());
+    if (knownCanonicalPath != null) {
+      parseKnownCanonical(knownCanonicalPath);
+    } else {
+      TranscriptSupportLevelsSetterFromLengths.run(this.knownGeneMap.values());
+    }
 
     // Augment information in builders with
     try {
@@ -256,8 +260,10 @@ public class UCSCParser implements TranscriptParser {
     // geneXref file.
     Integer chrID = refDict.getContigNameToID().get(A[1]);
     if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception
-      // to be thrown.
+    // to be thrown.
+    {
       throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);
+    }
 
     char strandC = A[2].charAt(0);
     if (strandC != '+' && strandC != '-') {
@@ -354,7 +360,7 @@ public class UCSCParser implements TranscriptParser {
       }
     }
 
-    for (int i = 0; i < exonStarts.length; ++i)
+    for (int i = 0; i < exonStarts.length; ++i) {
       tib.addExonRegion(
           new GenomeInterval(
               refDict,
@@ -363,6 +369,7 @@ public class UCSCParser implements TranscriptParser {
               exonStarts[i],
               exonEnds[i],
               PositionType.ONE_BASED));
+    }
 
     return tib;
   }
@@ -407,12 +414,16 @@ public class UCSCParser implements TranscriptParser {
               kgPath, e.toString());
     } finally {
       try {
-        if (br != null) br.close();
+        if (br != null) {
+          br.close();
+        }
       } catch (IOException e) {
         // swallow, nothing we can do about it
       }
     }
-    if (s != null) throw new TranscriptParseException(s);
+    if (s != null) {
+      throw new TranscriptParseException(s);
+    }
   }
 
   /**
@@ -478,8 +489,9 @@ public class UCSCParser implements TranscriptParser {
    */
   private void parseKnownCanonical(String knownCanonicalPath) throws TranscriptParseException {
     // assign LOW_PRIORITY to all transcripts
-    for (TranscriptModelBuilder tmb : knownGeneMap.values())
+    for (TranscriptModelBuilder tmb : knownGeneMap.values()) {
       tmb.setTranscriptSupportLevel(TranscriptSupportLevels.LOW_PRIORITY);
+    }
 
     // actually parse the file
     try {
@@ -502,7 +514,9 @@ public class UCSCParser implements TranscriptParser {
         }
         final String primaryTranscriptID = A[5];
         TranscriptModelBuilder tbi = this.knownGeneMap.get(primaryTranscriptID);
-        if (tbi != null) tbi.setTranscriptSupportLevel(TranscriptSupportLevels.UCSC_CANONICAL);
+        if (tbi != null) {
+          tbi.setTranscriptSupportLevel(TranscriptSupportLevels.UCSC_CANONICAL);
+        }
       }
       br.close();
       LOGGER.info(
@@ -619,7 +633,9 @@ public class UCSCParser implements TranscriptParser {
       // int kgWithXref=0;
 
       while ((line = br.readLine()) != null) {
-        if (line.startsWith("#")) continue; /* Skip comment line */
+        if (line.startsWith("#")) {
+          continue; /* Skip comment line */
+        }
         String A[] = line.split("\t");
         if (A.length < 8) {
           err =
@@ -653,19 +669,21 @@ public class UCSCParser implements TranscriptParser {
               "Exception while parsing UCSC KnownGene xref file at \"%s\"\n%s",
               xRefPath, e.toString());
     } finally {
-      if (br != null)
+      if (br != null) {
         try {
           br.close();
         } catch (IOException e) {
           // swallow, nothing we can do about it
         }
+      }
     }
-    if (err != null) throw new TranscriptParseException(err);
+    if (err != null) {
+      throw new TranscriptParseException(err);
+    }
   }
 
   /**
-   * @param key
-   *            name of the INI entry
+   * @param key name of the INI entry
    * @return file name from INI <code>key</code.
    */
   private String getINIFileName(String key) {
@@ -684,8 +702,11 @@ public class UCSCParser implements TranscriptParser {
       throws IOException {
     FileInputStream fin = new FileInputStream(path);
     BufferedReader br;
-    if (isGzip) br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
-    else br = new BufferedReader(new InputStreamReader(new DataInputStream(fin)));
+    if (isGzip) {
+      br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
+    } else {
+      br = new BufferedReader(new InputStreamReader(new DataInputStream(fin)));
+    }
     return br;
   }
 }

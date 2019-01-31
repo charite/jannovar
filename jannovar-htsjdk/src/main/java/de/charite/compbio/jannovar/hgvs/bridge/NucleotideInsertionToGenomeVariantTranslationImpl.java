@@ -41,9 +41,10 @@ class NucleotideInsertionToGenomeVariantTranslationImpl
     final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
 
     // perform sanity check of inserted nucleotides
-    if (insertedNTDesc.getNucleotides() == null)
+    if (insertedNTDesc.getNucleotides() == null) {
       throw new CannotTranslateHGVSVariant(
           "Nucleotides must be given but were not in " + ntIns.toHGVSString());
+    }
 
     final GenomeVariant result =
         new GenomeVariant(

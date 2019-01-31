@@ -15,7 +15,9 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
   @Test
   public void testProteinSingleVarTrivialChanges() {
     String[] arr = {"p.0", "p.?", "p.0", "p.0?"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
@@ -30,31 +32,41 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
       "p.Met1?",
       "p.Met1ext-5"
     };
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleVarDeletion() {
     String[] arr = {"p.G33del", "p.Glu123del", "p.G33_A127del", "p.Glu33_Ala127del"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleVarDuplication() {
     String[] arr = {"p.G33dup", "p.Glu123dup"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleVarVaryingShortSequenceRepeat() {
     String[] arr = {"p.G33(3_6)", "p.Glu123(3_6)"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleVarInsertion() {
     String[] arr = {"p.G33_L34insGlu", "p.Glu33_Lys34insG", "p.G33_L34ins17", "p.Glu33_Lys34ins17"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
@@ -62,19 +74,25 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
     String[] arr = {
       "p.G33delins17", "p.Glu33_Lys34delins17", "p.G33delinsG", "p.Glu33_Lys34delinsGlu"
     };
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleShortFrameShift() {
     String[] arr = {"p.G33fs", "p.Arg97fs"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   @Test
   public void testProteinSingleLongFrameShift() {
     String[] arr = {"p.Arg97Profs*23", "p.A97Pfs*23"};
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   /** test single allele substitutions */
@@ -88,7 +106,9 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
       "p.[(A2G;Lys33Gly)]",
       "p.[(A2G);(Lys33Gly)]"
     };
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   /** test multi-allele substitutions */
@@ -102,7 +122,9 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
       "p.[(A2G;Lys33Gly)]",
       "p.[(A2G);(Lys33Gly)]"
     };
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 
   /** test multi-allele substitutions with chromosome unknown */
@@ -111,6 +133,8 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
     String[] arr = {
       "p.[Ala25Thr(;)Pro323Leu]", "p.[(Ala25Thr(;)Pro323Leu)]", "p.[(Ala25Thr)(;)(Pro323Leu)]"
     };
-    for (String s : arr) parseString(PREFIX + s);
+    for (String s : arr) {
+      parseString(PREFIX + s);
+    }
   }
 }

@@ -73,7 +73,9 @@ public class DBVariantContextAnnotatorFactoryTest {
             .unsetOption(Options.INDEX_ON_THE_FLY)
             .build();
     writer.writeHeader(annotator.extendHeader(new VCFHeader(vcfReader.getFileHeader())));
-    for (VariantContext vc : vcfReader) writer.add(annotator.annotateVariantContext(vc));
+    for (VariantContext vc : vcfReader) {
+      writer.add(annotator.annotateVariantContext(vc));
+    }
 
     Assert.assertEquals(
         "##fileformat=VCFv4.2\n"

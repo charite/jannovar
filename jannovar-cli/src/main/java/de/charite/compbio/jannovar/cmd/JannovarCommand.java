@@ -18,10 +18,13 @@ public abstract class JannovarCommand {
     LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
     Configuration conf = ctx.getConfiguration();
 
-    if (verbosity <= 1) conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
-    else if (verbosity <= 2)
+    if (verbosity <= 1) {
+      conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
+    } else if (verbosity <= 2) {
       conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.DEBUG);
-    else conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.TRACE);
+    } else {
+      conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.TRACE);
+    }
 
     ctx.updateLoggers(conf);
   }

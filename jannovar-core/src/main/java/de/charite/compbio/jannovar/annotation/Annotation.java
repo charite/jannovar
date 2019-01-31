@@ -205,9 +205,13 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    *     no annotation.
    */
   public String getCDSNTChangeStr() {
-    if (cdsNTChange == null || transcript == null) return "";
-    else if (transcript.isCoding()) return "c." + cdsNTChange.toHGVSString();
-    else return "n." + cdsNTChange.toHGVSString();
+    if (cdsNTChange == null || transcript == null) {
+      return "";
+    } else if (transcript.isCoding()) {
+      return "c." + cdsNTChange.toHGVSString();
+    } else {
+      return "n." + cdsNTChange.toHGVSString();
+    }
   }
 
   /** @return predicted {@link ProteinChange} */
@@ -221,8 +225,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    *     annotation.
    */
   public String getProteinChangeStr(AminoAcidCode code) {
-    if (proteinChange == null) return "";
-    else return "p." + proteinChange.toHGVSString(code);
+    if (proteinChange == null) {
+      return "";
+    } else {
+      return "p." + proteinChange.toHGVSString(code);
+    }
   }
 
   /**
@@ -230,8 +237,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    *     annotation, uses default amino acid code from {@link ProteinChange#toHGVSString()}.
    */
   public String getProteinChangeStr() {
-    if (proteinChange == null) return "";
-    else return "p." + proteinChange.toHGVSString();
+    if (proteinChange == null) {
+      return "";
+    } else {
+      return "p." + proteinChange.toHGVSString();
+    }
   }
 
   /**
@@ -244,10 +254,15 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
   /** @return highest {@link PutativeImpact} of all {@link #getEffects}. */
   public PutativeImpact getPutativeImpact() {
-    if (effects.isEmpty()) return null;
+    if (effects.isEmpty()) {
+      return null;
+    }
     VariantEffect worst = effects.iterator().next();
-    for (VariantEffect vt : effects)
-      if (worst.getImpact().compareTo(vt.getImpact()) > 0) worst = vt;
+    for (VariantEffect vt : effects) {
+      if (worst.getImpact().compareTo(vt.getImpact()) > 0) {
+        worst = vt;
+      }
+    }
     return worst.getImpact();
   }
 
@@ -272,8 +287,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
     data.cdsNTChange = cdsNTChange;
     data.proteinChange = proteinChange;
     data.messages = messages;
-    if (escape) return data.toString(alt, code);
-    else return data.toUnescapedString(alt, code);
+    if (escape) {
+      return data.toString(alt, code);
+    } else {
+      return data.toUnescapedString(alt, code);
+    }
   }
 
   /**
@@ -294,8 +312,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    * @return gene symbol or <code>"."</code>
    */
   public String getGeneSymbol() {
-    if (transcript == null || transcript.getGeneSymbol() == null) return ".";
-    else return transcript.getGeneSymbol();
+    if (transcript == null || transcript.getGeneSymbol() == null) {
+      return ".";
+    } else {
+      return transcript.getGeneSymbol();
+    }
   }
 
   /**
@@ -308,7 +329,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
    */
   public String getSymbolAndAnnotation(AminoAcidCode code) {
-    if (transcript == null) return null;
+    if (transcript == null) {
+      return null;
+    }
     return Joiner.on(":")
         .skipNulls()
         .join(
@@ -323,7 +346,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
    */
   // TODO: rename to getMostPathogenicVariantEffect
   public VariantEffect getMostPathogenicVarType() {
-    if (effects.isEmpty()) return null;
+    if (effects.isEmpty()) {
+      return null;
+    }
     return effects.iterator().next();
   }
 
@@ -355,16 +380,26 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
   @Override
   public int compareTo(Annotation other) {
     if (getMostPathogenicVarType() == null
-        && getMostPathogenicVarType() == other.getMostPathogenicVarType()) return 0;
-    else if (other.getMostPathogenicVarType() == null) return -1;
-    else if (getMostPathogenicVarType() == null) return 1;
+        && getMostPathogenicVarType() == other.getMostPathogenicVarType()) {
+      return 0;
+    } else if (other.getMostPathogenicVarType() == null) {
+      return -1;
+    } else if (getMostPathogenicVarType() == null) {
+      return 1;
+    }
 
     int result = getMostPathogenicVarType().ordinal() - other.getMostPathogenicVarType().ordinal();
-    if (result != 0) return result;
+    if (result != 0) {
+      return result;
+    }
 
-    if (transcript == null && other.transcript == null) return 0;
-    else if (other.transcript == null) return -1;
-    else if (transcript == null) return 1;
+    if (transcript == null && other.transcript == null) {
+      return 0;
+    } else if (other.transcript == null) {
+      return -1;
+    } else if (transcript == null) {
+      return 1;
+    }
 
     return transcript.compareTo(other.transcript);
   }
@@ -399,28 +434,58 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     Annotation other = (Annotation) obj;
     if (proteinChange == null) {
-      if (other.proteinChange != null) return false;
-    } else if (!proteinChange.equals(other.proteinChange)) return false;
+      if (other.proteinChange != null) {
+        return false;
+      }
+    } else if (!proteinChange.equals(other.proteinChange)) {
+      return false;
+    }
     if (annoLoc == null) {
-      if (other.annoLoc != null) return false;
-    } else if (!annoLoc.equals(other.annoLoc)) return false;
+      if (other.annoLoc != null) {
+        return false;
+      }
+    } else if (!annoLoc.equals(other.annoLoc)) {
+      return false;
+    }
     if (effects == null) {
-      if (other.effects != null) return false;
-    } else if (!effects.equals(other.effects)) return false;
+      if (other.effects != null) {
+        return false;
+      }
+    } else if (!effects.equals(other.effects)) {
+      return false;
+    }
     if (messages == null) {
-      if (other.messages != null) return false;
-    } else if (!messages.equals(other.messages)) return false;
+      if (other.messages != null) {
+        return false;
+      }
+    } else if (!messages.equals(other.messages)) {
+      return false;
+    }
     if (cdsNTChange == null) {
-      if (other.cdsNTChange != null) return false;
-    } else if (!cdsNTChange.equals(other.cdsNTChange)) return false;
+      if (other.cdsNTChange != null) {
+        return false;
+      }
+    } else if (!cdsNTChange.equals(other.cdsNTChange)) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     return true;
   }
 }

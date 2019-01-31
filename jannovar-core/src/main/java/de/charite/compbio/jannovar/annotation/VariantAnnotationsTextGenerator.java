@@ -55,8 +55,12 @@ public abstract class VariantAnnotationsTextGenerator {
   public String buildEffectText() {
     StringBuilder builder = new StringBuilder();
     for (Annotation anno : getAnnotations()) {
-      if (builder.length() != 0) builder.append(',');
-      if (altCount > 1) builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
+      if (builder.length() != 0) {
+        builder.append(',');
+      }
+      if (altCount > 1) {
+        builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
+      }
       builder.append(Joiner.on("+").join(anno.getEffects()));
     }
     return builder.toString();
@@ -69,8 +73,12 @@ public abstract class VariantAnnotationsTextGenerator {
   public String buildHGVSText(AminoAcidCode code) {
     StringBuilder builder = new StringBuilder();
     for (Annotation anno : getAnnotations()) {
-      if (builder.length() != 0) builder.append(',');
-      if (altCount > 1) builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
+      if (builder.length() != 0) {
+        builder.append(',');
+      }
+      if (altCount > 1) {
+        builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
+      }
       builder.append(anno.getSymbolAndAnnotation(code));
     }
     return builder.toString();
@@ -84,8 +92,11 @@ public abstract class VariantAnnotationsTextGenerator {
                 .map(a -> Joiner.on(',').join(a.getMessages()))
                 .map(
                     s -> {
-                      if (s.isEmpty()) return ".";
-                      else return s;
+                      if (s.isEmpty()) {
+                        return ".";
+                      } else {
+                        return s;
+                      }
                     })
                 .collect(Collectors.toList()));
   }

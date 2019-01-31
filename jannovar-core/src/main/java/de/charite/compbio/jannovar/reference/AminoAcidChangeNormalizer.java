@@ -15,7 +15,9 @@ public final class AminoAcidChangeNormalizer {
    */
   public static AminoAcidChange truncateAltAfterStopCodon(AminoAcidChange change) {
     int stopCodonPos = change.getAlt().indexOf('*');
-    if (stopCodonPos == -1) return change; // no stop codon found in change.alt
+    if (stopCodonPos == -1) {
+      return change; // no stop codon found in change.alt
+    }
     return new AminoAcidChange(
         change.getPos(), change.getRef(), change.getAlt().substring(0, stopCodonPos + 1));
   }
@@ -30,14 +32,20 @@ public final class AminoAcidChangeNormalizer {
    * @return normalized AminoAcidChange
    */
   public static AminoAcidChange normalizeDeletion(String ref, AminoAcidChange change) {
-    if (change.getRef().length() == 0 || change.getAlt().length() != 0) return change;
+    if (change.getRef().length() == 0 || change.getAlt().length() != 0) {
+      return change;
+    }
 
     // Compute shift of deletion.
     int shift = 0;
     final int LEN = change.getRef().length();
     while (change.getPos() + LEN + shift < ref.length()
-        && ref.charAt(change.getPos()) == ref.charAt(change.getPos() + LEN + shift)) shift += 1;
-    if (shift == 0) return change;
+        && ref.charAt(change.getPos()) == ref.charAt(change.getPos() + LEN + shift)) {
+      shift += 1;
+    }
+    if (shift == 0) {
+      return change;
+    }
 
     // Build new AminoAcidChange.
     StringBuilder changeRefBuilder = new StringBuilder();
@@ -65,26 +73,31 @@ public final class AminoAcidChangeNormalizer {
     while (truncSuffix < aaChange.getRef().length()
         && truncSuffix < aaChange.getAlt().length()
         && aaChange.getRef().charAt(REFLEN - truncSuffix)
-            == aaChange.getAlt().charAt(ALTLEN - truncSuffix)) ++truncSuffix;
-    if (truncSuffix != 0)
+            == aaChange.getAlt().charAt(ALTLEN - truncSuffix)) {
+      ++truncSuffix;
+    }
+    if (truncSuffix != 0) {
       aaChange =
           new AminoAcidChange(
               aaChange.getPos(),
               aaChange.getRef().substring(0, aaChange.getRef().length() - truncSuffix),
               aaChange.getAlt().substring(0, aaChange.getAlt().length() - truncSuffix));
+    }
 
     // Truncate prefixes / from the left.
     int truncPrefix = 0;
     while (truncPrefix < aaChange.getRef().length()
         && truncPrefix < aaChange.getAlt().length()
-        && aaChange.getRef().charAt(truncPrefix) == aaChange.getAlt().charAt(truncPrefix))
+        && aaChange.getRef().charAt(truncPrefix) == aaChange.getAlt().charAt(truncPrefix)) {
       ++truncPrefix;
-    if (truncPrefix != 0)
+    }
+    if (truncPrefix != 0) {
       aaChange =
           new AminoAcidChange(
               aaChange.getPos() + truncPrefix,
               aaChange.getRef().substring(truncPrefix),
               aaChange.getAlt().substring(truncPrefix));
+    }
 
     return aaChange;
   }
@@ -100,7 +113,9 @@ public final class AminoAcidChangeNormalizer {
    */
   public static AminoAcidChange shiftInsertion(AminoAcidChange aaChange, String wtAASeq) {
     // TODO(holtgrem): Test me!
-    if (aaChange.getRef().length() != 0) return aaChange;
+    if (aaChange.getRef().length() != 0) {
+      return aaChange;
+    }
 
     // Insert the alternative bases at the position indicated by txPos.
     StringBuilder builder = new StringBuilder(wtAASeq);
@@ -117,7 +132,10 @@ public final class AminoAcidChangeNormalizer {
     }
 
     if (shift == 0) // only rebuild if shift > 0
-    return aaChange;
-    else return new AminoAcidChange(pos, "", seq.substring(pos, pos + LEN));
+    {
+      return aaChange;
+    } else {
+      return new AminoAcidChange(pos, "", seq.substring(pos, pos + LEN));
+    }
   }
 }

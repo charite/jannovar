@@ -678,10 +678,15 @@ public enum VariantEffect {
 
   /** @return {@link PutativeImpact} of this effect annotation. */
   public PutativeImpact getImpact() {
-    if (this.ordinal() <= _SMALLEST_HIGH_IMPACT.ordinal()) return PutativeImpact.HIGH;
-    else if (this.ordinal() <= _SMALLEST_MODERATE_IMPACT.ordinal()) return PutativeImpact.MODERATE;
-    else if (this.ordinal() <= _SMALLEST_LOW_IMPACT.ordinal()) return PutativeImpact.LOW;
-    else return PutativeImpact.MODIFIER;
+    if (this.ordinal() <= _SMALLEST_HIGH_IMPACT.ordinal()) {
+      return PutativeImpact.HIGH;
+    } else if (this.ordinal() <= _SMALLEST_MODERATE_IMPACT.ordinal()) {
+      return PutativeImpact.MODERATE;
+    } else if (this.ordinal() <= _SMALLEST_LOW_IMPACT.ordinal()) {
+      return PutativeImpact.LOW;
+    } else {
+      return PutativeImpact.MODIFIER;
+    }
   }
 
   /**
@@ -1095,7 +1100,9 @@ public enum VariantEffect {
     // This function first calls isOffExome() to check whether the variant effect is off-exome.
     // Then, this function
     // also allows intronic variants
-    if (!isOffExome(false, false)) return false;
+    if (!isOffExome(false, false)) {
+      return false;
+    }
 
     switch (this) {
       case CODING_TRANSCRIPT_INTRON_VARIANT:

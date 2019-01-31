@@ -106,16 +106,30 @@ public class ProteinInsertion extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinInsertion other = (ProteinInsertion) obj;
     if (position == null) {
-      if (other.position != null) return false;
-    } else if (!position.equals(other.position)) return false;
+      if (other.position != null) {
+        return false;
+      }
+    } else if (!position.equals(other.position)) {
+      return false;
+    }
     if (seq == null) {
-      if (other.seq != null) return false;
-    } else if (!seq.equals(other.seq)) return false;
+      if (other.seq != null) {
+        return false;
+      }
+    } else if (!seq.equals(other.seq)) {
+      return false;
+    }
     return true;
   }
 

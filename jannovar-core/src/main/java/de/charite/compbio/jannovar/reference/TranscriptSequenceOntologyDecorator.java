@@ -68,8 +68,11 @@ public final class TranscriptSequenceOntologyDecorator {
    * @return <code>true</code> if <code>interval</code> contains a full exon (coding or non-coding).
    */
   public boolean containsExon(GenomeInterval interval) {
-    for (GenomeInterval region : transcript.getExonRegions())
-      if (interval.contains(region)) return true;
+    for (GenomeInterval region : transcript.getExonRegions()) {
+      if (interval.contains(region)) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -79,9 +82,11 @@ public final class TranscriptSequenceOntologyDecorator {
    * @return <code>true</code> if <code>interval</code> overlaps with a CDS-overlapping exon
    */
   public boolean overlapsWithCDSExon(GenomeInterval interval) {
-    for (GenomeInterval region : transcript.getExonRegions())
-      if (transcript.getCDSRegion().overlapsWith(region) && interval.overlapsWith(region))
+    for (GenomeInterval region : transcript.getExonRegions()) {
+      if (transcript.getCDSRegion().overlapsWith(region) && interval.overlapsWith(region)) {
         return true;
+      }
+    }
     return false;
   }
 
@@ -126,7 +131,9 @@ public final class TranscriptSequenceOntologyDecorator {
     // TODO(holtgrem): Test me!
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval intronRegion = transcript.intronRegion(i);
-      if (changeInterval.overlapsWith(intronRegion)) return true;
+      if (changeInterval.overlapsWith(intronRegion)) {
+        return true;
+      }
     }
     return false;
   }
@@ -136,7 +143,9 @@ public final class TranscriptSequenceOntologyDecorator {
     // TODO(holtgrem): Test me!
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval intronRegion = transcript.intronRegion(i);
-      if (intronRegion.contains(pos)) return true;
+      if (intronRegion.contains(pos)) {
+        return true;
+      }
     }
     return false;
   }
@@ -151,7 +160,9 @@ public final class TranscriptSequenceOntologyDecorator {
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval intronRegion = transcript.intronRegion(i);
       if (transcript.getCDSRegion().overlapsWith(intronRegion)
-          && changeInterval.overlapsWith(intronRegion)) return true;
+          && changeInterval.overlapsWith(intronRegion)) {
+        return true;
+      }
     }
     return false;
   }
@@ -164,8 +175,9 @@ public final class TranscriptSequenceOntologyDecorator {
     // TODO(holtgrem): Test me!
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval intronRegion = transcript.intronRegion(i);
-      if (transcript.getCDSRegion().overlapsWith(intronRegion) && intronRegion.contains(pos))
+      if (transcript.getCDSRegion().overlapsWith(intronRegion) && intronRegion.contains(pos)) {
         return true;
+      }
     }
     return false;
   }
@@ -220,13 +232,17 @@ public final class TranscriptSequenceOntologyDecorator {
         // check for donor region
         GenomeInterval spliceRegionInterval =
             new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
-        if (interval.overlapsWith(spliceRegionInterval)) return true;
+        if (interval.overlapsWith(spliceRegionInterval)) {
+          return true;
+        }
       }
       if (i > 0) {
         // check for acceptor region
         GenomeInterval spliceRegionInterval =
             new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8), 11);
-        if (interval.overlapsWith(spliceRegionInterval)) return true;
+        if (interval.overlapsWith(spliceRegionInterval)) {
+          return true;
+        }
       }
     }
     return false;
@@ -249,13 +265,17 @@ public final class TranscriptSequenceOntologyDecorator {
         // check for donor region
         GenomeInterval spliceRegionInterval =
             new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
-        if (spliceRegionInterval.contains(pos)) return true;
+        if (spliceRegionInterval.contains(pos)) {
+          return true;
+        }
       }
       if (i > 0) {
         // check for acceptor region
         GenomeInterval spliceRegionInterval =
             new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8), 11);
-        if (spliceRegionInterval.contains(pos)) return true;
+        if (spliceRegionInterval.contains(pos)) {
+          return true;
+        }
       }
     }
     return false;
@@ -274,7 +294,9 @@ public final class TranscriptSequenceOntologyDecorator {
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval exonInterval = transcript.getExonRegions().get(i);
       GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
-      if (interval.overlapsWith(donorInterval)) return true;
+      if (interval.overlapsWith(donorInterval)) {
+        return true;
+      }
     }
     return false;
   }
@@ -292,7 +314,9 @@ public final class TranscriptSequenceOntologyDecorator {
     for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
       GenomeInterval exonInterval = transcript.getExonRegions().get(i);
       GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
-      if (donorInterval.contains(pos)) return true;
+      if (donorInterval.contains(pos)) {
+        return true;
+      }
     }
     return false;
   }
@@ -311,7 +335,9 @@ public final class TranscriptSequenceOntologyDecorator {
       GenomeInterval exonInterval = transcript.getExonRegions().get(i);
       GenomeInterval acceptorInterval =
           new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
-      if (interval.overlapsWith(acceptorInterval)) return true;
+      if (interval.overlapsWith(acceptorInterval)) {
+        return true;
+      }
     }
     return false;
   }
@@ -330,7 +356,9 @@ public final class TranscriptSequenceOntologyDecorator {
       GenomeInterval exonInterval = transcript.getExonRegions().get(i);
       GenomeInterval acceptorInterval =
           new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
-      if (acceptorInterval.contains(pos)) return true;
+      if (acceptorInterval.contains(pos)) {
+        return true;
+      }
     }
     return false;
   }
@@ -446,7 +474,9 @@ public final class TranscriptSequenceOntologyDecorator {
 
     // locate intron, return false on any errors
     final int intronNo = projector.locateIntron(interval.getGenomeBeginPos());
-    if (intronNo == TranscriptProjectionDecorator.INVALID_INTRON_ID) return false;
+    if (intronNo == TranscriptProjectionDecorator.INVALID_INTRON_ID) {
+      return false;
+    }
 
     return !transcript
         .getExonRegions()
@@ -463,7 +493,9 @@ public final class TranscriptSequenceOntologyDecorator {
 
     // locate exon, return false on any errors
     final int exonNo = projector.locateExon(interval.getGenomeBeginPos());
-    if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID) return false;
+    if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID) {
+      return false;
+    }
 
     return transcript.getExonRegions().get(exonNo).contains(interval);
   }
@@ -478,7 +510,9 @@ public final class TranscriptSequenceOntologyDecorator {
 
     // locate exon, return false on any errors
     final int exonNo = projector.locateExon(pos);
-    if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID) return false;
+    if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID) {
+      return false;
+    }
 
     return transcript.getExonRegions().get(exonNo).contains(pos);
   }
@@ -488,8 +522,11 @@ public final class TranscriptSequenceOntologyDecorator {
    * @return <code>true</code> if the interval overlaps with an exon
    */
   public boolean overlapsWithExon(GenomeInterval interval) {
-    for (int i = 0; i < transcript.getExonRegions().size(); ++i)
-      if (interval.overlapsWith(transcript.getExonRegions().get(i))) return true;
+    for (int i = 0; i < transcript.getExonRegions().size(); ++i) {
+      if (interval.overlapsWith(transcript.getExonRegions().get(i))) {
+        return true;
+      }
+    }
     return false;
   }
 }

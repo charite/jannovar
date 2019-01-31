@@ -66,23 +66,27 @@ public class ExacRecord {
 
     ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acBuilder =
         ImmutableSortedMap.naturalOrder();
-    for (Entry<ExacPopulation, List<Integer>> e : alleleCounts.entrySet())
+    for (Entry<ExacPopulation, List<Integer>> e : alleleCounts.entrySet()) {
       acBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+    }
     this.alleleCounts = acBuilder.build();
     ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHetBuilder =
         ImmutableSortedMap.naturalOrder();
-    for (Entry<ExacPopulation, List<Integer>> e : alleleHetCounts.entrySet())
+    for (Entry<ExacPopulation, List<Integer>> e : alleleHetCounts.entrySet()) {
       acHetBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+    }
     this.alleleHetCounts = acHetBuilder.build();
     ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHomBuilder =
         ImmutableSortedMap.naturalOrder();
-    for (Entry<ExacPopulation, List<Integer>> e : alleleHomCounts.entrySet())
+    for (Entry<ExacPopulation, List<Integer>> e : alleleHomCounts.entrySet()) {
       acHomBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+    }
     this.alleleHomCounts = acHomBuilder.build();
     ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHemiBuilder =
         ImmutableSortedMap.naturalOrder();
-    for (Entry<ExacPopulation, List<Integer>> e : alleleHemiCounts.entrySet())
+    for (Entry<ExacPopulation, List<Integer>> e : alleleHemiCounts.entrySet()) {
       acHemiBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+    }
     this.alleleHemiCounts = acHemiBuilder.build();
 
     this.chromCounts = ImmutableSortedMap.copyOf(chromCounts.entrySet());
@@ -93,7 +97,9 @@ public class ExacRecord {
       final ExacPopulation pop = e.getKey();
       final int count = chromCounts.get(pop);
       ImmutableList.Builder<Double> afs = new ImmutableList.Builder<Double>();
-      for (int x : e.getValue()) afs.add((1.0 * x) / count);
+      for (int x : e.getValue()) {
+        afs.add((1.0 * x) / count);
+      }
       afBuilder.put(pop, afs.build());
     }
     this.alleleFrequencies = afBuilder.build();
@@ -195,11 +201,12 @@ public class ExacRecord {
     double bestFreq = -1;
     ExacPopulation bestPop = ExacPopulation.ALL;
     for (ExacPopulation pop : ExacPopulation.values()) {
-      if (alleleNo < alleleFrequencies.get(pop).size())
+      if (alleleNo < alleleFrequencies.get(pop).size()) {
         if (alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
           bestFreq = alleleFrequencies.get(pop).get(alleleNo);
           bestPop = pop;
         }
+      }
     }
     return bestPop;
   }
@@ -211,11 +218,13 @@ public class ExacRecord {
 
   public double highestAlleleFreqOverall() {
     double result = 0;
-    for (int alleleNo = 0; alleleNo < alleleFrequencies.size(); ++alleleNo)
-      if (alleleNo < getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).size())
+    for (int alleleNo = 0; alleleNo < alleleFrequencies.size(); ++alleleNo) {
+      if (alleleNo < getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).size()) {
         result =
             Math.max(
                 result, getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo));
+      }
+    }
     return result;
   }
 
@@ -269,44 +278,93 @@ public class ExacRecord {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ExacRecord other = (ExacRecord) obj;
     if (alleleCounts == null) {
-      if (other.alleleCounts != null) return false;
+      if (other.alleleCounts != null) {
+        return false;
+      }
     } else if (alleleHetCounts == null) {
-      if (other.alleleHetCounts != null) return false;
+      if (other.alleleHetCounts != null) {
+        return false;
+      }
     } else if (alleleHomCounts == null) {
-      if (other.alleleHomCounts != null) return false;
+      if (other.alleleHomCounts != null) {
+        return false;
+      }
     } else if (alleleHemiCounts == null) {
-      if (other.alleleHemiCounts != null) return false;
-    } else if (!alleleCounts.equals(other.alleleCounts)) return false;
-    else if (!alleleHetCounts.equals(other.alleleHetCounts)) return false;
-    else if (!alleleHomCounts.equals(other.alleleHomCounts)) return false;
-    else if (!alleleHemiCounts.equals(other.alleleHemiCounts)) return false;
+      if (other.alleleHemiCounts != null) {
+        return false;
+      }
+    } else if (!alleleCounts.equals(other.alleleCounts)) {
+      return false;
+    } else if (!alleleHetCounts.equals(other.alleleHetCounts)) {
+      return false;
+    } else if (!alleleHomCounts.equals(other.alleleHomCounts)) {
+      return false;
+    } else if (!alleleHemiCounts.equals(other.alleleHemiCounts)) {
+      return false;
+    }
     if (alleleFrequencies == null) {
-      if (other.alleleFrequencies != null) return false;
-    } else if (!alleleFrequencies.equals(other.alleleFrequencies)) return false;
+      if (other.alleleFrequencies != null) {
+        return false;
+      }
+    } else if (!alleleFrequencies.equals(other.alleleFrequencies)) {
+      return false;
+    }
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (chrom == null) {
-      if (other.chrom != null) return false;
-    } else if (!chrom.equals(other.chrom)) return false;
+      if (other.chrom != null) {
+        return false;
+      }
+    } else if (!chrom.equals(other.chrom)) {
+      return false;
+    }
     if (chromCounts == null) {
-      if (other.chromCounts != null) return false;
-    } else if (!chromCounts.equals(other.chromCounts)) return false;
+      if (other.chromCounts != null) {
+        return false;
+      }
+    } else if (!chromCounts.equals(other.chromCounts)) {
+      return false;
+    }
     if (filter == null) {
-      if (other.filter != null) return false;
-    } else if (!filter.equals(other.filter)) return false;
+      if (other.filter != null) {
+        return false;
+      }
+    } else if (!filter.equals(other.filter)) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null) return false;
-    } else if (!id.equals(other.id)) return false;
-    if (pos != other.pos) return false;
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     return true;
   }
 }

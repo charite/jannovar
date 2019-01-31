@@ -38,9 +38,10 @@ public final class DataSourceFactory {
       if (iniFilePath.startsWith(BUNDLE_PREFIX)) {
         String strippedPath = iniFilePath.substring(BUNDLE_PREFIX.length());
         is = this.getClass().getResourceAsStream(strippedPath);
-        if (is == null)
+        if (is == null) {
           throw new InvalidDataSourceException(
               "BUG: bundled file " + strippedPath + " not in JAR!");
+        }
       } else {
         try {
           is = new FileInputStream(iniFilePath);
@@ -63,8 +64,13 @@ public final class DataSourceFactory {
   /** @return list of data source names */
   public ImmutableList<String> getNames() {
     ImmutableList.Builder<String> builder = new ImmutableList.Builder<>();
-    for (Ini ini : inis)
-      for (String name : ini.keySet()) if (ini.get(name).get("type") != null) builder.add(name);
+    for (Ini ini : inis) {
+      for (String name : ini.keySet()) {
+        if (ini.get(name).get("type") != null) {
+          builder.add(name);
+        }
+      }
+    }
     return builder.build();
   }
 
@@ -78,18 +84,25 @@ public final class DataSourceFactory {
    */
   public DataSource getDataSource(String name) throws InvalidDataSourceException {
     for (Ini ini : inis) {
-      if (!ini.keySet().contains(name)) continue; // not found in data source
+      if (!ini.keySet().contains(name)) {
+        continue; // not found in data source
+      }
       Section section = ini.get(name);
       String type = section.fetch("type");
-      if (type == null)
+      if (type == null) {
         throw new InvalidDataSourceException("Data source config does not have \"type\" key.");
-      else if (type.equals("ucsc")) return new UCSCDataSource(options, section);
-      else if (type.equals("ensembl")) return new EnsemblDataSource(options, section);
-      else if (type.equals("refseq")) return new RefSeqDataSource(options, section);
-      else if (type.equals("flat_bed")) return new FlatBEDDataSource(options, section);
-      else
+      } else if (type.equals("ucsc")) {
+        return new UCSCDataSource(options, section);
+      } else if (type.equals("ensembl")) {
+        return new EnsemblDataSource(options, section);
+      } else if (type.equals("refseq")) {
+        return new RefSeqDataSource(options, section);
+      } else if (type.equals("flat_bed")) {
+        return new FlatBEDDataSource(options, section);
+      } else {
         throw new InvalidDataSourceException(
             "Data source config has invalid \"type\" key: " + type);
+      }
     }
 
     throw new InvalidDataSourceException(

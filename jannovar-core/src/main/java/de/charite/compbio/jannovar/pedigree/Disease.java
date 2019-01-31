@@ -35,9 +35,14 @@ public enum Disease {
    *     , or <code>"2"</code>.
    */
   public static Disease toDisease(String s) throws PedParseException {
-    if (s.equals("0")) return UNKNOWN;
-    else if (s.equals("1")) return UNAFFECTED;
-    else if (s.equals("2")) return AFFECTED;
-    else throw new PedParseException("Invalid PED disease status value: " + s);
+    if (s.equals("0")) {
+      return UNKNOWN;
+    } else if (s.equals("1")) {
+      return UNAFFECTED;
+    } else if (s.equals("2")) {
+      return AFFECTED;
+    } else {
+      throw new PedParseException("Invalid PED disease status value: " + s);
+    }
   }
 }

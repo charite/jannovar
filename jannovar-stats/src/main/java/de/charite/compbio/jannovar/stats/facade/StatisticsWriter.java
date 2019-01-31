@@ -40,15 +40,18 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void printHeader(String token) {
     writer.print(token + "\tALL");
-    if (!statsCollector.getSampleNames().isEmpty())
+    if (!statsCollector.getSampleNames().isEmpty()) {
       writer.println("\t" + Joiner.on('\t').join(statsCollector.getSampleNames()));
-    else writer.println();
+    } else {
+      writer.println();
+    }
   }
 
   private void writeVariantEffects() {
     TreeSet<VariantEffect> keys = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       keys.addAll(stats.getCountVariantEffects().keySet());
+    }
 
     writer.println();
     writer.println("[variant_effects]");
@@ -80,8 +83,9 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void writeGenomeRegions() {
     TreeSet<GenomeRegion> keys = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       keys.addAll(stats.getCountGenomeRegion().keySet());
+    }
 
     writer.println();
     writer.println("[genome_regions]");
@@ -134,8 +138,9 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void writeAltAlleleCountHist() {
     TreeSet<Integer> keys = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       keys.addAll(stats.getAltAlleleCountHist().keySet());
+    }
 
     writer.println();
     writer.println("[alt_allele_count]");
@@ -166,8 +171,9 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void writeFilterCount() {
     TreeSet<String> keys = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       keys.addAll(stats.getFilterCount().keySet());
+    }
 
     writer.println();
     writer.println("[filter_count]");
@@ -203,8 +209,11 @@ public class StatisticsWriter implements AutoCloseable {
 
     for (Boolean isFiltered : ImmutableList.of(false, true)) {
       ArrayList<String> arr = new ArrayList<>();
-      if (isFiltered) arr.add("FILTER");
-      else arr.add("PASS");
+      if (isFiltered) {
+        arr.add("FILTER");
+      } else {
+        arr.add("PASS");
+      }
       arr.add(
           Integer.toString(
               statsCollector
@@ -228,8 +237,9 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void writePutativeImpacts() {
     TreeSet<PutativeImpact> keys = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       keys.addAll(stats.getCountPutativeImpacts().keySet());
+    }
 
     writer.println();
     writer.println("[putative_impacts]");
@@ -261,8 +271,9 @@ public class StatisticsWriter implements AutoCloseable {
 
   private void writeContigCounts() {
     TreeSet<String> contigs = new TreeSet<>();
-    for (Statistics stats : statsCollector.getPerSampleStats().values())
+    for (Statistics stats : statsCollector.getPerSampleStats().values()) {
       contigs.addAll(stats.getContigCount().keySet());
+    }
 
     writer.println();
     writer.println("[contig_counts]");
@@ -279,7 +290,7 @@ public class StatisticsWriter implements AutoCloseable {
                   .getContigCount()
                   .getOrDefault(contig, 0)));
 
-      for (String name : statsCollector.getSampleNames())
+      for (String name : statsCollector.getSampleNames()) {
         arr.add(
             Integer.toString(
                 statsCollector
@@ -287,6 +298,7 @@ public class StatisticsWriter implements AutoCloseable {
                     .get(name)
                     .getContigCount()
                     .getOrDefault(contig, 0)));
+      }
       writer.println(Joiner.on('\t').join(arr));
     }
   }

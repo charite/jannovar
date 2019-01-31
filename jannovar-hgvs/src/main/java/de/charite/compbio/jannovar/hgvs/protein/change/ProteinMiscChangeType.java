@@ -17,7 +17,7 @@ public enum ProteinMiscChangeType {
   /**
    * @param onlyPredicted whether or not the change was only predictd
    * @return String with HGVS representation of the misc change type, together with the <code>
-   *     onlyPredicted</code> flag
+   * onlyPredicted</code> flag
    */
   public String toHGVSString(boolean onlyPredicted) {
     switch (this) {

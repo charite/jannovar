@@ -249,64 +249,142 @@ public class HGNCRecord {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     HGNCRecord other = (HGNCRecord) obj;
     if (aliasSymbols == null) {
-      if (other.aliasSymbols != null) return false;
-    } else if (!aliasSymbols.equals(other.aliasSymbols)) return false;
+      if (other.aliasSymbols != null) {
+        return false;
+      }
+    } else if (!aliasSymbols.equals(other.aliasSymbols)) {
+      return false;
+    }
     if (ccdsIDs == null) {
-      if (other.ccdsIDs != null) return false;
-    } else if (!ccdsIDs.equals(other.ccdsIDs)) return false;
+      if (other.ccdsIDs != null) {
+        return false;
+      }
+    } else if (!ccdsIDs.equals(other.ccdsIDs)) {
+      return false;
+    }
     if (cosmicID == null) {
-      if (other.cosmicID != null) return false;
-    } else if (!cosmicID.equals(other.cosmicID)) return false;
+      if (other.cosmicID != null) {
+        return false;
+      }
+    } else if (!cosmicID.equals(other.cosmicID)) {
+      return false;
+    }
     if (enaID == null) {
-      if (other.enaID != null) return false;
-    } else if (!enaID.equals(other.enaID)) return false;
+      if (other.enaID != null) {
+        return false;
+      }
+    } else if (!enaID.equals(other.enaID)) {
+      return false;
+    }
     if (ensemblGeneID == null) {
-      if (other.ensemblGeneID != null) return false;
-    } else if (!ensemblGeneID.equals(other.ensemblGeneID)) return false;
+      if (other.ensemblGeneID != null) {
+        return false;
+      }
+    } else if (!ensemblGeneID.equals(other.ensemblGeneID)) {
+      return false;
+    }
     if (entrezID == null) {
-      if (other.entrezID != null) return false;
-    } else if (!entrezID.equals(other.entrezID)) return false;
+      if (other.entrezID != null) {
+        return false;
+      }
+    } else if (!entrezID.equals(other.entrezID)) {
+      return false;
+    }
     if (hgncID == null) {
-      if (other.hgncID != null) return false;
-    } else if (!hgncID.equals(other.hgncID)) return false;
+      if (other.hgncID != null) {
+        return false;
+      }
+    } else if (!hgncID.equals(other.hgncID)) {
+      return false;
+    }
     if (mgdID == null) {
-      if (other.mgdID != null) return false;
-    } else if (!mgdID.equals(other.mgdID)) return false;
+      if (other.mgdID != null) {
+        return false;
+      }
+    } else if (!mgdID.equals(other.mgdID)) {
+      return false;
+    }
     if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
     if (omimID == null) {
-      if (other.omimID != null) return false;
-    } else if (!omimID.equals(other.omimID)) return false;
+      if (other.omimID != null) {
+        return false;
+      }
+    } else if (!omimID.equals(other.omimID)) {
+      return false;
+    }
     if (prevSymbol == null) {
-      if (other.prevSymbol != null) return false;
-    } else if (!prevSymbol.equals(other.prevSymbol)) return false;
+      if (other.prevSymbol != null) {
+        return false;
+      }
+    } else if (!prevSymbol.equals(other.prevSymbol)) {
+      return false;
+    }
     if (pubmedIDs == null) {
-      if (other.pubmedIDs != null) return false;
-    } else if (!pubmedIDs.equals(other.pubmedIDs)) return false;
+      if (other.pubmedIDs != null) {
+        return false;
+      }
+    } else if (!pubmedIDs.equals(other.pubmedIDs)) {
+      return false;
+    }
     if (refseqAccession == null) {
-      if (other.refseqAccession != null) return false;
-    } else if (!refseqAccession.equals(other.refseqAccession)) return false;
+      if (other.refseqAccession != null) {
+        return false;
+      }
+    } else if (!refseqAccession.equals(other.refseqAccession)) {
+      return false;
+    }
     if (rgdID == null) {
-      if (other.rgdID != null) return false;
-    } else if (!rgdID.equals(other.rgdID)) return false;
+      if (other.rgdID != null) {
+        return false;
+      }
+    } else if (!rgdID.equals(other.rgdID)) {
+      return false;
+    }
     if (symbol == null) {
-      if (other.symbol != null) return false;
-    } else if (!symbol.equals(other.symbol)) return false;
+      if (other.symbol != null) {
+        return false;
+      }
+    } else if (!symbol.equals(other.symbol)) {
+      return false;
+    }
     if (ucscID == null) {
-      if (other.ucscID != null) return false;
-    } else if (!ucscID.equals(other.ucscID)) return false;
+      if (other.ucscID != null) {
+        return false;
+      }
+    } else if (!ucscID.equals(other.ucscID)) {
+      return false;
+    }
     if (uniprotIDs == null) {
-      if (other.uniprotIDs != null) return false;
-    } else if (!uniprotIDs.equals(other.uniprotIDs)) return false;
+      if (other.uniprotIDs != null) {
+        return false;
+      }
+    } else if (!uniprotIDs.equals(other.uniprotIDs)) {
+      return false;
+    }
     if (vegaID == null) {
-      if (other.vegaID != null) return false;
-    } else if (!vegaID.equals(other.vegaID)) return false;
+      if (other.vegaID != null) {
+        return false;
+      }
+    } else if (!vegaID.equals(other.vegaID)) {
+      return false;
+    }
     return true;
   }
 }

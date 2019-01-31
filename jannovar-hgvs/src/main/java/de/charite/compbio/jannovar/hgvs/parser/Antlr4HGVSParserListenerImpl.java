@@ -182,8 +182,9 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_multi_allele_var(Nt_multi_allele_varContext ctx) {
     LOGGER.debug("Leaving nt_multi_allele_var");
     ArrayList<NucleotideChangeAllele> alleles = new ArrayList<>();
-    for (Nt_multi_change_alleleContext childCtx : ctx.nt_multi_change_allele())
+    for (Nt_multi_change_alleleContext childCtx : ctx.nt_multi_change_allele()) {
       alleles.add((NucleotideChangeAllele) getValue(childCtx));
+    }
     final SequenceType seqType =
         SequenceType.findMatchingForPrefix(ctx.NT_CHANGE_DESCRIPTION().getText());
     final ReferenceLabel refLabel = (ReferenceLabel) getValue(ctx.reference());
@@ -225,18 +226,21 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     VariantConfiguration varConfig = VariantConfiguration.IN_CIS;
     if (!ctx.nt_var_sep().isEmpty()) {
       Nt_var_sepContext firstSep = ctx.nt_var_sep().get(0);
-      for (Nt_var_sepContext otherSep : ctx.nt_var_sep())
-        if (!firstSep.getText().equals(otherSep.getText()))
+      for (Nt_var_sepContext otherSep : ctx.nt_var_sep()) {
+        if (!firstSep.getText().equals(otherSep.getText())) {
           throw new RuntimeException(
               "Mismatching variant separators in allele: "
                   + firstSep.getText()
                   + " vs. "
                   + otherSep.getText());
+        }
+      }
       varConfig = VariantConfiguration.fromString(firstSep.getText());
     }
     ArrayList<NucleotideChange> changes = new ArrayList<>();
-    for (Nt_changeContext childCtx : ctx.nt_change())
+    for (Nt_changeContext childCtx : ctx.nt_change()) {
       changes.add((NucleotideChange) getValue(childCtx));
+    }
     setValue(ctx, new NucleotideChangeAllele(varConfig, changes));
   }
 
@@ -276,12 +280,14 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_change_indel(Nt_change_indelContext ctx) {
     LOGGER.debug("Leaving nt_change_deletion");
     final NucleotideRange range;
-    if (ctx.nt_range() != null) range = (NucleotideRange) getValue(ctx.nt_range());
-    else
+    if (ctx.nt_range() != null) {
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    } else {
       range =
           new NucleotideRange(
               (NucleotidePointLocation) getValue(ctx.nt_point_location()),
               (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+    }
 
     final boolean hasAny = (ctx.nt_number(0) != null || ctx.nt_string(0) != null);
     final boolean hasBoth = hasAny && (ctx.nt_number(1) != null || ctx.nt_string(1) != null);
@@ -323,18 +329,22 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     }
 
     final NucleotideSeqDescription seqDesc1;
-    if (delBases != null && delBases == ctx.nt_number(0))
+    if (delBases != null && delBases == ctx.nt_number(0)) {
       seqDesc1 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(0).getText()));
-    else if (delBases != null && delBases == ctx.nt_string(0))
+    } else if (delBases != null && delBases == ctx.nt_string(0)) {
       seqDesc1 = new NucleotideSeqDescription(ctx.nt_string(0).getText());
-    else seqDesc1 = new NucleotideSeqDescription();
+    } else {
+      seqDesc1 = new NucleotideSeqDescription();
+    }
 
     final NucleotideSeqDescription seqDesc2;
-    if (insBases != null && (insBases == ctx.nt_number(0) || insBases == ctx.nt_number(1)))
+    if (insBases != null && (insBases == ctx.nt_number(0) || insBases == ctx.nt_number(1))) {
       seqDesc2 = new NucleotideSeqDescription(Integer.parseInt(insBases.getText()));
-    else if (insBases != null && (insBases == ctx.nt_string(0) || insBases == ctx.nt_string(1)))
+    } else if (insBases != null && (insBases == ctx.nt_string(0) || insBases == ctx.nt_string(1))) {
       seqDesc2 = new NucleotideSeqDescription(insBases.getText());
-    else seqDesc2 = new NucleotideSeqDescription();
+    } else {
+      seqDesc2 = new NucleotideSeqDescription();
+    }
 
     setValue(ctx, new NucleotideIndel(false, range, seqDesc1, seqDesc2));
   }
@@ -349,24 +359,28 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_change_deletion(Nt_change_deletionContext ctx) {
     LOGGER.debug("Leaving nt_change_deletion");
     final NucleotideRange range;
-    if (ctx.nt_range() != null) range = (NucleotideRange) getValue(ctx.nt_range());
-    else
+    if (ctx.nt_range() != null) {
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    } else {
       range =
           new NucleotideRange(
               (NucleotidePointLocation) getValue(ctx.nt_point_location()),
               (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+    }
     final NucleotideDeletion change;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       change =
           new NucleotideDeletion(
               false,
               range,
               new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText())));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       change =
           new NucleotideDeletion(
               false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
-    else change = new NucleotideDeletion(false, range, new NucleotideSeqDescription());
+    } else {
+      change = new NucleotideDeletion(false, range, new NucleotideSeqDescription());
+    }
     setValue(ctx, change);
   }
 
@@ -380,24 +394,28 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_change_duplication(Nt_change_duplicationContext ctx) {
     LOGGER.debug("Leaving nt_change_duplication");
     final NucleotideRange range;
-    if (ctx.nt_range() != null) range = (NucleotideRange) getValue(ctx.nt_range());
-    else
+    if (ctx.nt_range() != null) {
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    } else {
       range =
           new NucleotideRange(
               (NucleotidePointLocation) getValue(ctx.nt_point_location()),
               (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+    }
     final NucleotideDuplication change;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       change =
           new NucleotideDuplication(
               false,
               range,
               new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText())));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       change =
           new NucleotideDuplication(
               false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
-    else change = new NucleotideDuplication(false, range, new NucleotideSeqDescription());
+    } else {
+      change = new NucleotideDuplication(false, range, new NucleotideSeqDescription());
+    }
     setValue(ctx, change);
   }
 
@@ -412,17 +430,19 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LOGGER.debug("Leaving nt_change_insertion");
     final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
     final NucleotideInsertion change;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       change =
           new NucleotideInsertion(
               false,
               range,
               new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText())));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       change =
           new NucleotideInsertion(
               false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
-    else change = new NucleotideInsertion(false, range, new NucleotideSeqDescription());
+    } else {
+      change = new NucleotideInsertion(false, range, new NucleotideSeqDescription());
+    }
     setValue(ctx, change);
   }
 
@@ -437,17 +457,19 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LOGGER.debug("Leaving nt_change_inversion");
     final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
     final NucleotideInversion change;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       change =
           new NucleotideInversion(
               false,
               range,
               new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText())));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       change =
           new NucleotideInversion(
               false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
-    else change = new NucleotideInversion(false, range, new NucleotideSeqDescription());
+    } else {
+      change = new NucleotideInversion(false, range, new NucleotideSeqDescription());
+    }
     setValue(ctx, change);
   }
 
@@ -478,12 +500,14 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LOGGER.debug("Leaving nt_change_ssr");
     final NucleotideRange range;
 
-    if (ctx.nt_range() != null) range = (NucleotideRange) getValue(ctx.nt_range());
-    else
+    if (ctx.nt_range() != null) {
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    } else {
       range =
           new NucleotideRange(
               (NucleotidePointLocation) getValue(ctx.nt_point_location()),
               (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+    }
     final int minCount = Integer.parseInt(ctx.NT_NUMBER(0).getText());
     final int maxCount = Integer.parseInt(ctx.NT_NUMBER(1).getText());
     setValue(ctx, new NucleotideShortSequenceRepeatVariability(false, range, minCount, maxCount));
@@ -518,7 +542,9 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
       transcriptVersion = Integer.parseInt(transcriptID.substring(pos + 1, transcriptID.length()));
       transcriptID = transcriptID.substring(0, pos);
     }
-    if (ctx.PAREN_OPEN() != null) proteinID = ctx.REFERENCE(1).getText();
+    if (ctx.PAREN_OPEN() != null) {
+      proteinID = ctx.REFERENCE(1).getText();
+    }
 
     setValue(ctx, new ReferenceLabel(transcriptID, transcriptVersion, proteinID));
   }
@@ -557,7 +583,9 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_base_location(Nt_base_locationContext ctx) {
     LOGGER.debug("Leaving nt_base_location");
     int value = Integer.parseInt(ctx.nt_number().getText());
-    if (ctx.NT_MINUS() != null) value = -value;
+    if (ctx.NT_MINUS() != null) {
+      value = -value;
+    }
     boolean downstreamOfCDS = (ctx.NT_ASTERISK() != null);
     int delta = (value < 0) ? 0 : 1;
     setValue(ctx, new NucleotidePointLocation(value - delta, 0, downstreamOfCDS));
@@ -568,7 +596,9 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
   public void exitNt_offset(Nt_offsetContext ctx) {
     LOGGER.debug("Leaving nt_offset");
     int value = Integer.parseInt(ctx.nt_number().getText());
-    if (ctx.NT_MINUS() != null) value = -value;
+    if (ctx.NT_MINUS() != null) {
+      value = -value;
+    }
     setValue(ctx, value);
   }
 
@@ -608,11 +638,13 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
 
     final NucleotideSeqDescription seqDesc;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       seqDesc = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText()));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       seqDesc = new NucleotideSeqDescription(ctx.nt_string().getText());
-    else seqDesc = new NucleotideSeqDescription();
+    } else {
+      seqDesc = new NucleotideSeqDescription();
+    }
 
     setValue(ctx, new LegacyDeletion(location, seqDesc));
   }
@@ -644,18 +676,22 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
 
     final NucleotideSeqDescription seqDesc1;
-    if (ctx.nt_number(0) != null)
+    if (ctx.nt_number(0) != null) {
       seqDesc1 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(0).getText()));
-    else if (ctx.nt_string(0) != null)
+    } else if (ctx.nt_string(0) != null) {
       seqDesc1 = new NucleotideSeqDescription(ctx.nt_string(0).getText());
-    else seqDesc1 = new NucleotideSeqDescription();
+    } else {
+      seqDesc1 = new NucleotideSeqDescription();
+    }
 
     final NucleotideSeqDescription seqDesc2;
-    if (ctx.nt_number(1) != null)
+    if (ctx.nt_number(1) != null) {
       seqDesc2 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(1).getText()));
-    else if (ctx.nt_string(1) != null)
+    } else if (ctx.nt_string(1) != null) {
       seqDesc2 = new NucleotideSeqDescription(ctx.nt_string(1).getText());
-    else seqDesc2 = new NucleotideSeqDescription();
+    } else {
+      seqDesc2 = new NucleotideSeqDescription();
+    }
 
     setValue(ctx, new LegacyIndel(location, seqDesc1, seqDesc2));
   }
@@ -671,11 +707,13 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
 
     final NucleotideSeqDescription seqDesc;
-    if (ctx.nt_number() != null)
+    if (ctx.nt_number() != null) {
       seqDesc = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText()));
-    else if (ctx.nt_string() != null)
+    } else if (ctx.nt_string() != null) {
       seqDesc = new NucleotideSeqDescription(ctx.nt_string().getText());
-    else seqDesc = new NucleotideSeqDescription();
+    } else {
+      seqDesc = new NucleotideSeqDescription();
+    }
 
     setValue(ctx, new LegacyInsertion(location, seqDesc));
   }
@@ -690,11 +728,15 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
     LOGGER.debug("Leaving legacy_point_location");
     int featureNo = Integer.parseInt(ctx.nt_number(0).getText());
     int offset = Integer.parseInt(ctx.nt_number(1).getText());
-    if (ctx.NT_MINUS() != null) offset = -offset;
+    if (ctx.NT_MINUS() != null) {
+      offset = -offset;
+    }
 
-    if (ctx.LEGACY_IVS_OR_EX().getText().equals("IVS"))
+    if (ctx.LEGACY_IVS_OR_EX().getText().equals("IVS")) {
       setValue(ctx, LegacyLocation.buildIntronicLocation(featureNo, offset));
-    else setValue(ctx, LegacyLocation.buildExonicLocation(featureNo, offset));
+    } else {
+      setValue(ctx, LegacyLocation.buildExonicLocation(featureNo, offset));
+    }
   }
 
   /** Simple triple for labeling of "reference" nodes. */

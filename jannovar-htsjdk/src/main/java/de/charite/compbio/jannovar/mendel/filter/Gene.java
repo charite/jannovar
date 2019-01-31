@@ -13,6 +13,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * field {@link #name}!
  */
 class Gene {
+
   private final String name;
   private final ImmutableList<TranscriptModel> transcripts;
   private final ReferenceDictionary refDict;
@@ -47,16 +48,20 @@ class Gene {
    *     transcripts).
    */
   private GenomeInterval buildGeneRegion() {
-    if (transcripts.isEmpty()) return null;
+    if (transcripts.isEmpty()) {
+      return null;
+    }
 
     GenomeInterval region = transcripts.get(0).getTXRegion().withStrand(Strand.FWD);
-    for (TranscriptModel tm : transcripts) region = mergeRegions(region, tm.getTXRegion());
+    for (TranscriptModel tm : transcripts) {
+      region = mergeRegions(region, tm.getTXRegion());
+    }
     return region;
   }
 
   /**
    * @return {@link GenomeInterval} from the smaller begin to the larger end position of <code>lhs
-   *     </code> and <code>rhs</code>.
+   * </code> and <code>rhs</code>.
    */
   private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
     lhs = lhs.withStrand(Strand.FWD);
@@ -84,12 +89,20 @@ class Gene {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     Gene other = (Gene) obj;
     if (name == null) {
-      if (other.name != null) return false;
+      if (other.name != null) {
+        return false;
+      }
     } else if (!name.equals(other.name)) {
       return false;
     }

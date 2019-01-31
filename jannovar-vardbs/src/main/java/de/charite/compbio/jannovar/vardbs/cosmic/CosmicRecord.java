@@ -99,25 +99,53 @@ public class CosmicRecord {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     CosmicRecord other = (CosmicRecord) obj;
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
     if (chrom == null) {
-      if (other.chrom != null) return false;
-    } else if (!chrom.equals(other.chrom)) return false;
-    if (cnt != other.cnt) return false;
+      if (other.chrom != null) {
+        return false;
+      }
+    } else if (!chrom.equals(other.chrom)) {
+      return false;
+    }
+    if (cnt != other.cnt) {
+      return false;
+    }
     if (id == null) {
-      if (other.id != null) return false;
-    } else if (!id.equals(other.id)) return false;
-    if (pos != other.pos) return false;
+      if (other.id != null) {
+        return false;
+      }
+    } else if (!id.equals(other.id)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
-    if (snp != other.snp) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
+    if (snp != other.snp) {
+      return false;
+    }
     return true;
   }
 }

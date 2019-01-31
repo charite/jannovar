@@ -94,8 +94,9 @@ public class GatherStatisticsCommand extends JannovarAnnotationCommand {
       }
 
       System.err.println("The following error messages occured");
-      for (Entry<String, Integer> e : errorMsgs.entrySet())
+      for (Entry<String, Integer> e : errorMsgs.entrySet()) {
         System.err.println(e.getValue() + " times: " + e.getKey());
+      }
 
       System.err.println("Wrote report to \"" + options.getPathOutputReport() + "\".");
       final long endTime = System.nanoTime();

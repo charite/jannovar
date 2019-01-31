@@ -46,11 +46,7 @@ public class ProteinDuplication extends ProteinChange {
         onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), desc);
   }
 
-  /**
-   * @param onlyPredicted
-   * @param range
-   * @param seqSpec
-   */
+  /** */
   public ProteinDuplication(
       boolean onlyPredicted, ProteinRange range, ProteinSeqDescription seqSpec) {
     super(onlyPredicted);
@@ -79,16 +75,30 @@ public class ProteinDuplication extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinDuplication other = (ProteinDuplication) obj;
     if (range == null) {
-      if (other.range != null) return false;
-    } else if (!range.equals(other.range)) return false;
+      if (other.range != null) {
+        return false;
+      }
+    } else if (!range.equals(other.range)) {
+      return false;
+    }
     if (seqSpec == null) {
-      if (other.seqSpec != null) return false;
-    } else if (!seqSpec.equals(other.seqSpec)) return false;
+      if (other.seqSpec != null) {
+        return false;
+      }
+    } else if (!seqSpec.equals(other.seqSpec)) {
+      return false;
+    }
     return true;
   }
 

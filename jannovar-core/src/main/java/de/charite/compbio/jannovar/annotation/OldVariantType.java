@@ -145,7 +145,7 @@ public enum OldVariantType {
    * mutation.
    *
    * @return <code>true</code> if a variantType has pathogenicity level one, otherwise <code>false
-   *     </code>
+   * </code>
    */
   public boolean isTopPriorityVariant() {
     return priorityLevel() == 1;

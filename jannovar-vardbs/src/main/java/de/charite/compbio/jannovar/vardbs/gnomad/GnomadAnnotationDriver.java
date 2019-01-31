@@ -53,13 +53,16 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
         } else {
           final GnomadRecord current = annotatingGnomadRecord.get(alleleNo).getRecord();
           final GnomadRecord update = matchToRecord.get(m).getRecord();
-          if (update.getAlleleFrequencies(GnomadPopulation.ALL).size() < alleleNo) continue;
+          if (update.getAlleleFrequencies(GnomadPopulation.ALL).size() < alleleNo) {
+            continue;
+          }
           if ((isMatch
                   && current.highestAlleleFreq(alleleNo - 1)
                       < update.highestAlleleFreq(alleleNo - 1))
               || (!isMatch
-                  && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall()))
+                  && current.highestAlleleFreqOverall() < update.highestAlleleFreqOverall())) {
             annotatingGnomadRecord.put(alleleNo, matchToRecord.get(m));
+          }
         }
       }
     }
@@ -71,7 +74,9 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       VariantContext vc,
       HashMap<Integer, AnnotatingRecord<GnomadRecord>> matchRecords,
       HashMap<Integer, AnnotatingRecord<GnomadRecord>> overlapRecords) {
-    if (matchRecords.isEmpty()) return vc;
+    if (matchRecords.isEmpty()) {
+      return vc;
+    }
 
     VariantContextBuilder builder = new VariantContextBuilder(vc);
 
@@ -105,11 +110,14 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       HashMap<Integer, AnnotatingRecord<GnomadRecord>> records,
       VariantContextBuilder builder,
       boolean isMatch) {
-    if (records.isEmpty()) return;
+    if (records.isEmpty()) {
+      return;
+    }
     GnomadRecord first = records.values().iterator().next().getRecord();
-    for (GnomadPopulation pop : GnomadPopulation.values())
+    for (GnomadPopulation pop : GnomadPopulation.values()) {
       builder.attribute(
           options.getVCFIdentifierPrefix() + infix + "AN_" + pop, first.getChromCount(pop));
+    }
   }
 
   private void annotateAlleleCounts(
@@ -141,20 +149,25 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       } else {
         // Pick best annotating record with highest AF and and use for all
         final AnnotatingRecord<GnomadRecord> bestAnnoRecord = pickBestAnnoRecord(vc, records, pop);
-        if (bestAnnoRecord != null)
+        if (bestAnnoRecord != null) {
           for (int i = 1; i < vc.getNAlleles(); ++i) {
-            if (!bestAnnoRecord.getRecord().getAlleleCounts().containsKey(pop)) acList.add(0);
-            else
+            if (!bestAnnoRecord.getRecord().getAlleleCounts().containsKey(pop)) {
+              acList.add(0);
+            } else {
               acList.add(
                   bestAnnoRecord
                       .getRecord()
                       .getAlleleCounts()
                       .get(pop)
                       .get(bestAnnoRecord.getAlleleNo() - 1));
+            }
           }
+        }
       }
 
-      if (!acList.isEmpty()) acLists.put(attrID, acList);
+      if (!acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -191,20 +204,25 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       } else {
         // Pick best annotating record with highest AF and and use for all
         final AnnotatingRecord<GnomadRecord> bestAnnoRecord = pickBestAnnoRecord(vc, records, pop);
-        if (bestAnnoRecord != null)
+        if (bestAnnoRecord != null) {
           for (int i = 1; i < vc.getNAlleles(); ++i) {
-            if (!bestAnnoRecord.getRecord().getAlleleHetCounts().containsKey(pop)) acList.add(0);
-            else
+            if (!bestAnnoRecord.getRecord().getAlleleHetCounts().containsKey(pop)) {
+              acList.add(0);
+            } else {
               acList.add(
                   bestAnnoRecord
                       .getRecord()
                       .getAlleleHetCounts()
                       .get(pop)
                       .get(bestAnnoRecord.getAlleleNo() - 1));
+            }
           }
+        }
       }
 
-      if (!acList.isEmpty()) acLists.put(attrID, acList);
+      if (!acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -240,20 +258,25 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       } else {
         // Pick best annotating record with highest AF and and use for all
         final AnnotatingRecord<GnomadRecord> bestAnnoRecord = pickBestAnnoRecord(vc, records, pop);
-        if (bestAnnoRecord != null)
+        if (bestAnnoRecord != null) {
           for (int i = 1; i < vc.getNAlleles(); ++i) {
-            if (!bestAnnoRecord.getRecord().getAlleleHomCounts().containsKey(pop)) acList.add(0);
-            else
+            if (!bestAnnoRecord.getRecord().getAlleleHomCounts().containsKey(pop)) {
+              acList.add(0);
+            } else {
               acList.add(
                   bestAnnoRecord
                       .getRecord()
                       .getAlleleHomCounts()
                       .get(pop)
                       .get(bestAnnoRecord.getAlleleNo() - 1));
+            }
           }
+        }
       }
 
-      if (!acList.isEmpty()) builder.attribute(attrID, acList);
+      if (!acList.isEmpty()) {
+        builder.attribute(attrID, acList);
+      }
     }
   }
 
@@ -275,7 +298,9 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
             continue;
           }
           final GnomadRecord record = records.get(i).getRecord();
-          if (record.getAlleleHemiCounts().isEmpty()) continue;
+          if (record.getAlleleHemiCounts().isEmpty()) {
+            continue;
+          }
           final int alleleNo = records.get(i).getAlleleNo();
           if (record.getAlleleHemiCounts(pop) == null
               || (alleleNo - 1 >= record.getAlleleHemiCounts(pop).size())) {
@@ -287,20 +312,25 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
       } else {
         // Pick best annotating record with highest AF and and use for all
         final AnnotatingRecord<GnomadRecord> bestAnnoRecord = pickBestAnnoRecord(vc, records, pop);
-        if (bestAnnoRecord != null)
+        if (bestAnnoRecord != null) {
           for (int i = 1; i < vc.getNAlleles(); ++i) {
-            if (!bestAnnoRecord.getRecord().getAlleleHemiCounts().containsKey(pop)) acList.add(0);
-            else
+            if (!bestAnnoRecord.getRecord().getAlleleHemiCounts().containsKey(pop)) {
+              acList.add(0);
+            } else {
               acList.add(
                   bestAnnoRecord
                       .getRecord()
                       .getAlleleHemiCounts()
                       .get(pop)
                       .get(bestAnnoRecord.getAlleleNo() - 1));
+            }
           }
+        }
       }
 
-      if (!acList.isEmpty()) acLists.put(attrID, acList);
+      if (!acList.isEmpty()) {
+        acLists.put(attrID, acList);
+      }
     }
 
     for (String attrID : acLists.keySet()) {
@@ -330,28 +360,35 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
             afList.add(0.0);
           } else {
             if (record.getAlleleFrequencies(pop) == null
-                || (alleleNo - 1 >= record.getAlleleFrequencies(pop).size())) afList.add(0.0);
-            else afList.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
+                || (alleleNo - 1 >= record.getAlleleFrequencies(pop).size())) {
+              afList.add(0.0);
+            } else {
+              afList.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
+            }
           }
         }
       } else {
         // Pick best annotating record with highest AF and and use for all
         final AnnotatingRecord<GnomadRecord> bestAnnoRecord = pickBestAnnoRecord(vc, records, pop);
-        if (bestAnnoRecord != null)
+        if (bestAnnoRecord != null) {
           for (int i = 1; i < vc.getNAlleles(); ++i) {
-            if (!bestAnnoRecord.getRecord().getAlleleFrequencies().containsKey(pop))
+            if (!bestAnnoRecord.getRecord().getAlleleFrequencies().containsKey(pop)) {
               afList.add(0.0);
-            else
+            } else {
               afList.add(
                   bestAnnoRecord
                       .getRecord()
                       .getAlleleFrequencies()
                       .get(pop)
                       .get(bestAnnoRecord.getAlleleNo() - 1));
+            }
           }
+        }
       }
 
-      if (!afList.isEmpty()) builder.attribute(attrID, afList);
+      if (!afList.isEmpty()) {
+        builder.attribute(attrID, afList);
+      }
     }
   }
 
@@ -381,10 +418,14 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
     } else {
       // Pick best annotating record with highest AF and and use for all
       final GnomadPopulation bestPop = pickBestPop(vc, records);
-      for (int i = 1; i < vc.getNAlleles(); ++i) popmaxList.add(bestPop.toString());
+      for (int i = 1; i < vc.getNAlleles(); ++i) {
+        popmaxList.add(bestPop.toString());
+      }
     }
 
-    if (!popmaxList.isEmpty()) builder.attribute(attrID, popmaxList);
+    if (!popmaxList.isEmpty()) {
+      builder.attribute(attrID, popmaxList);
+    }
   }
 
   private AnnotatingRecord<GnomadRecord> pickBestAnnoRecord(
@@ -394,14 +435,18 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
     AnnotatingRecord<GnomadRecord> result = null;
     double bestAF = -1;
     for (int i = 1; i < vc.getNAlleles(); ++i) {
-      if (records.get(i) == null) continue;
+      if (records.get(i) == null) {
+        continue;
+      }
       final GnomadRecord record = records.get(i).getRecord();
-      if (record.getAlleleFrequencies(pop) != null)
-        for (int alleleNo = 1; alleleNo <= record.getAlleleFrequencies(pop).size(); ++alleleNo)
+      if (record.getAlleleFrequencies(pop) != null) {
+        for (int alleleNo = 1; alleleNo <= record.getAlleleFrequencies(pop).size(); ++alleleNo) {
           if (bestAF < record.getAlleleFrequencies(pop).get(alleleNo - 1)) {
             bestAF = record.getAlleleFrequencies(pop).get(alleleNo - 1);
             result = new AnnotatingRecord<>(record, alleleNo);
           }
+        }
+      }
     }
     return result;
   }
@@ -412,15 +457,21 @@ public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRec
     double bestAF = -1;
     for (GnomadPopulation pop : GnomadPopulation.values()) {
       for (int i = 1; i < vc.getNAlleles(); ++i) {
-        if (records.get(i) == null) continue;
+        if (records.get(i) == null) {
+          continue;
+        }
         final GnomadRecord record = records.get(i).getRecord();
-        if (!record.getAlleleFrequencies().containsKey(pop)) continue;
-        if (record.getAlleleFrequencies(pop) != null)
-          for (int alleleNo = 1; alleleNo <= record.getAlleleFrequencies(pop).size(); ++alleleNo)
+        if (!record.getAlleleFrequencies().containsKey(pop)) {
+          continue;
+        }
+        if (record.getAlleleFrequencies(pop) != null) {
+          for (int alleleNo = 1; alleleNo <= record.getAlleleFrequencies(pop).size(); ++alleleNo) {
             if (bestAF < record.getAlleleFrequencies(pop).get(alleleNo - 1)) {
               bestAF = record.getAlleleFrequencies(pop).get(alleleNo - 1);
               result = pop;
             }
+          }
+        }
       }
     }
     return result;

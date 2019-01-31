@@ -34,12 +34,13 @@ public class PedFileReaderTest {
       bw.write("fam\tdaughter\tfather\tmother\t2\t0\n");
       bw.close();
     } catch (IOException e) {
-      if (bw != null)
+      if (bw != null) {
         try {
           bw.close();
         } catch (IOException e1) {
           // swallow, nothing we can do about it
         }
+      }
     }
   }
 
@@ -53,12 +54,13 @@ public class PedFileReaderTest {
       bw.write("fam\tdaughter\tfather\tmother\t2\t0\n");
       bw.close();
     } catch (IOException e) {
-      if (bw != null)
+      if (bw != null) {
         try {
           bw.close();
         } catch (IOException e1) {
           // swallow, nothing we can do about it
         }
+      }
     }
   }
 

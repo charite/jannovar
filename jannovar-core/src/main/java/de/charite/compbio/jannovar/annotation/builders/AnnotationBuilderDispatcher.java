@@ -42,7 +42,7 @@ public final class AnnotationBuilderDispatcher {
    * @throws InvalidGenomeVariant if there is a problem with {@link #change}
    */
   public Annotation build() throws InvalidGenomeVariant {
-    if (transcript == null)
+    if (transcript == null) {
       return new Annotation(
           null,
           change,
@@ -51,6 +51,7 @@ public final class AnnotationBuilderDispatcher {
           new GenomicNucleotideChangeBuilder(change).build(),
           null,
           null);
+    }
 
     switch (change.getType()) {
       case SNV:

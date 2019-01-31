@@ -77,7 +77,7 @@ public final class GenotypeList {
    */
   public boolean isXChromosomal() {
     return isXChromosomal;
-  };
+  }
 
   /**
    * the lists of genotype calls, each contains one entry for each individual
@@ -96,7 +96,6 @@ public final class GenotypeList {
    * is important for the PedigreeDiseaseCompatibilityDecorator, where the names in the pedigree
    * must be the same as the names in the genotype list.
    *
-   * @param pedigree
    * @return <code>true</code> if the list of {@link #names} is the same as the names of the members
    *     of <code>pedigree</code>
    */

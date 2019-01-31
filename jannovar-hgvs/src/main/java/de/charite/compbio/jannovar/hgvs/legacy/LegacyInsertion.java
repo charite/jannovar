@@ -44,13 +44,23 @@ public class LegacyInsertion extends LegacyChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacyInsertion other = (LegacyInsertion) obj;
     if (insertedSeq == null) {
-      if (other.insertedSeq != null) return false;
-    } else if (!insertedSeq.equals(other.insertedSeq)) return false;
+      if (other.insertedSeq != null) {
+        return false;
+      }
+    } else if (!insertedSeq.equals(other.insertedSeq)) {
+      return false;
+    }
     return true;
   }
 }

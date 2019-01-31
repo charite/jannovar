@@ -95,15 +95,29 @@ public final class TranscriptInterval {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     TranscriptInterval other = (TranscriptInterval) obj;
-    if (beginPos != other.beginPos) return false;
-    if (endPos != other.endPos) return false;
+    if (beginPos != other.beginPos) {
+      return false;
+    }
+    if (endPos != other.endPos) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     return true;
   }
 }

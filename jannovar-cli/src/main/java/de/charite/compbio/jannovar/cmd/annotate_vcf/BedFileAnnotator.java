@@ -49,11 +49,7 @@ public class BedFileAnnotator implements Closeable {
     }
   }
 
-  /**
-   * Add header line describing the INFO field.
-   *
-   * @param vcfHeader
-   */
+  /** Add header line describing the INFO field. */
   public void extendHeader(VCFHeader vcfHeader) {
     if (!vcfHeader.hasInfoLine(options.getInfoField())) {
       if (options.getColNo() < 0) {

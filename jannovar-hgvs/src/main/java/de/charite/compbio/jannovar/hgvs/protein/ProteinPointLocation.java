@@ -61,7 +61,7 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 
   /**
    * @return positions is downstream of the translational terminal codon, e.g. for <code>Gln*1
-   *     </code>
+   * </code>
    */
   public boolean isDownstreamOfTerminal() {
     return downstreamOfTerminal;
@@ -76,18 +76,22 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
   public String toHGVSString(AminoAcidCode code) {
     String offsetStr = "";
     if (downstreamOfTerminal) {
-      if (code == AminoAcidCode.THREE_LETTER)
+      if (code == AminoAcidCode.THREE_LETTER) {
         return Translator.getTranslator().toLong(aa.charAt(0)) + "*" + (pos + 1);
-      else return aa + "*" + (pos + 1);
+      } else {
+        return aa + "*" + (pos + 1);
+      }
     } else if (offset > 0) {
       offsetStr = "+" + offset;
     } else if (offset < 0) {
       offsetStr = Integer.toString(offset);
     }
 
-    if (code == AminoAcidCode.THREE_LETTER)
+    if (code == AminoAcidCode.THREE_LETTER) {
       return Translator.getTranslator().toLong(aa.charAt(0)) + (pos + 1) + offsetStr;
-    else return aa + (pos + 1) + offsetStr;
+    } else {
+      return aa + (pos + 1) + offsetStr;
+    }
   }
 
   @Override
@@ -116,16 +120,32 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinPointLocation other = (ProteinPointLocation) obj;
     if (aa == null) {
-      if (other.aa != null) return false;
-    } else if (!aa.equals(other.aa)) return false;
-    if (downstreamOfTerminal != other.downstreamOfTerminal) return false;
-    if (offset != other.offset) return false;
-    if (pos != other.pos) return false;
+      if (other.aa != null) {
+        return false;
+      }
+    } else if (!aa.equals(other.aa)) {
+      return false;
+    }
+    if (downstreamOfTerminal != other.downstreamOfTerminal) {
+      return false;
+    }
+    if (offset != other.offset) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     return true;
   }
 }

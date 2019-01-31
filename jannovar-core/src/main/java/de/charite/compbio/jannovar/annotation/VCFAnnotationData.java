@@ -61,7 +61,9 @@ class VCFAnnotationData {
   public ImmutableSet<AnnotationMessage> messages = ImmutableSortedSet.<AnnotationMessage>of();
 
   public void setAnnoLoc(AnnotationLocation annoLoc) {
-    if (annoLoc == null) return;
+    if (annoLoc == null) {
+      return;
+    }
     if (annoLoc.getRankType() != RankType.UNDEFINED) {
       this.rank = annoLoc.getRank();
       this.totalRank = annoLoc.getTotalRank();
@@ -70,13 +72,15 @@ class VCFAnnotationData {
     final TranscriptModel transcript = annoLoc.getTranscript();
     final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
     final TranscriptPosition txPos;
-    if (annoLoc != null && annoLoc.getTXLocation().length() == 0)
+    if (annoLoc != null && annoLoc.getTXLocation().length() == 0) {
       txPos =
           annoLoc
               .getTXLocation()
               .getTranscriptBeginPos()
               .shifted(-1); // change length == 0, insertion
-    else txPos = annoLoc.getTXLocation().getTranscriptBeginPos(); // all other variants
+    } else {
+      txPos = annoLoc.getTXLocation().getTranscriptBeginPos(); // all other variants
+    }
     this.txPos = txPos.getPos();
     this.txLength = annoLoc.getTranscript().getTXRegion().length();
 
@@ -91,7 +95,9 @@ class VCFAnnotationData {
   }
 
   public void setTranscriptAndChange(TranscriptModel tm, GenomeVariant change) {
-    if (tm == null) return;
+    if (tm == null) {
+      return;
+    }
     featureType = "transcript";
     featureID = tm.getAccession();
     geneSymbol = tm.getGeneSymbol();
@@ -101,17 +107,18 @@ class VCFAnnotationData {
     if (effects.contains(VariantEffect.INTERGENIC_VARIANT)
         || effects.contains(VariantEffect.UPSTREAM_GENE_VARIANT)
         || effects.contains(VariantEffect.DOWNSTREAM_GENE_VARIANT)) {
-      if (change.getGenomeInterval().isLeftOf(tm.getTXRegion().getGenomeBeginPos()))
+      if (change.getGenomeInterval().isLeftOf(tm.getTXRegion().getGenomeBeginPos())) {
         this.distance =
             tm.getTXRegion()
                 .getGenomeBeginPos()
                 .differenceTo(change.getGenomeInterval().getGenomeEndPos());
-      else
+      } else {
         this.distance =
             change
                 .getGenomeInterval()
                 .getGenomeBeginPos()
                 .differenceTo(tm.getTXRegion().getGenomeEndPos());
+      }
     }
   }
 
@@ -174,29 +181,43 @@ class VCFAnnotationData {
   }
 
   private String getRankString() {
-    if (rank == -1) return null;
+    if (rank == -1) {
+      return null;
+    }
     return Joiner.on('/').join(rank + 1, totalRank);
   }
 
   private String getTXPosString() {
-    if (txPos == -1) return null;
+    if (txPos == -1) {
+      return null;
+    }
     return Joiner.on('/').join(txPos + 1, txLength);
   }
 
   private String getCDSPosString() {
-    if (cdsPos == -1) return null;
-    if (!"Coding".equals(featureBioType)) return null;
+    if (cdsPos == -1) {
+      return null;
+    }
+    if (!"Coding".equals(featureBioType)) {
+      return null;
+    }
     return Joiner.on('/').join(cdsPos + 1, cdsLength);
   }
 
   private String getAminoAcidPosString() {
-    if (cdsPos == -1) return null;
-    if (!"Coding".equals(featureBioType)) return null;
+    if (cdsPos == -1) {
+      return null;
+    }
+    if (!"Coding".equals(featureBioType)) {
+      return null;
+    }
     return Joiner.on('/').join(cdsPos / 3 + 1, cdsLength / 3);
   }
 
   private String getDistanceString() {
-    if (distance == -1) return null;
+    if (distance == -1) {
+      return null;
+    }
     return Integer.toString(distance);
   }
 }

@@ -19,11 +19,7 @@ public final class DBVariantContextAnnotator {
   /** The options to use */
   private final DBAnnotationOptions options;
 
-  /**
-   * Initialize the annotator using the given {@link DBAnnotationDriver}
-   *
-   * @param driver
-   */
+  /** Initialize the annotator using the given {@link DBAnnotationDriver} */
   public DBVariantContextAnnotator(DBAnnotationDriver driver, DBAnnotationOptions options) {
     this.driver = driver;
     this.options = options;
@@ -56,6 +52,8 @@ public final class DBVariantContextAnnotator {
    * @param vcs {@link Collection} of {@link VariantContext} objects to annotate
    */
   public void annotateVariantContexts(Collection<VariantContext> vcs) {
-    for (VariantContext vc : vcs) annotateVariantContext(vc);
+    for (VariantContext vc : vcs) {
+      annotateVariantContext(vc);
+    }
   }
 }

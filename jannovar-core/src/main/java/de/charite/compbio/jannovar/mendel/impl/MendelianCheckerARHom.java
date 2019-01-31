@@ -46,9 +46,11 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
         calls.stream().filter(call -> call.getChromType() == ChromosomeType.AUTOSOMAL);
     // Filter to calls compatible with AD inheritance
     Stream<GenotypeCalls> compatibleCalls;
-    if (this.pedigree.getNMembers() == 1)
+    if (this.pedigree.getNMembers() == 1) {
       compatibleCalls = autosomalCalls.filter(this::isCompatibleSingleton);
-    else compatibleCalls = autosomalCalls.filter(this::isCompatibleFamily);
+    } else {
+      compatibleCalls = autosomalCalls.filter(this::isCompatibleFamily);
+    }
     return ImmutableList.copyOf(compatibleCalls.collect(Collectors.toList()));
   }
 
@@ -57,7 +59,9 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
    *     a single individual in the pedigree
    */
   private boolean isCompatibleSingleton(GenotypeCalls calls) {
-    if (calls.getNSamples() == 0) return false; // no calls!
+    if (calls.getNSamples() == 0) {
+      return false; // no calls!
+    }
     return calls.getGenotypeBySampleNo(0).isHomAlt();
   }
 
@@ -77,8 +81,11 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
     for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
       if (entry.getPerson().getDisease() == Disease.AFFECTED) {
         final Genotype gt = calls.getGenotypeForSample(entry.getPerson().getName());
-        if (gt.isHomRef() || gt.isHet()) return false;
-        else if (gt.isHomAlt()) numHomozygousAlt += 1;
+        if (gt.isHomRef() || gt.isHet()) {
+          return false;
+        } else if (gt.isHomAlt()) {
+          numHomozygousAlt += 1;
+        }
       }
     }
 
@@ -88,7 +95,9 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
   private boolean unaffectedParentsOfAffectedAreNotHomozygous(GenotypeCalls calls) {
     for (String name : getUnaffectedParentNamesOfAffecteds()) {
       final Genotype gt = calls.getGenotypeForSample(name);
-      if (gt.isHomAlt() || gt.isHomRef()) return false;
+      if (gt.isHomAlt() || gt.isHomRef()) {
+        return false;
+      }
     }
     return true;
   }
@@ -97,21 +106,27 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
   private ImmutableSet<String> getUnaffectedParentNamesOfAffecteds() {
     ImmutableSet.Builder<String> builder = new ImmutableSet.Builder<String>();
 
-    for (Person person : pedigree.getMembers())
+    for (Person person : pedigree.getMembers()) {
       if (person.getDisease() == Disease.AFFECTED) {
-        if (person.getFather() != null && person.getFather().getDisease() == Disease.UNAFFECTED)
+        if (person.getFather() != null && person.getFather().getDisease() == Disease.UNAFFECTED) {
           builder.add(person.getFather().getName());
-        if (person.getMother() != null && person.getMother().getDisease() == Disease.UNAFFECTED)
+        }
+        if (person.getMother() != null && person.getMother().getDisease() == Disease.UNAFFECTED) {
           builder.add(person.getMother().getName());
+        }
       }
+    }
 
     return builder.build();
   }
 
   private boolean unaffectedsAreNotHomozygousAlt(GenotypeCalls calls) {
-    for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values())
+    for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
       if (entry.getPerson().getDisease() == Disease.UNAFFECTED
-          && calls.getGenotypeForSample(entry.getPerson().getName()).isHomAlt()) return false;
+          && calls.getGenotypeForSample(entry.getPerson().getName()).isHomAlt()) {
+        return false;
+      }
+    }
     return true;
   }
 }

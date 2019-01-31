@@ -56,18 +56,22 @@ public final class AminoAcidChange {
 
   /** @return new {@link AminoAcidChange} that is shifted one to the right */
   public AminoAcidChange shiftRight() {
-    if (alt.length() > 0)
+    if (alt.length() > 0) {
       return new AminoAcidChange(
           pos + 1, ref.substring(1, ref.length()), alt.substring(1, alt.length()));
-    else return new AminoAcidChange(pos + 1, ref.substring(1, ref.length()), "");
+    } else {
+      return new AminoAcidChange(pos + 1, ref.substring(1, ref.length()), "");
+    }
   }
 
   /** @return new {@link AminoAcidChange} that is shifted one to the left */
   public AminoAcidChange shiftLeft() {
-    if (alt.length() > 0)
+    if (alt.length() > 0) {
       return new AminoAcidChange(
           pos, ref.substring(0, ref.length() - 1), alt.substring(1, alt.length()));
-    else return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), "");
+    } else {
+      return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), "");
+    }
   }
 
   /** @return <code>true</code> if the {@link AminoAcidChange} is a non-op */
@@ -97,17 +101,33 @@ public final class AminoAcidChange {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     AminoAcidChange other = (AminoAcidChange) obj;
     if (alt == null) {
-      if (other.alt != null) return false;
-    } else if (!alt.equals(other.alt)) return false;
-    if (pos != other.pos) return false;
+      if (other.alt != null) {
+        return false;
+      }
+    } else if (!alt.equals(other.alt)) {
+      return false;
+    }
+    if (pos != other.pos) {
+      return false;
+    }
     if (ref == null) {
-      if (other.ref != null) return false;
-    } else if (!ref.equals(other.ref)) return false;
+      if (other.ref != null) {
+        return false;
+      }
+    } else if (!ref.equals(other.ref)) {
+      return false;
+    }
     return true;
   }
 }

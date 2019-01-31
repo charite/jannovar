@@ -35,13 +35,15 @@ public class PedigreeExtractor {
     // check that all linked-to mothers and fathers exist
     for (PedPerson pedPerson : contents.getIndividuals()) {
       if (!"0".equals(pedPerson.getFather())
-          && !contents.getNameToPerson().containsKey(pedPerson.getFather()))
+          && !contents.getNameToPerson().containsKey(pedPerson.getFather())) {
         throw new PedParseException(
             "Unknown individual identifier for father: " + pedPerson.getFather());
+      }
       if (!"0".equals(pedPerson.getMother())
-          && !contents.getNameToPerson().containsKey(pedPerson.getMother()))
+          && !contents.getNameToPerson().containsKey(pedPerson.getMother())) {
         throw new PedParseException(
             "Unknown individual identifier for mother: " + pedPerson.getMother());
+      }
     }
 
     // construct all Person objects, we use a trick for the construction of immutable Person objects
@@ -49,12 +51,15 @@ public class PedigreeExtractor {
     // allowing potential cycles
     ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
     HashMap<String, Person> existing = new HashMap<String, Person>();
-    for (PedPerson pedPerson : contents.getIndividuals())
+    for (PedPerson pedPerson : contents.getIndividuals()) {
       if (pedPerson.getPedigree().equals(name)) {
-        if (existing.containsKey(pedPerson.getName()))
+        if (existing.containsKey(pedPerson.getName())) {
           builder.add(existing.get(pedPerson.getName()));
-        else builder.add(new Person(pedPerson, contents, existing));
+        } else {
+          builder.add(new Person(pedPerson, contents, existing));
+        }
       }
+    }
 
     return builder.build();
   }

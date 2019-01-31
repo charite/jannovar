@@ -58,10 +58,12 @@ public class ProteinSubstitution extends ProteinChange {
 
   @Override
   public String toHGVSString(AminoAcidCode code) {
-    if (code == AminoAcidCode.THREE_LETTER)
+    if (code == AminoAcidCode.THREE_LETTER) {
       return wrapIfOnlyPredicted(
           location.toHGVSString(code) + Translator.getTranslator().toLong(targetAA));
-    else return wrapIfOnlyPredicted(location.toHGVSString(code) + targetAA);
+    } else {
+      return wrapIfOnlyPredicted(location.toHGVSString(code) + targetAA);
+    }
   }
 
   @Override
@@ -80,16 +82,30 @@ public class ProteinSubstitution extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinSubstitution other = (ProteinSubstitution) obj;
     if (location == null) {
-      if (other.location != null) return false;
-    } else if (!location.equals(other.location)) return false;
+      if (other.location != null) {
+        return false;
+      }
+    } else if (!location.equals(other.location)) {
+      return false;
+    }
     if (targetAA == null) {
-      if (other.targetAA != null) return false;
-    } else if (!targetAA.equals(other.targetAA)) return false;
+      if (other.targetAA != null) {
+        return false;
+      }
+    } else if (!targetAA.equals(other.targetAA)) {
+      return false;
+    }
     return true;
   }
 

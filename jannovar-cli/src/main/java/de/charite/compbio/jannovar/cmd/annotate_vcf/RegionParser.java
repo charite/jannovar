@@ -17,7 +17,9 @@ class RegionParser {
     if (!matcherRegion.find()) {
       final String patternChrom = "^([a-zA-Z0-9_.]+)$";
       final Matcher matcherChrom = Pattern.compile(patternChrom).matcher(region);
-      if (!matcherChrom.find()) return null;
+      if (!matcherChrom.find()) {
+        return null;
+      }
       return new Interval(matcherChrom.group(1), 0, 0);
     } else {
       return new Interval(

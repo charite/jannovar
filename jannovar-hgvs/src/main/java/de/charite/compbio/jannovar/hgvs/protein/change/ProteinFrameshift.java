@@ -109,16 +109,18 @@ public class ProteinFrameshift extends ProteinChange {
   @Override
   public String toHGVSString(AminoAcidCode code) {
     String targetAA = this.targetAA;
-    if (!isShort() && code == AminoAcidCode.THREE_LETTER)
+    if (!isShort() && code == AminoAcidCode.THREE_LETTER) {
       targetAA = Translator.getTranslator().toLong(targetAA);
+    }
 
-    if (isShort())
+    if (isShort()) {
       return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), "fs"));
-    else if (shiftLength == LEN_NO_TER)
+    } else if (shiftLength == LEN_NO_TER) {
       return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*?"));
-    else
+    } else {
       return wrapIfOnlyPredicted(
           Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*", shiftLength));
+    }
   }
 
   @Override
@@ -144,17 +146,33 @@ public class ProteinFrameshift extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinFrameshift other = (ProteinFrameshift) obj;
     if (position == null) {
-      if (other.position != null) return false;
-    } else if (!position.equals(other.position)) return false;
-    if (shiftLength != other.shiftLength) return false;
+      if (other.position != null) {
+        return false;
+      }
+    } else if (!position.equals(other.position)) {
+      return false;
+    }
+    if (shiftLength != other.shiftLength) {
+      return false;
+    }
     if (targetAA == null) {
-      if (other.targetAA != null) return false;
-    } else if (!targetAA.equals(other.targetAA)) return false;
+      if (other.targetAA != null) {
+        return false;
+      }
+    } else if (!targetAA.equals(other.targetAA)) {
+      return false;
+    }
     return true;
   }
 

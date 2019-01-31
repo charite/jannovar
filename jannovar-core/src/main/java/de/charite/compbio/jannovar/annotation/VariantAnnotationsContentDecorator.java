@@ -32,8 +32,9 @@ public class VariantAnnotationsContentDecorator {
   /** @return <code>true</code> if the list has entries for multiple gene symbols. */
   public boolean hasMultipleGeneSymbols() {
     HashSet<String> geneSymbols = new HashSet<String>();
-    for (Annotation entry : annotations.getAnnotations())
+    for (Annotation entry : annotations.getAnnotations()) {
       geneSymbols.add(entry.getTranscript().getGeneSymbol());
+    }
     return (geneSymbols.size() > 0);
   }
 
@@ -42,8 +43,11 @@ public class VariantAnnotationsContentDecorator {
    *     VariantEffect#isStructural()} returns <code>true</code>
    */
   public boolean hasStructuralVariant() {
-    for (Annotation entry : annotations.getAnnotations())
-      if (entry.getMostPathogenicVarType().isStructural()) return true;
+    for (Annotation entry : annotations.getAnnotations()) {
+      if (entry.getMostPathogenicVarType().isStructural()) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -52,8 +56,11 @@ public class VariantAnnotationsContentDecorator {
    *     #annotations} is empty
    */
   public String getGeneSymbol() {
-    if (annotations.getAnnotations().size() == 0) return null;
-    else return annotations.getAnnotations().get(0).getTranscript().getGeneSymbol();
+    if (annotations.getAnnotations().size() == 0) {
+      return null;
+    } else {
+      return annotations.getAnnotations().get(0).getTranscript().getGeneSymbol();
+    }
   }
 
   /**
@@ -61,8 +68,11 @@ public class VariantAnnotationsContentDecorator {
    *     variant
    */
   public String getGeneID() {
-    if (annotations.getAnnotations().size() == 0) return null;
-    else return annotations.getAnnotations().get(0).getTranscript().getGeneID();
+    if (annotations.getAnnotations().size() == 0) {
+      return null;
+    } else {
+      return annotations.getAnnotations().get(0).getTranscript().getGeneID();
+    }
   }
 
   /**
@@ -70,7 +80,10 @@ public class VariantAnnotationsContentDecorator {
    *     no such variant exists
    */
   public VariantEffect getVariantType() {
-    if (annotations.getAnnotations().size() == 0) return null;
-    else return annotations.getAnnotations().get(0).getMostPathogenicVarType();
+    if (annotations.getAnnotations().size() == 0) {
+      return null;
+    } else {
+      return annotations.getAnnotations().get(0).getMostPathogenicVarType();
+    }
   }
 }

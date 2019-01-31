@@ -32,6 +32,8 @@ public class DatabaseListCommand extends JannovarCommand {
 
     DataSourceFactory factory = new DataSourceFactory(dsOptions, options.getDataSourceFiles());
     System.err.println("Available data sources:\n");
-    for (String name : factory.getNames()) System.err.println(String.format("    %s", name));
+    for (String name : factory.getNames()) {
+      System.err.println(String.format("    %s", name));
+    }
   }
 }

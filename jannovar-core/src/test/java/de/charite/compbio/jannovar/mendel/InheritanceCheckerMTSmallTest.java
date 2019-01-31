@@ -65,11 +65,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(4, inconsistentMTpedigree.getMembers().size());
   }
 
-  /**
-   * no affected is HET or ALT
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** no affected is HET or ALT */
   @Test
   public void testCaseNegativesOneVariant1() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, REF, REF, REF), ChromosomeType.MITOCHONDRIAL);
@@ -83,11 +79,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * TWO affected are REF
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** TWO affected are REF */
   @Test
   public void testCaseNegativesOneVariant2() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT), ChromosomeType.MITOCHONDRIAL);
@@ -101,11 +93,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * TWO affected are REF
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** TWO affected are REF */
   @Test
   public void testCaseNegativesOneVariant3() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, REF, ALT, REF), ChromosomeType.MITOCHONDRIAL);
@@ -119,11 +107,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * Two affected are REF
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** Two affected are REF */
   @Test
   public void testCaseNegativesOneVariant4() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, ALT, REF, REF), ChromosomeType.MITOCHONDRIAL);
@@ -137,11 +121,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * One unaffected is also ALT
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** One unaffected is also ALT */
   @Test
   public void testCaseNegativesOneVariant5() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(ALT, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
@@ -158,8 +138,6 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
   /**
    * Affected Okay but one unaffected has it HET. We allow this because of heteroplasmie in
    * unaffected
-   *
-   * @throws IncompatiblePedigreeException
    */
   @Test
   public void testCasePositivesOneVariantHeteroplasmie1() throws IncompatiblePedigreeException {
@@ -174,11 +152,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * At least one HET or ALT call in affected
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** At least one HET or ALT call in affected */
   @Test
   public void testCaseNegativesOneVariant7() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(UKN, UKN, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
@@ -192,11 +166,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * At least one HET or ALT call in affected
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** At least one HET or ALT call in affected */
   @Test
   public void testCaseNegativesOneVariant8() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, UKN, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
@@ -210,11 +180,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
     Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
   }
 
-  /**
-   * One affected is REF
-   *
-   * @throws IncompatiblePedigreeException
-   */
+  /** One affected is REF */
   @Test
   public void testCaseNegativesOneVariant9() throws IncompatiblePedigreeException {
     gcList = getGenotypeCallsList(lst(REF, ALT, HET, REF), ChromosomeType.MITOCHONDRIAL);
@@ -232,8 +198,6 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
    * Affected Okay but one unaffected has it HET. We allow this because of heteroplasmie in
    * unaffected. This is in general difficult an can only be figured out by using the exact "allele
    * balances".
-   *
-   * @throws IncompatiblePedigreeException
    */
   @Test
   public void testCasePositivesOneVariantHeteroplasmie2() throws IncompatiblePedigreeException {
@@ -254,8 +218,6 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
    * that the pedigree should be judged compatible with mitochondrial inheritance, because the
    * unaffected father is REF, the affected mother and her affected daughter are HET, and her
    * affected son is ALT (OK because he might have a higher degree of heteroplasmy).
-   *
-   * @throws IncompatiblePedigreeException
    */
   @Test
   public void testCasePositiveOneVariant1() throws IncompatiblePedigreeException {

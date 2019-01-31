@@ -42,8 +42,9 @@ public class DBAnnotationOptions {
     this.identifierPrefix = identifierPrefix;
     this.multiMatchBehaviour = multiMatchBehaviour;
 
-    if (multiMatchBehaviour == MultipleMatchBehaviour.BEST_AND_ALL)
+    if (multiMatchBehaviour == MultipleMatchBehaviour.BEST_AND_ALL) {
       throw new RuntimeException("Multi-match behaviour BEST_AND_ALL not implemented yet!");
+    }
   }
 
   public boolean isReportOverlapping() {

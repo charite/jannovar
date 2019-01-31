@@ -46,15 +46,19 @@ public abstract class ProteinVariant extends HGVSVariant {
 
   /**
    * @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"
-   *     </code>.
+   * </code>.
    */
   public String getSequenceNamePrefix() {
     String proteinID = this.proteinID;
-    if (proteinID != null && proteinIsoform != NO_PROTEIN_ISOFORM)
+    if (proteinID != null && proteinIsoform != NO_PROTEIN_ISOFORM) {
       proteinID += "_i" + proteinIsoform;
+    }
 
-    if (proteinID == null) return refID;
-    else return Joiner.on("").join(refID, "(", proteinID, ")");
+    if (proteinID == null) {
+      return refID;
+    } else {
+      return Joiner.on("").join(refID, "(", proteinID, ")");
+    }
   }
 
   @Override
@@ -74,17 +78,33 @@ public abstract class ProteinVariant extends HGVSVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinVariant other = (ProteinVariant) obj;
     if (proteinID == null) {
-      if (other.proteinID != null) return false;
-    } else if (!proteinID.equals(other.proteinID)) return false;
-    if (proteinIsoform != other.proteinIsoform) return false;
+      if (other.proteinID != null) {
+        return false;
+      }
+    } else if (!proteinID.equals(other.proteinID)) {
+      return false;
+    }
+    if (proteinIsoform != other.proteinIsoform) {
+      return false;
+    }
     if (refID == null) {
-      if (other.refID != null) return false;
-    } else if (!refID.equals(other.refID)) return false;
+      if (other.refID != null) {
+        return false;
+      }
+    } else if (!refID.equals(other.refID)) {
+      return false;
+    }
     return true;
   }
 }

@@ -48,7 +48,9 @@ public final class AlleleMatcher {
     for (VariantDescription obsVar : obsVars) {
       int j = 1; // excludes reference allele
       for (VariantDescription dbVar : dbVars) {
-        if (dbVar.equals(obsVar)) result.add(new GenotypeMatch(i, j, obsVC, dbVC, true));
+        if (dbVar.equals(obsVar)) {
+          result.add(new GenotypeMatch(i, j, obsVC, dbVC, true));
+        }
         j += 1;
       }
 
@@ -102,7 +104,7 @@ public final class AlleleMatcher {
    *
    * @param vc {@link VariantContext} to convert
    * @return A {@link Collection} of {@link VariantDescription} objects corresponding to <code>vc
-   *     </code>
+   * </code>
    */
   private Collection<VariantDescription> ctxToVariants(VariantContext vc) {
     // Short-circuit in the case that we see a "database only" allele, e.g., as created when
@@ -123,7 +125,9 @@ public final class AlleleMatcher {
               vc.getAlleles().get(i).getBaseString());
       VariantDescription nd = normalizer.normalizeVariant(vd);
       if (nd.getRef().isEmpty()) // is insertion
-      nd = normalizer.normalizeInsertion(vd);
+      {
+        nd = normalizer.normalizeInsertion(vd);
+      }
       vars.add(nd);
     }
     return vars;

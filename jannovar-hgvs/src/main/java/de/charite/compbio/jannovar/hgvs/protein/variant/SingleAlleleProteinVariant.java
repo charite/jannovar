@@ -65,8 +65,9 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
 
   @Override
   public String toHGVSString(AminoAcidCode code) {
-    if (hasOnlyOneChange())
+    if (hasOnlyOneChange()) {
       return Joiner.on("").join(getSequenceNamePrefix(), ":p.", getChange().toHGVSString(code));
+    }
 
     final String sep = allele.getVarConfig().toHGVSSeparator();
 
@@ -79,8 +80,11 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
       parts.add("[");
       boolean first = true;
       for (ProteinChange change : allele) {
-        if (first) first = false;
-        else parts.add(sep);
+        if (first) {
+          first = false;
+        } else {
+          parts.add(sep);
+        }
         parts.add(change.toHGVSString(code));
       }
       parts.add("]");
@@ -107,13 +111,23 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     SingleAlleleProteinVariant other = (SingleAlleleProteinVariant) obj;
     if (allele == null) {
-      if (other.allele != null) return false;
-    } else if (!allele.equals(other.allele)) return false;
+      if (other.allele != null) {
+        return false;
+      }
+    } else if (!allele.equals(other.allele)) {
+      return false;
+    }
     return true;
   }
 }

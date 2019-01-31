@@ -71,8 +71,11 @@ public final class VariantAnnotations implements VariantDescription {
    *     none.
    */
   public Annotation getHighestImpactAnnotation() {
-    if (!hasAnnotation()) return null;
-    else return entries.get(0);
+    if (!hasAnnotation()) {
+      return null;
+    } else {
+      return entries.get(0);
+    }
   }
 
   /**
@@ -83,8 +86,11 @@ public final class VariantAnnotations implements VariantDescription {
    */
   public VariantEffect getHighestImpactEffect() {
     final Annotation anno = getHighestImpactAnnotation();
-    if (anno == null || anno.getEffects().isEmpty()) return VariantEffect.SEQUENCE_VARIANT;
-    else return anno.getEffects().iterator().next();
+    if (anno == null || anno.getEffects().isEmpty()) {
+      return VariantEffect.SEQUENCE_VARIANT;
+    } else {
+      return anno.getEffects().iterator().next();
+    }
   }
 
   @Override
@@ -102,13 +108,23 @@ public final class VariantAnnotations implements VariantDescription {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     VariantAnnotations other = (VariantAnnotations) obj;
     if (entries == null) {
-      if (other.entries != null) return false;
-    } else if (!entries.equals(other.entries)) return false;
+      if (other.entries != null) {
+        return false;
+      }
+    } else if (!entries.equals(other.entries)) {
+      return false;
+    }
     return true;
   }
 

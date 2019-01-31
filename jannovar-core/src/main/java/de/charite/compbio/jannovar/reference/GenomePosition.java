@@ -54,8 +54,11 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
     this.refDict = refDict;
     this.strand = strand;
     this.chr = chr;
-    if (positionType == PositionType.ONE_BASED) this.pos = pos - 1;
-    else this.pos = pos;
+    if (positionType == PositionType.ONE_BASED) {
+      this.pos = pos - 1;
+    } else {
+      this.pos = pos;
+    }
   }
 
   /** construct genome position from other with selected coordinate system */
@@ -73,8 +76,11 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
     this.chr = other.chr;
 
     // transform coordinate system
-    if (strand == other.strand) this.pos = other.pos;
-    else this.pos = refDict.getContigIDToLength().get(other.chr) - other.pos - 1;
+    if (strand == other.strand) {
+      this.pos = other.pos;
+    } else {
+      this.pos = refDict.getContigIDToLength().get(other.chr) - other.pos - 1;
+    }
   }
 
   /** @return reference dictionary to use for coordinate translation */
@@ -107,35 +113,53 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
 
   /** @return <tt>true</tt> if this position is left of the other (on this strand). */
   public boolean isLt(GenomePosition other) {
-    if (other.strand != strand) other = other.withStrand(strand);
+    if (other.strand != strand) {
+      other = other.withStrand(strand);
+    }
     return (pos < other.pos);
   }
 
   /** @return <tt>true</tt> if this position is left of or equal to the other (on this strand). */
   public boolean isLeq(GenomePosition other) {
-    if (other.chr != chr) return false;
-    if (other.strand != strand) other = other.withStrand(strand);
+    if (other.chr != chr) {
+      return false;
+    }
+    if (other.strand != strand) {
+      other = other.withStrand(strand);
+    }
     return (pos <= other.pos);
   }
 
   /** @return <tt>true</tt> if this position is right of the other (on this strand). */
   public boolean isGt(GenomePosition other) {
-    if (other.chr != chr) return false;
-    if (other.strand != strand) other = other.withStrand(strand);
+    if (other.chr != chr) {
+      return false;
+    }
+    if (other.strand != strand) {
+      other = other.withStrand(strand);
+    }
     return (pos > other.pos);
   }
 
   /** @return <tt>true</tt> if this position is right of or equal to the other (on this strand). */
   public boolean isGeq(GenomePosition other) {
-    if (other.chr != chr) return false;
-    if (other.strand != strand) other = other.withStrand(strand);
+    if (other.chr != chr) {
+      return false;
+    }
+    if (other.strand != strand) {
+      other = other.withStrand(strand);
+    }
     return (pos >= other.pos);
   }
 
   /** @return <tt>true</tt> if this position is equal to the other (on this strand). */
   public boolean isEq(GenomePosition other) {
-    if (other.chr != chr) return false;
-    if (other.strand != strand) other = other.withStrand(strand);
+    if (other.chr != chr) {
+      return false;
+    }
+    if (other.strand != strand) {
+      other = other.withStrand(strand);
+    }
     return (pos == other.pos);
   }
 
@@ -147,10 +171,13 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
    *     chromosomes
    */
   public int differenceTo(GenomePosition pos) {
-    if (chr != pos.chr)
+    if (chr != pos.chr) {
       throw new InvalidCoordinateException(
           "Coordinates are on different chromosomes " + this + " vs. " + pos);
-    if (pos.strand != strand) pos = pos.withStrand(strand);
+    }
+    if (pos.strand != strand) {
+      pos = pos.withStrand(strand);
+    }
     return (this.pos - pos.pos);
   }
 
@@ -158,23 +185,33 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
    * @param itv interval to compute difference to
    * @return difference to closest base in <code>itv</code>, as would be returned by {@link
    *     #differenceTo(GenomePosition)}), <code>0</code> if <code>this</code> lies in <code>itv
-   *     </code>
+   * </code>
    * @throws InvalidCoordinateException if <code>this</code> and <code>itv</code> are on different
    *     chromosomes
    */
   public int differenceTo(GenomeInterval itv) {
-    if (chr != itv.getChr())
+    if (chr != itv.getChr()) {
       throw new InvalidCoordinateException(
           "Coordinates are on different chromosomes " + this + " vs. " + itv);
-    if (itv.getStrand() != strand) itv = itv.withStrand(strand);
+    }
+    if (itv.getStrand() != strand) {
+      itv = itv.withStrand(strand);
+    }
 
-    if (itv.contains(this)) return 0;
+    if (itv.contains(this)) {
+      return 0;
+    }
 
     int a = differenceTo(itv.getGenomeBeginPos());
-    if (itv.length() == 0) return a;
+    if (itv.length() == 0) {
+      return a;
+    }
     int b = differenceTo(itv.getGenomeEndPos().shifted(-1));
-    if (Math.abs(a) < Math.abs(b)) return a;
-    else return b;
+    if (Math.abs(a) < Math.abs(b)) {
+      return a;
+    } else {
+      return b;
+    }
   }
 
   /**
@@ -197,7 +234,9 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
    */
   @Override
   public String toString() {
-    if (strand.isReverse()) return withStrand(Strand.FWD).toString();
+    if (strand.isReverse()) {
+      return withStrand(Strand.FWD).toString();
+    }
 
     return StringUtil.concatenate(refDict.getContigIDToName().get(chr), ":g.", pos + 1);
   }
@@ -209,7 +248,9 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
    */
   @Override
   public int hashCode() {
-    if (strand.isReverse()) return withStrand(Strand.FWD).hashCode();
+    if (strand.isReverse()) {
+      return withStrand(Strand.FWD).hashCode();
+    }
 
     final int prime = 31;
     int result = 1;
@@ -226,16 +267,28 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
 
-    if (strand.isReverse()) return withStrand(Strand.FWD).equals(obj);
+    if (strand.isReverse()) {
+      return withStrand(Strand.FWD).equals(obj);
+    }
     GenomePosition other = (GenomePosition) obj;
     other = other.withStrand(Strand.FWD);
 
-    if (strand != other.strand) return false;
-    if (chr != other.chr) return false;
+    if (strand != other.strand) {
+      return false;
+    }
+    if (chr != other.chr) {
+      return false;
+    }
     return pos == other.pos;
   }
 

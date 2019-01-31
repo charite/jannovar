@@ -18,7 +18,9 @@ public abstract class FeatureRecordParser {
     LOGGER.debug("Parsing GFF line\t{}", new Object[] {line});
 
     String[] arr = line.trim().split("\\t");
-    if (arr.length != 9) throw new RuntimeException("Wrong number of fields in GFF file!");
+    if (arr.length != 9) {
+      throw new RuntimeException("Wrong number of fields in GFF file!");
+    }
 
     final String chrom = arr[0];
     final String source = arr[1];
@@ -31,11 +33,15 @@ public abstract class FeatureRecordParser {
 
     int phase = 0;
     try {
-      if (!arr[7].equals(".")) phase = Integer.parseInt(arr[7]);
+      if (!arr[7].equals(".")) {
+        phase = Integer.parseInt(arr[7]);
+      }
     } catch (NumberFormatException e) {
       LOGGER.warn("Invalid phase {}", new Object[] {arr[7]});
     }
-    if (phase < 0 || phase > 3) phase = 0;
+    if (phase < 0 || phase > 3) {
+      phase = 0;
+    }
 
     FeatureRecord result =
         new FeatureRecord(

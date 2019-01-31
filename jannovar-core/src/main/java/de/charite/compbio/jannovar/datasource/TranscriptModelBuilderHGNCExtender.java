@@ -52,7 +52,6 @@ public class TranscriptModelBuilderHGNCExtender {
    * Augment the {@link TranscriptModelBuilder}s with HGNC information
    *
    * @param builders to augment
-   * @throws JannovarException
    */
   public void run(Map<String, TranscriptModelBuilder> builders) throws JannovarException {
     // Get path of downloaded TSV file and parse it
@@ -129,6 +128,8 @@ public class TranscriptModelBuilderHGNCExtender {
 
   /** Put key/value pair into map if value is not null and not the empty string */
   private void putValue(Map<String, String> altIDs, String key, String value) {
-    if (value != null || !"".equals(value)) altIDs.put(key, value);
+    if (value != null || !"".equals(value)) {
+      altIDs.put(key, value);
+    }
   }
 }

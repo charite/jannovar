@@ -48,13 +48,23 @@ public class LegacyDeletion extends LegacyChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacyDeletion other = (LegacyDeletion) obj;
     if (deletedSeq == null) {
-      if (other.deletedSeq != null) return false;
-    } else if (!deletedSeq.equals(other.deletedSeq)) return false;
+      if (other.deletedSeq != null) {
+        return false;
+      }
+    } else if (!deletedSeq.equals(other.deletedSeq)) {
+      return false;
+    }
     return true;
   }
 }

@@ -49,11 +49,14 @@ public class VariantThresholdFilterAnnotator {
     HashSet<String> filters = new HashSet<String>(vc.getFilters());
     if (!affecteds.isEmpty()) {
       HashSet<String> unfilteredAffecteds = new HashSet<>(affecteds);
-      for (Genotype gt : vc.getGenotypes())
-        if (affecteds.contains(gt.getSampleName()) && gt.isFiltered())
+      for (Genotype gt : vc.getGenotypes()) {
+        if (affecteds.contains(gt.getSampleName()) && gt.isFiltered()) {
           unfilteredAffecteds.remove(gt.getSampleName());
-      if (unfilteredAffecteds.isEmpty())
+        }
+      }
+      if (unfilteredAffecteds.isEmpty()) {
         filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_ALL_AFFECTED_GTS_FILTERED);
+      }
     }
 
     // Check best frequency from EXAC
@@ -88,10 +91,12 @@ public class VariantThresholdFilterAnnotator {
     final double highestAf =
         Collections.max(ImmutableList.of(exacBestAf, dbSnpBestAf, gnomAdGenomesAf, gnomAdExomesAf));
     if (highestAf > 0) {
-      if (highestAf > options.getMaxAlleleFrequencyAd())
+      if (highestAf > options.getMaxAlleleFrequencyAd()) {
         filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD);
-      if (highestAf > options.getMaxAlleleFrequencyAr())
+      }
+      if (highestAf > options.getMaxAlleleFrequencyAr()) {
         filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR);
+      }
     }
     // Check total homozygous state in ExAC.
     final String exacHoms = options.getExacPrefix() + "HOM_ALL";

@@ -93,15 +93,29 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinShortSequenceRepeatVariability other = (ProteinShortSequenceRepeatVariability) obj;
-    if (maxCount != other.maxCount) return false;
-    if (minCount != other.minCount) return false;
+    if (maxCount != other.maxCount) {
+      return false;
+    }
+    if (minCount != other.minCount) {
+      return false;
+    }
     if (range == null) {
-      if (other.range != null) return false;
-    } else if (!range.equals(other.range)) return false;
+      if (other.range != null) {
+        return false;
+      }
+    } else if (!range.equals(other.range)) {
+      return false;
+    }
     return true;
   }
 

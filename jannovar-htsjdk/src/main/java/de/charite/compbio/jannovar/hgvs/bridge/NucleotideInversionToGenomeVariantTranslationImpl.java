@@ -47,16 +47,18 @@ class NucleotideInversionToGenomeVariantTranslationImpl
     if (invertedNTs == null) {
       invertedNTs = getGenomeSeq(tm.getStrand(), gItv);
       if (invertedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-          && invertedNTDesc.length() != invertedNTs.length())
+          && invertedNTDesc.length() != invertedNTs.length()) {
         warningMsg =
             "Invalid nucleotide count in "
                 + ntInv.toHGVSString()
                 + ", expected "
                 + invertedNTs.length();
+      }
     } else {
       final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-      if (!refSeq.equals(invertedNTs))
+      if (!refSeq.equals(invertedNTs)) {
         warningMsg = "Invalid nucleotides in " + ntInv.toHGVSString() + ", expected " + refSeq;
+      }
       invertedNTs = refSeq;
     }
 
@@ -67,7 +69,10 @@ class NucleotideInversionToGenomeVariantTranslationImpl
                 DNAUtils.reverseComplement(invertedNTs),
                 tm.getStrand())
             .withStrand(Strand.FWD);
-    if (warningMsg != null) return ResultWithWarnings.construct(result, warningMsg);
-    else return ResultWithWarnings.construct(result);
+    if (warningMsg != null) {
+      return ResultWithWarnings.construct(result, warningMsg);
+    } else {
+      return ResultWithWarnings.construct(result);
+    }
   }
 }

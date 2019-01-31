@@ -58,16 +58,30 @@ public class LegacySubstitution extends LegacyChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     LegacySubstitution other = (LegacySubstitution) obj;
     if (fromSeq == null) {
-      if (other.fromSeq != null) return false;
-    } else if (!fromSeq.equals(other.fromSeq)) return false;
+      if (other.fromSeq != null) {
+        return false;
+      }
+    } else if (!fromSeq.equals(other.fromSeq)) {
+      return false;
+    }
     if (toSeq == null) {
-      if (other.toSeq != null) return false;
-    } else if (!toSeq.equals(other.toSeq)) return false;
+      if (other.toSeq != null) {
+        return false;
+      }
+    } else if (!toSeq.equals(other.toSeq)) {
+      return false;
+    }
     return true;
   }
 }

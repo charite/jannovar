@@ -40,7 +40,9 @@ public final class Pedigree {
     ImmutableMap.Builder<String, IndexedPerson> mapBuilder =
         new ImmutableMap.Builder<String, IndexedPerson>();
     int i = 0;
-    for (Person person : members) mapBuilder.put(person.getName(), new IndexedPerson(i++, person));
+    for (Person person : members) {
+      mapBuilder.put(person.getName(), new IndexedPerson(i++, person));
+    }
     this.nameToMember = mapBuilder.build();
   }
 
@@ -91,7 +93,7 @@ public final class Pedigree {
     nameSet.addAll(names);
 
     ArrayList<Person> tmpMembers = new ArrayList<Person>();
-    for (String name : names)
+    for (String name : names) {
       if (hasPerson(name)) {
         Person p = nameToMember.get(name).getPerson();
         Person father = nameSet.contains(p.getFather().getName()) ? p.getFather() : null;
@@ -101,6 +103,7 @@ public final class Pedigree {
             new Person(
                 p.getName(), father, mother, p.getSex(), p.getDisease(), p.getExtraFields()));
       }
+    }
     return new Pedigree(name, tmpMembers);
   }
 
@@ -120,7 +123,9 @@ public final class Pedigree {
   /** @return list of members, in the same order as in {@link #members}. */
   public ImmutableList<String> getNames() {
     ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
-    for (Person p : members) builder.add(p.getName());
+    for (Person p : members) {
+      builder.add(p.getName());
+    }
     return builder.build();
   }
 
@@ -137,6 +142,7 @@ public final class Pedigree {
 
   /** Helper class, used in the name to member map. */
   public static class IndexedPerson {
+
     private final int idx;
     private final Person person;
 

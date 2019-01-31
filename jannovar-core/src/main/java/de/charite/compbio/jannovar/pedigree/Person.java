@@ -71,12 +71,14 @@ public final class Person {
     this.extraFields = pedPerson.getExtraFields();
 
     // construct father and mother if necessary, construction will put them into existing
-    if (!"0".equals(pedPerson.getFather()) && !existing.containsKey(pedPerson.getFather()))
+    if (!"0".equals(pedPerson.getFather()) && !existing.containsKey(pedPerson.getFather())) {
       new Person(
           pedFileContents.getNameToPerson().get(pedPerson.getFather()), pedFileContents, existing);
-    if (!"0".equals(pedPerson.getMother()) && !existing.containsKey(pedPerson.getMother()))
+    }
+    if (!"0".equals(pedPerson.getMother()) && !existing.containsKey(pedPerson.getMother())) {
       new Person(
           pedFileContents.getNameToPerson().get(pedPerson.getMother()), pedFileContents, existing);
+    }
 
     this.father = existing.get(pedPerson.getFather());
     this.mother = existing.get(pedPerson.getMother());
@@ -172,24 +174,50 @@ public final class Person {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     Person other = (Person) obj;
-    if (disease != other.disease) return false;
+    if (disease != other.disease) {
+      return false;
+    }
     if (extraFields == null) {
-      if (other.extraFields != null) return false;
-    } else if (!extraFields.equals(other.extraFields)) return false;
+      if (other.extraFields != null) {
+        return false;
+      }
+    } else if (!extraFields.equals(other.extraFields)) {
+      return false;
+    }
     if (father == null) {
-      if (other.father != null) return false;
-    } else if (!father.equals(other.father)) return false;
+      if (other.father != null) {
+        return false;
+      }
+    } else if (!father.equals(other.father)) {
+      return false;
+    }
     if (mother == null) {
-      if (other.mother != null) return false;
-    } else if (!mother.equals(other.mother)) return false;
+      if (other.mother != null) {
+        return false;
+      }
+    } else if (!mother.equals(other.mother)) {
+      return false;
+    }
     if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
-    if (sex != other.sex) return false;
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
+    if (sex != other.sex) {
+      return false;
+    }
     return true;
   }
 }

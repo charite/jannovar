@@ -46,7 +46,7 @@ public final class PedFileReader {
    * @return resulting {@link PedFileContents} representing the contents of the file
    * @throws IOException in the case of problems with reading from <code>stream</code>
    * @throws PedParseException in the case of problems with parsing the data from <code>stream
-   *     </code>
+   * </code>
    */
   public static PedFileContents read(InputStream stream) throws IOException, PedParseException {
     BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
@@ -64,7 +64,9 @@ public final class PedFileReader {
     while (line != null) {
       line = line.trim(); // trim leading and trailing whitespace
       if (line.length() != 0) // ignore empty lines
-      individualBuilder.add(readIndividual(line));
+      {
+        individualBuilder.add(readIndividual(line));
+      }
 
       line = in.readLine(); // read next
     }
@@ -79,9 +81,13 @@ public final class PedFileReader {
   private static ImmutableList<String> parseHeader(String line) {
     ImmutableList.Builder<String> extraHeaderBuilder = new ImmutableList.Builder<String>();
     Iterator<String> it = Splitter.on('\t').split(line.trim().substring(1)).iterator();
-    for (int i = 0; it.hasNext(); ++i)
-      if (i < 6) it.next();
-      else extraHeaderBuilder.add(it.next());
+    for (int i = 0; it.hasNext(); ++i) {
+      if (i < 6) {
+        it.next();
+      } else {
+        extraHeaderBuilder.add(it.next());
+      }
+    }
     return extraHeaderBuilder.build();
   }
 
@@ -104,7 +110,9 @@ public final class PedFileReader {
 
       // parse out extra fields
       ImmutableList.Builder<String> extraFields = new ImmutableList.Builder<String>();
-      while (it.hasNext()) extraFields.add(it.next());
+      while (it.hasNext()) {
+        extraFields.add(it.next());
+      }
 
       return new PedPerson(
           pedigree,

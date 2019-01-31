@@ -69,9 +69,13 @@ public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 
   @Override
   public String toHGVSString(AminoAcidCode code) {
-    if (isBlank()) return "";
-    else if (this.nts != null) return this.nts;
-    else return Integer.toString(this.ntCount);
+    if (isBlank()) {
+      return "";
+    } else if (this.nts != null) {
+      return this.nts;
+    } else {
+      return Integer.toString(this.ntCount);
+    }
   }
 
   @Override
@@ -90,14 +94,26 @@ public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideSeqDescription other = (NucleotideSeqDescription) obj;
-    if (ntCount != other.ntCount) return false;
+    if (ntCount != other.ntCount) {
+      return false;
+    }
     if (nts == null) {
-      if (other.nts != null) return false;
-    } else if (!nts.equals(other.nts)) return false;
+      if (other.nts != null) {
+        return false;
+      }
+    } else if (!nts.equals(other.nts)) {
+      return false;
+    }
     return true;
   }
 }

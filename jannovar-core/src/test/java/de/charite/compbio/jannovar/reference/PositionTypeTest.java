@@ -9,6 +9,7 @@ import org.junit.Test;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class PositionTypeTest {
+
   @Test
   public void test() {
     Assert.assertEquals(PositionType.values().length, 2);

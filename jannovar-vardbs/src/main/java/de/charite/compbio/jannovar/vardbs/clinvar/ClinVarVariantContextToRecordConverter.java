@@ -19,8 +19,11 @@ final class ClinVarVariantContextToRecordConverter
     implements VariantContextToRecordConverter<ClinVarRecord> {
 
   private static <T> T getFromList(List<T> lst, int idx, T defaultValue) {
-    if (idx >= lst.size()) return defaultValue;
-    else return lst.get(idx);
+    if (idx >= lst.size()) {
+      return defaultValue;
+    } else {
+      return lst.get(idx);
+    }
   }
 
   @Override
@@ -32,7 +35,9 @@ final class ClinVarVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
 
     TreeMap<Integer, ArrayList<ClinVarAnnotationBuilder>> annoBuilders = new TreeMap<>();
@@ -43,8 +48,12 @@ final class ClinVarVariantContextToRecordConverter
     //
     // The number of entries must be consistent with everything downstream
     ArrayList<Integer> alleles = new ArrayList<>();
-    for (Object s : vc.getAttributeAsList("CLNALLE")) alleles.add(Integer.parseInt((String) s));
-    for (int idx = 0; idx < alleles.size(); ++idx) annoBuilders.put(idx, new ArrayList<>());
+    for (Object s : vc.getAttributeAsList("CLNALLE")) {
+      alleles.add(Integer.parseInt((String) s));
+    }
+    for (int idx = 0; idx < alleles.size(); ++idx) {
+      annoBuilders.put(idx, new ArrayList<>());
+    }
 
     // Create shortcuts to allele-wise lists of the INFO atributes we will try to interpret
     List<Object> hgvs = vc.getAttributeAsList("CLNHGVS");
@@ -62,7 +71,9 @@ final class ClinVarVariantContextToRecordConverter
 
     for (int idx = 0; idx < alleles.size(); ++idx) {
       final int alleleID = alleles.get(idx);
-      if (alleleID == -1) continue; // ignore
+      if (alleleID == -1) {
+        continue; // ignore
+      }
 
       // One element: CLNHGVS, CLNORIGIN
       ArrayList<String> hgvsList = Lists.newArrayList(((String) hgvs.get(idx)).split("\\|"));
@@ -93,18 +104,23 @@ final class ClinVarVariantContextToRecordConverter
 
       // Set one-element lists into annoBuilder
       annoBuilder.setAlleleMapping(alleleID);
-      if (hgvsList.size() != 1) throw new RuntimeException("Invalid HGVS size, must be 1");
+      if (hgvsList.size() != 1) {
+        throw new RuntimeException("Invalid HGVS size, must be 1");
+      }
       annoBuilder.setHgvsVariant(hgvsList.get(0));
-      if (clnOriginList.size() != 1)
+      if (clnOriginList.size() != 1) {
         throw new RuntimeException("Invalid CLNORIGIN size, must be 1");
+      }
       annoBuilder.setOrigin(ClinVarOrigin.fromInteger(Integer.parseInt(clnOriginList.get(0))));
 
       // Construct variant source information
       List<ClinVarSourceInfo> sourceInfos = new ArrayList<>();
-      if (clnSrcList.size() != clnSrcIdList.size())
+      if (clnSrcList.size() != clnSrcIdList.size()) {
         throw new RuntimeException("length of CLNSRC differ CLNSRCID");
-      for (int i = 0; i < clnSrcList.size(); ++i)
+      }
+      for (int i = 0; i < clnSrcList.size(); ++i) {
         sourceInfos.add(new ClinVarSourceInfo(clnSrcList.get(i), clnSrcIdList.get(i)));
+      }
       annoBuilder.setSourceInfos(sourceInfos);
 
       // Construct variant disease information
@@ -118,7 +134,7 @@ final class ClinVarVariantContextToRecordConverter
                   clnDiseaseDbNameList.size(),
                   clnRevStatList.size(),
                   clnAccessionList.size()));
-      for (int i = 0; i < numDiseaseAlleles; ++i)
+      for (int i = 0; i < numDiseaseAlleles; ++i) {
         diseaseInfos.add(
             new ClinVarDiseaseInfo(
                 ClinVarSignificance.fromInteger(
@@ -128,6 +144,7 @@ final class ClinVarVariantContextToRecordConverter
                 getFromList(clnDiseaseDbNameList, i, ""),
                 ClinVarRevisionStatus.fromString(getFromList(clnRevStatList, i, "no_assertion")),
                 getFromList(clnAccessionList, i, "")));
+      }
       annoBuilder.setDiseaseInfos(diseaseInfos);
     }
 

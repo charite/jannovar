@@ -79,10 +79,13 @@ public class TranscriptModelBuilder {
         ImmutableSortedSet.<GenomeInterval>naturalOrder();
     if (exonRegions.size() > 0) {
       if (strand == exonRegions.get(0).getStrand()) {
-        for (int i = 0; i < exonRegions.size(); ++i) builder.add(exonRegions.get(i));
+        for (int i = 0; i < exonRegions.size(); ++i) {
+          builder.add(exonRegions.get(i));
+        }
       } else {
-        for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j)
+        for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j) {
           builder.add(exonRegions.get(j).withStrand(strand));
+        }
       }
     }
 

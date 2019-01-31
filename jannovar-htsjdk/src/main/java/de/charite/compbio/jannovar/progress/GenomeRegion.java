@@ -54,15 +54,29 @@ public class GenomeRegion {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     GenomeRegion other = (GenomeRegion) obj;
-    if (beginPos != other.beginPos) return false;
+    if (beginPos != other.beginPos) {
+      return false;
+    }
     if (contig == null) {
-      if (other.contig != null) return false;
-    } else if (!contig.equals(other.contig)) return false;
-    if (endPos != other.endPos) return false;
+      if (other.contig != null) {
+        return false;
+      }
+    } else if (!contig.equals(other.contig)) {
+      return false;
+    }
+    if (endPos != other.endPos) {
+      return false;
+    }
     return true;
   }
 }

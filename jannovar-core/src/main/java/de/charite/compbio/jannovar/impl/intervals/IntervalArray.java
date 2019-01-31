@@ -20,8 +20,10 @@ public final class IntervalArray<T> implements Serializable {
   private static final long serialVersionUID = 1L;
 
   // TODO(holtgrew): store lists for left and right as well?
+
   /** Type for storing the query result. */
   public class QueryResult {
+
     /** the values that overlapped with the given point or interval */
     private final ImmutableList<T> entries;
     /** the value to the left of the given point */
@@ -50,6 +52,7 @@ public final class IntervalArray<T> implements Serializable {
 
   /** Builder for {@link QueryResult}. */
   private class QueryResultBuilder {
+
     /** the values that overlapped with the given point or interval */
     private ImmutableList.Builder<T> values = new ImmutableList.Builder<T>();
     /** the value to the left of the given point */
@@ -103,7 +106,9 @@ public final class IntervalArray<T> implements Serializable {
 
     // if overlapping interval was found then return this set
     QueryResult result = resultBuilder.build();
-    if (result.entries.size() > 0) return result;
+    if (result.entries.size() > 0) {
+      return result;
+    }
 
     // otherwise, find left and right neighbour
     resultBuilder.left = findLeftNeighbor(point);
@@ -124,11 +129,16 @@ public final class IntervalArray<T> implements Serializable {
               }
             });
 
-    if (idx >= 0) throw new RuntimeException("Found element although in right neighbor search!");
+    if (idx >= 0) {
+      throw new RuntimeException("Found element although in right neighbor search!");
+    }
     idx = -(idx + 1); // convert to insertion point
 
-    if (idx == intervals.size()) return null;
-    else return intervals.get(idx).getValue();
+    if (idx == intervals.size()) {
+      return null;
+    } else {
+      return intervals.get(idx).getValue();
+    }
   }
 
   /** @return left neighbor of the given point if any, or <code>null</code> */
@@ -144,11 +154,17 @@ public final class IntervalArray<T> implements Serializable {
               }
             });
 
-    if (idx >= 0) idx += 1;
-    else idx = -(idx + 1); // convert to insertion point
+    if (idx >= 0) {
+      idx += 1;
+    } else {
+      idx = -(idx + 1); // convert to insertion point
+    }
 
-    if (idx == 0) return null;
-    else return intervalsEnd.get(idx - 1).getValue();
+    if (idx == 0) {
+      return null;
+    } else {
+      return intervalsEnd.get(idx - 1).getValue();
+    }
   }
 
   /**
@@ -164,25 +180,37 @@ public final class IntervalArray<T> implements Serializable {
   private void findOverlappingWithPoint(
       int begin, int end, int center, int point, QueryResultBuilder result) {
     if (begin >= end) // handle base case of empty interval
-    return;
+    {
+      return;
+    }
 
     final Interval<T> node = intervals.get(center); // shortcut to current node
 
     if (node.allLeftOf(point)) // point is right of the rightmost point of any interval in this node
-    return;
+    {
+      return;
+    }
 
     if (begin < center) // recurse left
-    findOverlappingWithPoint(begin, center, begin + (center - begin) / 2, point, result);
+    {
+      findOverlappingWithPoint(begin, center, begin + (center - begin) / 2, point, result);
+    }
 
     if (node.contains(point)) // check this node
-    result.values.add(node.getValue());
+    {
+      result.values.add(node.getValue());
+    }
 
     if (node.isRightOf(point)) // point is left of the start of the interval, can't to the right
-    return;
+    {
+      return;
+    }
 
     if (center + 1 < end) // recurse right
-    findOverlappingWithPoint(
+    {
+      findOverlappingWithPoint(
           center + 1, end, (center + 1) + (end - (center + 1)) / 2, point, result);
+    }
   }
 
   /**
@@ -200,7 +228,9 @@ public final class IntervalArray<T> implements Serializable {
 
     // if overlapping interval was found then return this set
     QueryResult result = resultBuilder.build();
-    if (result.entries.size() > 0) return result;
+    if (result.entries.size() > 0) {
+      return result;
+    }
 
     // otherwise, find left and right neighbour, can use begin for all queries, have no overlap
     resultBuilder.left = findLeftNeighbor(begin);
@@ -222,33 +252,47 @@ public final class IntervalArray<T> implements Serializable {
   private void findOverlappingWithInterval(
       int begin, int end, int center, int iBegin, int iEnd, QueryResultBuilder result) {
     if (begin >= end) // handle base case of empty interval
-    return;
+    {
+      return;
+    }
 
     final Interval<T> node = intervals.get(center); // shortcut to current node
 
     if (node.allLeftOf(
         iBegin)) // iBegin is right of the rightmost point of any interval in this node
-    return;
+    {
+      return;
+    }
 
     if (begin < center) // recurse left
-    findOverlappingWithInterval(begin, center, begin + (center - begin) / 2, iBegin, iEnd, result);
+    {
+      findOverlappingWithInterval(
+          begin, center, begin + (center - begin) / 2, iBegin, iEnd, result);
+    }
 
     if (node.overlapsWith(iBegin, iEnd)) // check this node
-    result.values.add(node.getValue());
+    {
+      result.values.add(node.getValue());
+    }
 
     if (node.isRightOf(
         iEnd - 1)) // last interval entry is left of the start of the interval, can't to the right
-    return;
+    {
+      return;
+    }
 
     if (center + 1 < end) // recurse right
-    findOverlappingWithInterval(
+    {
+      findOverlappingWithInterval(
           center + 1, end, (center + 1) + (end - (center + 1)) / 2, iBegin, iEnd, result);
+    }
   }
 
   /** Helper class for building the interval lists. */
   private class IntervalListBuilder {
 
     class TwoIntervalList {
+
       private final ImmutableList<Interval<T>> intervals;
       private final ImmutableList<Interval<T>> intervalsEnd;
 
@@ -282,13 +326,14 @@ public final class IntervalArray<T> implements Serializable {
     private void buildIntervals() {
       // obtain list of elements sorted by begin positions
       tmpList = new ArrayList<MutableInterval<T>>();
-      for (T element : elements)
+      for (T element : elements) {
         tmpList.add(
             new MutableInterval<T>(
                 extractor.getBegin(element),
                 extractor.getEnd(element),
                 element,
                 extractor.getEnd(element)));
+      }
       Collections.sort(tmpList);
 
       // compute the maxEnd members of the lst entries
@@ -296,18 +341,24 @@ public final class IntervalArray<T> implements Serializable {
 
       // convert the mutable intervals into immutable ones
       ImmutableList.Builder<Interval<T>> builder = new ImmutableList.Builder<Interval<T>>();
-      for (MutableInterval<T> i : tmpList) builder.add(new Interval<T>(i));
+      for (MutableInterval<T> i : tmpList) {
+        builder.add(new Interval<T>(i));
+      }
       intervals = builder.build();
     }
 
     private int computeMaxEndProperties(
         ArrayList<MutableInterval<T>> lst, int beginIdx, int endIdx) {
-      if (beginIdx == endIdx) return -1;
+      if (beginIdx == endIdx) {
+        return -1;
+      }
 
       int centerIdx = (endIdx + beginIdx) / 2;
       MutableInterval<T> mi = lst.get(centerIdx);
 
-      if (beginIdx + 1 == endIdx) return mi.getMaxEnd();
+      if (beginIdx + 1 == endIdx) {
+        return mi.getMaxEnd();
+      }
 
       mi.setMaxEnd(
           Math.max(
@@ -326,14 +377,19 @@ public final class IntervalArray<T> implements Serializable {
           new Comparator<MutableInterval<T>>() {
             public int compare(MutableInterval<T> o1, MutableInterval<T> o2) {
               final int result = (o1.getEnd() - o2.getEnd());
-              if (result == 0) return (o1.getBegin() - o2.getBegin());
-              else return result;
+              if (result == 0) {
+                return (o1.getBegin() - o2.getBegin());
+              } else {
+                return result;
+              }
             }
           });
 
       // build list of intervals
       ImmutableList.Builder<Interval<T>> builder = new ImmutableList.Builder<Interval<T>>();
-      for (MutableInterval<T> i : tmpList) builder.add(new Interval<T>(i));
+      for (MutableInterval<T> i : tmpList) {
+        builder.add(new Interval<T>(i));
+      }
       intervalsEnd = builder.build();
     }
   }

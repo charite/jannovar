@@ -614,9 +614,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
             || pathVCFGnomadGenomes != null
             || pathDbNsfp != null
             || !tsvAnnotationOptions.isEmpty()
-            || !vcfAnnotationOptions.isEmpty()))
+            || !vcfAnnotationOptions.isEmpty())) {
       throw new CommandLineParsingException(
           "Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
+    }
   }
 
   public String getInterval() {

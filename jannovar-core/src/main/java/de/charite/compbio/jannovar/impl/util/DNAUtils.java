@@ -17,7 +17,9 @@ public final class DNAUtils {
    * @return reverse complement version of the input string sq.
    */
   public static String reverseComplement(String sq) {
-    if (sq.isEmpty()) return sq; // deletion, insertion do not need rc
+    if (sq.isEmpty()) {
+      return sq; // deletion, insertion do not need rc
+    }
 
     StringBuffer sb = new StringBuffer();
     for (int i = sq.length() - 1; i >= 0; i--) {
@@ -40,7 +42,9 @@ public final class DNAUtils {
           match = 'N';
           break;
       }
-      if (match > 0) sb.append(match);
+      if (match > 0) {
+        sb.append(match);
+      }
     }
     return sb.toString();
   }

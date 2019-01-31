@@ -38,11 +38,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
   /** Configuration */
   private JannovarAnnotateCSVOptions options;
 
-  /**
-   * @param argv
-   * @param args
-   * @throws CommandLineParsingException
-   */
+  /** */
   public AnnotateCSVCommand(Namespace args) throws CommandLineParsingException {
     this.options = new JannovarAnnotateCSVOptions();
     this.options.setFromArgs(args);
@@ -103,8 +99,11 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
           printer.print(string);
         }
         VariantAnnotationsTextGenerator textGenerator;
-        if (options.isShowAll()) textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
-        else textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
+        if (options.isShowAll()) {
+          textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
+        } else {
+          textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
+        }
 
         printer.print(
             textGenerator.buildHGVSText(
@@ -135,11 +134,12 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
     Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
     Matcher match = pat.matcher(changeStr);
 
-    if (!match.matches())
+    if (!match.matches()) {
       throw new JannovarException(
           "[ERROR] Input string for the chromosomal change "
               + changeStr
               + " does not fit the regular expression ... :(");
+    }
 
     int chr = refDict.getContigNameToID().get(match.group(1));
     int pos = Integer.parseInt(match.group(2));

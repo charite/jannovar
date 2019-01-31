@@ -78,7 +78,9 @@ public final class JannovarData implements Serializable {
       ImmutableList<TranscriptModel> transcriptModels) {
     ImmutableMultimap.Builder<String, TranscriptModel> builder =
         new ImmutableMultimap.Builder<String, TranscriptModel>();
-    for (TranscriptModel tm : transcriptModels) builder.put(tm.getGeneSymbol(), tm);
+    for (TranscriptModel tm : transcriptModels) {
+      builder.put(tm.getGeneSymbol(), tm);
+    }
     return builder.build();
   }
 
@@ -90,7 +92,9 @@ public final class JannovarData implements Serializable {
       ImmutableList<TranscriptModel> transcriptModels) {
     ImmutableMap.Builder<String, TranscriptModel> builder =
         new ImmutableMap.Builder<String, TranscriptModel>();
-    for (TranscriptModel tm : transcriptModels) builder.put(tm.getAccession(), tm);
+    for (TranscriptModel tm : transcriptModels) {
+      builder.put(tm.getAccession(), tm);
+    }
     return builder.build();
   }
 
@@ -114,11 +118,13 @@ public final class JannovarData implements Serializable {
     // create hash map for this
     HashMap<Integer, ArrayList<TranscriptModel>> transcripts =
         new HashMap<Integer, ArrayList<TranscriptModel>>();
-    for (Integer chrID : refDict.getContigIDToName().keySet())
+    for (Integer chrID : refDict.getContigIDToName().keySet()) {
       transcripts.put(chrID, new ArrayList<TranscriptModel>());
+    }
     // distribute TranscriptModel lists
-    for (TranscriptModel transcript : transcriptModels)
+    for (TranscriptModel transcript : transcriptModels) {
       transcripts.get(transcript.getChr()).add(transcript);
+    }
 
     // Then, construct an interval tree for each chromosome and add the lists of intervals.
     for (Integer chrID : transcripts.keySet()) {

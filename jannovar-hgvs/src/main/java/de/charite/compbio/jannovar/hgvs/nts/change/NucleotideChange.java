@@ -15,7 +15,7 @@ public abstract class NucleotideChange implements ConvertibleToHGVSString {
   /** change is only predicted and will be kept in parantheses */
   private final boolean onlyPredicted;
 
-  /** @param onlyPredicted */
+  /** */
   public NucleotideChange(boolean onlyPredicted) {
     this.onlyPredicted = onlyPredicted;
   }
@@ -35,11 +35,14 @@ public abstract class NucleotideChange implements ConvertibleToHGVSString {
 
   /**
    * @return <code>s</code> wrapped in parantheses if not {@link #onlyPredicted} and plain <code>s
-   *     </code> otherwise.
+   * </code> otherwise.
    */
   protected String wrapIfOnlyPredicted(String s) {
-    if (onlyPredicted) return "(" + s + ")";
-    else return s;
+    if (onlyPredicted) {
+      return "(" + s + ")";
+    } else {
+      return s;
+    }
   }
 
   @Override
@@ -52,11 +55,19 @@ public abstract class NucleotideChange implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideChange other = (NucleotideChange) obj;
-    if (onlyPredicted != other.onlyPredicted) return false;
+    if (onlyPredicted != other.onlyPredicted) {
+      return false;
+    }
     return true;
   }
 }

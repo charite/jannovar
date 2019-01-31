@@ -36,9 +36,11 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
         calls.stream().filter(call -> call.getChromType() == ChromosomeType.X_CHROMOSOMAL);
     // Filter to calls compatible with AD inheritance
     Stream<GenotypeCalls> compatibleCalls;
-    if (this.pedigree.getNMembers() == 1)
+    if (this.pedigree.getNMembers() == 1) {
       compatibleCalls = xCalls.filter(this::isCompatibleSingleton);
-    else compatibleCalls = xCalls.filter(this::isCompatibleFamily);
+    } else {
+      compatibleCalls = xCalls.filter(this::isCompatibleFamily);
+    }
     return ImmutableList.copyOf(compatibleCalls.collect(Collectors.toList()));
   }
 
@@ -47,7 +49,9 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
    *     individual in the pedigree
    */
   private boolean isCompatibleSingleton(GenotypeCalls calls) {
-    if (calls.getNSamples() == 0) return false; // no calls!
+    if (calls.getNSamples() == 0) {
+      return false; // no calls!
+    }
     final Genotype gt = calls.getGenotypeBySampleNo(0);
     if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE) {
       // Allow only heterozygous calls
@@ -84,7 +88,9 @@ public class MendelianCheckerXD extends AbstractMendelianChecker {
           numAffectedWithVar++;
         }
       } else if (d == Disease.UNAFFECTED) {
-        if (gt.isHet() || gt.isHomAlt()) return false; // unaffected must not have it!
+        if (gt.isHet() || gt.isHomAlt()) {
+          return false; // unaffected must not have it!
+        }
       }
     }
 

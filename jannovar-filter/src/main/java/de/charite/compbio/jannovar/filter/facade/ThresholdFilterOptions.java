@@ -255,40 +255,82 @@ public class ThresholdFilterOptions {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ThresholdFilterOptions other = (ThresholdFilterOptions) obj;
     if (dbSnpPrefix == null) {
-      if (other.dbSnpPrefix != null) return false;
-    } else if (!dbSnpPrefix.equals(other.dbSnpPrefix)) return false;
+      if (other.dbSnpPrefix != null) {
+        return false;
+      }
+    } else if (!dbSnpPrefix.equals(other.dbSnpPrefix)) {
+      return false;
+    }
     if (exacPrefix == null) {
-      if (other.exacPrefix != null) return false;
-    } else if (!exacPrefix.equals(other.exacPrefix)) return false;
+      if (other.exacPrefix != null) {
+        return false;
+      }
+    } else if (!exacPrefix.equals(other.exacPrefix)) {
+      return false;
+    }
     if (gnomAdExomesPrefix == null) {
-      if (other.gnomAdExomesPrefix != null) return false;
-    } else if (!gnomAdExomesPrefix.equals(other.gnomAdExomesPrefix)) return false;
+      if (other.gnomAdExomesPrefix != null) {
+        return false;
+      }
+    } else if (!gnomAdExomesPrefix.equals(other.gnomAdExomesPrefix)) {
+      return false;
+    }
     if (gnomAdGenomesPrefix == null) {
-      if (other.gnomAdGenomesPrefix != null) return false;
-    } else if (!gnomAdGenomesPrefix.equals(other.gnomAdGenomesPrefix)) return false;
+      if (other.gnomAdGenomesPrefix != null) {
+        return false;
+      }
+    } else if (!gnomAdGenomesPrefix.equals(other.gnomAdGenomesPrefix)) {
+      return false;
+    }
     if (Double.doubleToLongBits(maxAlleleFrequencyAd)
-        != Double.doubleToLongBits(other.maxAlleleFrequencyAd)) return false;
+        != Double.doubleToLongBits(other.maxAlleleFrequencyAd)) {
+      return false;
+    }
     if (Double.doubleToLongBits(maxAlleleFrequencyAr)
-        != Double.doubleToLongBits(other.maxAlleleFrequencyAr)) return false;
-    if (maxCov != other.maxCov) return false;
-    if (maxExacHomState != other.maxExacHomState) return false;
-    if (maxG1kHomState != other.maxG1kHomState) return false;
-    if (Double.doubleToLongBits(maxGtAafHet) != Double.doubleToLongBits(other.maxGtAafHet))
+        != Double.doubleToLongBits(other.maxAlleleFrequencyAr)) {
       return false;
-    if (Double.doubleToLongBits(maxGtAafHomRef) != Double.doubleToLongBits(other.maxGtAafHomRef))
+    }
+    if (maxCov != other.maxCov) {
       return false;
-    if (Double.doubleToLongBits(minGtAafHet) != Double.doubleToLongBits(other.minGtAafHet))
+    }
+    if (maxExacHomState != other.maxExacHomState) {
       return false;
-    if (Double.doubleToLongBits(minGtAafHomAlt) != Double.doubleToLongBits(other.minGtAafHomAlt))
+    }
+    if (maxG1kHomState != other.maxG1kHomState) {
       return false;
-    if (minGtCovHet != other.minGtCovHet) return false;
-    if (minGtCovHomAlt != other.minGtCovHomAlt) return false;
-    if (minGtGq != other.minGtGq) return false;
+    }
+    if (Double.doubleToLongBits(maxGtAafHet) != Double.doubleToLongBits(other.maxGtAafHet)) {
+      return false;
+    }
+    if (Double.doubleToLongBits(maxGtAafHomRef) != Double.doubleToLongBits(other.maxGtAafHomRef)) {
+      return false;
+    }
+    if (Double.doubleToLongBits(minGtAafHet) != Double.doubleToLongBits(other.minGtAafHet)) {
+      return false;
+    }
+    if (Double.doubleToLongBits(minGtAafHomAlt) != Double.doubleToLongBits(other.minGtAafHomAlt)) {
+      return false;
+    }
+    if (minGtCovHet != other.minGtCovHet) {
+      return false;
+    }
+    if (minGtCovHomAlt != other.minGtCovHomAlt) {
+      return false;
+    }
+    if (minGtGq != other.minGtGq) {
+      return false;
+    }
     return true;
   }
 }

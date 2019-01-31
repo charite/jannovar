@@ -134,16 +134,30 @@ public class NucleotideDeletion extends NucleotideChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideDeletion other = (NucleotideDeletion) obj;
     if (range == null) {
-      if (other.range != null) return false;
-    } else if (!range.equals(other.range)) return false;
+      if (other.range != null) {
+        return false;
+      }
+    } else if (!range.equals(other.range)) {
+      return false;
+    }
     if (seq == null) {
-      if (other.seq != null) return false;
-    } else if (!seq.equals(other.seq)) return false;
+      if (other.seq != null) {
+        return false;
+      }
+    } else if (!seq.equals(other.seq)) {
+      return false;
+    }
     return true;
   }
 }

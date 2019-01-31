@@ -92,13 +92,16 @@ public class ReferenceDictionary implements Serializable {
    */
   public void print(PrintStream out) {
     out.println("contig ID mapping");
-    for (Entry<String, Integer> entry : contigID.entrySet())
+    for (Entry<String, Integer> entry : contigID.entrySet()) {
       out.println("\t" + entry.getKey() + " -> " + entry.getValue());
+    }
     out.println("contigs lengths");
-    for (Entry<Integer, Integer> entry : contigLength.entrySet())
+    for (Entry<Integer, Integer> entry : contigLength.entrySet()) {
       out.println("\t" + entry.getKey() + " -> " + entry.getValue());
+    }
     out.println("contig name mapping");
-    for (Entry<Integer, String> entry : contigName.entrySet())
+    for (Entry<Integer, String> entry : contigName.entrySet()) {
       out.println("\t" + entry.getKey() + " -> " + entry.getValue());
+    }
   }
 }

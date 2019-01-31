@@ -6,6 +6,7 @@ package de.charite.compbio.jannovar.vardbs.clinvar;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ClinVarDiseaseInfo {
+
   /** Significance level */
   private final ClinVarSignificance significance;
 
@@ -95,24 +96,50 @@ public class ClinVarDiseaseInfo {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ClinVarDiseaseInfo other = (ClinVarDiseaseInfo) obj;
     if (clinicalAccession == null) {
-      if (other.clinicalAccession != null) return false;
-    } else if (!clinicalAccession.equals(other.clinicalAccession)) return false;
+      if (other.clinicalAccession != null) {
+        return false;
+      }
+    } else if (!clinicalAccession.equals(other.clinicalAccession)) {
+      return false;
+    }
     if (diseaseDB == null) {
-      if (other.diseaseDB != null) return false;
-    } else if (!diseaseDB.equals(other.diseaseDB)) return false;
+      if (other.diseaseDB != null) {
+        return false;
+      }
+    } else if (!diseaseDB.equals(other.diseaseDB)) {
+      return false;
+    }
     if (diseaseDBID == null) {
-      if (other.diseaseDBID != null) return false;
-    } else if (!diseaseDBID.equals(other.diseaseDBID)) return false;
+      if (other.diseaseDBID != null) {
+        return false;
+      }
+    } else if (!diseaseDBID.equals(other.diseaseDBID)) {
+      return false;
+    }
     if (diseaseDBName == null) {
-      if (other.diseaseDBName != null) return false;
-    } else if (!diseaseDBName.equals(other.diseaseDBName)) return false;
-    if (revisionStatus != other.revisionStatus) return false;
-    if (significance != other.significance) return false;
+      if (other.diseaseDBName != null) {
+        return false;
+      }
+    } else if (!diseaseDBName.equals(other.diseaseDBName)) {
+      return false;
+    }
+    if (revisionStatus != other.revisionStatus) {
+      return false;
+    }
+    if (significance != other.significance) {
+      return false;
+    }
     return true;
   }
 }

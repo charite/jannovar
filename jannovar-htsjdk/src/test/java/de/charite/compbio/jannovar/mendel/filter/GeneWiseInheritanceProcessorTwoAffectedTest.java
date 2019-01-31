@@ -64,7 +64,9 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
         Paths.get("src/test/resources/inheritanceFilterTest." + infix + "vcf");
     reader = new VCFFileReader(inheritanceFilterVCFPath.toFile(), false);
     variants = new ArrayList<VariantContext>();
-    for (VariantContext variantContext : reader) variants.add(variantContext);
+    for (VariantContext variantContext : reader) {
+      variants.add(variantContext);
+    }
   }
 
   @Test
@@ -74,7 +76,9 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
     ArrayList<VariantContext> result = new ArrayList<>();
     try (GeneWiseMendelianAnnotationProcessor proc =
         new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB, vc -> result.add(vc), false)) {
-      for (VariantContext vc : variants) proc.put(vc);
+      for (VariantContext vc : variants) {
+        proc.put(vc);
+      }
     }
 
     Assert.assertEquals(7, result.size());
@@ -122,7 +126,9 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
     ArrayList<VariantContext> result = new ArrayList<>();
     try (GeneWiseMendelianAnnotationProcessor proc =
         new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB, vc -> result.add(vc), false)) {
-      for (VariantContext vc : variants) proc.put(vc);
+      for (VariantContext vc : variants) {
+        proc.put(vc);
+      }
     }
 
     Assert.assertEquals(7, result.size());

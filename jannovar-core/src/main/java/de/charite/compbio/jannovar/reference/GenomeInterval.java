@@ -48,8 +48,11 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
     this.refDict = refDict;
     this.strand = strand;
     this.chr = chr;
-    if (positionType == PositionType.ONE_BASED) this.beginPos = beginPos - 1;
-    else this.beginPos = beginPos;
+    if (positionType == PositionType.ONE_BASED) {
+      this.beginPos = beginPos - 1;
+    } else {
+      this.beginPos = beginPos;
+    }
     this.endPos = endPos;
   }
 
@@ -121,31 +124,38 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
 
   /** @return GenomeInterval with intersection of <code>this</code> and <code>other</code> */
   public GenomeInterval intersection(GenomeInterval other) {
-    if (chr != other.chr)
+    if (chr != other.chr) {
       return new GenomeInterval(refDict, strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
+    }
     other = other.withStrand(strand);
 
     int beginPos = Math.max(this.beginPos, other.beginPos);
     int endPos = Math.min(this.endPos, other.endPos);
-    if (endPos < beginPos) beginPos = endPos;
+    if (endPos < beginPos) {
+      beginPos = endPos;
+    }
 
     return new GenomeInterval(refDict, strand, chr, beginPos, endPos, PositionType.ZERO_BASED);
   }
 
   // TODO(holtgrewe): Test me!
+
   /**
    * @return GenomeInterval with union of <code>this</code> and <code>other</code> and everything in
    *     between, <code>this</code> if on different chromosomes. Result will be on the same strand
    *     as <code>this</code>.
    */
   public GenomeInterval union(GenomeInterval other) {
-    if (chr != other.chr)
+    if (chr != other.chr) {
       return new GenomeInterval(refDict, strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
+    }
     other = other.withStrand(strand);
 
     int beginPos = Math.min(this.beginPos, other.beginPos);
     int endPos = Math.max(this.endPos, other.endPos);
-    if (endPos < beginPos) beginPos = endPos;
+    if (endPos < beginPos) {
+      beginPos = endPos;
+    }
 
     return new GenomeInterval(refDict, strand, chr, beginPos, endPos, PositionType.ZERO_BASED);
   }
@@ -155,7 +165,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    * @return <tt>true</tt> if the interval is truly left of the base that base pos points to
    */
   public boolean isLeftOf(GenomePosition pos) {
-    if (chr != pos.getChr()) return false; // wrong chromosome
+    if (chr != pos.getChr()) {
+      return false; // wrong chromosome
+    }
     pos = ensureSameStrand(pos);
     return (pos.getPos() >= endPos);
   }
@@ -165,7 +177,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    * @return <tt>true</tt> if the interval is truly right of the base that base pos points to
    */
   public boolean isRightOf(GenomePosition pos) {
-    if (chr != pos.getChr()) return false; // wrong chromosome
+    if (chr != pos.getChr()) {
+      return false; // wrong chromosome
+    }
     pos = ensureSameStrand(pos);
     return (pos.getPos() < beginPos);
   }
@@ -173,10 +187,12 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
   /**
    * @param pos query position
    * @return <tt>true</tt> if the interval is truly left of the gap between bases that <code>pos
-   *     </code> points at
+   * </code> points at
    */
   public boolean isLeftOfGap(GenomePosition pos) {
-    if (chr != pos.getChr()) return false; // wrong chromosome
+    if (chr != pos.getChr()) {
+      return false; // wrong chromosome
+    }
     pos = ensureSameStrand(pos);
     return (pos.getPos() >= endPos);
   }
@@ -188,10 +204,12 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
   /**
    * @param pos query position
    * @return <tt>true</tt> if the interval is truly right of the gap between bases that <code>pos
-   *     </code> points at
+   * </code> points at
    */
   public boolean isRightOfGap(GenomePosition pos) {
-    if (chr != pos.getChr()) return false; // wrong chromosome
+    if (chr != pos.getChr()) {
+      return false; // wrong chromosome
+    }
     pos = ensureSameStrand(pos);
     return (pos.getPos() <= beginPos);
   }
@@ -201,7 +219,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    * @return <tt>true</tt> if the interval contains <tt>pos</tt>
    */
   public boolean contains(GenomePosition pos) {
-    if (chr != pos.getChr()) return false; // wrong chromosome
+    if (chr != pos.getChr()) {
+      return false; // wrong chromosome
+    }
     pos = ensureSameStrand(pos);
     return (pos.getPos() >= beginPos && pos.getPos() < endPos);
   }
@@ -212,7 +232,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    */
   public boolean contains(GenomeInterval other) {
     // TODO(holtgrem): Test this.
-    if (chr != other.chr) return false; // wrong chromosome
+    if (chr != other.chr) {
+      return false; // wrong chromosome
+    }
     other = ensureSameStrand(other);
     return (other.beginPos >= beginPos && other.endPos <= endPos);
   }
@@ -246,7 +268,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    */
   public boolean overlapsWith(GenomeInterval other) {
     // TODO(holtgrem): add test for this
-    if (chr != other.chr) return false;
+    if (chr != other.chr) {
+      return false;
+    }
     other = ensureSameStrand(other);
     return (other.beginPos < endPos && beginPos < other.endPos);
   }
@@ -262,7 +286,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    */
   @Override
   public String toString() {
-    if (strand.isReverse()) return withStrand(Strand.FWD).toString();
+    if (strand.isReverse()) {
+      return withStrand(Strand.FWD).toString();
+    }
 
     return StringUtil.concatenate(
         refDict.getContigIDToName().get(chr), ":g.", beginPos + 1, "_", endPos);
@@ -275,7 +301,9 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    */
   @Override
   public int hashCode() {
-    if (strand.isReverse()) return withStrand(Strand.FWD).hashCode();
+    if (strand.isReverse()) {
+      return withStrand(Strand.FWD).hashCode();
+    }
 
     final int prime = 31;
     int result = 1;
@@ -293,15 +321,29 @@ public final class GenomeInterval implements Serializable, Comparable<GenomeInte
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     GenomeInterval other = (GenomeInterval) obj;
     other = other.withStrand(strand);
-    if (beginPos != other.beginPos) return false;
-    if (chr != other.chr) return false;
-    if (endPos != other.endPos) return false;
-    if (strand != other.strand) return false;
+    if (beginPos != other.beginPos) {
+      return false;
+    }
+    if (chr != other.chr) {
+      return false;
+    }
+    if (endPos != other.endPos) {
+      return false;
+    }
+    if (strand != other.strand) {
+      return false;
+    }
     return true;
   }
 

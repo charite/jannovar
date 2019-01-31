@@ -79,8 +79,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
   private void addAFHeader(
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     String popName;
-    if (pop == ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AF_" + pop,
@@ -95,8 +98,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     // TODO: change counts to 1 for AN?
     String popName;
-    if (pop == ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AN_" + pop,
@@ -110,8 +116,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
   private void addACHeader(
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     String popName;
-    if (pop == ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AC_" + pop,
@@ -125,8 +134,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
   private void addACHetHeader(
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     String popName;
-    if (pop != ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop != ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "HET_" + pop,
@@ -140,8 +152,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
   private void addACHomHeader(
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     String popName;
-    if (pop == ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "HOM_" + pop,
@@ -155,8 +170,11 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
   private void addACHemiHeader(
       VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
     String popName;
-    if (pop == ExacPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ExacPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "HEMI_" + pop,

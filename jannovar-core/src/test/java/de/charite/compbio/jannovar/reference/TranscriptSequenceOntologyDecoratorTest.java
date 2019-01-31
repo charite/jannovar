@@ -102,11 +102,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
     Assert.assertFalse(
         decorator.overlapsWithTranslationalStartSite(
             new GenomeInterval(refDict, Strand.FWD, 1, 6640666, 6640669, PositionType.ZERO_BASED)));
-    for (int i = 1; i <= 5; ++i)
+    for (int i = 1; i <= 5; ++i) {
       Assert.assertTrue(
           decorator.overlapsWithTranslationalStartSite(
               new GenomeInterval(
                   refDict, Strand.FWD, 1, 6640666 + i, 6640669 + i, PositionType.ZERO_BASED)));
+    }
     Assert.assertFalse(
         decorator.overlapsWithTranslationalStartSite(
             new GenomeInterval(refDict, Strand.FWD, 1, 6640672, 6640675, PositionType.ZERO_BASED)));
@@ -120,11 +121,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
     Assert.assertFalse(
         decorator.overlapsWithTranslationalStopSite(
             new GenomeInterval(refDict, Strand.FWD, 1, 6649266, 6649269, PositionType.ZERO_BASED)));
-    for (int i = 1; i <= 5; ++i)
+    for (int i = 1; i <= 5; ++i) {
       Assert.assertTrue(
           decorator.overlapsWithTranslationalStopSite(
               new GenomeInterval(
                   refDict, Strand.FWD, 1, 6649266 + i, 6649269 + i, PositionType.ZERO_BASED)));
+    }
     Assert.assertFalse(
         decorator.overlapsWithTranslationalStopSite(
             new GenomeInterval(refDict, Strand.FWD, 1, 6649272, 6649275, PositionType.ZERO_BASED)));

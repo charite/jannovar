@@ -50,7 +50,9 @@ public class ProgressReporter extends TimerTask {
 
   public void print() {
     final VariantContext vc = currentVC;
-    if (vc == null) return; // ignore
+    if (vc == null) {
+      return; // ignore
+    }
 
     final long elapsed = (System.currentTimeMillis() - this.startTime) / 1000;
     final double timeFor1MSites = elapsed / (this.numProcessed / 1000.0 / 1000.0);
@@ -71,10 +73,15 @@ public class ProgressReporter extends TimerTask {
   }
 
   public String formatDuration(long seconds) {
-    if (seconds > 60 * 60 * 24 * 1.5) return String.format("%.1f d", seconds / 60.0 / 60.0 / 24.0);
-    else if (seconds > 60 * 60 * 1.5) return String.format("%.1f h", seconds / 60.0 / 60.0);
-    else if (seconds > 60 * 1.5) return String.format("%.1f min", seconds / 60.0);
-    else return String.format("%d s", seconds);
+    if (seconds > 60 * 60 * 24 * 1.5) {
+      return String.format("%.1f d", seconds / 60.0 / 60.0 / 24.0);
+    } else if (seconds > 60 * 60 * 1.5) {
+      return String.format("%.1f h", seconds / 60.0 / 60.0);
+    } else if (seconds > 60 * 1.5) {
+      return String.format("%.1f min", seconds / 60.0);
+    } else {
+      return String.format("%d s", seconds);
+    }
   }
 
   @Override

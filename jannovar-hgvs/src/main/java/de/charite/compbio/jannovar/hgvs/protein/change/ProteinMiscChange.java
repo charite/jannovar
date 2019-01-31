@@ -51,11 +51,19 @@ public class ProteinMiscChange extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinMiscChange other = (ProteinMiscChange) obj;
-    if (changeType != other.changeType) return false;
+    if (changeType != other.changeType) {
+      return false;
+    }
     return true;
   }
 

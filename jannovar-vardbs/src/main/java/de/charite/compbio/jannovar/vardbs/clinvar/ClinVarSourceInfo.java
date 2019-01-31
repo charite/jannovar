@@ -43,16 +43,30 @@ public class ClinVarSourceInfo {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ClinVarSourceInfo other = (ClinVarSourceInfo) obj;
     if (dbId == null) {
-      if (other.dbId != null) return false;
-    } else if (!dbId.equals(other.dbId)) return false;
+      if (other.dbId != null) {
+        return false;
+      }
+    } else if (!dbId.equals(other.dbId)) {
+      return false;
+    }
     if (dbName == null) {
-      if (other.dbName != null) return false;
-    } else if (!dbName.equals(other.dbName)) return false;
+      if (other.dbName != null) {
+        return false;
+      }
+    } else if (!dbName.equals(other.dbName)) {
+      return false;
+    }
     return true;
   }
 }

@@ -131,7 +131,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
   @Test
   public void testForwardTranscriptAblation() throws InvalidGenomeVariant {
     StringBuilder chars200 = new StringBuilder();
-    for (int i = 0; i < 200; ++i) chars200.append("A");
+    for (int i = 0; i < 200; ++i) {
+      chars200.append("A");
+    }
     GenomeVariant change1 =
         new GenomeVariant(
             new GenomePosition(refDict, Strand.FWD, 1, 6640061, PositionType.ZERO_BASED),

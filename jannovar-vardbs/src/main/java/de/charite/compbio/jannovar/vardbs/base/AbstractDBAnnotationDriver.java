@@ -56,9 +56,12 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
       while (iter.hasNext()) {
         final VariantContext dbVC = iter.next();
         if (!options.isReportOverlappingAsMatching()) // unnecessary in this case
-        genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
-        if (options.isReportOverlapping() || options.isReportOverlappingAsMatching())
+        {
+          genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
+        }
+        if (options.isReportOverlapping() || options.isReportOverlappingAsMatching()) {
           positionOverlaps.addAll(matcher.positionOverlaps(obsVC, dbVC));
+        }
       }
 
       // Pick best record for each alternative allele
@@ -70,11 +73,13 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 
       // Use these records to annotate the variant call in obsVC (record-wise but also per
       // alternative allele)
-      if (options.isReportOverlappingAsMatching())
+      if (options.isReportOverlappingAsMatching()) {
         return annotateWithDBRecords(obsVC, dbRecordsOverlap, emptyMap);
-      else if (options.isReportOverlapping())
+      } else if (options.isReportOverlapping()) {
         return annotateWithDBRecords(obsVC, dbRecordsMatch, dbRecordsOverlap);
-      else return annotateWithDBRecords(obsVC, dbRecordsMatch, emptyMap);
+      } else {
+        return annotateWithDBRecords(obsVC, dbRecordsMatch, emptyMap);
+      }
     }
   }
 
@@ -101,11 +106,12 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
       final int alleleNo = match.getObservedAllele();
       annotatingRecords.putIfAbsent(alleleNo, new ArrayList<GenotypeMatch>());
       annotatingRecords.get(alleleNo).add(match);
-      if (!matchToRecord.containsKey(match))
+      if (!matchToRecord.containsKey(match)) {
         matchToRecord.put(
             match,
             new AnnotatingRecord<RecordType>(
                 vcToRecord.convert(match.getDBVC()), match.getDbAllele()));
+      }
     }
 
     return pickAnnotatingDBRecords(annotatingRecords, matchToRecord, isMatch);

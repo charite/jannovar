@@ -36,9 +36,12 @@ public final class NucleotideChangeAllele
   /** @return a new allele containing one nucleotide change */
   public static NucleotideChangeAllele singleChangeAllele(NucleotideChange change) {
     if (change == null) // parsing failed below
-    return new NucleotideChangeAllele(
+    {
+      return new NucleotideChangeAllele(
           VariantConfiguration.IN_CIS, ImmutableList.<NucleotideChange>of());
-    else return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
+    } else {
+      return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
+    }
   }
 
   /** @return a new allele with the given variant configuration and changes */
@@ -63,7 +66,9 @@ public final class NucleotideChangeAllele
   /** @return Allele with the onlyPredicted state of all contained changes set to the given value */
   public NucleotideChangeAllele withOnlyPredicted(boolean flag) {
     ArrayList<NucleotideChange> changesCopy = new ArrayList<>();
-    for (NucleotideChange change : changes) changesCopy.add(change.withOnlyPredicted(flag));
+    for (NucleotideChange change : changes) {
+      changesCopy.add(change.withOnlyPredicted(flag));
+    }
     return new NucleotideChangeAllele(varConfig, changesCopy);
   }
 
@@ -88,8 +93,11 @@ public final class NucleotideChangeAllele
     parts.add("[");
     boolean first = true;
     for (NucleotideChange change : changes) {
-      if (first) first = false;
-      else parts.add(varConfig.toHGVSSeparator());
+      if (first) {
+        first = false;
+      } else {
+        parts.add(varConfig.toHGVSSeparator());
+      }
       parts.add(change.toHGVSString(code));
     }
     parts.add("]");
@@ -113,14 +121,26 @@ public final class NucleotideChangeAllele
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideChangeAllele other = (NucleotideChangeAllele) obj;
     if (changes == null) {
-      if (other.changes != null) return false;
-    } else if (!changes.equals(other.changes)) return false;
-    if (varConfig != other.varConfig) return false;
+      if (other.changes != null) {
+        return false;
+      }
+    } else if (!changes.equals(other.changes)) {
+      return false;
+    }
+    if (varConfig != other.varConfig) {
+      return false;
+    }
     return true;
   }
 

@@ -24,7 +24,9 @@ final class UK10KVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
 
     // Fields from INFO VCF field

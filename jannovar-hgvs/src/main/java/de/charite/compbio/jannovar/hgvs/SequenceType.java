@@ -22,7 +22,11 @@ public enum SequenceType {
 
   /** @return matching {@link SequenceType} value for the given <code>prefix</code> */
   public static SequenceType findMatchingForPrefix(String prefix) {
-    for (SequenceType st : SequenceType.values()) if (st.getPrefix().equals(prefix)) return st;
+    for (SequenceType st : SequenceType.values()) {
+      if (st.getPrefix().equals(prefix)) {
+        return st;
+      }
+    }
     throw new IllegalArgumentException("No enum constant has matching prefix \"" + prefix + "\"");
   }
 

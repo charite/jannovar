@@ -63,8 +63,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
     super(transcript, change, options);
 
     // Guard against invalid genome change.
-    if (change.getRef().length() != 0 || change.getAlt().length() == 0)
+    if (change.getRef().length() != 0 || change.getAlt().length() == 0) {
       throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe an insertion.");
+    }
   }
 
   @Override
@@ -73,30 +74,36 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
     // each of them
     // where applicable.
 
-    if (!transcript.isCoding()) return buildNonCodingAnnotation();
+    if (!transcript.isCoding()) {
+      return buildNonCodingAnnotation();
+    }
 
     // We have the base left and/or right of the insertion to determine the cases.
     final GenomePosition pos = change.getGenomePos();
     final GenomePosition lPos = change.getGenomePos().shifted(-1);
     if ((so.liesInCDSExon(lPos) && so.liesInCDSExon(pos))
         && so.liesInCDS(lPos)
-        && so.liesInCDS(pos)) return buildCDSExonicAnnotation(); // can affect amino acids
-    else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos))
+        && so.liesInCDS(pos)) {
+      return buildCDSExonicAnnotation(); // can affect amino acids
+    } else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos))
         && so.liesInCDS(lPos)
-        && so.liesInCDS(pos))
+        && so.liesInCDS(pos)) {
       return buildIntronicAnnotation(); // intron but no exon => intronic variant
-    else if (so.liesInFivePrimeUTR(lPos) || so.liesInThreePrimeUTR(pos))
+    } else if (so.liesInFivePrimeUTR(lPos) || so.liesInThreePrimeUTR(pos)) {
       return buildUTRAnnotation();
-    else if (so.liesInUpstreamRegion(lPos) || so.liesInDownstreamRegion(pos))
+    } else if (so.liesInUpstreamRegion(lPos) || so.liesInDownstreamRegion(pos)) {
       return buildUpOrDownstreamAnnotation();
-    else return buildIntergenicAnnotation();
+    } else {
+      return buildIntergenicAnnotation();
+    }
   }
 
   @Override
   protected NucleotideChange getCDSNTChange() {
-    if (!so.liesInExon(change.getGenomePos()))
+    if (!so.liesInExon(change.getGenomePos())) {
       return new NucleotideInsertion(
           false, ntChangeRange, new NucleotideSeqDescription(change.getAlt()));
+    }
 
     // For building the HGVS string in transcript locations, we have to check for duplications.
     //
@@ -155,6 +162,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
    * etc.
    */
   private class CDSExonicAnnotationBuilder {
+
     final Translator t = Translator.getTranslator();
 
     // wild type CDS nucleotide sequence
@@ -206,8 +214,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
       final int insertAAPos = this.insertPos.getPos() / 3;
       final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
       int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
-      if (insertAAPos + insertAALength > varAASeq.length())
+      if (insertAAPos + insertAALength > varAASeq.length()) {
         insertAALength = varAASeq.length() - insertAAPos;
+      }
       final String delAA = wtAASeq.substring(insertAAPos, insertAAPos + delta);
       final String insertAA = varAASeq.substring(insertAAPos, insertAAPos + insertAALength);
       this.aaChange = new AminoAcidChange(insertAAPos, delAA, insertAA);
@@ -227,8 +236,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
       } else {
         // We do not have the corner case of "">"" but can go on with frameshift/non-frameshift
         // distinction.
-        if (change.getAlt().length() % 3 == 0) handleNonFrameShiftCase();
-        else handleFrameShiftCase();
+        if (change.getAlt().length() % 3 == 0) {
+          handleNonFrameShiftCase();
+        } else {
+          handleFrameShiftCase();
+        }
       }
 
       return new Annotation(
@@ -248,11 +260,15 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
       // against an insertion at the end of the amino acid and the case that introduces a
       // non-existing stop codon
       // at the end.
-      if (handleInsertionAtEndInCaseOfNoStopCodon()) return;
+      if (handleInsertionAtEndInCaseOfNoStopCodon()) {
+        return;
+      }
       final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
-      if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
+      if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*') {
         handleFrameShiftCaseWTStartWithStopCodon();
-      else handleFrameShiftCaseWTStartsWithNoStopCodon();
+      } else {
+        handleFrameShiftCaseWTStartsWithNoStopCodon();
+      }
     }
 
     /** Deal with an insertion to an amino acid string that does not have a stop codon yet. */
@@ -262,7 +278,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
       // entries into the main cases or decide to ignore these bad cases.
 
       // Return false if this is not the case this function deals with.
-      if (varAAInsertPos != wtAASeq.length() || wtAAStopPos != -1) return false;
+      if (varAAInsertPos != wtAASeq.length() || wtAAStopPos != -1) {
+        return false;
+      }
 
       // TODO(holtgrew): Check for duplication? This is a very rare corner case with bogus
       // transcript.
@@ -275,7 +293,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
               toString(wtAASeq.charAt(varAAInsertPos - 1)),
               varAAInsertPos,
               varAASeq.substring(varAAInsertPos - 1, varAASeq.length()));
-      if (varAAStopPos != -1) varTypes.add(VariantEffect.STOP_GAINED);
+      if (varAAStopPos != -1) {
+        varTypes.add(VariantEffect.STOP_GAINED);
+      }
       varTypes.add(VariantEffect.INFRAME_INSERTION);
 
       return true;
@@ -339,11 +359,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
                   toString(varAASeq.charAt(varAAInsertPos)),
                   (varAAStopPos + 1 - varAAInsertPos));
 
-          if (varAASeq.length() > wtAASeq.length())
+          if (varAASeq.length() > wtAASeq.length()) {
             varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
-          else if (varAASeq.length() < wtAASeq.length())
+          } else if (varAASeq.length() < wtAASeq.length()) {
             varTypes.add(VariantEffect.FRAMESHIFT_TRUNCATION);
-          else varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
+          } else {
+            varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
+          }
         } else {
           // The insertion is a frameshift variant that leads to the loss of the stop codon, we mark
           // this as
@@ -364,9 +386,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
       // to guard
       // against the insertion being at the end of the encode amino acid string.
       final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
-      if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
+      if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*') {
         handleNonFrameShiftCaseStartsWithStopCodon();
-      else handleNonFrameShiftCaseStartsWithNoStopCodon();
+      } else {
+        handleNonFrameShiftCaseStartsWithNoStopCodon();
+      }
     }
 
     private void handleNonFrameShiftCaseStartsWithStopCodon() {
@@ -418,8 +442,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
           varTypes.add(VariantEffect.STOP_GAINED);
 
           // Differentiate the case of disruptive and non-disruptive insertions.
-          if (insertPos.getPos() % 3 == 0) varTypes.add(VariantEffect.INFRAME_INSERTION);
-          else varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
+          if (insertPos.getPos() % 3 == 0) {
+            varTypes.add(VariantEffect.INFRAME_INSERTION);
+          } else {
+            varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
+          }
         } else {
           if (varAAStopPos != -1
               && wtAAStopPos != -1
@@ -508,8 +535,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
      */
     private void addNonFrameshiftInsertionEffect() {
       // Differentiate the case of disruptive and non-disruptive insertions.
-      if (insertPos.getPos() % 3 == 0) varTypes.add(VariantEffect.INFRAME_INSERTION);
-      else varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
+      if (insertPos.getPos() % 3 == 0) {
+        varTypes.add(VariantEffect.INFRAME_INSERTION);
+      } else {
+        varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
+      }
     }
 
     /** Helper function for char to String conversion. */

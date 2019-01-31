@@ -45,7 +45,9 @@ public class GenotypeThresholdFilterAnnotator {
    */
   private void annotateGenotypes(VariantContextBuilder builder, VariantContext vc) {
     ArrayList<Genotype> gts = new ArrayList<>();
-    for (Genotype gt : vc.getGenotypes()) gts.add(gtAnnotator.gtWithAppliedFilters(gt));
+    for (Genotype gt : vc.getGenotypes()) {
+      gts.add(gtAnnotator.gtWithAppliedFilters(gt));
+    }
     builder.genotypes(gts);
   }
 }

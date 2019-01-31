@@ -108,13 +108,14 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
       contigInfoProvider.registerContig(vc.getContig());
     } else {
       // Contig already known, check that variants are sorted by contig
-      if (!contigInfoProvider.isContigKnown(vc.getContig()))
+      if (!contigInfoProvider.isContigKnown(vc.getContig())) {
         throw new UncheckedJannovarException(
             "Variants are not sorted by chromosome, seeing contig "
                 + vc.getContig()
                 + " the second time with contig "
                 + contigInfoProvider.getCurrentContig()
                 + " before the second time");
+      }
     }
 
     // Resolve contig that we work on, trigger start of new contig if necessary
@@ -140,29 +141,36 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
             x -> new GenomeInterval(refDict, Strand.FWD, x, vc.getStart() - 1, vc.getEnd()));
     Optional<IntervalArray<Gene>.QueryResult> qr = Optional.empty();
     if (changeInterval.isPresent()) {
-      if (changeInterval.get().length() == 0)
+      if (changeInterval.get().length() == 0) {
         qr = iTree.map(x -> x.findOverlappingWithPoint(changeInterval.get().getBeginPos()));
-      else
+      } else {
         qr =
             iTree.map(
                 x ->
                     x.findOverlappingWithInterval(
                         changeInterval.get().getBeginPos(), changeInterval.get().getEndPos()));
+      }
     }
 
     if (qr.isPresent()) {
       if (qr.get().getEntries().isEmpty()) {
         putVariantForGene(vc, null);
       } else {
-        for (Gene gene : qr.get().getEntries())
-          if (isGeneAffectedByChange(gene, vc)) putVariantForGene(vc, gene);
+        for (Gene gene : qr.get().getEntries()) {
+          if (isGeneAffectedByChange(gene, vc)) {
+            putVariantForGene(vc, gene);
+          }
+        }
       }
     }
 
     // Write out all variants left of variant. If contig ID not known then write out everything
     // currently in cache
-    if (contigID.isPresent()) markDoneGenes(contigID.get(), vc.getStart() - 1);
-    else markDoneGenes(-1, -1);
+    if (contigID.isPresent()) {
+      markDoneGenes(contigID.get(), vc.getStart() - 1);
+    } else {
+      markDoneGenes(-1, -1);
+    }
   }
 
   /** @return <code>true</code> if <code>gene</code> is affected by <code>variantContext</code> */
@@ -174,10 +182,13 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
     if (changeInterval.length() == 0
         && gene.getRegion().contains(changeInterval.getGenomeBeginPos())
-        && gene.getRegion().contains(changeInterval.getGenomeBeginPos().shifted(-1))) return false;
-    else if (changeInterval.length() != 0 && gene.getRegion().overlapsWith(changeInterval))
+        && gene.getRegion().contains(changeInterval.getGenomeBeginPos().shifted(-1))) {
+      return false;
+    } else if (changeInterval.length() != 0 && gene.getRegion().overlapsWith(changeInterval)) {
       return true;
-    else return false;
+    } else {
+      return false;
+    }
   }
 
   @Override
@@ -186,10 +197,12 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
     markDoneGenes(-1, -1);
 
     // There should be no more active variants or genes
-    if (!activeVariants.isEmpty())
+    if (!activeVariants.isEmpty()) {
       throw new VariantContextFilterException("All variants should be inactive now");
-    if (!activeGenes.isEmpty())
+    }
+    if (!activeGenes.isEmpty()) {
       throw new VariantContextFilterException("All genes should be inactive now");
+    }
   }
 
   /** Appropriately extend {@link VCFHeader} */
@@ -206,18 +219,22 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
   private static GeneList buildGeneList(JannovarData jannovarDB) {
     // create one GeneBuilder for each gene, collect all transcripts for the gene
     HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
-    for (Chromosome chrom : jannovarDB.getChromosomes().values())
+    for (Chromosome chrom : jannovarDB.getChromosomes().values()) {
       for (Interval<TranscriptModel> itv : chrom.getTMIntervalTree().getIntervals()) {
         TranscriptModel tm = itv.getValue();
-        if (!geneMap.containsKey(tm.getGeneSymbol()))
+        if (!geneMap.containsKey(tm.getGeneSymbol())) {
           geneMap.put(
               tm.getGeneSymbol(), new GeneBuilder(jannovarDB.getRefDict(), tm.getGeneSymbol()));
+        }
         geneMap.get(tm.getGeneSymbol()).addTranscriptModel(tm);
       }
+    }
 
     // construct GeneList from geneMap
     ImmutableList.Builder<Gene> builder = new ImmutableList.Builder<Gene>();
-    for (GeneBuilder gene : geneMap.values()) builder.add(gene.build());
+    for (GeneBuilder gene : geneMap.values()) {
+      builder.add(gene.build());
+    }
     return new GeneList(builder.build());
   }
 
@@ -260,8 +277,11 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
     ArrayList<Gene> doneGenes = new ArrayList<Gene>();
     for (Entry<Gene, ArrayList<VariantContext>> entry : activeGenes.entrySet()) {
       Gene gene = entry.getKey();
-      if (gene.getRegion().getChr() != contigID) doneGenes.add(gene);
-      else if (gene.getRegion().getEndPos() <= pos) doneGenes.add(gene);
+      if (gene.getRegion().getChr() != contigID) {
+        doneGenes.add(gene);
+      } else if (gene.getRegion().getEndPos() <= pos) {
+        doneGenes.add(gene);
+      }
     }
 
     if (doneGenes.isEmpty()) {
@@ -273,8 +293,9 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
       }
     }
 
-    if (!doneGenes.isEmpty() && activeGenes.isEmpty() && !activeVariants.isEmpty())
+    if (!doneGenes.isEmpty() && activeGenes.isEmpty() && !activeVariants.isEmpty()) {
       throw new RuntimeException("All genes inactive, there should be no active variant");
+    }
   }
 
   /**
@@ -307,18 +328,24 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
    */
   private void processedGene(Gene gene) throws VariantContextFilterException {
     try {
-      if (gene != null) checkVariantsForGene(gene);
+      if (gene != null) {
+        checkVariantsForGene(gene);
+      }
     } catch (CannotAnnotateMendelianInheritance e) {
-      if (e.getCause().getClass().equals(IncompatiblePedigreeException.class))
+      if (e.getCause().getClass().equals(IncompatiblePedigreeException.class)) {
         throw new VariantContextFilterException(
             "Cannot annotate Mendelian inheritance, pedigree is incompatible to genotypes", e);
-      else
+      } else {
         throw new VariantContextFilterException(
             "Problem with annotating variant for Mendelian inheritance", e);
+      }
     }
 
-    if (gene != null) LOGGER.trace("Gene done {}", new Object[] {gene.getName()});
-    else LOGGER.trace("Marking variants as done without any gene");
+    if (gene != null) {
+      LOGGER.trace("Gene done {}", new Object[] {gene.getName()});
+    } else {
+      LOGGER.trace("Marking variants as done without any gene");
+    }
 
     // Decrease count of variants that lie in gene (that is now ignored)
     for (VariantContextCounter var : activeVariants.values()) {
@@ -342,8 +369,11 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
                 contigInfoProvider.getContigNoForName(lhs.getVariantContext().getContig());
             final int idxRhs =
                 contigInfoProvider.getContigNoForName(rhs.getVariantContext().getContig());
-            if (idxLhs != idxRhs) return (idxLhs - idxRhs);
-            else return (lhs.getVariantContext().getStart() - rhs.getVariantContext().getStart());
+            if (idxLhs != idxRhs) {
+              return (idxLhs - idxRhs);
+            } else {
+              return (lhs.getVariantContext().getStart() - rhs.getVariantContext().getStart());
+            }
           }
         };
 
@@ -380,9 +410,12 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
         sink.accept(var.getVariantContext());
       } else {
         VariantContextBuilder vcBuilder = new VariantContextBuilder(var.getVariantContext());
-        if (!modes.isEmpty()) vcBuilder.attribute(MendelVCFHeaderExtender.key(), modes);
-        if (!arSubModes.isEmpty())
+        if (!modes.isEmpty()) {
+          vcBuilder.attribute(MendelVCFHeaderExtender.key(), modes);
+        }
+        if (!arSubModes.isEmpty()) {
           vcBuilder.attribute(MendelVCFHeaderExtender.keySub(), arSubModes);
+        }
         sink.accept(vcBuilder.make());
       }
     }
@@ -410,8 +443,11 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
     /** @return number for given contig name */
     int getContigNoForName(String name) {
-      if (contigNameToNo.containsKey(name)) return contigNameToNo.get(name);
-      else return UNKNOWN;
+      if (contigNameToNo.containsKey(name)) {
+        return contigNameToNo.get(name);
+      } else {
+        return UNKNOWN;
+      }
     }
 
     /** @return whether the contig has been seen before */
@@ -425,11 +461,12 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
      * <p>Also update {@link currentContig} to <code>name</code>
      */
     int registerContig(String name) {
-      if (isContigKnown(name))
+      if (isContigKnown(name)) {
         throw new RuntimeException(
             "Seeing contig "
                 + name
                 + " a second time (with other contig name in between). Is your file sorted?");
+      }
       contigNameToNo.put(name, nextContigNo);
       currentContig = name;
       return nextContigNo++;

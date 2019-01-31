@@ -24,7 +24,9 @@ final class ExacVariantContextToRecordConverter
     builder.setPos(vc.getStart() - 1);
     builder.setID(vc.getID());
     builder.setRef(vc.getReference().getBaseString());
-    for (Allele all : vc.getAlternateAlleles()) builder.getAlt().add(all.getBaseString());
+    for (Allele all : vc.getAlternateAlleles()) {
+      builder.getAlt().add(all.getBaseString());
+    }
     builder.getFilter().addAll(vc.getFilters());
 
     // Fields from INFO VCF field
@@ -32,11 +34,15 @@ final class ExacVariantContextToRecordConverter
     // AN: Chromosome count
     int allAN = 0;
     for (ExacPopulation pop : ExacPopulation.values()) {
-      if (pop == ExacPopulation.ALL) continue; // skip
+      if (pop == ExacPopulation.ALL) {
+        continue; // skip
+      }
 
       int an = vc.getAttributeAsInt("AN_" + pop, 0);
       builder.getChromCounts().put(pop, an);
-      for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) allAN += an;
+      for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
+        allAN += an;
+      }
     }
     builder.getChromCounts().put(ExacPopulation.ALL, allAN);
 
@@ -52,7 +58,9 @@ final class ExacVariantContextToRecordConverter
       allHemi.add(0);
     }
     for (ExacPopulation pop : ExacPopulation.values()) {
-      if (pop == ExacPopulation.ALL) continue; // skip
+      if (pop == ExacPopulation.ALL) {
+        continue; // skip
+      }
 
       // AC
       List<Integer> lst =
@@ -61,8 +69,9 @@ final class ExacVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!lst.isEmpty()) {
         builder.getAlleleCounts().put(pop, lst);
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
           allAC.set(i, allAC.get(i) + lst.get(i));
+        }
       }
 
       // Het
@@ -72,8 +81,9 @@ final class ExacVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!lst.isEmpty()) {
         builder.getAlleleHetCounts().put(pop, lst);
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
           allHet.set(i, allHet.get(i) + lst.get(i));
+        }
       }
 
       // Hom
@@ -83,8 +93,9 @@ final class ExacVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!lst.isEmpty()) {
         builder.getAlleleHomCounts().put(pop, lst);
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
           allHom.set(i, allHom.get(i) + lst.get(i));
+        }
       }
 
       // Hemi
@@ -94,17 +105,21 @@ final class ExacVariantContextToRecordConverter
               .collect(Collectors.toList());
       if (!lst.isEmpty()) {
         builder.getAlleleHemiCounts().put(pop, lst);
-        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+        for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
           allHemi.set(i, allHemi.get(i) + lst.get(i));
+        }
       }
     }
     builder.getAlleleCounts().put(ExacPopulation.ALL, allAC);
-    if (!builder.getAlleleHetCounts().isEmpty())
+    if (!builder.getAlleleHetCounts().isEmpty()) {
       builder.getAlleleHetCounts().put(ExacPopulation.ALL, allHet);
-    if (!builder.getAlleleHomCounts().isEmpty())
+    }
+    if (!builder.getAlleleHomCounts().isEmpty()) {
       builder.getAlleleHomCounts().put(ExacPopulation.ALL, allHom);
-    if (!builder.getAlleleHemiCounts().isEmpty())
+    }
+    if (!builder.getAlleleHemiCounts().isEmpty()) {
       builder.getAlleleHemiCounts().put(ExacPopulation.ALL, allHemi);
+    }
 
     return builder.build();
   }

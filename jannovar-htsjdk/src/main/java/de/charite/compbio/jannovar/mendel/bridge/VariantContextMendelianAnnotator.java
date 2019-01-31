@@ -150,7 +150,9 @@ public class VariantContextMendelianAnnotator {
     // Construct extended VariantContext objects with INHERITED and
     // INHERITANCE_RECESSIVE_DETAIL attributes
     ArrayList<VariantContextBuilder> vcBuilders = new ArrayList<>();
-    for (int i = 0; i < vcs.size(); ++i) vcBuilders.add(new VariantContextBuilder(vcs.get(i)));
+    for (int i = 0; i < vcs.size(); ++i) {
+      vcBuilders.add(new VariantContextBuilder(vcs.get(i)));
+    }
     for (Entry<Integer, Set<String>> e : map.entrySet()) {
       VariantContextBuilder vcBuilder = vcBuilders.get(e.getKey());
       vcBuilder.attribute(MendelVCFHeaderExtender.key(), e.getValue());
@@ -159,7 +161,9 @@ public class VariantContextMendelianAnnotator {
 
     // Build final result list
     ImmutableList.Builder<VariantContext> resultBuilder = new ImmutableList.Builder<>();
-    for (int i = 0; i < vcs.size(); ++i) resultBuilder.add(vcBuilders.get(i).make());
+    for (int i = 0; i < vcs.size(); ++i) {
+      resultBuilder.add(vcBuilders.get(i).make());
+    }
     return resultBuilder.build();
   }
 
@@ -190,7 +194,9 @@ public class VariantContextMendelianAnnotator {
         new ImmutableMap.Builder<>();
     for (Entry<ModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
       ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
-      for (GenotypeCalls gc : e.getValue()) listBuilder.add(vcs.get((Integer) gc.getPayload()));
+      for (GenotypeCalls gc : e.getValue()) {
+        listBuilder.add(vcs.get((Integer) gc.getPayload()));
+      }
       builder.put(e.getKey(), listBuilder.build());
     }
     return builder.build();
@@ -223,7 +229,9 @@ public class VariantContextMendelianAnnotator {
         new ImmutableMap.Builder<>();
     for (Entry<SubModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
       ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
-      for (GenotypeCalls gc : e.getValue()) listBuilder.add(vcs.get((Integer) gc.getPayload()));
+      for (GenotypeCalls gc : e.getValue()) {
+        listBuilder.add(vcs.get((Integer) gc.getPayload()));
+      }
       builder.put(e.getKey(), listBuilder.build());
     }
     return builder.build();
@@ -249,25 +257,34 @@ public class VariantContextMendelianAnnotator {
       GenotypeCallsBuilder builder = new GenotypeCallsBuilder();
       builder.setPayload(i++);
 
-      if (xNames.contains(vc.getContig())) builder.setChromType(ChromosomeType.X_CHROMOSOMAL);
-      else if (mtNames.contains(vc.getContig())) builder.setChromType(ChromosomeType.MITOCHONDRIAL);
-      else builder.setChromType(ChromosomeType.AUTOSOMAL);
+      if (xNames.contains(vc.getContig())) {
+        builder.setChromType(ChromosomeType.X_CHROMOSOMAL);
+      } else if (mtNames.contains(vc.getContig())) {
+        builder.setChromType(ChromosomeType.MITOCHONDRIAL);
+      } else {
+        builder.setChromType(ChromosomeType.AUTOSOMAL);
+      }
 
       for (Genotype gt : vc.getGenotypes()) {
         List<String> gtFilters = new ArrayList<String>();
-        if (gt.getFilters() != null) gtFilters.addAll(Arrays.asList(gt.getFilters().split(";")));
+        if (gt.getFilters() != null) {
+          gtFilters.addAll(Arrays.asList(gt.getFilters().split(";")));
+        }
 
         boolean isFiltered = false;
         if (gt.isHet()) {
-          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HET))
+          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HET)) {
             isFiltered = true;
+          }
         } else if (gt.isHomRef()) {
-          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_REF))
+          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_REF)) {
             isFiltered = true;
+          }
         } else { // hom-alt or two overlapping hets, treated the same
           // for filtration
-          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_ALT))
+          if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_ALT)) {
             isFiltered = true;
+          }
         }
 
         GenotypeBuilder gtBuilder = new GenotypeBuilder();

@@ -56,7 +56,9 @@ public final class Jannovar {
 
     BiFunction<String[], Namespace, JannovarCommand> factory = args.get("cmd");
     JannovarCommand cmd = factory.apply(argv, args);
-    if (cmd == null) System.exit(1);
+    if (cmd == null) {
+      System.exit(1);
+    }
 
     // Execute the command.
     try {

@@ -35,7 +35,7 @@ public abstract class AbstractMendelianChecker {
    *
    * @param calls The list of calls to check for compatibility
    * @return Filtered {@link ImmutableList} of {@link GenotypeCalls} objects, subset of <code>calls
-   *     </code>
+   * </code>
    * @throws IncompatiblePedigreeException if <code>calls</code> is incompatible with the pedigree
    */
   public abstract ImmutableList<GenotypeCalls> filterCompatibleRecords(

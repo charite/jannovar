@@ -66,10 +66,11 @@ public class ThresholdFilterHeaderExtender {
    * @param header The {@link VCFHeader} to extend.
    */
   public void addHeaders(VCFHeader header) {
-    if (!header.hasFormatLine("FT"))
+    if (!header.hasFormatLine("FT")) {
       header.addMetaDataLine(
           new VCFFormatHeaderLine(
               "FT", 1, VCFHeaderLineType.String, "Filters applied to genotype call"));
+    }
 
     header.addMetaDataLine(
         new VCFFilterHeaderLine(

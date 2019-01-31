@@ -56,7 +56,9 @@ public final class PedFileWriter {
     out.append('\n');
 
     // write payload
-    for (PedPerson individual : contents.getIndividuals()) writeIndividual(individual, out);
+    for (PedPerson individual : contents.getIndividuals()) {
+      writeIndividual(individual, out);
+    }
     out.close();
   }
 

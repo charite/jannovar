@@ -50,8 +50,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
     super(transcript, change, options);
 
     // guard against invalid genome change
-    if (change.getRef().length() != 1 || change.getAlt().length() != 1)
+    if (change.getRef().length() != 1 || change.getAlt().length() != 1) {
       throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe a SNV.");
+    }
   }
 
   @Override
@@ -60,18 +61,24 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
     // each of them
     // where applicable.
 
-    if (!transcript.isCoding()) return buildNonCodingAnnotation();
+    if (!transcript.isCoding()) {
+      return buildNonCodingAnnotation();
+    }
 
     final GenomeInterval changeInterval = change.getGenomeInterval();
-    if (so.liesInCDSExon(changeInterval) && transcript.getCDSRegion().contains(changeInterval))
+    if (so.liesInCDSExon(changeInterval) && transcript.getCDSRegion().contains(changeInterval)) {
       return buildCDSExonicAnnotation(); // lies in coding part of exon
-    else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
+    } else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval)) {
       return buildIntronicAnnotation(); // intron but no exon => intronic variant
-    else if (so.overlapsWithFivePrimeUTR(changeInterval)
-        || so.overlapsWithThreePrimeUTR(changeInterval)) return buildUTRAnnotation();
-    else if (so.overlapsWithUpstreamRegion(changeInterval)
-        || so.overlapsWithDownstreamRegion(changeInterval)) return buildUpOrDownstreamAnnotation();
-    else return buildIntergenicAnnotation();
+    } else if (so.overlapsWithFivePrimeUTR(changeInterval)
+        || so.overlapsWithThreePrimeUTR(changeInterval)) {
+      return buildUTRAnnotation();
+    } else if (so.overlapsWithUpstreamRegion(changeInterval)
+        || so.overlapsWithDownstreamRegion(changeInterval)) {
+      return buildUpOrDownstreamAnnotation();
+    } else {
+      return buildIntergenicAnnotation();
+    }
   }
 
   private Annotation buildCDSExonicAnnotation() {
@@ -92,8 +99,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
         || !transcript
             .getSequence()
             .substring(txPos.getPos(), txPos.getPos() + 1)
-            .equals(change.getRef()))
+            .equals(change.getRef())) {
       messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT);
+    }
 
     // Compute the frame shift and codon start position.
     int frameShift = cdsPos.getPos() % 3;
@@ -120,9 +128,10 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
           EnumSet.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
     }
     String wtCodon = transcriptCodon;
-    if (options.isOverrideTxSeqWithGenomeVariantRef())
+    if (options.isOverrideTxSeqWithGenomeVariantRef()) {
       TranscriptSequenceDecorator.codonWithUpdatedBase(
           wtCodon, frameShift, change.getRef().charAt(0));
+    }
     String varCodon =
         TranscriptSequenceDecorator.codonWithUpdatedBase(
             transcriptCodon, frameShift, change.getAlt().charAt(0));
@@ -144,7 +153,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
     String varAA = Translator.getTranslator().translateDNA(varCodon);
     ProteinChange proteinChange = ProteinSubstitution.build(true, wtAA, cdsPos.getPos() / 3, varAA);
     if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
-    proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
+    {
+      proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
+    }
 
     // Compute variant type.
     EnumSet<VariantEffect> varTypes = computeVariantTypes(wtAA, varAA);
@@ -166,12 +177,13 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
     }
     // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
     // disjoint.
-    if (so.overlapsWithSpliceDonorSite(changeInterval))
+    if (so.overlapsWithSpliceDonorSite(changeInterval)) {
       varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-    else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+    } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
       varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-    else if (so.overlapsWithSpliceRegion(changeInterval))
+    } else if (so.overlapsWithSpliceRegion(changeInterval)) {
       varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+    }
 
     // Build the resulting Annotation.
     return new Annotation(
@@ -187,10 +199,12 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
   @Override
   protected NucleotideChange getCDSNTChange() {
-    if (ntSubstitutionOverride != null) return ntSubstitutionOverride;
-    else
+    if (ntSubstitutionOverride != null) {
+      return ntSubstitutionOverride;
+    } else {
       return new NucleotideSubstitution(
           false, ntChangeRange.getFirstPos(), change.getRef(), change.getAlt());
+    }
   }
 
   /**
@@ -200,10 +214,15 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
    */
   private EnumSet<VariantEffect> computeVariantTypes(String wtAA, String varAA) {
     EnumSet<VariantEffect> result = EnumSet.noneOf(VariantEffect.class);
-    if (wtAA.equals(varAA)) result.add(VariantEffect.SYNONYMOUS_VARIANT);
-    else if (wtAA.equals("*")) result.add(VariantEffect.STOP_LOST);
-    else if (varAA.equals("*")) result.add(VariantEffect.STOP_GAINED);
-    else result.add(VariantEffect.MISSENSE_VARIANT);
+    if (wtAA.equals(varAA)) {
+      result.add(VariantEffect.SYNONYMOUS_VARIANT);
+    } else if (wtAA.equals("*")) {
+      result.add(VariantEffect.STOP_LOST);
+    } else if (varAA.equals("*")) {
+      result.add(VariantEffect.STOP_GAINED);
+    } else {
+      result.add(VariantEffect.MISSENSE_VARIANT);
+    }
     return result;
   }
 }

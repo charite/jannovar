@@ -59,8 +59,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       String noteInfix,
       ThousandGenomesPopulation pop) {
     String popName;
-    if (pop == ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AF_" + pop,
@@ -79,8 +82,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       ThousandGenomesPopulation pop) {
     // TODO: change counts to 1 for AN?
     String popName;
-    if (pop == ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AN_" + pop,
@@ -98,8 +104,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       String noteInfix,
       ThousandGenomesPopulation pop) {
     String popName;
-    if (pop == ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "AC_" + pop,
@@ -117,8 +126,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       String noteInfix,
       ThousandGenomesPopulation pop) {
     String popName;
-    if (pop != ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop != ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "Het_" + pop,
@@ -136,8 +148,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       String noteInfix,
       ThousandGenomesPopulation pop) {
     String popName;
-    if (pop == ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "Hom_" + pop,
@@ -155,8 +170,11 @@ public class ThousandGenomesVCFHeaderExtender extends VCFHeaderExtender {
       String noteInfix,
       ThousandGenomesPopulation pop) {
     String popName;
-    if (pop == ThousandGenomesPopulation.ALL) popName = "all populations";
-    else popName = pop + " / " + pop.getLabel() + " population";
+    if (pop == ThousandGenomesPopulation.ALL) {
+      popName = "all populations";
+    } else {
+      popName = pop + " / " + pop.getLabel() + " population";
+    }
     VCFInfoHeaderLine line =
         new VCFInfoHeaderLine(
             prefix + idInfix + "Hemi_" + pop,

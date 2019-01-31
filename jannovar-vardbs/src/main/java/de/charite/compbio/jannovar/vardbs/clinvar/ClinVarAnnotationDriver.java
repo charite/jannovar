@@ -74,19 +74,22 @@ public class ClinVarAnnotationDriver implements DBAnnotationDriver {
         final VariantContext dbVC = iter.next();
         genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
         // TODO: what to do about non-reference/non-alt ClinVar annotation "-1"?
-        if (options.isReportOverlapping() || options.isReportOverlappingAsMatching())
+        if (options.isReportOverlapping() || options.isReportOverlappingAsMatching()) {
           positionOverlaps.addAll(matcher.positionOverlaps(obsVC, dbVC));
+        }
       }
 
       List<GenotypeMatch> emptyList = new ArrayList<>();
 
       // Use these records to annotate the variant call in obsVC (record-wise but also per
       // alternative allele)
-      if (options.isReportOverlappingAsMatching())
+      if (options.isReportOverlappingAsMatching()) {
         return annotateWithDBRecords(obsVC, positionOverlaps, emptyList);
-      else if (options.isReportOverlapping())
+      } else if (options.isReportOverlapping()) {
         return annotateWithDBRecords(obsVC, genotypeMatches, positionOverlaps);
-      else return annotateWithDBRecords(obsVC, genotypeMatches, emptyList);
+      } else {
+        return annotateWithDBRecords(obsVC, genotypeMatches, emptyList);
+      }
     }
   }
 
@@ -129,21 +132,28 @@ public class ClinVarAnnotationDriver implements DBAnnotationDriver {
       VariantContextBuilder builder,
       ArrayListMultimap<Integer, ClinVarAnnotation> matchMap,
       String infix) {
-    if (matchMap.isEmpty()) return; // skip
+    if (matchMap.isEmpty()) {
+      return; // skip
+    }
 
     List<String> basicInfo = buildBasicInfo(builder, matchMap);
-    if (!basicInfo.isEmpty())
+    if (!basicInfo.isEmpty()) {
       builder.attribute(options.getVCFIdentifierPrefix() + infix + "BASIC_INFO", basicInfo);
+    }
     List<String> varInfo = buildVarInfo(builder, matchMap);
-    if (!varInfo.isEmpty())
+    if (!varInfo.isEmpty()) {
       builder.attribute(options.getVCFIdentifierPrefix() + infix + "VAR_INFO", varInfo);
+    }
     List<String> diseaseInfo = buildDiseaseInfo(builder, matchMap);
-    if (!diseaseInfo.isEmpty())
+    if (!diseaseInfo.isEmpty()) {
       builder.attribute(options.getVCFIdentifierPrefix() + infix + "DISEASE_INFO", diseaseInfo);
+    }
   }
 
   private static String encode(String s) {
-    if (s == null) return "";
+    if (s == null) {
+      return "";
+    }
     try {
       return URLEncoder.encode(s, "utf-8").replaceAll("=", "%3D");
     } catch (UnsupportedEncodingException e) {

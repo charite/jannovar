@@ -36,7 +36,9 @@ public class NucleotideChangeToGenomeVariantTranslationImplBase {
    */
   protected String getGenomeSeq(Strand strand, GenomeInterval gItv) {
     String result = seqExtractor.load(gItv.withStrand(Strand.FWD));
-    if (strand == Strand.REV) result = DNAUtils.reverseComplement(result);
+    if (strand == Strand.REV) {
+      result = DNAUtils.reverseComplement(result);
+    }
     return result.toUpperCase();
   }
 }

@@ -20,7 +20,10 @@ public final class BestAnnotationListTextGenerator extends VariantAnnotationsTex
 
   @Override
   protected ImmutableList<Annotation> getAnnotations() {
-    if (annotations.getAnnotations().isEmpty()) return annotations.getAnnotations().subList(0, 0);
-    else return annotations.getAnnotations().subList(0, 1);
+    if (annotations.getAnnotations().isEmpty()) {
+      return annotations.getAnnotations().subList(0, 0);
+    } else {
+      return annotations.getAnnotations().subList(0, 1);
+    }
   }
 }

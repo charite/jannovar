@@ -62,7 +62,9 @@ public class GFFParser {
    * @throws IOException on problems with reading the GFF files
    */
   public FeatureRecord next() throws IOException {
-    if (lastLine == null) return null;
+    if (lastLine == null) {
+      return null;
+    }
     FeatureRecord result = recordParser.parseLine(lastLine);
     do {
       lastLine = reader.readLine();
@@ -79,8 +81,11 @@ public class GFFParser {
   public GFFParser(InputStream stream) throws IOException {
     this.reader = new BufferedReader(new InputStreamReader(openStream(stream)));
     this.gffVersion = initializeStream();
-    if (gffVersion == GFFVersion.GTF) recordParser = new GTFRecordParser();
-    else recordParser = new GFFRecordParser();
+    if (gffVersion == GFFVersion.GTF) {
+      recordParser = new GTFRecordParser();
+    } else {
+      recordParser = new GFFRecordParser();
+    }
   }
 
   /**
@@ -95,8 +100,11 @@ public class GFFParser {
     byte[] signature = new byte[2];
     pb.read(signature);
     pb.unread(signature);
-    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) return new GZIPInputStream(pb);
-    else return pb;
+    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) {
+      return new GZIPInputStream(pb);
+    } else {
+      return pb;
+    }
   }
 
   /**
@@ -114,7 +122,9 @@ public class GFFParser {
         break;
       } else if (lastLine.startsWith("##gff-version")) {
         String[] tokens = lastLine.split(" ");
-        if (tokens[1].equals("3")) result = GFFVersion.GFF3;
+        if (tokens[1].equals("3")) {
+          result = GFFVersion.GFF3;
+        }
       }
     }
 

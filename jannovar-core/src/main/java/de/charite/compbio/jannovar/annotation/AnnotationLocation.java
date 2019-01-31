@@ -81,8 +81,9 @@ public class AnnotationLocation {
   public String toHGVSChunk() {
     StringBuilder builder = new StringBuilder();
     builder.append(transcript.getAccession());
-    if (rankType != RankType.UNDEFINED)
+    if (rankType != RankType.UNDEFINED) {
       builder.append(":").append(rankType.toString().toLowerCase()).append(rank + 1);
+    }
     return builder.toString();
   }
 
@@ -100,19 +101,39 @@ public class AnnotationLocation {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     AnnotationLocation other = (AnnotationLocation) obj;
-    if (rank != other.rank) return false;
-    if (rankType != other.rankType) return false;
-    if (totalRank != other.totalRank) return false;
+    if (rank != other.rank) {
+      return false;
+    }
+    if (rankType != other.rankType) {
+      return false;
+    }
+    if (totalRank != other.totalRank) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     if (txLocation == null) {
-      if (other.txLocation != null) return false;
-    } else if (!txLocation.equals(other.txLocation)) return false;
+      if (other.txLocation != null) {
+        return false;
+      }
+    } else if (!txLocation.equals(other.txLocation)) {
+      return false;
+    }
     return true;
   }
 }

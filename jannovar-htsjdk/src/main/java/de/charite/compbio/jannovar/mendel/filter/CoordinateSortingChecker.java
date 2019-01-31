@@ -33,16 +33,19 @@ public class CoordinateSortingChecker implements VariantContextProcessor {
 
   public void put(VariantContext vc) throws VariantContextFilterException {
     // Perform sortedness check and throw exception otherwise
-    if (prevVC != null)
+    if (prevVC != null) {
       if (!vc.getContig().equals(prevVC.getContig())) { // change in chromosomes
-        if (seenChromosomes.contains(vc.getContig()))
+        if (seenChromosomes.contains(vc.getContig())) {
           throw new VariantContextFilterException(
               "Unsorted VCF file, seen " + vc.getContig() + " twice!");
+        }
       } else {
-        if (vc.getStart() < prevVC.getStart())
+        if (vc.getStart() < prevVC.getStart()) {
           throw new VariantContextFilterException(
               "Unsorted VCF file, seen " + vc.getStart() + " < " + prevVC.getStart());
+        }
       }
+    }
 
     // Pass through to next filter
     sink.put(vc);

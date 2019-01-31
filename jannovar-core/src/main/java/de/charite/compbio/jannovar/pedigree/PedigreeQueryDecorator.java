@@ -35,16 +35,22 @@ public class PedigreeQueryDecorator {
    * @return <code>true</code> if the nth person in the PED file is parent of an affected child
    */
   public boolean isParentOfAffected(Person person) {
-    for (Person member : pedigree.getMembers())
-      if (member.getFather() == person || member.getMother() == person) return true;
+    for (Person member : pedigree.getMembers()) {
+      if (member.getFather() == person || member.getMother() == person) {
+        return true;
+      }
+    }
     return false;
   }
 
   /** @return set with the name of the unaffected persons */
   public ImmutableSet<String> getUnaffectedNames() {
     ImmutableSet.Builder<String> resultNames = new ImmutableSet.Builder<String>();
-    for (Person member : pedigree.getMembers())
-      if (member.getDisease() == Disease.UNAFFECTED) resultNames.add(member.getName());
+    for (Person member : pedigree.getMembers()) {
+      if (member.getDisease() == Disease.UNAFFECTED) {
+        resultNames.add(member.getName());
+      }
+    }
     return resultNames.build();
   }
 
@@ -52,8 +58,12 @@ public class PedigreeQueryDecorator {
   public ImmutableSet<String> getParentNames() {
     ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
     for (Person member : pedigree.getMembers()) {
-      if (member.getFather() != null) parentNames.add(member.getFather().getName());
-      if (member.getMother() != null) parentNames.add(member.getMother().getName());
+      if (member.getFather() != null) {
+        parentNames.add(member.getFather().getName());
+      }
+      if (member.getMother() != null) {
+        parentNames.add(member.getMother().getName());
+      }
     }
     return parentNames.build();
   }
@@ -63,8 +73,12 @@ public class PedigreeQueryDecorator {
     ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
     for (Person member : pedigree.getMembers()) {
       if (member.isAffected() && member.isFemale()) {
-        if (member.getFather() != null) parentNames.add(member.getFather().getName());
-        if (member.getMother() != null) parentNames.add(member.getMother().getName());
+        if (member.getFather() != null) {
+          parentNames.add(member.getFather().getName());
+        }
+        if (member.getMother() != null) {
+          parentNames.add(member.getMother().getName());
+        }
       }
     }
     return parentNames.build();
@@ -75,8 +89,12 @@ public class PedigreeQueryDecorator {
     ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
     for (Person member : pedigree.getMembers()) {
       if (member.isAffected() && member.isMale()) {
-        if (member.getFather() != null) parentNames.add(member.getFather().getName());
-        if (member.getMother() != null) parentNames.add(member.getMother().getName());
+        if (member.getFather() != null) {
+          parentNames.add(member.getFather().getName());
+        }
+        if (member.getMother() != null) {
+          parentNames.add(member.getMother().getName());
+        }
       }
     }
     return parentNames.build();
@@ -89,8 +107,11 @@ public class PedigreeQueryDecorator {
     ImmutableSet<String> parentNames = getParentNames();
 
     ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
-    for (Person member : pedigree.getMembers())
-      if (parentNames.contains(member.getName())) builder.add(member);
+    for (Person member : pedigree.getMembers()) {
+      if (parentNames.contains(member.getName())) {
+        builder.add(member);
+      }
+    }
     return builder.build();
   }
 
@@ -98,8 +119,12 @@ public class PedigreeQueryDecorator {
   public int getNumberOfParents() {
     HashSet<String> parentNames = new HashSet<String>();
     for (Person member : pedigree.getMembers()) {
-      if (member.getFather() != null) parentNames.add(member.getFather().getName());
-      if (member.getMother() != null) parentNames.add(member.getMother().getName());
+      if (member.getFather() != null) {
+        parentNames.add(member.getFather().getName());
+      }
+      if (member.getMother() != null) {
+        parentNames.add(member.getMother().getName());
+      }
     }
     return parentNames.size();
   }
@@ -107,16 +132,22 @@ public class PedigreeQueryDecorator {
   /** @return number of affected individuals in the pedigree */
   public int getNumberOfAffecteds() {
     int result = 0;
-    for (Person member : pedigree.getMembers())
-      if (member.getDisease() == Disease.AFFECTED) result += 1;
+    for (Person member : pedigree.getMembers()) {
+      if (member.getDisease() == Disease.AFFECTED) {
+        result += 1;
+      }
+    }
     return result;
   }
 
   /** @return number of unaffected individuals in the pedigree */
   public int getNumberOfUnaffecteds() {
     int result = 0;
-    for (Person member : pedigree.getMembers())
-      if (member.getDisease() == Disease.UNAFFECTED) result += 1;
+    for (Person member : pedigree.getMembers()) {
+      if (member.getDisease() == Disease.UNAFFECTED) {
+        result += 1;
+      }
+    }
     return result;
   }
 
@@ -129,12 +160,16 @@ public class PedigreeQueryDecorator {
         new ImmutableMap.Builder<Person, ImmutableList<Person>>();
 
     for (Person p1 : pedigree.getMembers()) {
-      if (p1.getMother() == null || p1.getFather() == null) continue;
+      if (p1.getMother() == null || p1.getFather() == null) {
+        continue;
+      }
       ImmutableList.Builder<Person> listBuilder = new ImmutableList.Builder<Person>();
       for (Person p2 : pedigree.getMembers()) {
         if (p1.equals(p2)
             || !p1.getMother().equals(p2.getMother())
-            || !p1.getFather().equals(p2.getFather())) continue;
+            || !p1.getFather().equals(p2.getFather())) {
+          continue;
+        }
         listBuilder.add(p2);
       }
       mapBuilder.put(p1, listBuilder.build());

@@ -24,8 +24,11 @@ public final class CDSPosition {
   /** construct transcript position with selected coordinate system */
   public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
     this.transcript = transcript;
-    if (positionType == PositionType.ONE_BASED) this.pos = pos - 1;
-    else this.pos = pos;
+    if (positionType == PositionType.ONE_BASED) {
+      this.pos = pos - 1;
+    } else {
+      this.pos = pos;
+    }
   }
 
   /** @return the transcript that this position is relative to */
@@ -84,14 +87,26 @@ public final class CDSPosition {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     CDSPosition other = (CDSPosition) obj;
-    if (pos != other.pos) return false;
+    if (pos != other.pos) {
+      return false;
+    }
     if (transcript == null) {
-      if (other.transcript != null) return false;
-    } else if (!transcript.equals(other.transcript)) return false;
+      if (other.transcript != null) {
+        return false;
+      }
+    } else if (!transcript.equals(other.transcript)) {
+      return false;
+    }
     return true;
   }
 }

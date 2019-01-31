@@ -47,9 +47,11 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
 
     // Filter to calls compatible with mitochondrial inheritance
     Stream<GenotypeCalls> compatibleCalls;
-    if (this.pedigree.getNMembers() == 1)
+    if (this.pedigree.getNMembers() == 1) {
       compatibleCalls = mitoCalls.filter(this::isCompatibleSingleton);
-    else compatibleCalls = mitoCalls.filter(this::isCompatibleFamily);
+    } else {
+      compatibleCalls = mitoCalls.filter(this::isCompatibleFamily);
+    }
     return ImmutableList.copyOf(compatibleCalls.collect(Collectors.toList()));
   }
 
@@ -77,7 +79,6 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
    * doesnot currently assess heteroplasmy, but any amount // of called mutation will be assessed as
    * potentially disease causing here.
    *
-   * @param calls
    * @return true if no affected is homozygous wildtype
    */
   private boolean affectedsAreCompatible(GenotypeCalls calls) {
@@ -86,8 +87,11 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
     for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
       if (entry.getPerson().getDisease() == Disease.AFFECTED) {
         final Genotype gt = calls.getGenotypeForSample(entry.getPerson().getName());
-        if (gt.isHomRef()) return false;
-        else if (gt.isHomAlt() || gt.isHet()) numHetOrHomAlt += 1;
+        if (gt.isHomRef()) {
+          return false;
+        } else if (gt.isHomAlt() || gt.isHet()) {
+          numHetOrHomAlt += 1;
+        }
       }
     }
     return (numHetOrHomAlt > 0); // no affected is homozygous wildtype and at least one has a call
@@ -97,7 +101,9 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
     for (Person p : pedigree.getMembers()) {
       final String name = p.getName();
       final Genotype gt = calls.getGenotypeForSample(name);
-      if (p.getDisease() == Disease.UNAFFECTED && gt.isHomAlt()) return false;
+      if (p.getDisease() == Disease.UNAFFECTED && gt.isHomAlt()) {
+        return false;
+      }
     }
     return true; // no unaffected is homozygous alternative
   }
@@ -135,7 +141,9 @@ public class InheritanceCheckerMT extends AbstractMendelianChecker {
    *     a single individual in the pedigree
    */
   private boolean isCompatibleSingleton(GenotypeCalls calls) {
-    if (calls.getNSamples() == 0) return false; // no calls!
+    if (calls.getNSamples() == 0) {
+      return false; // no calls!
+    }
 
     return calls.getGenotypeBySampleNo(0).isHet() || calls.getGenotypeBySampleNo(0).isHomAlt();
   }

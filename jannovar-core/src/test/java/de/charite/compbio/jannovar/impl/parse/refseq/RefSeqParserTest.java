@@ -84,7 +84,9 @@ public class RefSeqParserTest {
     Assert.assertEquals(12, result.size());
 
     SortedSet<String> values = new TreeSet<String>();
-    for (TranscriptModel tx : result) values.add(tx.toString());
+    for (TranscriptModel tx : result) {
+      values.add(tx.toString());
+    }
 
     SortedSet<String> expected = new TreeSet<String>();
     expected.addAll(
@@ -124,7 +126,9 @@ public class RefSeqParserTest {
     Assert.assertEquals(6, result.size());
 
     SortedSet<String> values = new TreeSet<String>();
-    for (TranscriptModel tx : result) values.add(tx.toString());
+    for (TranscriptModel tx : result) {
+      values.add(tx.toString());
+    }
 
     SortedSet<String> expected = new TreeSet<String>();
     expected.addAll(

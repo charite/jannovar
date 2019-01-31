@@ -39,8 +39,11 @@ public class MultiAlleleProteinVariant extends ProteinVariant {
     parts.add(":p.");
     boolean first = true;
     for (ProteinChangeAllele allele : alleles) {
-      if (first) first = false;
-      else parts.add(";");
+      if (first) {
+        first = false;
+      } else {
+        parts.add(";");
+      }
       parts.add(allele.toHGVSString(code));
     }
     return Joiner.on("").join(parts);
@@ -61,13 +64,23 @@ public class MultiAlleleProteinVariant extends ProteinVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     MultiAlleleProteinVariant other = (MultiAlleleProteinVariant) obj;
     if (alleles == null) {
-      if (other.alleles != null) return false;
-    } else if (!alleles.equals(other.alleles)) return false;
+      if (other.alleles != null) {
+        return false;
+      }
+    } else if (!alleles.equals(other.alleles)) {
+      return false;
+    }
     return true;
   }
 }

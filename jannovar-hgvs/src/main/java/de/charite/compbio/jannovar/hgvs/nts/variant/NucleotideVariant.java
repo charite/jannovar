@@ -62,8 +62,11 @@ public abstract class NucleotideVariant extends HGVSVariant {
 
   /** @return the reference/transcript ID with version, if set */
   public String getRefIDWithVersion() {
-    if (transcriptVersion == NO_TRANSCRIPT_VERSION) return getRefID();
-    else return Joiner.on("").join(getRefID(), ".", transcriptVersion);
+    if (transcriptVersion == NO_TRANSCRIPT_VERSION) {
+      return getRefID();
+    } else {
+      return Joiner.on("").join(getRefID(), ".", transcriptVersion);
+    }
   }
 
   @Override
@@ -73,11 +76,14 @@ public abstract class NucleotideVariant extends HGVSVariant {
 
   /**
    * @return sequence name prefix, e.g. <code>"NM_000109.3(DMD)"</code>, or <code>"NM_000109.3"
-   *     </code>.
+   * </code>.
    */
   public String getSequenceNamePrefix() {
-    if (proteinID == null) return getRefIDWithVersion();
-    else return Joiner.on("").join(getRefIDWithVersion(), "(", proteinID, ")");
+    if (proteinID == null) {
+      return getRefIDWithVersion();
+    } else {
+      return Joiner.on("").join(getRefIDWithVersion(), "(", proteinID, ")");
+    }
   }
 
   @Override
@@ -106,18 +112,36 @@ public abstract class NucleotideVariant extends HGVSVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideVariant other = (NucleotideVariant) obj;
     if (proteinID == null) {
-      if (other.proteinID != null) return false;
-    } else if (!proteinID.equals(other.proteinID)) return false;
+      if (other.proteinID != null) {
+        return false;
+      }
+    } else if (!proteinID.equals(other.proteinID)) {
+      return false;
+    }
     if (refID == null) {
-      if (other.refID != null) return false;
-    } else if (!refID.equals(other.refID)) return false;
-    if (seqType != other.seqType) return false;
-    if (transcriptVersion != other.transcriptVersion) return false;
+      if (other.refID != null) {
+        return false;
+      }
+    } else if (!refID.equals(other.refID)) {
+      return false;
+    }
+    if (seqType != other.seqType) {
+      return false;
+    }
+    if (transcriptVersion != other.transcriptVersion) {
+      return false;
+    }
     return true;
   }
 }

@@ -145,7 +145,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
   /**
    * @return The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>
-   *     ENTREZ([0-9]+)</code> "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no
+   * ENTREZ([0-9]+)</code> "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no
    *     available gene ID.
    */
   public String getGeneID() {
@@ -193,14 +193,18 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
   /** @return the length of the coding exon sequence */
   public int cdsTranscriptLength() {
     int result = 0;
-    for (GenomeInterval region : exonRegions) result += region.intersection(cdsRegion).length();
+    for (GenomeInterval region : exonRegions) {
+      result += region.intersection(cdsRegion).length();
+    }
     return result;
   }
 
   /** @return the sum of the exon sequence lengths */
   public int transcriptLength() {
     int result = 0;
-    for (GenomeInterval region : exonRegions) result += region.length();
+    for (GenomeInterval region : exonRegions) {
+      result += region.length();
+    }
     return result;
   }
 
@@ -226,7 +230,9 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
     Strand strand = txRegion.getStrand();
     assert (txRegion.getStrand() == strand);
     assert (cdsRegion.getStrand() == strand);
-    for (GenomeInterval region : exonRegions) assert (region.getStrand() == strand);
+    for (GenomeInterval region : exonRegions) {
+      assert (region.getStrand() == strand);
+    }
   }
 
   @Override
@@ -251,32 +257,68 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     TranscriptModel other = (TranscriptModel) obj;
     if (accession == null) {
-      if (other.accession != null) return false;
-    } else if (!accession.equals(other.accession)) return false;
+      if (other.accession != null) {
+        return false;
+      }
+    } else if (!accession.equals(other.accession)) {
+      return false;
+    }
     if (cdsRegion == null) {
-      if (other.cdsRegion != null) return false;
-    } else if (!cdsRegion.equals(other.cdsRegion)) return false;
+      if (other.cdsRegion != null) {
+        return false;
+      }
+    } else if (!cdsRegion.equals(other.cdsRegion)) {
+      return false;
+    }
     if (exonRegions == null) {
-      if (other.exonRegions != null) return false;
-    } else if (!exonRegions.equals(other.exonRegions)) return false;
+      if (other.exonRegions != null) {
+        return false;
+      }
+    } else if (!exonRegions.equals(other.exonRegions)) {
+      return false;
+    }
     if (geneID == null) {
-      if (other.geneID != null) return false;
-    } else if (!geneID.equals(other.geneID)) return false;
+      if (other.geneID != null) {
+        return false;
+      }
+    } else if (!geneID.equals(other.geneID)) {
+      return false;
+    }
     if (geneSymbol == null) {
-      if (other.geneSymbol != null) return false;
-    } else if (!geneSymbol.equals(other.geneSymbol)) return false;
+      if (other.geneSymbol != null) {
+        return false;
+      }
+    } else if (!geneSymbol.equals(other.geneSymbol)) {
+      return false;
+    }
     if (sequence == null) {
-      if (other.sequence != null) return false;
-    } else if (!sequence.equals(other.sequence)) return false;
-    if (transcriptSupportLevel != other.transcriptSupportLevel) return false;
+      if (other.sequence != null) {
+        return false;
+      }
+    } else if (!sequence.equals(other.sequence)) {
+      return false;
+    }
+    if (transcriptSupportLevel != other.transcriptSupportLevel) {
+      return false;
+    }
     if (txRegion == null) {
-      if (other.txRegion != null) return false;
-    } else if (!txRegion.equals(other.txRegion)) return false;
+      if (other.txRegion != null) {
+        return false;
+      }
+    } else if (!txRegion.equals(other.txRegion)) {
+      return false;
+    }
     return true;
   }
 
@@ -284,11 +326,15 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
     int result = -1;
     if (geneID != null && o.geneID != null) {
       result = geneID.compareTo(o.geneID);
-      if (result != 0) return result;
+      if (result != 0) {
+        return result;
+      }
     }
 
     result = geneSymbol.compareTo(o.geneSymbol);
-    if (result != 0) return result;
+    if (result != 0) {
+      return result;
+    }
 
     return accession.compareTo(o.accession);
   }

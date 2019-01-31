@@ -82,13 +82,16 @@ public class ProteinExtension extends ProteinChange {
   @Override
   public String toHGVSString(AminoAcidCode code) {
     String targetAA = this.targetAA;
-    if (code == AminoAcidCode.THREE_LETTER) targetAA = Translator.getTranslator().toLong(targetAA);
-    if (isNoTerminalExtension())
+    if (code == AminoAcidCode.THREE_LETTER) {
+      targetAA = Translator.getTranslator().toLong(targetAA);
+    }
+    if (isNoTerminalExtension()) {
       return wrapIfOnlyPredicted(
           Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*?"));
-    else
+    } else {
       return wrapIfOnlyPredicted(
           Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*", shift));
+    }
   }
 
   @Override
@@ -116,17 +119,33 @@ public class ProteinExtension extends ProteinChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ProteinExtension other = (ProteinExtension) obj;
     if (position == null) {
-      if (other.position != null) return false;
-    } else if (!position.equals(other.position)) return false;
-    if (shift != other.shift) return false;
+      if (other.position != null) {
+        return false;
+      }
+    } else if (!position.equals(other.position)) {
+      return false;
+    }
+    if (shift != other.shift) {
+      return false;
+    }
     if (targetAA == null) {
-      if (other.targetAA != null) return false;
-    } else if (!targetAA.equals(other.targetAA)) return false;
+      if (other.targetAA != null) {
+        return false;
+      }
+    } else if (!targetAA.equals(other.targetAA)) {
+      return false;
+    }
     return true;
   }
 

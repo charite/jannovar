@@ -57,6 +57,7 @@ public final class VariantAnnotator {
   }
 
   // TODO(holtgrem): Remove this?
+
   /**
    * Convenience function for obtaining an {@link VariantAnnotations} from genome change in
    * primitive types.
@@ -75,8 +76,9 @@ public final class VariantAnnotator {
       int chr, int position, String ref, String alt, PositionType posType)
       throws AnnotationException {
     // Get chromosome by id.
-    if (chromosomeMap.get(chr) == null)
+    if (chromosomeMap.get(chr) == null) {
       throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
+    }
 
     // Build the GenomeChange to build annotation for.
     GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
@@ -100,7 +102,9 @@ public final class VariantAnnotator {
     // Short-circuit in the case of symbolic changes/alleles. These could be SVs, large
     // duplications, etc., that are
     // described as shortcuts in the VCF file. We cannot annotate these yet.
-    if (change.isSymbolic()) return VariantAnnotations.buildEmptyList(change);
+    if (change.isSymbolic()) {
+      return VariantAnnotations.buildEmptyList(change);
+    }
 
     // Get genomic change interval and reset the factory.
     final GenomeInterval changeInterval = change.getGenomeInterval();
@@ -108,13 +112,14 @@ public final class VariantAnnotator {
     // Get the TranscriptModel objects that overlap with changeInterval.
     final Chromosome chr = chromosomeMap.get(change.getChr());
     IntervalArray<TranscriptModel>.QueryResult qr;
-    if (changeInterval.length() == 0)
+    if (changeInterval.length() == 0) {
       qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.getBeginPos());
-    else
+    } else {
       qr =
           chr.getTMIntervalTree()
               .findOverlappingWithInterval(
                   changeInterval.getBeginPos(), changeInterval.getEndPos());
+    }
     ArrayList<TranscriptModel> candidateTranscripts =
         new ArrayList<TranscriptModel>(qr.getEntries());
 
@@ -127,17 +132,24 @@ public final class VariantAnnotator {
     boolean isStructuralVariant =
         (change.getRef().length() >= 1000 || change.getAlt().length() >= 1000);
     if (candidateTranscripts.isEmpty()) {
-      if (isStructuralVariant) buildSVAnnotation(annotations, change, null);
-      else buildNonSVAnnotation(annotations, change, qr.getLeft(), qr.getRight());
+      if (isStructuralVariant) {
+        buildSVAnnotation(annotations, change, null);
+      } else {
+        buildNonSVAnnotation(annotations, change, qr.getLeft(), qr.getRight());
+      }
       return new VariantAnnotations(change, annotations);
     }
 
     // If we reach here, then there is at least one transcript that overlaps with the query. Iterate
     // over these
     // transcripts and collect annotations for each (they are collected in annovarFactory).
-    for (TranscriptModel tm : candidateTranscripts)
-      if (isStructuralVariant) buildSVAnnotation(annotations, change, tm);
-      else buildNonSVAnnotation(annotations, change, tm);
+    for (TranscriptModel tm : candidateTranscripts) {
+      if (isStructuralVariant) {
+        buildSVAnnotation(annotations, change, tm);
+      } else {
+        buildNonSVAnnotation(annotations, change, tm);
+      }
+    }
 
     return new VariantAnnotations(change, annotations);
   }
@@ -162,6 +174,8 @@ public final class VariantAnnotator {
       List<Annotation> annotations, GenomeVariant change, TranscriptModel transcript)
       throws InvalidGenomeVariant {
     if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
-    annotations.add(new AnnotationBuilderDispatcher(transcript, change, options).build());
+    {
+      annotations.add(new AnnotationBuilderDispatcher(transcript, change, options).build());
+    }
   }
 }

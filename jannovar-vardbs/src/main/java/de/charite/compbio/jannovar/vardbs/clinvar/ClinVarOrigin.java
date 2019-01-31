@@ -66,19 +66,43 @@ public enum ClinVarOrigin {
   }
 
   public static List<ClinVarOrigin> fromInteger(int i) {
-    if (i == 0) return Lists.newArrayList(UNKNOWN);
+    if (i == 0) {
+      return Lists.newArrayList(UNKNOWN);
+    }
     List<ClinVarOrigin> result = new ArrayList<>();
-    if ((i & 1) != 0) result.add(GERMLINE);
-    if ((i & 2) != 0) result.add(SOMATIC);
-    if ((i & 4) != 0) result.add(INHERITED);
-    if ((i & 8) != 0) result.add(PATERNAL);
-    if ((i & 16) != 0) result.add(MATERNAL);
-    if ((i & 32) != 0) result.add(DE_NOVO);
-    if ((i & 64) != 0) result.add(BIPARENTAL);
-    if ((i & 128) != 0) result.add(UNIPARENTAL);
-    if ((i & 256) != 0) result.add(NOT_TESTED);
-    if ((i & 512) != 0) result.add(TESTED_INCONCLUSIVE);
-    if ((i & 1073741824) != 0) result.add(OTHER);
+    if ((i & 1) != 0) {
+      result.add(GERMLINE);
+    }
+    if ((i & 2) != 0) {
+      result.add(SOMATIC);
+    }
+    if ((i & 4) != 0) {
+      result.add(INHERITED);
+    }
+    if ((i & 8) != 0) {
+      result.add(PATERNAL);
+    }
+    if ((i & 16) != 0) {
+      result.add(MATERNAL);
+    }
+    if ((i & 32) != 0) {
+      result.add(DE_NOVO);
+    }
+    if ((i & 64) != 0) {
+      result.add(BIPARENTAL);
+    }
+    if ((i & 128) != 0) {
+      result.add(UNIPARENTAL);
+    }
+    if ((i & 256) != 0) {
+      result.add(NOT_TESTED);
+    }
+    if ((i & 512) != 0) {
+      result.add(TESTED_INCONCLUSIVE);
+    }
+    if ((i & 1073741824) != 0) {
+      result.add(OTHER);
+    }
     return result;
   }
 }

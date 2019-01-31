@@ -16,6 +16,10 @@ public class NucleotideParsingTest extends HGVSParsingTestBase {
   public void testNucleotideSingleVarSubstitution() {
     String[] types = {"c.", "m.", "n.", "g.", "r."};
     String[] changes = {"76A>C", "-14G>C", "88+1G>T", "89-2A>C", "*46T>C"};
-    for (String t : types) for (String s : changes) parseString(PREFIX + t + s);
+    for (String t : types) {
+      for (String s : changes) {
+        parseString(PREFIX + t + s);
+      }
+    }
   }
 }

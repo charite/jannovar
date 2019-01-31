@@ -27,8 +27,9 @@ public class ClinVarVCFHeaderExtender extends VCFHeaderExtender {
   public void addHeaders(VCFHeader header, String prefix) {
     addHeaders(header, prefix, "", "");
     final String note = " (requiring no genotype match, only position overlap)";
-    if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching())
+    if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
       addHeaders(header, prefix, "OVL_", note);
+    }
   }
 
   private void addHeaders(VCFHeader header, String prefix, String infix, String note) {

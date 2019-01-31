@@ -45,7 +45,9 @@ public final class ProgressBar {
 
   /** print progress up to position <code>pos</code>, if {@link #doPrint} */
   public void print(long pos) {
-    if (!doPrint) return;
+    if (!doPrint) {
+      return;
+    }
     int percent = (int) Math.ceil(100.0 * (pos - this.min) / (this.max - this.min));
     StringBuilder bar = new StringBuilder("[");
 
@@ -61,6 +63,8 @@ public final class ProgressBar {
 
     bar.append("]   " + percent + "%     ");
     System.err.print("\r" + bar.toString());
-    if (pos == max) System.err.println();
+    if (pos == max) {
+      System.err.println();
+    }
   }
 }

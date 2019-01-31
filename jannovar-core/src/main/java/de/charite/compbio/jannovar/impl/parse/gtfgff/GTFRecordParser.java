@@ -75,7 +75,9 @@ public class GTFRecordParser extends FeatureRecordParser {
       }
     }
 
-    if (key.length() > 0) result.put(key.toString(), value.toString());
+    if (key.length() > 0) {
+      result.put(key.toString(), value.toString());
+    }
 
     return result;
   }

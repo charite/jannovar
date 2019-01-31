@@ -81,11 +81,15 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
     final int shift = (this.basePos >= 0) ? 1 : 0;
     final String prefix = downstreamOfCDS ? "*" : "";
 
-    if (offset == 0) return prefix + Integer.toString(this.basePos + shift);
-    else if (offset > 0) return prefix + Joiner.on("").join(this.basePos + shift, "+", offset);
-    else
-      // if (offset < 0)
+    if (offset == 0) {
+      return prefix + Integer.toString(this.basePos + shift);
+    } else if (offset > 0) {
+      return prefix + Joiner.on("").join(this.basePos + shift, "+", offset);
+    } else
+    // if (offset < 0)
+    {
       return prefix + Joiner.on("").join(this.basePos + shift, "-", -offset);
+    }
   }
 
   @Override
@@ -116,13 +120,25 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotidePointLocation other = (NucleotidePointLocation) obj;
-    if (basePos != other.basePos) return false;
-    if (downstreamOfCDS != other.downstreamOfCDS) return false;
-    if (offset != other.offset) return false;
+    if (basePos != other.basePos) {
+      return false;
+    }
+    if (downstreamOfCDS != other.downstreamOfCDS) {
+      return false;
+    }
+    if (offset != other.offset) {
+      return false;
+    }
     return true;
   }
 }

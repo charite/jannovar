@@ -79,23 +79,47 @@ public final class DBSNPInfo {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     DBSNPInfo other = (DBSNPInfo) obj;
-    if (dbSNPBuildID != other.dbSNPBuildID) return false;
+    if (dbSNPBuildID != other.dbSNPBuildID) {
+      return false;
+    }
     if (fileDate == null) {
-      if (other.fileDate != null) return false;
-    } else if (!fileDate.equals(other.fileDate)) return false;
+      if (other.fileDate != null) {
+        return false;
+      }
+    } else if (!fileDate.equals(other.fileDate)) {
+      return false;
+    }
     if (phasing == null) {
-      if (other.phasing != null) return false;
-    } else if (!phasing.equals(other.phasing)) return false;
+      if (other.phasing != null) {
+        return false;
+      }
+    } else if (!phasing.equals(other.phasing)) {
+      return false;
+    }
     if (reference == null) {
-      if (other.reference != null) return false;
-    } else if (!reference.equals(other.reference)) return false;
+      if (other.reference != null) {
+        return false;
+      }
+    } else if (!reference.equals(other.reference)) {
+      return false;
+    }
     if (source == null) {
-      if (other.source != null) return false;
-    } else if (!source.equals(other.source)) return false;
+      if (other.source != null) {
+        return false;
+      }
+    } else if (!source.equals(other.source)) {
+      return false;
+    }
     return true;
   }
 }

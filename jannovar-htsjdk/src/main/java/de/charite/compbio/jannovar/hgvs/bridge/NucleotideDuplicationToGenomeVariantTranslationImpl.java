@@ -46,16 +46,18 @@ class NucleotideDuplicationToGenomeVariantTranslationImpl
     if (duplicatedNTs == null) {
       duplicatedNTs = getGenomeSeq(tm.getStrand(), gItv);
       if (duplicatedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-          && duplicatedNTDesc.length() != duplicatedNTs.length())
+          && duplicatedNTDesc.length() != duplicatedNTs.length()) {
         warningMsg =
             "Invalid nucleotide count in "
                 + ntDup.toHGVSString()
                 + ", expected "
                 + duplicatedNTs.length();
+      }
     } else {
       final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-      if (!refSeq.equals(duplicatedNTs))
+      if (!refSeq.equals(duplicatedNTs)) {
         warningMsg = "Invalid nucleotides in " + ntDup.toHGVSString() + ", expected " + refSeq;
+      }
       duplicatedNTs = refSeq;
     }
 
@@ -66,7 +68,10 @@ class NucleotideDuplicationToGenomeVariantTranslationImpl
                 duplicatedNTs,
                 tm.getStrand())
             .withStrand(Strand.FWD);
-    if (warningMsg != null) return ResultWithWarnings.construct(result, warningMsg);
-    else return ResultWithWarnings.construct(result);
+    if (warningMsg != null) {
+      return ResultWithWarnings.construct(result, warningMsg);
+    } else {
+      return ResultWithWarnings.construct(result);
+    }
   }
 }

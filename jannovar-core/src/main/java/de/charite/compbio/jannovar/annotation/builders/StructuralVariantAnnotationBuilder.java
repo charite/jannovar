@@ -53,11 +53,17 @@ public final class StructuralVariantAnnotationBuilder {
 
     // Build reverse-complement of alt string.
     StringBuilder altRC = new StringBuilder(alt).reverse();
-    for (int i = 0; i < altRC.length(); ++i)
-      if (altRC.charAt(i) == 'A') altRC.setCharAt(i, 'T');
-      else if (altRC.charAt(i) == 'T') altRC.setCharAt(i, 'A');
-      else if (altRC.charAt(i) == 'C') altRC.setCharAt(i, 'G');
-      else if (altRC.charAt(i) == 'G') altRC.setCharAt(i, 'C');
+    for (int i = 0; i < altRC.length(); ++i) {
+      if (altRC.charAt(i) == 'A') {
+        altRC.setCharAt(i, 'T');
+      } else if (altRC.charAt(i) == 'T') {
+        altRC.setCharAt(i, 'A');
+      } else if (altRC.charAt(i) == 'C') {
+        altRC.setCharAt(i, 'G');
+      } else if (altRC.charAt(i) == 'G') {
+        altRC.setCharAt(i, 'C');
+      }
+    }
 
     // chromosome/genome level change
     NucleotideChange ntChange = new GenomicNucleotideChangeBuilder(change).build();

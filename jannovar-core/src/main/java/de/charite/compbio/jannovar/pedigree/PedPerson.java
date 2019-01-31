@@ -121,7 +121,7 @@ public final class PedPerson {
 
   /**
    * @return <code>true</code> if the person is a founder (both mother and father are <code>"0"
-   *     </code>)
+   * </code>)
    */
   public boolean isFounder() {
     return ("0".equals(father) && "0".equals(mother));
@@ -162,26 +162,54 @@ public final class PedPerson {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     PedPerson other = (PedPerson) obj;
-    if (disease != other.disease) return false;
+    if (disease != other.disease) {
+      return false;
+    }
     if (extraFields == null) {
-      if (other.extraFields != null) return false;
-    } else if (!extraFields.equals(other.extraFields)) return false;
+      if (other.extraFields != null) {
+        return false;
+      }
+    } else if (!extraFields.equals(other.extraFields)) {
+      return false;
+    }
     if (father == null) {
-      if (other.father != null) return false;
-    } else if (!father.equals(other.father)) return false;
+      if (other.father != null) {
+        return false;
+      }
+    } else if (!father.equals(other.father)) {
+      return false;
+    }
     if (mother == null) {
-      if (other.mother != null) return false;
-    } else if (!mother.equals(other.mother)) return false;
+      if (other.mother != null) {
+        return false;
+      }
+    } else if (!mother.equals(other.mother)) {
+      return false;
+    }
     if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
     if (pedigree == null) {
-      if (other.pedigree != null) return false;
-    } else if (!pedigree.equals(other.pedigree)) return false;
+      if (other.pedigree != null) {
+        return false;
+      }
+    } else if (!pedigree.equals(other.pedigree)) {
+      return false;
+    }
     return sex == other.sex;
   }
 }

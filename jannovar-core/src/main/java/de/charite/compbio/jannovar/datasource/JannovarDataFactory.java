@@ -156,7 +156,9 @@ public abstract class JannovarDataFactory {
     if (url != null && url.getHost() != null && !url.getHost().equals("")) {
       proxyOptions.host = url.getHost();
       proxyOptions.port = url.getPort();
-      if (proxyOptions.port == -1) proxyOptions.port = 80;
+      if (proxyOptions.port == -1) {
+        proxyOptions.port = 80;
+      }
       String userInfo = url.getUserInfo();
       if (userInfo != null && userInfo.indexOf(':') != -1) {
         String[] userPass = userInfo.split(":", 2);
@@ -171,7 +173,7 @@ public abstract class JannovarDataFactory {
    * @param targetDir path where the downloaded files are
    * @param geneIdentifiers List of gene identifiers to extract data for
    * @return list of {@link TranscriptModel} objects that are parsed from the files in <code>
-   *     targetDir</code>
+   * targetDir</code>
    * @throws TranscriptParseException on problems with parsing the transcript database
    */
   protected abstract ImmutableList<TranscriptModel> parseTranscripts(

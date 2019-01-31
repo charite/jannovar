@@ -94,23 +94,41 @@ public class Interval<T> implements java.io.Serializable, Comparable<Interval<T>
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     @SuppressWarnings("rawtypes")
     Interval other = (Interval) obj;
-    if (begin != other.begin) return false;
-    if (end != other.end) return false;
-    if (maxEnd != other.maxEnd) return false;
+    if (begin != other.begin) {
+      return false;
+    }
+    if (end != other.end) {
+      return false;
+    }
+    if (maxEnd != other.maxEnd) {
+      return false;
+    }
     if (value == null) {
-      if (other.value != null) return false;
-    } else if (!value.equals(other.value)) return false;
+      if (other.value != null) {
+        return false;
+      }
+    } else if (!value.equals(other.value)) {
+      return false;
+    }
     return true;
   }
 
   public int compareTo(Interval<T> o) {
     final int result = (begin - o.begin);
-    if (result == 0) return (end - o.end);
+    if (result == 0) {
+      return (end - o.end);
+    }
     return result;
   }
 

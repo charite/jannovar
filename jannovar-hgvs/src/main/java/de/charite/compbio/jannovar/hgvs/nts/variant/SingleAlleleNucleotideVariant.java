@@ -94,9 +94,10 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 
   @Override
   public String toHGVSString() {
-    if (hasOnlyOneChange())
+    if (hasOnlyOneChange()) {
       return Joiner.on("")
           .join(getSequenceNamePrefix(), ":", seqType.getPrefix(), getChange().toHGVSString());
+    }
 
     final String sep = allele.getVarConfig().toHGVSSeparator();
 
@@ -110,8 +111,11 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
       parts.add("[");
       boolean first = true;
       for (NucleotideChange change : allele) {
-        if (first) first = false;
-        else parts.add(sep);
+        if (first) {
+          first = false;
+        } else {
+          parts.add(sep);
+        }
         parts.add(change.toHGVSString());
       }
       parts.add("]");
@@ -129,13 +133,23 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!super.equals(obj)) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj)) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     SingleAlleleNucleotideVariant other = (SingleAlleleNucleotideVariant) obj;
     if (allele == null) {
-      if (other.allele != null) return false;
-    } else if (!allele.equals(other.allele)) return false;
+      if (other.allele != null) {
+        return false;
+      }
+    } else if (!allele.equals(other.allele)) {
+      return false;
+    }
     return true;
   }
 }

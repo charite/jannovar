@@ -76,25 +76,39 @@ public class JannovarBaseOptions {
    * @throws CommandLineParsingException on problems parsing a given URL
    */
   public void setFromArgs(Namespace args) throws CommandLineParsingException {
-    if (args.getBoolean("verbose")) this.verbosity = 2;
-    if (args.getBoolean("very_verbose")) this.verbosity = 3;
+    if (args.getBoolean("verbose")) {
+      this.verbosity = 2;
+    }
+    if (args.getBoolean("very_verbose")) {
+      this.verbosity = 3;
+    }
 
     Map<String, String> env = System.getenv();
 
     try {
-      if (args.getString("http_proxy") != null)
+      if (args.getString("http_proxy") != null) {
         this.httpProxy = new URL(args.getString("http_proxy"));
-      else if (env.get("HTTP_PROXY") != null) this.httpProxy = new URL(env.get("HTTP_PROXY"));
-      else if (env.get("http_proxy") != null) this.httpProxy = new URL(env.get("http_proxy"));
+      } else if (env.get("HTTP_PROXY") != null) {
+        this.httpProxy = new URL(env.get("HTTP_PROXY"));
+      } else if (env.get("http_proxy") != null) {
+        this.httpProxy = new URL(env.get("http_proxy"));
+      }
 
-      if (args.getString("https_proxy") != null)
+      if (args.getString("https_proxy") != null) {
         this.httpsProxy = new URL(args.getString("https_proxy"));
-      else if (env.get("HTTPS_PROXY") != null) this.httpsProxy = new URL(env.get("HTTPS_PROXY"));
-      else if (env.get("https_proxy") != null) this.httpsProxy = new URL(env.get("https_proxy"));
+      } else if (env.get("HTTPS_PROXY") != null) {
+        this.httpsProxy = new URL(env.get("HTTPS_PROXY"));
+      } else if (env.get("https_proxy") != null) {
+        this.httpsProxy = new URL(env.get("https_proxy"));
+      }
 
-      if (args.getString("ftp_proxy") != null) this.ftpProxy = new URL(args.getString("ftp_proxy"));
-      else if (env.get("FTP_PROXY") != null) this.ftpProxy = new URL(env.get("FTP_PROXY"));
-      else if (env.get("ftp_proxy") != null) this.ftpProxy = new URL(env.get("ftp_proxy"));
+      if (args.getString("ftp_proxy") != null) {
+        this.ftpProxy = new URL(args.getString("ftp_proxy"));
+      } else if (env.get("FTP_PROXY") != null) {
+        this.ftpProxy = new URL(env.get("FTP_PROXY"));
+      } else if (env.get("ftp_proxy") != null) {
+        this.ftpProxy = new URL(env.get("ftp_proxy"));
+      }
     } catch (MalformedURLException e) {
       throw new CommandLineParsingException("Problem parsing URL", e);
     }

@@ -37,7 +37,9 @@ final class VariantDataCorrector {
     while (idx < ref.length() && idx < alt.length() && ref.charAt(idx) == alt.charAt(idx)) {
       idx++;
     }
-    if (idx == ref.length() && idx == alt.length() && idx > 0) idx -= 1;
+    if (idx == ref.length() && idx == alt.length() && idx > 0) {
+      idx -= 1;
+    }
     position += idx;
     ref = ref.substring(idx);
     alt = alt.substring(idx);
@@ -48,7 +50,9 @@ final class VariantDataCorrector {
     while (xdi > 0 && xdi - diff > 0 && ref.charAt(xdi - 1) == alt.charAt(xdi - 1 - diff)) {
       xdi--;
     }
-    if (xdi == 0 && ref.length() > 0 && alt.length() > 0) xdi += 1;
+    if (xdi == 0 && ref.length() > 0 && alt.length() > 0) {
+      xdi += 1;
+    }
     ref = xdi == 0 ? "" : ref.substring(0, xdi);
     alt = xdi - diff == 0 ? "" : alt.substring(0, xdi - diff);
   }

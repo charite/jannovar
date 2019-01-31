@@ -30,15 +30,25 @@ public class NucleotideMiscChange extends NucleotideChange {
    * @return resulting {@link NucleotideMiscChange}
    */
   public static NucleotideMiscChange buildFromString(String str) {
-    if (str.equals("(?)")) return build(false, NucleotideMiscChangeType.SAME_AS_DNA);
-    else if (str.equals("?")) return build(false, NucleotideMiscChangeType.UNKNOWN_EFFECT);
-    else if (str.equals("(spl?)")) return build(true, NucleotideMiscChangeType.SPLICING_AFFECTED);
-    else if (str.equals("spl?")) return build(false, NucleotideMiscChangeType.SPLICING_AFFECTED);
-    else if (str.equals("(=)")) return build(true, NucleotideMiscChangeType.NO_CHANGE);
-    else if (str.equals("=")) return build(false, NucleotideMiscChangeType.NO_CHANGE);
-    else if (str.equals("(0)")) return build(true, NucleotideMiscChangeType.NO_RNA);
-    else if (str.equals("0")) return build(false, NucleotideMiscChangeType.NO_RNA);
-    else throw new IllegalArgumentException("Invalid nucleotide misc change string " + str);
+    if (str.equals("(?)")) {
+      return build(false, NucleotideMiscChangeType.SAME_AS_DNA);
+    } else if (str.equals("?")) {
+      return build(false, NucleotideMiscChangeType.UNKNOWN_EFFECT);
+    } else if (str.equals("(spl?)")) {
+      return build(true, NucleotideMiscChangeType.SPLICING_AFFECTED);
+    } else if (str.equals("spl?")) {
+      return build(false, NucleotideMiscChangeType.SPLICING_AFFECTED);
+    } else if (str.equals("(=)")) {
+      return build(true, NucleotideMiscChangeType.NO_CHANGE);
+    } else if (str.equals("=")) {
+      return build(false, NucleotideMiscChangeType.NO_CHANGE);
+    } else if (str.equals("(0)")) {
+      return build(true, NucleotideMiscChangeType.NO_RNA);
+    } else if (str.equals("0")) {
+      return build(false, NucleotideMiscChangeType.NO_RNA);
+    } else {
+      throw new IllegalArgumentException("Invalid nucleotide misc change string " + str);
+    }
   }
 
   /**
@@ -77,11 +87,19 @@ public class NucleotideMiscChange extends NucleotideChange {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     NucleotideMiscChange other = (NucleotideMiscChange) obj;
-    if (changeType != other.changeType) return false;
+    if (changeType != other.changeType) {
+      return false;
+    }
     return true;
   }
 }

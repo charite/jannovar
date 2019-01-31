@@ -90,23 +90,47 @@ public class ClinVarAnnotation {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
     ClinVarAnnotation other = (ClinVarAnnotation) obj;
-    if (alleleMapping != other.alleleMapping) return false;
+    if (alleleMapping != other.alleleMapping) {
+      return false;
+    }
     if (diseaseInfos == null) {
-      if (other.diseaseInfos != null) return false;
-    } else if (!diseaseInfos.equals(other.diseaseInfos)) return false;
+      if (other.diseaseInfos != null) {
+        return false;
+      }
+    } else if (!diseaseInfos.equals(other.diseaseInfos)) {
+      return false;
+    }
     if (hgvsVariant == null) {
-      if (other.hgvsVariant != null) return false;
-    } else if (!hgvsVariant.equals(other.hgvsVariant)) return false;
+      if (other.hgvsVariant != null) {
+        return false;
+      }
+    } else if (!hgvsVariant.equals(other.hgvsVariant)) {
+      return false;
+    }
     if (origin == null) {
-      if (other.origin != null) return false;
-    } else if (!origin.equals(other.origin)) return false;
+      if (other.origin != null) {
+        return false;
+      }
+    } else if (!origin.equals(other.origin)) {
+      return false;
+    }
     if (sourceInfos == null) {
-      if (other.sourceInfos != null) return false;
-    } else if (!sourceInfos.equals(other.sourceInfos)) return false;
+      if (other.sourceInfos != null) {
+        return false;
+      }
+    } else if (!sourceInfos.equals(other.sourceInfos)) {
+      return false;
+    }
     return true;
   }
 }

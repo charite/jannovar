@@ -41,9 +41,10 @@ class NucleotideIndelToGenomeVariantTranslationImpl
     final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
 
     // perform sanity check of inserted nucleotides
-    if (insertedNTDesc.getNucleotides() == null)
+    if (insertedNTDesc.getNucleotides() == null) {
       throw new CannotTranslateHGVSVariant(
           "Nucleotides must be given but were not in " + ntIndel.toHGVSString());
+    }
 
     // obtain deleted sequence, setting inconsistency warnings into warningMsg, if any
     String warningMsg = null;
@@ -51,17 +52,19 @@ class NucleotideIndelToGenomeVariantTranslationImpl
     if (deletedNTs == null) {
       deletedNTs = getGenomeSeq(tm.getStrand(), gItv);
       if (deletedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-          && deletedNTDesc.length() != deletedNTs.length())
+          && deletedNTDesc.length() != deletedNTs.length()) {
         warningMsg =
             "Invalid reference nucleotide count in "
                 + ntIndel.toHGVSString()
                 + ", expected "
                 + deletedNTs.length();
+      }
     } else {
       final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-      if (!refSeq.equals(deletedNTs))
+      if (!refSeq.equals(deletedNTs)) {
         warningMsg =
             "Invalid reference nucleotides in " + ntIndel.toHGVSString() + ", expected " + refSeq;
+      }
       deletedNTs = refSeq;
     }
 
@@ -72,7 +75,10 @@ class NucleotideIndelToGenomeVariantTranslationImpl
                 insertedNTDesc.getNucleotides(),
                 tm.getStrand())
             .withStrand(Strand.FWD);
-    if (warningMsg != null) return ResultWithWarnings.construct(result, warningMsg);
-    else return ResultWithWarnings.construct(result);
+    if (warningMsg != null) {
+      return ResultWithWarnings.construct(result, warningMsg);
+    } else {
+      return ResultWithWarnings.construct(result);
+    }
   }
 }

@@ -27,7 +27,9 @@ public class PedFileContents {
     this.individuals = individuals;
 
     ImmutableMap.Builder<String, PedPerson> builder = new ImmutableMap.Builder<String, PedPerson>();
-    for (PedPerson p : individuals) builder.put(p.getName(), p);
+    for (PedPerson p : individuals) {
+      builder.put(p.getName(), p);
+    }
     this.nameToPerson = builder.build();
   }
 

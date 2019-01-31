@@ -47,7 +47,9 @@ public final class FASTAParser {
   public FASTAParser(InputStream stream) throws IOException {
     this.reader = new BufferedReader(new InputStreamReader(openStream(stream)));
     this.lastLine = reader.readLine(); // read first line
-    if (this.lastLine != null) this.lastLine = this.lastLine.trim();
+    if (this.lastLine != null) {
+      this.lastLine = this.lastLine.trim();
+    }
   }
 
   /**
@@ -58,18 +60,24 @@ public final class FASTAParser {
    * @throws IOException on problems with reading the GFF files
    */
   public FASTARecord next() throws IOException {
-    if (lastLine == null) return null;
+    if (lastLine == null) {
+      return null;
+    }
 
     assert lastLine.startsWith(">");
 
     while (true) {
       // add current line to buffer
-      if (lastLine != null && !lastLine.isEmpty()) recordBuffer.add(lastLine);
+      if (lastLine != null && !lastLine.isEmpty()) {
+        recordBuffer.add(lastLine);
+      }
 
       // read next line, skipping empty lines
       lastLine = reader.readLine();
 
-      if (lastLine == null || lastLine.startsWith(">")) break;
+      if (lastLine == null || lastLine.startsWith(">")) {
+        break;
+      }
     }
 
     return buildRecord();
@@ -77,7 +85,9 @@ public final class FASTAParser {
 
   /** Build record from {@link #recordBuffer} */
   private FASTARecord buildRecord() {
-    if (recordBuffer.isEmpty()) return null;
+    if (recordBuffer.isEmpty()) {
+      return null;
+    }
 
     final String firstLine = recordBuffer.get(0);
     String[] tokens = firstLine.substring(1).split("\\s", 2);
@@ -101,7 +111,10 @@ public final class FASTAParser {
     byte[] signature = new byte[2];
     pb.read(signature);
     pb.unread(signature);
-    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) return new GZIPInputStream(pb);
-    else return pb;
+    if (signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b) {
+      return new GZIPInputStream(pb);
+    } else {
+      return pb;
+    }
   }
 }

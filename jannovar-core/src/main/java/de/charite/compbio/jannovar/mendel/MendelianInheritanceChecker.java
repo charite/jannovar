@@ -130,7 +130,7 @@ public final class MendelianInheritanceChecker {
    * @param calls List of {@link GenotypeCalls} to filter
    * @param mode {@link ModeOfInheritance} to check for
    * @return List of {@link GenotypeCalls} from <code>calls</code> that are compatible with <code>
-   *     mode</code>
+   * mode</code>
    * @throws IncompatiblePedigreeException if the individuals in <code>calls</code> do not fit to
    *     the pedigree
    */
@@ -138,8 +138,9 @@ public final class MendelianInheritanceChecker {
       Collection<GenotypeCalls> calls, ModeOfInheritance mode)
       throws IncompatiblePedigreeException {
     // Check for compatibility of calls with pedigree
-    if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c)))
+    if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c))) {
       throw new IncompatiblePedigreeException("GenotypeCalls not compatible with pedigree");
+    }
     // Filter down to the compatible records
     ImmutableSet<GenotypeCalls> calls1;
     ImmutableSet<GenotypeCalls> calls2;
@@ -159,7 +160,11 @@ public final class MendelianInheritanceChecker {
                     .get(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_COMP_HET)
                     .filterCompatibleRecords(calls));
         builder = new ImmutableList.Builder<>();
-        for (GenotypeCalls c : calls) if (calls1.contains(c) || calls2.contains(c)) builder.add(c);
+        for (GenotypeCalls c : calls) {
+          if (calls1.contains(c) || calls2.contains(c)) {
+            builder.add(c);
+          }
+        }
         return builder.build();
       case X_DOMINANT:
         return checkers.get(SubModeOfInheritance.X_DOMINANT).filterCompatibleRecords(calls);
@@ -175,7 +180,11 @@ public final class MendelianInheritanceChecker {
                     .get(SubModeOfInheritance.X_RECESSIVE_COMP_HET)
                     .filterCompatibleRecords(calls));
         builder = new ImmutableList.Builder<>();
-        for (GenotypeCalls c : calls) if (calls1.contains(c) || calls2.contains(c)) builder.add(c);
+        for (GenotypeCalls c : calls) {
+          if (calls1.contains(c) || calls2.contains(c)) {
+            builder.add(c);
+          }
+        }
         return builder.build();
       case MITOCHONDRIAL:
         return checkers.get(SubModeOfInheritance.MITOCHONDRIAL).filterCompatibleRecords(calls);
@@ -191,7 +200,7 @@ public final class MendelianInheritanceChecker {
    * @param calls List of {@link GenotypeCalls} to filter
    * @param subMode {@link SubModeOfInheritance} to check for
    * @return List of {@link GenotypeCalls} from <code>calls</code> that are compatible with <code>
-   *     mode</code>
+   * mode</code>
    * @throws IncompatiblePedigreeException if the individuals in <code>calls</code> do not fit to
    *     the pedigree
    */
@@ -199,11 +208,15 @@ public final class MendelianInheritanceChecker {
       Collection<GenotypeCalls> calls, SubModeOfInheritance subMode)
       throws IncompatiblePedigreeException {
     // Check for compatibility of calls with pedigree
-    if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c)))
+    if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c))) {
       throw new IncompatiblePedigreeException("GenotypeCalls not compatible with pedigree");
+    }
     // Filter down to the compatible records
-    if (subMode == SubModeOfInheritance.ANY) return ImmutableList.copyOf(calls);
-    else return checkers.get(subMode).filterCompatibleRecords(calls);
+    if (subMode == SubModeOfInheritance.ANY) {
+      return ImmutableList.copyOf(calls);
+    } else {
+      return checkers.get(subMode).filterCompatibleRecords(calls);
+    }
   }
 
   /** @return {@link Pedigree} to use */

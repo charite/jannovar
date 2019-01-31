@@ -111,7 +111,9 @@ abstract class AnnotationBuilder {
         this.change =
             GenomeVariantNormalizer.normalizeGenomeChange(
                 transcript, change, projector.genomeToTranscriptPos(change.getGenomePos()));
-        if (!change.equals(this.change)) messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
+        if (!change.equals(this.change)) {
+          messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
+        }
       } catch (ProjectionException e) {
         throw new Error("Bug: change begin position must be on transcript.");
       }
@@ -150,9 +152,11 @@ abstract class AnnotationBuilder {
     // Handle the upstream/downstream and intergenic case for non-coding transcripts.
     GenomeInterval changeInterval = change.getGenomeInterval();
     if (so.overlapsWithUpstreamRegion(changeInterval)
-        || so.overlapsWithDownstreamRegion(changeInterval)) return buildUpOrDownstreamAnnotation();
-    else if (!changeInterval.overlapsWith(transcript.getTXRegion()))
+        || so.overlapsWithDownstreamRegion(changeInterval)) {
+      return buildUpOrDownstreamAnnotation();
+    } else if (!changeInterval.overlapsWith(transcript.getTXRegion())) {
       return buildIntergenicAnnotation();
+    }
 
     // Project genome to CDS position.
     GenomePosition pos = changeInterval.getGenomeBeginPos();
@@ -162,28 +166,35 @@ abstract class AnnotationBuilder {
       final GenomePosition lPos = pos.shifted(-1);
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
+      if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
+      } else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.liesInSpliceRegion(pos)) varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      } else if (so.liesInSpliceRegion(pos)) {
+        varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check for being in intron/exon.
-      if (so.liesInExon(lPos) && so.liesInExon(pos))
+      if (so.liesInExon(lPos) && so.liesInExon(pos)) {
         varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
-      else varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+      } else {
+        varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+      }
     } else {
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.overlapsWithSpliceDonorSite(changeInterval))
+      if (so.overlapsWithSpliceDonorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+      } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.overlapsWithSpliceRegion(changeInterval))
+      } else if (so.overlapsWithSpliceRegion(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check for being in intron/exon.
-      if (so.overlapsWithExon(changeInterval))
+      if (so.overlapsWithExon(changeInterval)) {
         varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
-      else varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+      } else {
+        varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+      }
     }
     return new Annotation(
         transcript,
@@ -202,34 +213,41 @@ abstract class AnnotationBuilder {
 
     EnumSet<VariantEffect> varTypes = EnumSet.noneOf(VariantEffect.class);
     if (transcript.isCoding()) // always include intronic as variant type
-    varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
-    else varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+    {
+      varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+    } else {
+      varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
+    }
     if (change.getGenomeInterval().length() == 0) {
       final GenomePosition lPos = pos.shifted(-1);
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
+      if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
+      } else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.liesInSpliceRegion(pos)) varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      } else if (so.liesInSpliceRegion(pos)) {
+        varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
     } else {
       GenomeInterval changeInterval = change.getGenomeInterval();
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.overlapsWithSpliceDonorSite(changeInterval))
+      if (so.overlapsWithSpliceDonorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+      } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.overlapsWithSpliceRegion(changeInterval))
+      } else if (so.overlapsWithSpliceRegion(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
     }
     // intronic variants have no effect on the protein but splice variants lead to "probably no
     // protein produced"
     // annotation, as in Mutalyzer.
     ProteinChange proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
-    if (!Sets.intersection(Sets.immutableEnumSet(varTypes), SPLICE_VARIANT_EFFECTS).isEmpty())
+    if (!Sets.intersection(Sets.immutableEnumSet(varTypes), SPLICE_VARIANT_EFFECTS).isEmpty()) {
       proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
+    }
     return new Annotation(
         transcript,
         change,
@@ -250,58 +268,74 @@ abstract class AnnotationBuilder {
       GenomePosition lPos = pos.shifted(-1);
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+      if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+      } else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+      } else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos))) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check for being in 5' or 3' UTR.
       if (so.liesInFivePrimeUTR(lPos)) {
         // Check if variant overlaps really with an UTR
-        if (so.liesInExon(lPos)) varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
-        else {
+        if (so.liesInExon(lPos)) {
+          varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
+        } else {
           // between two UTRs. check for coding or non-coding transcript.
-          if (transcript.isCoding()) varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
-          else varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          if (transcript.isCoding()) {
+            varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          } else {
+            varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          }
         }
       } else {
         // Check if variant overlaps really with an UTR
-        if (so.liesInExon(lPos)) varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
-        else {
+        if (so.liesInExon(lPos)) {
+          varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
+        } else {
           // between two UTRs. check for coding or non-coding transcript.
-          if (transcript.isCoding()) varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
-          else varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          if (transcript.isCoding()) {
+            varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          } else {
+            varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          }
         }
       }
     } else {
       GenomeInterval changeInterval = change.getGenomeInterval();
       // Check for being a splice site variant. The splice donor, acceptor, and region intervals are
       // disjoint.
-      if (so.overlapsWithSpliceDonorSite(changeInterval))
+      if (so.overlapsWithSpliceDonorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
-      else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+      } else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
-      else if (so.overlapsWithSpliceRegion(changeInterval))
+      } else if (so.overlapsWithSpliceRegion(changeInterval)) {
         varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
+      }
       // Check for being in 5' or 3' UTR.
       if (so.overlapsWithFivePrimeUTR(changeInterval)) {
         // Check if variant overlaps really with an UTR
-        if (so.overlapsWithExon(changeInterval))
+        if (so.overlapsWithExon(changeInterval)) {
           varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
-        else {
+        } else {
           // between two UTRs. check for coding or non-coding transcript.
-          if (transcript.isCoding()) varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
-          else varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          if (transcript.isCoding()) {
+            varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          } else {
+            varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+          }
         }
       } else {
         // Check if variant overlaps really with an UTR
-        if (so.overlapsWithExon(changeInterval))
+        if (so.overlapsWithExon(changeInterval)) {
           varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
-        else {
+        } else {
           // between two UTRs. check for coding or non-coding transcript.
-          if (transcript.isCoding()) varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
-          else varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          if (transcript.isCoding()) {
+            varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          } else {
+            varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+          }
         }
       }
     }
@@ -322,23 +356,27 @@ abstract class AnnotationBuilder {
     if (change.getGenomeInterval().length() == 0) {
       // Empty interval, is insertion.
       GenomePosition lPos = pos.shifted(-1);
-      if (so.liesInUpstreamRegion(lPos))
+      if (so.liesInUpstreamRegion(lPos)) {
         return new Annotation(
             transcript, change, UPSTREAM_GENE_VARIANT, null, null, null, null, messages);
-      else
-        // so.liesInDownstreamRegion(pos))
+      } else
+      // so.liesInDownstreamRegion(pos))
+      {
         return new Annotation(
             transcript, change, DOWNSTREAM_GENE_VARIANT, null, null, null, null, messages);
+      }
     } else {
       // Non-empty interval, at least one reference base changed/deleted.
       GenomeInterval changeInterval = change.getGenomeInterval();
-      if (so.overlapsWithUpstreamRegion(changeInterval))
+      if (so.overlapsWithUpstreamRegion(changeInterval)) {
         return new Annotation(
             transcript, change, UPSTREAM_GENE_VARIANT, null, null, null, null, messages);
-      else
-        // so.overlapsWithDownstreamRegion(changeInterval)
+      } else
+      // so.overlapsWithDownstreamRegion(changeInterval)
+      {
         return new Annotation(
             transcript, change, DOWNSTREAM_GENE_VARIANT, null, null, null, null, messages);
+      }
     }
   }
 
@@ -372,16 +410,20 @@ abstract class AnnotationBuilder {
       GenomePosition lPos = changePos.shifted(-1);
 
       // Handle the cases for which no exon and no intron number is available.
-      if (!soDecorator.liesInExon(changePos) && !soDecorator.liesInIntron(changePos))
+      if (!soDecorator.liesInExon(changePos) && !soDecorator.liesInIntron(changePos)) {
         return locBuilder.build(); // no exon information if change pos does not lie in exon
+      }
 
       final int exonNum = projector.locateExon(changePos);
       final int lExonNum = projector.locateExon(lPos);
       if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID
           || lExonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
         locBuilder.setRankType(AnnotationLocation.RankType.EXON);
-        if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) locBuilder.setRank(exonNum);
-        else locBuilder.setRank(lExonNum);
+        if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+          locBuilder.setRank(exonNum);
+        } else {
+          locBuilder.setRank(lExonNum);
+        }
         return locBuilder.build();
       }
 
@@ -403,8 +445,9 @@ abstract class AnnotationBuilder {
       // Handle the cases for which no exon and no intron number is available.
       if ((!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
           && (!soDecorator.liesInIntron(firstChangeBase)
-              || !soDecorator.liesInIntron(lastChangeBase)))
+              || !soDecorator.liesInIntron(lastChangeBase))) {
         return locBuilder.build(); // no exon/intron information if change pos does not lie in exon
+      }
       final int intronNum = projector.locateIntron(firstChangePos);
       if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
         locBuilder.setRankType(AnnotationLocation.RankType.INTRON);
@@ -412,10 +455,12 @@ abstract class AnnotationBuilder {
         return locBuilder.build();
       }
       final int exonNum = projector.locateExon(firstChangePos);
-      if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
+      if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID) {
         throw new Error("Bug: positions should be in exons if we reach here");
-      if (exonNum != projector.locateExon(lastChangePos))
+      }
+      if (exonNum != projector.locateExon(lastChangePos)) {
         return locBuilder.build(); // no exon information if the deletion spans more than one
+      }
 
       locBuilder.setRankType(AnnotationLocation.RankType.EXON);
       locBuilder.setRank(exonNum);
@@ -435,14 +480,17 @@ abstract class AnnotationBuilder {
     GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
     GenomePosition lastChangePos = change.getGenomeInterval().getGenomeEndPos().shifted(-1);
     if (change.getGenomeInterval().length() == 0)
-      // case of zero-base change (insertion)
+    // case of zero-base change (insertion)
+    {
       return new NucleotideRange(
           posBuilder.getNucleotidePointLocation(lastChangePos),
           posBuilder.getNucleotidePointLocation(firstChangePos));
-    else
-      // case of single-base change (SNV) or multi-base change
+    } else
+    // case of single-base change (SNV) or multi-base change
+    {
       return new NucleotideRange(
           posBuilder.getNucleotidePointLocation(firstChangePos),
           posBuilder.getNucleotidePointLocation(lastChangePos));
+    }
   }
 }

@@ -31,9 +31,10 @@ public class GenericTSVHeaderExtender extends VCFHeaderExtender {
     // Only add the overlapping annotations if the REF and ALT columns are
     // configured at all
     if (tsvOptions.getAltAlleleColumnIndex() > 0 && tsvOptions.getRefAlleleColumnIndex() > 0) {
-      if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching())
+      if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
         addHeadersInfixes(
             header, prefix, "OVL_", " (requiring no genotype match, only position overlap)");
+      }
     }
   }
 
