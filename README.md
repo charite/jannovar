@@ -22,3 +22,11 @@ in the Jannovar manual.
 - **Availability:**
     - Java command line tool `jannovar-cli`
     - Java libraries exposing most of `jannovar-cli`'s functionality.
+
+## Developer Guidelines
+
+### Style
+
+- Java code should follow IntelliJ default formatting and the `Ctrl+Alt+l` formatter.
+  Eclipse users please use [Eclipse Code Formatter](https://plugins.jetbrains.com/plugin/6546-eclipse-code-formatter).
+- For all other text, use `.editorconfig`.
