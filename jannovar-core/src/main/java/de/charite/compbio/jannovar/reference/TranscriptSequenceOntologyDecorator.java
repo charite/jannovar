@@ -1,9 +1,11 @@
 package de.charite.compbio.jannovar.reference;
 
+import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.Immutable;
 
 /**
- * Functionality for finding out about certain points/regions of {@link TranscriptModel} using <b>genomic</b> positions.
+ * Functionality for finding out about certain points/regions of {@link TranscriptModel} using <b>genomic</b>
+ * positions.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
@@ -58,6 +60,40 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
+	 * Returns the <b>genomic</b> intervals of the exonic 5' UTR regions.
+	 *
+	 * @return the {@link GenomeInterval}s with exonic 5' UTR sequence
+	 */
+	public ImmutableList<GenomeInterval> getFivePrimeUTRExonIntervals() {
+		return getIntersectedExons(getFivePrimeUTRInterval());
+	}
+
+	private ImmutableList<GenomeInterval> getIntersectedExons(GenomeInterval other) {
+		final ImmutableList.Builder result = ImmutableList.<GenomeInterval>builder();
+		for (GenomeInterval exon : transcript.getExonRegions()) {
+			final GenomeInterval itv = exon.intersection(other);
+			if (itv.length() > 0) {
+				result.add(itv);
+			}
+		}
+		return result.build();
+	}
+
+	/**
+	 * Query whether interval overlaps with exonic 5' UTR sequence.
+	 *
+	 * @return {@code true} if this is the case
+	 */
+	public boolean overlapsWithFivePrimeUTRExon(GenomeInterval itv) {
+		for (GenomeInterval exon : getIntersectedExons(getFivePrimeUTRInterval())) {
+			if (exon.overlapsWith(itv)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Returns the <b>genomic</b> 3' UTR interval.
 	 *
 	 * @return the {@link GenomeInterval} with the 3' UTR
@@ -66,6 +102,29 @@ public final class TranscriptSequenceOntologyDecorator {
 		GenomePosition threePrimeUTRBeginPos = transcript.getCDSRegion().getGenomeEndPos();
 		int threePrimeUTRLen = transcript.getTXRegion().getGenomeEndPos().differenceTo(threePrimeUTRBeginPos);
 		return new GenomeInterval(threePrimeUTRBeginPos, threePrimeUTRLen);
+	}
+
+	/**
+	 * Returns the <b>genomic</b> intervals of the exonic 3' UTR regions
+	 *
+	 * @return the {@link GenomeInterval}s with exonic 3' UTR sequence
+	 */
+	public ImmutableList<GenomeInterval> getThreePrimeUTRExonIntervals() {
+		return getIntersectedExons(getThreePrimeUTRInterval());
+	}
+
+	/**
+	 * Query whether interval overlaps with exonic 3' UTR sequence.
+	 *
+	 * @return {@code true} if this is the case
+	 */
+	public boolean overlapsWithThreePrimeUTRExon(GenomeInterval itv) {
+		for (GenomeInterval exon : getIntersectedExons(getThreePrimeUTRInterval())) {
+			if (exon.overlapsWith(itv)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -344,16 +403,22 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
+	 * Length of upstream interval around a transcript.
+	 */
+	public static int UPSTREAM_LENGTH = 5_000;
+
+	/**
 	 * @return {@link GenomeInterval} that gives the upstream region of the transcript.
 	 */
 	public GenomeInterval getUpstreamInterval() {
-		return new GenomeInterval(transcript.getTXRegion().getGenomeBeginPos().shifted(-1000), 1000);
+		return new GenomeInterval(
+			transcript.getTXRegion().getGenomeBeginPos().shifted(-UPSTREAM_LENGTH), UPSTREAM_LENGTH);
 	}
 
 	/**
 	 * Returns whether the given <code>interval</code> overlaps with the upstream region of the transcript.
 	 * <p>
-	 * The upstream region of the transcript is up to 1000 bp upstream of the transcript.
+	 * The upstream region of the transcript is up to {@link #UPSTREAM_LENGTH} bp upstream of the transcript.
 	 *
 	 * @param interval the {@link GenomeInterval} to use for querying
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with the upstream region of the transcript.
@@ -366,7 +431,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>pos</code> lies within with the upstream region of the transcript.
 	 * <p>
-	 * The upstream region of the transcript is up to 1000 bp upstream of the transcript.
+	 * The upstream region of the transcript is up to {@link #UPSTREAM_LENGTH} bp upstream of the transcript.
 	 *
 	 * @param pos the {@link GenomePosition} to use for querying
 	 * @return <code>true</code> if the {@link GenomePosition} lies within the upstream region of the transcript.
@@ -377,16 +442,21 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
+	 * Length of downstream interval around a transcript.
+	 */
+	public static int DOWNSTREAM_LENGTH = 5_000;
+
+	/**
 	 * @return {@link GenomeInterval} that gives the downstream region of the transcript.
 	 */
 	public GenomeInterval getDownstreamInterval() {
-		return new GenomeInterval(transcript.getTXRegion().getGenomeEndPos(), 1000);
+		return new GenomeInterval(transcript.getTXRegion().getGenomeEndPos(), DOWNSTREAM_LENGTH);
 	}
 
 	/**
 	 * Returns whether the given <code>interval</code> overlaps with the downstream region of the transcript.
 	 * <p>
-	 * The upstream region of the transcript is up to 1000 bp upstream of the transcript.
+	 * The upstream region of the transcript is up to {@link #UPSTREAM_LENGTH} bp upstream of the transcript.
 	 *
 	 * @param interval the {@link GenomeInterval} to use for querying
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with the downstream region of the transcript.
@@ -399,7 +469,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>pos</code> lies within with the downstream region of the transcript.
 	 * <p>
-	 * The upstream region of the transcript is up to 1000 bp downstream of the transcript.
+	 * The upstream region of the transcript is up to {@link #DOWNSTREAM_LENGTH} bp downstream of the transcript.
 	 *
 	 * @param pos the {@link GenomePosition} to use for querying
 	 * @return <code>true</code> if the {@link GenomePosition} lies within the downstream region of the transcript.
