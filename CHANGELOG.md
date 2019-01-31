@@ -2,6 +2,13 @@
 
 ## HEAD (unreleased)
 
+### overall
+
+- Reformatting everything with Google Java style
+- Enforcing Google Java style via checkstyle
+- Adding `make style` target for formatting code
+- Adding more JDK versions to Travis CI build matrix
+
 ### jannovar-cli
 
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
