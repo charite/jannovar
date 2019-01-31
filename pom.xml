@@ -275,8 +275,8 @@
                     </sourceDirectories>
                     <configLocation>google_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
-                    <failOnViolation>true</failOnViolation>
-                    <failOnErrors>true</failOnErrors>
+                    <failOnViolation>false</failOnViolation>
+                    <failOnErrors>false</failOnErrors>
                     <violationSeverity>warning</violationSeverity>
                 </configuration>
                 <executions>
