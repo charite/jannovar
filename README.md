@@ -22,3 +22,17 @@ in the Jannovar manual.
 - **Availability:**
     - Java command line tool `jannovar-cli`
     - Java libraries exposing most of `jannovar-cli`'s functionality.
+
+## Developer Shortcuts
+
+### Run Tests
+
+```
+# make test
+```
+
+### Apply Code Style
+
+```
+# make style
+```
