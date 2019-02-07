@@ -72,6 +72,11 @@ public class TranscriptModelBuilder {
 	private String geneID = null;
 
 	/**
+	 * Optional gene version.
+	 */
+	private String geneVersion = null;
+
+	/**
 	 * Map with alternative gene IDs
 	 */
 	private HashMap<String, String> altGeneIDs = new HashMap<String, String>();
@@ -97,6 +102,7 @@ public class TranscriptModelBuilder {
 		exonRegions.clear();
 		sequence = null;
 		geneID = null;
+		geneVersion = null;
 		altGeneIDs.clear();
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 	}
@@ -123,9 +129,15 @@ public class TranscriptModelBuilder {
 			fullAccession += "." + this.txVersion;
 		}
 
+		// Build full gene ID with version if set.
+		String fullGeneID = geneID;
+		if (this.geneVersion != null) {
+			fullGeneID += "." + this.geneVersion;
+		}
+
 		// Create new TranscriptModel object.
 		return new TranscriptModel(fullAccession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-			ImmutableList.copyOf(builder.build()), sequence, geneID, transcriptSupportLevel, altGeneIDs);
+			ImmutableList.copyOf(builder.build()), sequence, fullGeneID, transcriptSupportLevel, altGeneIDs);
 	}
 
 	/**
@@ -266,6 +278,21 @@ public class TranscriptModelBuilder {
 	 */
 	public String getGeneID() {
 		return geneID;
+	}
+
+	/**
+	 * @param geneVersion the geneVersion to set
+	 */
+	public void setGeneVersion(String geneVersion) {
+		this.geneVersion = geneVersion;
+	}
+
+
+	/**
+	 * @return the geneVersion
+	 */
+	public String getGeneVersion() {
+		return geneVersion;
 	}
 
 	/**

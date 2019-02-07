@@ -4,7 +4,8 @@
 
 ### jannovar-cli
 
-* Fixing sources information for hg38 downloads.
+* Bumping ENSEMBL versions for GRCh37 and GRCh38.
+* Fixing sources information for updated ENSEMBL downloads.
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
 * Adding SV support to jannovar-cli, includes tests.
 

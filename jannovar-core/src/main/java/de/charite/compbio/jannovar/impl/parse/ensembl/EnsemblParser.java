@@ -130,8 +130,12 @@ public class EnsemblParser implements TranscriptParser {
 		throws TranscriptParseException {
 		// First, build mapping from RNA accession to builder
 		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
-		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet())
+		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
 			txMap.put(entry.getValue().getSequence(), entry.getValue());
+			if (entry.getValue().getTxVersion() != null) {
+				txMap.put(entry.getValue().getSequence() + "." + entry.getValue().getTxVersion(), entry.getValue());
+			}
+		}
 
 		// We must remove variants for which we did not find any sequence;
 		Set<String> missingSequence = new HashSet<>();
