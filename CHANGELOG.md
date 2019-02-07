@@ -6,6 +6,9 @@
 
 * Bumping ENSEMBL versions for GRCh37 and GRCh38.
 * Fixing sources information for updated ENSEMBL downloads.
+* For ENSEMBL, use ENSEMBL-provided mapping from ENSG to HGNC ID for Entrez ID assignment.
+  This is necessary as Ensembl gene IDs turn out to be not so stable between hg37 and hg38 after all.
+  Case in point: `ENSG00000276141` vs. `ENSG00000187667`.
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
 * Adding SV support to jannovar-cli, includes tests.
 

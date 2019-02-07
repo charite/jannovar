@@ -48,7 +48,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.containsExon(changeInterval)) // deletion of whole exon
-			return buildFeatureAblationAnnotation();
+			return buildExonLossAnnotation();
 		else if (so.overlapsWithTranslationalStartSite(changeInterval))
 			return buildStartLossAnnotation();
 		else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval))
@@ -68,8 +68,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		return new NucleotideDeletion(false, ntChangeRange, new NucleotideSeqDescription());
 	}
 
-	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
+	private Annotation buildExonLossAnnotation() {
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.EXON_LOSS_VARIANT), locAnno,
 			getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN),
 			messages);
 	}

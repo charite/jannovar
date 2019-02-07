@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMultiset;
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.SVDescription;
@@ -8,6 +9,8 @@ import de.charite.compbio.jannovar.reference.SVGenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A list of priority-sorted {@link SVAnnotation} objects.
@@ -75,27 +78,28 @@ public final class SVAnnotations implements SVDescription {
 	}
 
 	/**
-	 * @return {@link SVAnnotation} with highest predicted impact, or <code>null</code> if there is none.
-	 */
-	public SVAnnotation getHighestImpactAnnotation() {
-		if (!hasAnnotation())
-			return null;
-		else
-			return entries.get(0);
-	}
-
-	/**
-	 * Convenience method.
+	 * Return the highest impact annotation for each gene.
 	 *
-	 * @return {@link VariantEffect} with the highest impact of all in entries or {@link VariantEffect#SEQUENCE_VARIANT}
-	 * if entries are empty or contain no annotated effects.
+	 * @return {@link ImmutableMap} from gene ID to highest-impact {@link SVAnnotation} of all transcripts, empty list
+	 * if there is none.
 	 */
-	public VariantEffect getHighestImpactEffect() {
-		final SVAnnotation anno = getHighestImpactAnnotation();
-		if (anno == null || anno.getEffects().isEmpty())
-			return VariantEffect.SEQUENCE_VARIANT;
-		else
-			return anno.getEffects().iterator().next();
+	public ImmutableMap<String, SVAnnotation> getHighestImpactAnnotation() {
+		if (!hasAnnotation()) {
+			return ImmutableMap.of();
+		} else {
+			final Map<String, SVAnnotation> map = new HashMap<>();
+			for (SVAnnotation svAnno : entries) {
+				final String geneID = svAnno.getTranscript().getGeneID();
+				final SVAnnotation other = map.get(geneID);
+				if (other == null) {
+					map.put(geneID, svAnno);
+				} else if (svAnno.getMostPathogenicVariantEffect().compareTo(
+					other.getMostPathogenicVariantEffect()) > 0) {
+					map.replace(geneID, other, svAnno);
+				}
+			}
+			return ImmutableMap.copyOf(map);
+		}
 	}
 
 	@Override
