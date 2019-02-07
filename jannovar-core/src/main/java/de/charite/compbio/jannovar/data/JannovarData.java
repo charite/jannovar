@@ -75,7 +75,8 @@ public final class JannovarData implements Serializable {
 	}
 
 	/**
-	 * @return map from transcript accession to {@link TranscriptModel} instance.
+	 * @return {@link ImmutableMultimap} from gene symbol to to {@link TranscriptModel} instances that have this gene
+	 * symbol.
 	 */
 	public ImmutableMultimap<String, TranscriptModel> getTmByGeneSymbol() {
 		return tmByGeneSymbol;
@@ -113,8 +114,8 @@ public final class JannovarData implements Serializable {
 	}
 
 	/**
-	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptModel}
-	 * objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
+	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link
+	 * TranscriptModel} objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
 	 *
 	 * @param refDict          the {@link ReferenceDictionary} to use for the construction
 	 * @param transcriptModels list of {@link TranscriptModel} objects with the transcripts of all chromosomes
