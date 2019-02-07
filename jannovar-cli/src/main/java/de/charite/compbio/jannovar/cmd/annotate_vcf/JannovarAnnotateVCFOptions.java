@@ -23,131 +23,106 @@ import java.util.function.BiFunction;
 public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	/**
-	 * Whether or not to escape ANN field
-	 */
-	private boolean escapeAnnField = true;
-
-	/**
-	 * Path to input VCF file
-	 */
-	private String pathInputVCF = null;
-
-	/**
-	 * Interval to annotate
-	 */
-	private String interval = "";
-
-	/**
-	 * Path to output VCF file
-	 */
-	private String pathOutputVCF = null;
-
-	/**
 	 * Path to dbSNP VCF file to use for the annotation
 	 */
 	public String pathVCFDBSNP = null;
-
 	/**
 	 * Prefix to use for dbSNP VCF INFO Fields
 	 */
 	public String prefixDBSNP = null;
-
 	/**
 	 * Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation
 	 */
 	public String pathFASTARef = null;
-
 	/**
 	 * Path to ExAC VCF file to use for the annotation
 	 */
 	public String pathVCFExac;
-
 	/**
 	 * Prefix to use for ExAC VCF INFO Fields
 	 */
 	public String prefixExac;
-
 	/**
 	 * Path to gnomAD exomes VCF file to use for the annotation
 	 */
 	public String pathVCFGnomadExomes;
-
 	/**
 	 * Prefix to use for gnomAD exomes INFO fields
 	 */
 	public String prefixGnomadExomes;
-
 	/**
 	 * Path to gnomAD genomes VCF file to use for the annotation
 	 */
 	public String pathVCFGnomadGenomes;
-
 	/**
 	 * Prefix to use for gnomAD genomes INFO fields
 	 */
 	public String prefixGnomadGenomes;
-
 	/**
 	 * Path to UK10K VCF file to use for the annotation
 	 */
 	public String pathVCFUK10K;
-
 	/**
 	 * Prefix to use for UK10K VCF INFO Fields
 	 */
 	public String prefixUK10K;
-
 	/**
 	 * Path to thousand genomes VCF file to use for the annotation
 	 */
 	public String pathThousandGenomes;
-
 	/**
 	 * Prefix to use for thousand genomes VCF INFO Fields
 	 */
 	public String prefixThousandGenomes;
-
 	/**
 	 * Path to ClinVar VCF file to use for the annotation
 	 */
 	public String pathClinVar;
-
 	/**
 	 * Prefix to use for ClinVar VCF INFO Fields
 	 */
 	public String prefixClinVar;
-
 	/**
 	 * Path to COSMIC VCF file to use for the annotation
 	 */
 	public String pathCosmic;
-
 	/**
 	 * Prefix to use for COSMIC VCF INFO Fields
 	 */
 	public String prefixCosmic;
-
 	/**
 	 * Path to pedigree file
 	 */
 	public String pathPedFile;
-
 	/**
-	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the
-	 * single individual is the affected index.
+	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the single individual
+	 * is the affected index.
 	 */
 	public boolean annotateAsSingletonPedigree;
-
 	/**
 	 * Whether or not to use threshold-based filters
 	 */
 	public boolean useThresholdFilters;
-
 	/**
 	 * Whether or not to use the advanced pedigree filters (mainly useful for de novo variants)
 	 */
 	public boolean useAdvancedPedigreeFilters;
-
+	/**
+	 * Whether or not to escape ANN field
+	 */
+	private boolean escapeAnnField = true;
+	/**
+	 * Path to input VCF file
+	 */
+	private String pathInputVCF = null;
+	/**
+	 * Interval to annotate
+	 */
+	private String interval = "";
+	/**
+	 * Path to output VCF file
+	 */
+	private String pathOutputVCF = null;
 	/**
 	 * Threshold filter: minimal coverage at a site for heterozygous calls
 	 */
@@ -194,8 +169,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private int threshFiltMaxExacHomAlt;
 
 	/**
-	 * Threshold filter: ignore variants that have more than this number of hom. occurences in
-	 * thousand genomes.
+	 * Threshold filter: ignore variants that have more than this number of hom. occurences in thousand genomes.
 	 */
 	private int threshFiltMaxThousandGenomesHomAlt;
 
@@ -225,16 +199,15 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private boolean offTargetFilterIntronicSpliceIsOffTarget;
 
 	/**
-	 * Whether or not to consider "OneParentGtFiltered" GT-wise filter for applying
-	 * "AllAffGtFiltered" FILTER, important for het. comp. inheritance mode compatibililty
-	 * annotation.
+	 * Whether or not to consider "OneParentGtFiltered" GT-wise filter for applying "AllAffGtFiltered" FILTER, important
+	 * for het. comp. inheritance mode compatibililty annotation.
 	 */
 	private boolean oneParentGtFilteredFiltersAffected;
 
 	/**
-	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome)
-	 * and genotype-wise filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet,
-	 * MinAafHomAlt, MinAafHomRef) in inheritance mode compatibility annotation.
+	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome) and genotype-wise
+	 * filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet, MinAafHomAlt, MinAafHomRef) in inheritance
+	 * mode compatibility annotation.
 	 */
 	private boolean inheritanceAnnoUseFilters;
 
@@ -827,12 +800,20 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		return threshFiltMaxAlleleFrequencyAd;
 	}
 
+	public void setThreshFiltMaxAlleleFrequencyAd(double threshFiltMaxAlleleFrequencyAd) {
+		this.threshFiltMaxAlleleFrequencyAd = threshFiltMaxAlleleFrequencyAd;
+	}
+
 	public void setThreshFiltMaxAlleleFrequencyAD(double threshFiltMaxAlleleFrequencyAd) {
 		this.threshFiltMaxAlleleFrequencyAd = threshFiltMaxAlleleFrequencyAd;
 	}
 
 	public double getThreshFiltMaxAlleleFrequencyAr() {
 		return threshFiltMaxAlleleFrequencyAr;
+	}
+
+	public void setThreshFiltMaxAlleleFrequencyAr(double threshFiltMaxAlleleFrequencyAr) {
+		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
 	}
 
 	public void setThreshFiltMaxAlleleFrequencyAR(double threshFiltMaxAlleleFrequencyAr) {
@@ -870,14 +851,6 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	public void setOneParentGtFilteredFiltersAffected(boolean oneParentGtFilteredFiltersAffected) {
 		this.oneParentGtFilteredFiltersAffected = oneParentGtFilteredFiltersAffected;
-	}
-
-	public void setThreshFiltMaxAlleleFrequencyAd(double threshFiltMaxAlleleFrequencyAd) {
-		this.threshFiltMaxAlleleFrequencyAd = threshFiltMaxAlleleFrequencyAd;
-	}
-
-	public void setThreshFiltMaxAlleleFrequencyAr(double threshFiltMaxAlleleFrequencyAr) {
-		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
 	}
 
 	public boolean isInheritanceAnnoUseFilters() {
@@ -1054,6 +1027,35 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	public static class BedAnnotationOptions {
 
 		/**
+		 * Path to BED file
+		 */
+		private final String pathBed;
+		/**
+		 * Label to use for INFO field.
+		 */
+		private final String infoField;
+		/**
+		 * Description to use for INFO field.
+		 */
+		private final String description;
+		/**
+		 * 0-based column to write into VCF file, if any, <code>-1</code> for none
+		 */
+		private final int colNo;
+
+		public BedAnnotationOptions(String pathBed, String infoField, String description) {
+			this(pathBed, infoField, description, -1);
+		}
+
+		public BedAnnotationOptions(String pathBed, String infoField, String description,
+									int colNo) {
+			this.pathBed = pathBed;
+			this.infoField = infoField;
+			this.description = description;
+			this.colNo = colNo;
+		}
+
+		/**
 		 * Construct new BED annotation from command line option value.
 		 *
 		 * <p>
@@ -1073,38 +1075,6 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				return new BedAnnotationOptions(tokens[0], tokens[1], tokens[2],
 					Integer.parseInt(tokens[3]));
 			}
-		}
-
-		/**
-		 * Path to BED file
-		 */
-		private final String pathBed;
-
-		/**
-		 * Label to use for INFO field.
-		 */
-		private final String infoField;
-
-		/**
-		 * Description to use for INFO field.
-		 */
-		private final String description;
-
-		/**
-		 * 0-based column to write into VCF file, if any, <code>-1</code> for none
-		 */
-		private final int colNo;
-
-		public BedAnnotationOptions(String pathBed, String infoField, String description) {
-			this(pathBed, infoField, description, -1);
-		}
-
-		public BedAnnotationOptions(String pathBed, String infoField, String description,
-									int colNo) {
-			this.pathBed = pathBed;
-			this.infoField = infoField;
-			this.description = description;
-			this.colNo = colNo;
 		}
 
 		public String getPathBed() {

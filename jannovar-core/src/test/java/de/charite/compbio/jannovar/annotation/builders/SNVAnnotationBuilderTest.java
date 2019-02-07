@@ -88,7 +88,7 @@ public class SNVAnnotationBuilderTest {
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// upstream intergenic
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639061,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6632061,
 			PositionType.ZERO_BASED), "T", "A");
 		Annotation anno1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno1.getTranscript().getAccession());
@@ -98,7 +98,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno1.getEffects());
 
 		// downstream intergenic
-		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6700340,
 			PositionType.ZERO_BASED), "T", "A");
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());

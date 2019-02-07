@@ -79,8 +79,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	}
 
 	/**
-	 * This function inputs a VCF file, and prints the annotated version thereof to a file (name of
-	 * the original file with the suffix .de.charite.compbio.jannovar).
+	 * This function inputs a VCF file, and prints the annotated version thereof to a file (name of the original file
+	 * with the suffix .de.charite.compbio.jannovar).
 	 *
 	 * @throws JannovarException on problems with the annotation
 	 */
@@ -444,8 +444,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	/**
 	 * Load pedigree from file given in configuration or construct singleton pedigree
 	 *
-	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in case of
-	 *                  singleton pedigree construction
+	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in case of singleton
+	 *                  pedigree construction
 	 * @throws PedParseException in the case of problems with parsing pedigrees
 	 */
 	private Pedigree loadPedigree(VCFHeader vcfHeader)
@@ -471,8 +471,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 * Construct the mendelian inheritance annotation processors
 	 *
 	 * @param writer    the place to put put the VariantContext to after filtration
-	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in case of
-	 *                  singleton pedigree construction
+	 * @param vcfHeader {@link VCFHeader}, for checking compatibility and getting sample name in case of singleton
+	 *                  pedigree construction
 	 * @throws IOException                   in case of problems with opening the pedigree file
 	 * @throws PedParseException             in the case of problems with parsing pedigrees
 	 * @throws IncompatiblePedigreeException If the pedigree is incompatible with the VCF file

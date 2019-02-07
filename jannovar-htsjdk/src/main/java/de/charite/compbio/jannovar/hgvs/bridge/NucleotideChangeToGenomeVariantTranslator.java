@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
 import com.google.common.base.Joiner;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.change.*;
@@ -29,7 +30,7 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	 */
 	final private JannovarData jvDB;
 	/**
-	 * extraction of {@link GenomicRegion} from FASTA files
+	 * extraction of {@link String} from FASTA files
 	 */
 	private final GenomeRegionSequenceExtractor seqExtractor;
 
@@ -39,11 +40,12 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	}
 
 	/**
-	 * Shortcut to {@link #translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant, boolean)} with using
+	 * Shortcut to {@link #translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant, boolean)} with
+	 * using
 	 * <code>true</code> for the second parameter.
 	 */
 	public GenomeVariant translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant variant)
-		throws CannotTranslateHGVSVariant {
+		throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		return translateNucleotideVariantToGenomeVariant(variant, true);
 	}
 
@@ -51,14 +53,14 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	 * Translate single-change {@link SingleAlleleNucleotideVariant} into a {@link GenomeVariant}
 	 *
 	 * @param variant     {@link SingleAlleleNucleotideVariant} to translate
-	 * @param autocorrect try to auto-correct mismatching reference sequence instead of throwing
-	 *                    {@link CannotTranslateHGVSVariant}
+	 * @param autocorrect try to auto-correct mismatching reference sequence instead of throwing {@link
+	 *                    CannotTranslateHGVSVariant}
 	 * @return {@link GenomeVariant} resulting from the conversion, possibly annotated with some warning messages
-	 * @throws CannotTranslateHGVSVariant in the case of problems such as more than one entry in the allele of <code>variant</code> or
-	 *                                    unsupported {@link NucleotideChange}s
+	 * @throws CannotTranslateHGVSVariant in the case of problems such as more than one entry in the allele of
+	 *                                    <code>variant</code> or unsupported {@link NucleotideChange}s
 	 */
-	public GenomeVariant translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant variant,
-																   boolean autocorrect) throws CannotTranslateHGVSVariant {
+	public GenomeVariant translateNucleotideVariantToGenomeVariant(
+		SingleAlleleNucleotideVariant variant, boolean autocorrect) throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		// perform sanity checks and get corresponding TranscriptModel from JannovarData
 		if (variant.getSeqType() != SequenceType.CODING_DNA && variant.getSeqType() != SequenceType.NON_CODING_DNA)
 			throw new CannotTranslateHGVSVariant("Currently only coding DNA (\"c.\") and non-coding DNA (\"n.\") "

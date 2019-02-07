@@ -3,11 +3,12 @@ package de.charite.compbio.jannovar.reference;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ComparisonChain;
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
 // TODO(holtgrewe): We only want genome changes on the forward strand, make sure this does not lead to problems downstream.
-// TODO(holtgrewe): Add support for symbolic alleles in all the members.
 
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
@@ -15,8 +16,8 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
  * GenomeChange objects are immutable, the members are automatically adjusted for the longest common suffix and prefix
  * in REF and ALT.
  * <p>
- * Symbolic alleles, as in the VCF standard, are also possible, but methods like {@link #getType} etc. do not return
- * sensible results.
+ * Symbolic-ness of alleles can be checked with {@link #wouldBeSymbolicAllele(String)} but symbolic alleles are not
+ * supported by {@code GenomeVariant}.  Rather, use {@link SVGenomeVariant} for this.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
@@ -64,18 +65,12 @@ public final class GenomeVariant implements VariantDescription {
 	 * <p>
 	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
+	 *
+	 * @throws InvalidGenomeVariant if {@code ref} and {@code alt} describe symbolic or non-ACGT alleles.
 	 */
-	public GenomeVariant(GenomePosition pos, String ref, String alt, Strand strand) {
+	public GenomeVariant(GenomePosition pos, String ref, String alt, Strand strand) throws InvalidGenomeVariant {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
-			this.pos = pos.withStrand(strand);
-			if (strand == pos.getStrand()) {
-				this.ref = ref;
-				this.alt = alt;
-			} else {
-				this.ref = DNAUtils.reverseComplement(ref);
-				this.alt = DNAUtils.reverseComplement(alt);
-			}
-			return;
+			throw new InvalidGenomeVariant("Symbolic alleles are not supported by GenomeVariant");
 		}
 
 		// Correct variant data.
@@ -99,23 +94,18 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * @return <code>true</code> if this is a symbolic allele, as described
-	 */
-	public boolean isSymbolic() {
-		return (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt));
-	}
-
-	/**
+	 * Check whether the given allele string would be interpreted as a symbolic one.
+	 *
 	 * @return <code>true</code> if the given <code>allele</code> string describes a symbolic allele (events not
 	 * described by replacement of bases, e.g. break-ends or duplications that are described in one line).
 	 */
-	private static boolean wouldBeSymbolicAllele(String allele) {
+	public static boolean wouldBeSymbolicAllele(String allele) {
 		if (allele.length() <= 1)
 			return false;
-		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>') || // symbolic or large insertion
+		// The outer terms are: (i) symbolic or large insertion, (ii) single breakend, (iii) mated breakend
+		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>') ||
 			(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.') || // single breakend
-			(allele.contains("[") || allele.contains("]")); // mated
-		// breakend
+			(allele.contains("[") || allele.contains("]"));
 	}
 
 	@Override
@@ -154,10 +144,6 @@ public final class GenomeVariant implements VariantDescription {
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {
-		// note - it is not worth caching this as an instance field as this leads to worse GC performance
-		if (isSymbolic())
-			return new GenomeInterval(pos, 1);
-
 		return new GenomeInterval(pos, ref.length());
 	}
 
@@ -174,7 +160,11 @@ public final class GenomeVariant implements VariantDescription {
 
 		// Get position as 0-based position.
 		GenomePosition oppositePos = pos.shifted(this.ref.length() - 1).withStrand(strand);
-		return new GenomeVariant(oppositePos, oppositeRef, oppositeAlt, strand);
+		try {
+			return new GenomeVariant(oppositePos, oppositeRef, oppositeAlt, strand);
+		} catch (InvalidGenomeVariant invalidGenomeVariant) {
+			throw new UncheckedJannovarException("This cannot happen as check is done on construction.");
+		}
 	}
 
 	/**

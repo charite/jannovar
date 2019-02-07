@@ -44,6 +44,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		if (!transcript.isCoding())
 			return buildNonCodingAnnotation();
 
+		// TODO(holtgrewe): differentiate between transcript ablation and whole exon deletion here
+
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.containsExon(changeInterval)) // deletion of whole exon
 			return buildFeatureAblationAnnotation();

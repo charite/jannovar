@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.cmd.hgvs_to_vcf;
 import com.google.common.collect.Lists;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
@@ -38,19 +39,17 @@ import java.util.TreeMap;
 public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 
 	/**
-	 * Configuration
-	 */
-	private ProjectTranscriptToChromosomeOptions options;
-
-	/**
 	 * FAI-indexed FASTA file to use
 	 */
 	IndexedFastaSequenceFile fasta;
-
 	/**
 	 * Translation of variants
 	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
+	/**
+	 * Configuration
+	 */
+	private ProjectTranscriptToChromosomeOptions options;
 
 	public ProjectTranscriptToChromosome(Namespace args) throws CommandLineParsingException {
 		this.options = new ProjectTranscriptToChromosomeOptions();
@@ -221,7 +220,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 	private GenomeVariant translate(SingleAlleleNucleotideVariant rawVar) {
 		try {
 			return translator.translateNucleotideVariantToGenomeVariant((SingleAlleleNucleotideVariant) rawVar, true);
-		} catch (CannotTranslateHGVSVariant e) {
+		} catch (CannotTranslateHGVSVariant | InvalidGenomeVariant e) {
 			System.err.println("Could not translate variant " + rawVar + ": " + e.toString());
 			return null;
 		}

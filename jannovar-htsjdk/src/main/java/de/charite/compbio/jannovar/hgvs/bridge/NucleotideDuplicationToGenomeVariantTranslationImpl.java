@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
@@ -30,8 +31,9 @@ class NucleotideDuplicationToGenomeVariantTranslationImpl extends NucleotideChan
 	 * @return {@link GenomeVariant} with the translation result, possibly annotated with warning messages
 	 * @throws CannotTranslateHGVSVariant in case of translation problems
 	 */
-	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
-												 NucleotideDuplication ntDup) throws CannotTranslateHGVSVariant {
+	public ResultWithWarnings<GenomeVariant> run(
+		TranscriptModel tm, SequenceType sequenceType, NucleotideDuplication ntDup)
+		throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		final NucleotideRange range = ntDup.getRange();
 		final NucleotideSeqDescription duplicatedNTDesc = ntDup.getSeq();
 		final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);

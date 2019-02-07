@@ -21,8 +21,6 @@ public class AnnotationLocation {
 		EXON, INTRON, UNDEFINED
 	}
 
-	;
-
 	/**
 	 * Sentinel value for "invalid rank".
 	 */

@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
 import com.google.common.io.Files;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -65,7 +66,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionInCDS() throws CannotTranslateHGVSVariant {
+	public void testPositionInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339A>T";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -76,7 +77,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithPositiveOffsetInCDS() throws CannotTranslateHGVSVariant {
+	public void testPositionWithPositiveOffsetInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339+1G>A";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -87,7 +88,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithNegativeOffsetInCDS() throws CannotTranslateHGVSVariant {
+	public void testPositionWithNegativeOffsetInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339-1G>A";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -98,7 +99,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionInUTR5() throws CannotTranslateHGVSVariant {
+	public void testPositionInUTR5() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1A>T";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -109,7 +110,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithPositiveOffsetInUTR5() throws CannotTranslateHGVSVariant {
+	public void testPositionWithPositiveOffsetInUTR5() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1+1T>C";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -120,7 +121,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithNegativeOffsetInUTR5() throws CannotTranslateHGVSVariant {
+	public void testPositionWithNegativeOffsetInUTR5() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1-1C>G";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -131,7 +132,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionInUTR3() throws CannotTranslateHGVSVariant {
+	public void testPositionInUTR3() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1T>C";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -142,7 +143,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithPositiveOffsetInUTR3() throws CannotTranslateHGVSVariant {
+	public void testPositionWithPositiveOffsetInUTR3() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1+1A>C";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -153,7 +154,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionWithNegativeOffsetInUTR3() throws CannotTranslateHGVSVariant {
+	public void testPositionWithNegativeOffsetInUTR3() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1-1T>A";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());

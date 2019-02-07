@@ -90,7 +90,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// intergenic upstream
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639059,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6634059,
 			PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 			new AnnotationBuilderOptions()).build();
@@ -100,7 +100,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 		// intergenic downstream
-		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6700340,
 			PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 			new AnnotationBuilderOptions()).build();

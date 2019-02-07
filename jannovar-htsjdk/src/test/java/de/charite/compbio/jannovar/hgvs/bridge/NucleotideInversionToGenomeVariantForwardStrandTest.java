@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
 import com.google.common.io.Files;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -65,7 +66,7 @@ public class NucleotideInversionToGenomeVariantForwardStrandTest {
 	}
 
 	@Test
-	public void testRangeInCDS() throws CannotTranslateHGVSVariant {
+	public void testRangeInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_004937.2(CTNS):c.400_404invATCT";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());

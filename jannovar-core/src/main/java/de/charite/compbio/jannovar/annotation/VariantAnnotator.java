@@ -94,11 +94,6 @@ public final class VariantAnnotator {
 	 * @throws AnnotationException on problems building the annotation list
 	 */
 	public VariantAnnotations buildAnnotations(GenomeVariant change) throws AnnotationException {
-		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
-		// described as shortcuts in the VCF file. We cannot annotate these yet.
-		if (change.isSymbolic())
-			return VariantAnnotations.buildEmptyList(change);
-
 		// Get genomic change interval and reset the factory.
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 
