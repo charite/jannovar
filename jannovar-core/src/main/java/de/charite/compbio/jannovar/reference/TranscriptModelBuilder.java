@@ -36,6 +36,12 @@ public class TranscriptModelBuilder {
 	private String accession = null;
 
 	/**
+	 * Optional transcript version.  The accession must be the same as in the transcript FASTA file.  Specifying
+	 * the version separately here allows us to store it from the GTF/GFF and then later add it to the accession.
+	 */
+	private String txVersion = null;
+
+	/**
 	 * {@link TranscriptModel#geneSymbol} of next {@link TranscriptModel} to build.
 	 */
 	private String geneSymbol = null;
@@ -84,6 +90,7 @@ public class TranscriptModelBuilder {
 	public void reset() {
 		strand = Strand.FWD;
 		accession = null;
+		txVersion = null;
 		geneSymbol = null;
 		txRegion = null;
 		cdsRegion = null;
@@ -110,8 +117,14 @@ public class TranscriptModelBuilder {
 			}
 		}
 
+		// Build full accession with version if set.
+		String fullAccession = accession;
+		if (this.txVersion != null) {
+			fullAccession += "." + this.txVersion;
+		}
+
 		// Create new TranscriptModel object.
-		return new TranscriptModel(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
+		return new TranscriptModel(fullAccession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
 			ImmutableList.copyOf(builder.build()), sequence, geneID, transcriptSupportLevel, altGeneIDs);
 	}
 
@@ -134,6 +147,20 @@ public class TranscriptModelBuilder {
 	 */
 	public String getAccession() {
 		return accession;
+	}
+
+	/**
+	 * @param txVersion the version to set
+	 */
+	public void setTxVersion(String txVersion) {
+		this.txVersion = txVersion;
+	}
+
+	/**
+	 * @return the transcript version
+	 */
+	public String getTxVersion() {
+		return txVersion;
 	}
 
 	/**

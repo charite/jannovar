@@ -219,6 +219,7 @@ public class EnsemblParser implements TranscriptParser {
 			final String geneName = first.getAttributes().get("gene_name");
 			final String geneID = first.getAttributes().get("gene_id");
 			final String txID = first.getAttributes().get("transcript_id");
+			final String txVersion = first.getAttributes().get("transcript_version");
 
 			final TranscriptModelBuilder builder = new TranscriptModelBuilder();
 
@@ -226,6 +227,7 @@ public class EnsemblParser implements TranscriptParser {
 			final Strand strand = (first.getStrand() == FeatureRecord.Strand.FORWARD) ? Strand.FWD : Strand.REV;
 			builder.setStrand(strand);
 			builder.setAccession(txID);
+			builder.setTxVersion(txVersion);
 			builder.setGeneID(geneID);
 			builder.setGeneSymbol(geneName);
 			builder.setSequence(txID);

@@ -24,6 +24,7 @@
 * Prohibiting creating `GenomeVariant` with symbolic alleles.
   Throwing new checked exception `InvalidGenomeVariant` case of error.
 * Fixing SO term ID for `VariantEffect.DISRUPTIVE_INFRAME_DELETION`
+* Correctly parsing transcript version for ENSEMBL when available (not available for b75/GRCh37).
 
 ## v0.27
 
