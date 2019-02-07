@@ -120,6 +120,7 @@ public class UCSCParser implements TranscriptParser {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
+		this.knownGeneMap = new HashMap<>();
 		this.geneIdentifiers = geneIdentifiers;
 	}
 

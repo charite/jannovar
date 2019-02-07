@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Fixing sources information for hg38 downloads.
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
 * Adding SV support to jannovar-cli, includes tests.
 
