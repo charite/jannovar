@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
@@ -31,7 +32,7 @@ class NucleotideIndelToGenomeVariantTranslationImpl extends NucleotideChangeToGe
 	 * @throws CannotTranslateHGVSVariant in case of translation problems
 	 */
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType, NucleotideIndel ntIndel)
-		throws CannotTranslateHGVSVariant {
+		throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		final NucleotideRange range = ntIndel.getRange();
 		final NucleotideSeqDescription insertedNTDesc = ntIndel.getInsSeq();
 		final NucleotideSeqDescription deletedNTDesc = ntIndel.getDelSeq();

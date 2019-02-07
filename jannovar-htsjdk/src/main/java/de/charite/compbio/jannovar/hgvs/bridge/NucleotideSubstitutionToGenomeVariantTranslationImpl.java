@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
@@ -28,7 +29,7 @@ class NucleotideSubstitutionToGenomeVariantTranslationImpl extends NucleotideCha
 	 * @throws CannotTranslateHGVSVariant in case of translation problems
 	 */
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
-												 NucleotideSubstitution ntSub) throws CannotTranslateHGVSVariant {
+												 NucleotideSubstitution ntSub) throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		final NucleotidePointLocation pos = ntSub.getPosition();
 		final String fromNT = ntSub.getFromNT().toUpperCase();
 		final String toNT = ntSub.getToNT().toUpperCase();

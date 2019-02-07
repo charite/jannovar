@@ -31,15 +31,6 @@ public class ProjectTranscriptToChromosomeOptions extends JannovarAnnotationOpti
 	 */
 	private String pathReferenceFASTA;
 
-	@Override
-	public void setFromArgs(Namespace args) throws CommandLineParsingException {
-		super.setFromArgs(args);
-
-		pathInputText = args.getString("input_txt");
-		pathOutputVCF = args.getString("output_vcf");
-		pathReferenceFASTA = args.getString("reference_fasta");
-	}
-
 	/**
 	 * Setup {@link ArgumentParser}
 	 *
@@ -75,6 +66,15 @@ public class ProjectTranscriptToChromosomeOptions extends JannovarAnnotationOpti
 		subParser.epilog("Example: java -jar Jannovar.jar tx-to-chrom -i in.txt -o out.vcf");
 
 		JannovarBaseOptions.setupParser(subParser);
+	}
+
+	@Override
+	public void setFromArgs(Namespace args) throws CommandLineParsingException {
+		super.setFromArgs(args);
+
+		pathInputText = args.getString("input_txt");
+		pathOutputVCF = args.getString("output_vcf");
+		pathReferenceFASTA = args.getString("reference_fasta");
 	}
 
 	public String getPathReferenceFASTA() {

@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.htsjdk;
 
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.SVAnnotation;
 import htsjdk.variant.variantcontext.writer.Options;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
@@ -125,6 +126,9 @@ public final class VariantContextWriterConstructionHelper {
 		VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String,
 			Annotation.VCF_ANN_DESCRIPTION_STRING);
 		header.addMetaDataLine(annLine);
+		VCFInfoHeaderLine svAnnLine = new VCFInfoHeaderLine("SVANN", 1, VCFHeaderLineType.String,
+			SVAnnotation.VCF_SVANN_DESCRIPTION_STRING);
+		header.addMetaDataLine(svAnnLine);
 		return header;
 	}
 

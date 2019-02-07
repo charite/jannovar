@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.reference;
 
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,7 +66,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
+	public void testForwardInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
@@ -74,7 +75,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException {
+	public void testForwardInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException, InvalidGenomeVariant {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
@@ -84,7 +85,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+	public void testForwardInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.FWD);
@@ -93,7 +94,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
+	public void testForwardInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "C", Strand.FWD);
@@ -103,7 +104,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryOneBaseSecond() throws ProjectionException {
+	public void testForwardInsertNormalizationNecessaryOneBaseSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
@@ -113,7 +114,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+	public void testForwardInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "GTGC", Strand.FWD);
@@ -123,7 +124,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
+	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.REV);
@@ -132,7 +133,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException {
+	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "A", Strand.REV);
@@ -141,7 +142,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.REV);
@@ -150,7 +151,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
+	public void testReverseInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "T", Strand.FWD);
@@ -160,7 +161,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryOneBaseThird() throws ProjectionException {
+	public void testReverseInsertNormalizationNecessaryOneBaseThird() throws ProjectionException, InvalidGenomeVariant {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 3, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
@@ -171,7 +172,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "AA", Strand.FWD);
@@ -181,7 +182,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testForwardDeletionNormalization() throws ProjectionException {
+	public void testForwardDeletionNormalization() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "GTCACGTCCGGCGCG", "", Strand.FWD);
@@ -191,7 +192,7 @@ public class GenomeChangeNormalizerTest {
 	}
 
 	@Test
-	public void testReverseDeletionNormalization() throws ProjectionException {
+	public void testReverseDeletionNormalization() throws ProjectionException, InvalidGenomeVariant {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "AA", "", Strand.FWD);

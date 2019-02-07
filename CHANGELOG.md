@@ -5,14 +5,24 @@
 ### jannovar-cli
 
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
+* Adding SV support to jannovar-cli, includes tests.
+
+### jannovar-htsjdk
+
+* Adding SV support to jannovar-htsjdk
+* Bumping HTSJDK dependency to v2.18.2
 
 ### jannovar-core
 
+* Changing upstream/downstream size to 5kbp.
 * Support for prioritizing RefSeq transcript on the PAR of chrX over those of chrY
 * Refactorizations to improve performace using `EnumSet`.
 * Extended `VariantEffect` for the effects of structural variants.
   Removing documentation that the effect is not used in Jannovar for some now interpreted ones.
   Also variant effect for non-coding variants is added using the [current VEP predictions](https://www.ensembl.org/info/genome/variation/prediction/predicted_data.html) as a template.
+* Prohibiting creating `GenomeVariant` with symbolic alleles.
+  Throwing new checked exception `InvalidGenomeVariant` case of error.
+* Fixing SO term ID for `VariantEffect.DISRUPTIVE_INFRAME_DELETION`
 
 ## v0.27
 

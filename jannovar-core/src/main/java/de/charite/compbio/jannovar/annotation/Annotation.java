@@ -28,8 +28,10 @@ import java.util.EnumSet;
 @Immutable
 public final class Annotation implements VariantDescription, Comparable<Annotation> {
 
-	private static final ImmutableSet<VariantEffect> EMPTY_VARIANT_EFFECTS = Sets.immutableEnumSet(EnumSet.noneOf(VariantEffect.class));
-	private static final ImmutableSet<AnnotationMessage> EMPTY_ANNOTATION_MESSAGES = Sets.immutableEnumSet(EnumSet.noneOf(AnnotationMessage.class));
+	private static final ImmutableSet<VariantEffect> EMPTY_VARIANT_EFFECTS = Sets.immutableEnumSet(
+		EnumSet.noneOf(VariantEffect.class));
+	private static final ImmutableSet<AnnotationMessage> EMPTY_ANNOTATION_MESSAGES = Sets.immutableEnumSet(
+		EnumSet.noneOf(AnnotationMessage.class));
 
 	/**
 	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
@@ -91,7 +93,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	private final ProteinChange proteinChange;
 
 	/**
-	 * the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations
+	 * the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC_VARIANT} annotations
 	 */
 	private final TranscriptModel transcript;
 
@@ -275,6 +277,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @return VCF annotation string
 	 */
 	public String toVCFAnnoString(String alt, boolean escape, AminoAcidCode code) {
+		// 	public static final String VCF_SVANN_DESCRIPTION_STRING = "Functional SV Annotation:'Effects|Gene_Name|Gene_ID|" +
+		//		"Feature_Type|Feature_ID|Transcript_BioType|ERRORS / WARNINGS / INFO'";
 		VCFAnnotationData data = new VCFAnnotationData();
 		data.effects = effects;
 		data.impact = getPutativeImpact();
@@ -291,8 +295,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	}
 
 	/**
-	 * Forward to {@link #toVCFAnnoString(String, boolean, AminoAcidCode)
-	 * toVCFAnnoString(alt, true, code)}.
+	 * Forward to {@link #toVCFAnnoString(String, boolean, AminoAcidCode) toVCFAnnoString(alt, true, code)}.
 	 *
 	 * @param alt  alternateve allele
 	 * @param code Three ore one letter amino acid code

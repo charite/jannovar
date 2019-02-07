@@ -4,10 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationMessage;
-import de.charite.compbio.jannovar.annotation.VariantAnnotations;
-import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
@@ -21,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
@@ -30,12 +29,19 @@ import java.util.*;
 public final class VariantContextAnnotator {
 
 	/**
-	 * the logger object to use
+	 * Regular expression pattern for matching breakends in VCF.
+	 */
+	private static final Pattern BND_PATTERN = Pattern.compile(
+		"^(?<leadingBases>\\w*)(?<firstBracket>[\\[\\]])(?<targetChrom>[^:])+:(?<targetPos>\\w+)" +
+			"(?<secondBracket>[\\[\\]])(?<trailingBases>\\w*)$");
+
+	/**
+	 * The logger object to use.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
 
 	/**
-	 * Options class for {@link VariantContextAnnotator}
+	 * Options class for {@link VariantContextAnnotator}.
 	 *
 	 * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
 	 * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
@@ -43,7 +49,7 @@ public final class VariantContextAnnotator {
 	public static class Options {
 		/**
 		 * Whether or not to trim each annotation list to the first (one with highest putative impact), defaults to
-		 * <code>true</code>
+		 * <code>true</code>.
 		 */
 		private final boolean oneAnnotationOnly;
 
@@ -93,10 +99,11 @@ public final class VariantContextAnnotator {
 		/**
 		 * constructor using fields
 		 *
-		 * @param oneAnnotationOnly                        Whether or not to trim each annotation list to the first (one with
-		 *                                                 highest putative impact), defaults to <code>true</code>
+		 * @param oneAnnotationOnly                        Whether or not to trim each annotation list to the first (one
+		 *                                                 with highest putative impact), defaults to <code>true</code>
 		 * @param code                                     HGVS protein output in three or one letter
-		 * @param escapeAnnField                           whether or not to escape values in the ANN field (defaults to
+		 * @param escapeAnnField                           whether or not to escape values in the ANN field (defaults
+		 *                                                 to
 		 *                                                 <code>true</code>)
 		 * @param nt3PrimeShifting                         whether or not to perform shifting towards the 3' end of the
 		 *                                                 transcript (defaults to <code>true</code>)
@@ -171,6 +178,11 @@ public final class VariantContextAnnotator {
 	private final VariantAnnotator annotator;
 
 	/**
+	 * implementation of the actual SV annotation
+	 */
+	private final SVAnnotator svAnnotator;
+
+	/**
 	 * Construct annotator with default options.
 	 *
 	 * @param refDict       Referencedictionary
@@ -194,6 +206,7 @@ public final class VariantContextAnnotator {
 		this.options = options;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap,
 			new AnnotationBuilderOptions(options.nt3PrimeShifting, false));
+		this.svAnnotator = new SVAnnotator(refDict, chromosomeMap);
 	}
 
 	/**
@@ -233,7 +246,8 @@ public final class VariantContextAnnotator {
 	 * @param vc       {@link VariantContext} describing the variant
 	 * @param alleleID numeric identifier of the allele
 	 * @return {@link GenomeVariant} corresponding to <code>vc</code>, guaranteed to be on {@link Strand#FWD}.
-	 * @throws InvalidCoordinatesException in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
+	 * @throws InvalidCoordinatesException in the case that the reference in <code>vc</code> is not known in {@link
+	 *                                     #refDict}.
 	 */
 	public GenomeVariant buildGenomeVariant(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
@@ -277,25 +291,65 @@ public final class VariantContextAnnotator {
 	 */
 	public VariantContext annotateVariantContext(VariantContext vc) {
 		try {
-			vc = applyAnnotations(vc, buildAnnotations(vc));
+			vc = dispatchAnnotateVariantContext(vc);
 		} catch (InvalidCoordinatesException e) {
 			putErrorAnnotation(vc, ImmutableSet.of(e.getAnnotationMessage()));
+		} catch (MixingSmallAndSVAlleles e) {
+			LOGGER.error("Cannot mix small and structural variant in {}", new Object[]{e});
+			putErrorAnnotation(vc, ImmutableSet.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
+		} catch (MultipleSVAlleles | MissingSVTypeInfoField | MissingEndInfoField |
+			InvalidBreakendDescriptionException e) {
+			LOGGER.error("Problem annotating SV in {}", new Object[]{e});
+			putErrorAnnotation(vc, ImmutableSet.of(AnnotationMessage.OTHER_MESSAGE));
 		}
-		vc.getCommonInfo().removeAttribute(""); // remove leading/trailing comma
+		vc.getCommonInfo().removeAttribute(""); // remove leading/trailing semicolon in INFO
 		return vc;
+	}
+
+	/**
+	 * Dispatch annotation of {@link VariantContext} depending on whether it describes a sequence or a structural
+	 * variant.
+	 * <p>
+	 * This function looks at whether any of the alternate alleles is symbolic or the {@code SVTYPE} key of the {@code
+	 * INFO} field is set.
+	 */
+	public VariantContext dispatchAnnotateVariantContext(VariantContext vc)
+		throws MixingSmallAndSVAlleles, InvalidCoordinatesException, MissingSVTypeInfoField,
+		MissingEndInfoField, MultipleSVAlleles, InvalidBreakendDescriptionException {
+
+		Boolean isSymbolic = null;
+		for (Allele allele : vc.getAlternateAlleles()) {
+			boolean symbolic = GenomeVariant.wouldBeSymbolicAllele(allele.getBaseString());
+			if (isSymbolic == null) {
+				isSymbolic = symbolic;
+			} else if (isSymbolic != symbolic) {
+				throw new MixingSmallAndSVAlleles("Mixing small and structural variant");
+			}
+		}
+
+		final boolean hasSVType = vc.getCommonInfo().hasAttribute("SVTYPE");
+
+		if (isSymbolic == null) {
+			return vc;
+		} else if (!isSymbolic && !hasSVType) {
+			return applyAnnotations(vc, buildAnnotations(vc));
+		} else {
+			return applySVAnnotations(vc, buildSVAnnotations(vc));
+		}
 	}
 
 	/**
 	 * Given a {@link VariantContext}, generate one {@link VariantAnnotations} for each alternative allele.
 	 * <p>
-	 * Note that in the case of an exception being thrown, you have to add an error annotation yourself to the
-	 * {@link VariantContext} yourself, e.g. by using {@link #putErrorAnnotation}.
+	 * Note that in the case of an exception being thrown, you have to add an error annotation yourself to the {@link
+	 * VariantContext} yourself, e.g. by using {@link #putErrorAnnotation}.
 	 *
 	 * @param vc the VCF record to annotate, remains unchanged
 	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of
 	 * the alternative alleles in <code>vc</code>
-	 * @throws InvalidCoordinatesException in the case of problems with resolving coordinates internally, namely building the
-	 *                                     {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
+	 * @throws InvalidCoordinatesException in the case of problems with resolving coordinates internally, namely
+	 *                                     building the {@link GenomeVariant} object one one of the returned {@link
+	 *                                     VariantAnnotations}s.
 	 */
 	public ImmutableList<VariantAnnotations> buildAnnotations(VariantContext vc) throws InvalidCoordinatesException {
 		LOGGER.trace("building annotation lists for {}", new Object[]{vc});
@@ -369,6 +423,219 @@ public final class VariantContextAnnotator {
 	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
 		return new VariantAnnotations(change,
 			ImmutableList.of(new Annotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
+	}
+
+	/**
+	 * @param change {@link SVGenomeVariant} to build error annotation for
+	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
+	 */
+	public SVAnnotations buildSVErrorAnnotations(SVGenomeVariant change) {
+		return new SVAnnotations(change,
+			ImmutableList.of(new SVAnnotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
+	}
+
+	public ImmutableList<SVAnnotations> buildSVAnnotations(VariantContext vc)
+		throws MultipleSVAlleles, MissingSVTypeInfoField, MissingEndInfoField, InvalidCoordinatesException,
+		InvalidBreakendDescriptionException {
+		LOGGER.trace("building SV annotation lists for {}", new Object[]{vc});
+
+		if (vc.getAlternateAlleles().size() > 1) {
+			throw new MultipleSVAlleles("More than one SV allele in variant: " + vc.toString());
+		}
+
+		final ImmutableList.Builder<SVAnnotations> builder = new ImmutableList.Builder<SVAnnotations>();
+		final SVGenomeVariant change = buildSVGenomeVariant(vc);
+
+		// Build AnnotationList object for this allele.
+		try {
+			final SVAnnotations lst = svAnnotator.buildAnnotations(change);
+			builder.add(lst);
+			LOGGER.trace("adding SV annotation list {}", new Object[]{lst});
+		} catch (Exception e) {
+			final SVAnnotations lst = buildSVErrorAnnotations(change);
+			builder.add(lst);
+			LOGGER.trace("adding SV error annotation list {}", new Object[]{lst});
+		}
+
+		return builder.build();
+	}
+
+	public SVGenomeVariant buildSVGenomeVariant(VariantContext vc)
+		throws MissingSVTypeInfoField, InvalidCoordinatesException, MissingEndInfoField,
+		InvalidBreakendDescriptionException {
+
+		final String tmpSVType = vc.getCommonInfo().getAttributeAsString("SVTYPE", null);
+		if (tmpSVType == null) {
+			throw new MissingSVTypeInfoField("INFO field SVTYPE not found for variant: " + vc);
+		}
+
+		final String svType;
+		final String altStr = vc.getAlternateAllele(0).toString();
+		if (altStr.startsWith("<") && altStr.endsWith(">")) {
+			final String altSVType = altStr.substring(1, altStr.length() - 1);
+			if (!altSVType.startsWith(tmpSVType)) {
+				throw new MissingSVTypeInfoField("INFO/SVTYPE not a prefix of ALT allele");
+			}
+			svType = altSVType;
+		} else {
+			svType = tmpSVType;
+		}
+
+		// Get start position.
+		final Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
+		if (boxedInt == null) {
+			throw new InvalidCoordinatesException("Unknown reference " + vc.getContig(),
+				AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+		}
+		final int chr = boxedInt.intValue();
+		final int pos = vc.getStart();
+		final GenomePosition gPos = new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED);
+
+		// Get end position, if any.
+		final GenomePosition gPos2;
+		if (vc.getCommonInfo().hasAttribute("END")) {
+			final String contig2 = vc.getCommonInfo().getAttributeAsString("CHR2", vc.getContig());
+			final Integer boxedInt2 = refDict.getContigNameToID().get(contig2);
+			if (boxedInt2 == null) {
+				throw new InvalidCoordinatesException("Unknown reference " + contig2,
+					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+			}
+			final int chr2 = boxedInt2.intValue();
+			final int pos2 = vc.getCommonInfo().getAttributeAsInt("END", -1);
+			if (pos2 == -1) {
+				throw new InvalidCoordinatesException(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+			}
+			gPos2 = new GenomePosition(refDict, Strand.FWD, chr2, pos2, PositionType.ZERO_BASED);
+		} else {
+			gPos2 = null;
+		}
+
+		// Get CI around pos.
+		int lowerCIPos = 0;
+		int upperCIPos = 0;
+		if (vc.getCommonInfo().hasAttribute("CIPOS")) {
+			final List<Integer> ciPos = vc.getCommonInfo().getAttributeAsIntList("CIPOS", -1);
+			if (ciPos != null && ciPos.size() == 2) {
+				lowerCIPos = ciPos.get(0);
+				upperCIPos = ciPos.get(1);
+			}
+		}
+
+		// Get CI around pos2.
+		int lowerCIPos2 = 0;
+		int upperCIPos2 = 0;
+		if (vc.getCommonInfo().hasAttribute("CIEND")) {
+			final List<Integer> ciPos2 = vc.getCommonInfo().getAttributeAsIntList("CIEND", -1);
+			if (ciPos2 != null && ciPos2.size() == 2) {
+				lowerCIPos2 = ciPos2.get(0);
+				upperCIPos2 = ciPos2.get(1);
+			}
+		}
+
+		// Make case distinction between the known variant types.
+		if (svType.equals("DEL")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVDeletion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.startsWith("DEL:ME")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVMobileElementDeletion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.equals("DUP")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVDuplication(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.equals("DUP:TANDEM")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVTandemDuplication(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.equals("INS")) {
+			return new SVInsertion(gPos, lowerCIPos, upperCIPos);
+		} else if (svType.startsWith("INS:ME")) {
+			return new SVMobileElementInsertion(gPos, lowerCIPos, upperCIPos);
+		} else if (svType.equals("INV")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVInversion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.equals("CNV")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVCopyNumberVariant(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.equals("BND")) {
+			final Matcher matcher = BND_PATTERN.matcher(altStr);
+			if (!matcher.matches()) {
+				throw new InvalidBreakendDescriptionException("Not a valid BND alternative allele: " + vc.toString());
+			} else {
+				final String firstBracket = matcher.group("firstBracket");
+				final String secondBracket = matcher.group("secondBracket");
+				if (!firstBracket.equals(secondBracket)) {
+					throw new InvalidBreakendDescriptionException(
+						"Not a valid BND alternative allele: " + vc.toString());
+				} else {
+					final int chr2 = refDict.getContigNameToID().get(matcher.group("targetChrom"));
+					final int pos2 = Integer.parseInt(matcher.group("targetPos"));
+					final GenomePosition gBNDPos2 = new GenomePosition(
+						refDict, Strand.FWD, chr2, pos2, PositionType.ZERO_BASED);
+
+					final String leadingBases = matcher.group("leadingBases");
+					final String trailingBases = matcher.group("trailingBases");
+
+					return new SVBreakend(
+						gPos, gBNDPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2,
+						leadingBases, trailingBases,
+						"]".equals(firstBracket) ? SVBreakend.Side.LEFT_END : SVBreakend.Side.RIGHT_END);
+				}
+			}
+		} else {
+			return new SVUnknown(gPos, gPos2 == null ? gPos : gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		}
+	}
+
+	public VariantContext applySVAnnotations(VariantContext vc, List<SVAnnotations> annos) {
+		// Whether or not variant is off-target in all annotations
+		boolean offTargetInAll = true;
+
+		if (vc.getAlternateAlleles().size() > 1) {
+			throw new RuntimeException(
+				"Must not have more than one alternate allele for SVs. This should have been caught earlier, thought");
+		} else if (vc.getAlternateAlleles().size() == 0) {
+			return vc;
+		}
+
+		ArrayList<String> annotations = new ArrayList<String>();
+		final int alleleID = 0;
+		if (!annos.get(alleleID).getAnnotations().isEmpty()) {
+			for (SVAnnotation ann : annos.get(alleleID).getAnnotations()) {
+				boolean offTargetInThis = ann.getEffects().stream()
+					.allMatch(e -> e.isOffExome(options.offTargetFilterUtrIsOffTarget,
+						options.offTargetFilterIntronicSpliceIsOffTarget));
+				offTargetInAll = offTargetInAll && offTargetInThis;
+
+				if (!options.oneAnnotationOnly || annotations.isEmpty()) {
+					annotations.add(ann.toVCFSVAnnoString(options.escapeAnnField));
+				}
+			}
+		}
+
+		if (options.isOffTargetFilterEnabled() && (offTargetInAll && !annotations.isEmpty())) {
+			Set<String> filters = new HashSet<>(vc.getFilters());
+			filters.add(VariantEffectHeaderExtender.FILTER_EFFECT_OFF_EXOME);
+			vc = new VariantContextBuilder(vc).filters(filters).make();
+		}
+
+		// If a VC builder is used before the attributes can be unmodifiable.
+		Map<String, Object> attributes = new HashMap<>(vc.getAttributes());
+		if (!annotations.isEmpty())
+			attributes.put("SVANN", Joiner.on(',').join(annotations));
+		vc.getCommonInfo().setAttributes(attributes);
+
+		return vc;
 	}
 
 }

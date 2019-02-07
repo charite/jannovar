@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
 import com.google.common.io.Files;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -65,7 +66,7 @@ public class NucleotideIndelToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionInCDS() throws CannotTranslateHGVSVariant {
+	public void testPositionInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339delAinsCT";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
@@ -76,7 +77,7 @@ public class NucleotideIndelToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testRangeInCDS() throws CannotTranslateHGVSVariant {
+	public void testRangeInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339_7341delAGTinsCTTTG";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
