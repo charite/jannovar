@@ -17,14 +17,15 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 // TODO(holtgrewe): Factor out common paths with RefSeqParser
 // TODO(holtgrewe): stop codon part of CDS here?
@@ -81,10 +82,21 @@ public class EnsemblParser implements TranscriptParser {
 		final String pathGTF = PathUtil.join(basePath, getINIFileName("gtf"));
 		Map<String, TranscriptModelBuilder> builders = recordsToBuilders(loadRecords(pathGTF));
 
+		// Load mappings that allows mapping from ENSG to HGNC ID.
+		final Map<String, String> ensgToHgnc;
+		try {
+			ensgToHgnc = loadEngsToHgnc();
+		} catch (Exception e) {
+			throw new TranscriptParseException("Could not parse ENSEMBL mapping files", e);
+		}
+
 		// Augment information in builders with
 		try {
-			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEnsemblGeneID()),
-				tx -> tx.getGeneID()).run(builders);
+			new TranscriptModelBuilderHGNCExtender(
+				basePath,
+				r -> Lists.newArrayList(r.getHgncID()),
+				tx -> "HGNC:" + ensgToHgnc.get(tx.getGeneID())
+			).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
 		}
@@ -92,7 +104,8 @@ public class EnsemblParser implements TranscriptParser {
 		// Use Entrez IDs from RefSeq if no HGNC annotation
 		for (TranscriptModelBuilder val : builders.values()) {
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
-				LOGGER.info("ENSEMBL Gene {} not known to HGNC, only annotating with ENSEMBL_GENE_ID => {} for additional IDs",
+				LOGGER.info(
+					"ENSEMBL Gene {} not known to HGNC, only annotating with ENSEMBL_GENE_ID => {} for additional IDs",
 					new Object[]{val.getGeneID(), val.getGeneID()});
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
 			}
@@ -119,6 +132,61 @@ public class EnsemblParser implements TranscriptParser {
 			}
 		}
 		return result.build();
+	}
+
+	private Map<String, String> loadEngsToHgnc() throws IOException {
+		// Read mapping from ENSG to MySQL key
+		final String pathTableGeneMain = PathUtil.join(basePath, getINIFileName("table_gene_main"));
+		final Map<String, String> ensgToKey = new HashMap<>();
+		try (
+			FileInputStream fis = new FileInputStream(pathTableGeneMain);
+			InputStream bis = new BufferedInputStream(fis);
+			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
+				new BZip2CompressorInputStream(fis) : null;
+			GZIPInputStream gzis = new GZIPInputStream(pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
+			InputStreamReader reader = new InputStreamReader(gzis);
+			BufferedReader bufReader = new BufferedReader(reader)
+		) {
+			String line;
+			while ((line = bufReader.readLine()) != null) {
+				final String[] arr = line.trim().split("\t");
+				ensgToKey.put(arr[6], arr[1]);
+			}
+		}
+
+		// Read mapping from MySQL key to HGNC ID
+		final String pathTableHgnc = PathUtil.join(basePath, getINIFileName("table_hgnc"));
+		final Map<String, String> keyToHgnc = new HashMap<>();
+		try (
+			FileInputStream fis = new FileInputStream(pathTableHgnc);
+			InputStream bis = new BufferedInputStream(fis);
+			BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2") ? new BZip2CompressorInputStream(fis) : null;
+			GZIPInputStream gzis = new GZIPInputStream(pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
+			InputStreamReader reader = new InputStreamReader(gzis);
+			BufferedReader bufReader = new BufferedReader(reader)
+		) {
+			String line;
+			while ((line = bufReader.readLine()) != null) {
+				final String[] arr = line.trim().split("\t");
+				if (!arr[0].equals("\\N") && !arr[3].equals("\\N")) {
+					keyToHgnc.put(arr[0], arr[3]);
+				}
+			}
+		}
+
+		// Build mapping from ENSG to HGNC identifier
+		final Map<String, String> result = new HashMap<>();
+		for (Entry<String, String> entry1: ensgToKey.entrySet()) {
+			final String ensg = entry1.getKey();
+			final String key = entry1.getValue();
+			final String hgnc = keyToHgnc.get(key);
+			if (hgnc == null) {
+				LOGGER.warn("Found no HGNC identifier for ENSG: ", new Object[]{ensg});
+			} else {
+				result.put(ensg, hgnc);
+			}
+		}
+		return result;
 	}
 
 	/**

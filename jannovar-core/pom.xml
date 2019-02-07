@@ -35,6 +35,12 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <!-- Loading of bz2 files -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.4.1</version>
+        </dependency>
         <!-- HGVS variant description -->
         <dependency>
             <groupId>de.charite.compbio</groupId>
