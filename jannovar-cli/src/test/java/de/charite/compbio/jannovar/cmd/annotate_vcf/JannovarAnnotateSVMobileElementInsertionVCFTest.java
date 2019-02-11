@@ -95,8 +95,9 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 		"/sv_header.vcf",
 			"1\t59017449\t.\tN\t<INS:ME>\t.\t.\tSVTYPE=INS;END=59017449");
 		final String expected = "1\t59017449\t.\tN\t<INS:ME>\t.\t.\tEND=59017449;" +
-			"SVANN=intergenic_variant&structural_variant&coding_transcript_variant" +
-			"|MODIFIER|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
+			"SVANN=intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|TACSTD2|4070|transcript|NM_002353.2|Coding|," +
+			"intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|NM_145243.3|Coding|;" +
+			"SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
 		Assert.assertEquals(expected, actual);
 	}

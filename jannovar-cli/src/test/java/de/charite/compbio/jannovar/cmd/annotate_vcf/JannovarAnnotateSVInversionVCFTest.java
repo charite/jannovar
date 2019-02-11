@@ -107,8 +107,9 @@ public class JannovarAnnotateSVInversionVCFTest extends JannovarAnnotateVCFWithS
 			"/sv_header.vcf",
 			"1\t59017449\t.\tN\t<INV>\t.\t.\tSVTYPE=INV;END=59017899");
 		final String expected = "1\t59017449\t.\tN\t<INV>\t.\t.\tEND=59017899;" +
-			"SVANN=intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|" +
-			"transcript|NM_145243.3|Coding|;SVTYPE=INV";
+			"SVANN=intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|TACSTD2|4070|transcript|NM_002353.2|Coding|," +
+			"intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|NM_145243.3|Coding|;" +
+			"SVTYPE=INV";
 		final String actual = loadVcfBody(outPath);
 		Assert.assertEquals(expected, actual);
 	}

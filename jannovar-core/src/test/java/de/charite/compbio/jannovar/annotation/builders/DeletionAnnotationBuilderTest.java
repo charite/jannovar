@@ -125,7 +125,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-204_-70+65del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.TRANSCRIPT_ABLATION), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.EXON_LOSS_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
