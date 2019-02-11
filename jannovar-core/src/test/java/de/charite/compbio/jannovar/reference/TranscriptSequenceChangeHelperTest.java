@@ -274,12 +274,12 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSDeletionSpanningIntoCDSFromTheRightForward() {
-		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
-			PositionType.ZERO_BASED), "TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
+			PositionType.ZERO_BASED), "TAGC", "");
 		String resultTranscript = helperForward.getCDSWithGenomeVariant(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());
-		expectedBuilder.delete(infoForward.cdsTranscriptLength() - 2, infoForward.cdsTranscriptLength());
+		expectedBuilder.delete(infoForward.cdsTranscriptLength() - 1, infoForward.cdsTranscriptLength() + 3);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
@@ -469,23 +469,23 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSDeletionSpanningIntoCDSFromTheLeftReverse() {
-		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688459,
-			PositionType.ZERO_BASED), "TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688461,
+			PositionType.ZERO_BASED), "TTAG", "");
 		String resultTranscript = helperReverse.getCDSWithGenomeVariant(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorReverse.getTranscriptStartingAtCDS());
-		expectedBuilder.delete(infoReverse.cdsTranscriptLength() - 2, infoReverse.cdsTranscriptLength());
+		expectedBuilder.delete(infoReverse.cdsTranscriptLength() - 4, infoReverse.cdsTranscriptLength());
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSDeletionSpanningIntoCDSFromTheRightReverse() {
-		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694496,
-			PositionType.ZERO_BASED), "TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694491,
+			PositionType.ZERO_BASED), "CTGCCATCTCGA", "");
 		String resultTranscript = helperReverse.getCDSWithGenomeVariant(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorReverse.getTranscriptStartingAtCDS());
-		expectedBuilder.delete(0, 2);
+		expectedBuilder.delete(0, 7);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 

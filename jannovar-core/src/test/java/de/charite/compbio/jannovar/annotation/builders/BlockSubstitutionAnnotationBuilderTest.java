@@ -227,8 +227,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("2067_*2delACGinsCGTT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Tyrext*25)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST),
+		Assert.assertEquals("(*689Tyrext*16)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals(ImmutableSortedSet.of(
+			VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST),
 			annotation1.getEffects());
 
 		// Replace stop codon by 6 nucleotides, non-frameshift case.
@@ -239,9 +240,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("2066_*1delACTinsCGGTCG", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Serext*17)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("(*689Serext*25)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION,
+		Assert.assertEquals(ImmutableSortedSet.of(
 			VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST), annotation2.getEffects());
 
 		// Delete first base of stop codon, leads to complete loss.

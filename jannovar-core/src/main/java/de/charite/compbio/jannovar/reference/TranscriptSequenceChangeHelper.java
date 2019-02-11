@@ -203,12 +203,16 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Get transcript end position.
 		GenomePosition changeEndPos = change.getGenomeInterval().getGenomeEndPos();
-		CDSPosition cdsChangeEndPos = projector.projectGenomeToCDSPosition(changeEndPos);
+		TranscriptPosition txCDSStartPos = projector.cdsToTranscriptPos(new CDSPosition(transcript, 0));
+		TranscriptPosition txChangeEndPos = projector.projectGenomeToTXPosition(changeEndPos);
+		CDSPosition cdsChangeEndPos = new CDSPosition(
+			transcript, txChangeEndPos.getPos() - txCDSStartPos.getPos());
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(cdsSeq);
-		builder.delete(cdsChangeBeginPos.getPos(), cdsChangeEndPos.getPos());
+		builder.delete(cdsChangeBeginPos.getPos(), Math.min(cdsChangeEndPos.getPos(), cdsSeq.length()));
 		builder.insert(cdsChangeBeginPos.getPos(), change.getAlt());
 		return builder.toString();
 	}
+
 }
