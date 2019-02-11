@@ -603,24 +603,26 @@ public final class VariantContextAnnotator {
 
 		if (vc.getAlternateAlleles().size() > 1) {
 			throw new RuntimeException(
-				"Must not have more than one alternate allele for SVs. This should have been caught earlier, thought");
+				"Must not have more than one alternate allele for SVs. This should have been caught earlier, though");
+		} else if (vc.getAlternateAlleles().size() != annos.size()) {
+			throw new IllegalArgumentException("alt allele count != annos.size()");
 		} else if (vc.getAlternateAlleles().size() == 0) {
 			return vc;
 		}
 
-		ArrayList<String> annotations = new ArrayList<String>();
-		final int alleleID = 0;
-		if (!annos.get(alleleID).getAnnotations().isEmpty()) {
-			for (SVAnnotation ann : annos.get(alleleID).getAnnotations()) {
-				boolean offTargetInThis = ann.getEffects().stream()
-					.allMatch(e -> e.isOffExome(options.offTargetFilterUtrIsOffTarget,
-						options.offTargetFilterIntronicSpliceIsOffTarget));
-				offTargetInAll = offTargetInAll && offTargetInThis;
-
-				if (!options.oneAnnotationOnly || annotations.isEmpty()) {
-					annotations.add(ann.toVCFSVAnnoString(options.escapeAnnField));
-				}
-			}
+		ArrayList<String> annotations = new ArrayList<>();
+		final Iterable<SVAnnotation> iterAnnos;
+		if (options.oneAnnotationOnly) {
+			iterAnnos = annos.get(0).getHighestImpactAnnotation().values();
+		} else {
+			iterAnnos = annos.get(0).getAnnotations();
+		}
+		for (SVAnnotation ann : iterAnnos) {
+			boolean offTargetInThis = ann.getEffects().stream()
+				.allMatch(e -> e.isOffExome(
+					options.offTargetFilterUtrIsOffTarget, options.offTargetFilterIntronicSpliceIsOffTarget));
+			offTargetInAll = offTargetInAll && offTargetInThis;
+			annotations.add(ann.toVCFSVAnnoString(options.escapeAnnField));
 		}
 
 		if (options.isOffTargetFilterEnabled() && (offTargetInAll && !annotations.isEmpty())) {
