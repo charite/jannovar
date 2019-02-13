@@ -3,9 +3,9 @@
 * text=auto
 
 # All FASTA and VCF files should always have Unix line endings.
-*.fasta text eol=lf
-*.fa text eol=lf
-*.vcf text eol=lf
+*.fasta         text eol=lf
+*.fa            text eol=lf
+*.vcf           text eol=lf
 
 # These files are text and should be normalized (Convert crlf => lf)
 *.css           text
