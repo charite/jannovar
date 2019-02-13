@@ -102,6 +102,28 @@ public final class SVAnnotations implements SVDescription {
 		}
 	}
 
+	/**
+	 * Convenience method.
+	 *
+	 * @return {@link VariantEffect} with the highest impact of all in entries or {@link VariantEffect#SEQUENCE_VARIANT}
+	 * if entries are empty or contain no annotated effects.
+	 */
+	public VariantEffect getHighestImpactEffect() {
+		final ImmutableMap<String, SVAnnotation> anno = getHighestImpactAnnotation();
+		if (anno == null || anno.isEmpty() || anno.entrySet().iterator().next().getValue().getEffects().isEmpty()) {
+			return VariantEffect.SEQUENCE_VARIANT;
+		} else {
+			VariantEffect result = null;
+			for (SVAnnotation svAnno: anno.values()) {
+				final VariantEffect candidate = svAnno.getMostPathogenicVariantEffect();
+				if (candidate.compareTo(result) < 0) {
+					result = candidate;
+				}
+			}
+			return result;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "AnnotationList(change=" + change + ", entries=[" + entries + "])";
