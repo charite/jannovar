@@ -140,7 +140,6 @@ public class EnsemblParser implements TranscriptParser {
 		final Map<String, String> ensgToKey = new HashMap<>();
 		try (
 			FileInputStream fis = new FileInputStream(pathTableGeneMain);
-			InputStream bis = new BufferedInputStream(fis);
 			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
 				new BZip2CompressorInputStream(fis) : null;
 			GZIPInputStream gzis = new GZIPInputStream(pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
@@ -159,7 +158,6 @@ public class EnsemblParser implements TranscriptParser {
 		final Map<String, String> keyToHgnc = new HashMap<>();
 		try (
 			FileInputStream fis = new FileInputStream(pathTableHgnc);
-			InputStream bis = new BufferedInputStream(fis);
 			BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2") ? new BZip2CompressorInputStream(fis) : null;
 			GZIPInputStream gzis = new GZIPInputStream(pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
 			InputStreamReader reader = new InputStreamReader(gzis);

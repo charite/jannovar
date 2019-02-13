@@ -96,7 +96,7 @@ final public class SVDeletionAnnotationBuilder extends SVAnnotationBuilder {
 	 * Return annotation for variant overlapping but not containing exons.
 	 */
 	private SVAnnotation buildExonOverlapAnnotation(GenomeInterval changeInterval) {
-		final EnumSet effects = EnumSet.noneOf(VariantEffect.class);
+		final EnumSet<VariantEffect> effects = EnumSet.noneOf(VariantEffect.class);
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
 			effects.add(VariantEffect.START_LOST);
 		}
@@ -129,7 +129,7 @@ final public class SVDeletionAnnotationBuilder extends SVAnnotationBuilder {
 	 * Results depends on overlap of {@code changeInterval} with UTRs.
 	 */
 	private SVAnnotation buildExonLossAnnotation(GenomeInterval changeInterval) {
-		final EnumSet effects = EnumSet.of(VariantEffect.EXON_LOSS_VARIANT);
+		final EnumSet<VariantEffect> effects = EnumSet.of(VariantEffect.EXON_LOSS_VARIANT);
 		if (so.overlapsWithThreePrimeUTRExon(changeInterval)) {
 			effects.add(VariantEffect.THREE_PRIME_UTR_TRUNCATION);
 		}

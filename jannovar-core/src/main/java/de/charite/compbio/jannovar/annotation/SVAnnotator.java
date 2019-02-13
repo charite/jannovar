@@ -58,7 +58,7 @@ public final class SVAnnotator {
 	 */
 	public SVAnnotations buildAnnotations(SVGenomeVariant change) throws AnnotationException {
 		// Get genomic change interval(s)
-		final ImmutableList.Builder builder = ImmutableList.<GenomeInterval>builder();
+		final ImmutableList.Builder<GenomeInterval> builder = ImmutableList.builder();
 		try {
 			builder.add(change.getGenomeInterval());
 		} catch (IllegalArgumentException e) {

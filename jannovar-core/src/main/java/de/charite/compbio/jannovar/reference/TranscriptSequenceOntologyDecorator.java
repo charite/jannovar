@@ -69,7 +69,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	private ImmutableList<GenomeInterval> getIntersectedExons(GenomeInterval other) {
-		final ImmutableList.Builder result = ImmutableList.<GenomeInterval>builder();
+		final ImmutableList.Builder<GenomeInterval> result = ImmutableList.builder();
 		for (GenomeInterval exon : transcript.getExonRegions()) {
 			final GenomeInterval itv = exon.intersection(other);
 			if (itv.length() > 0) {

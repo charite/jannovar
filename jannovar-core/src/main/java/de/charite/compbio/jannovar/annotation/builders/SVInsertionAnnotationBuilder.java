@@ -91,7 +91,7 @@ final public class SVInsertionAnnotationBuilder extends SVAnnotationBuilder {
 	 * Return annotation for variant in intron.
 	 */
 	private SVAnnotation buildIntronAnnotation(GenomeInterval changeInterval) {
-		final EnumSet effects = EnumSet.noneOf(VariantEffect.class);
+		final EnumSet<VariantEffect> effects = EnumSet.noneOf(VariantEffect.class);
 		if (so.overlapsWithCDS(changeInterval)) {
 			return buildAnnotation(VariantEffect.INTRON_VARIANT);
 		} else if (so.overlapsWithFivePrimeUTR(changeInterval)) {
