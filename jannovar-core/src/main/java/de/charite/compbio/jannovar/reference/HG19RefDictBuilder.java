@@ -54,6 +54,7 @@ public class HG19RefDictBuilder {
 		builder.putContigID("Y", 24);
 		builder.putContigName(25, "M");
 		builder.putContigID("M", 25);
+		builder.putContigID("MT", 25);
 		builder.putContigID("chrX", 23);
 		builder.putContigID("chrY", 24);
 		builder.putContigID("chrM", 25);
