@@ -32,7 +32,7 @@ public final class VariantContextAnnotator {
 	 * Regular expression pattern for matching breakends in VCF.
 	 */
 	private static final Pattern BND_PATTERN = Pattern.compile(
-		"^(?<leadingBases>\\w*)(?<firstBracket>[\\[\\]])(?<targetChrom>[^:])+:(?<targetPos>\\w+)" +
+		"^(?<leadingBases>\\w*)(?<firstBracket>[\\[\\]])(?<targetChrom>[^:]+):(?<targetPos>\\w+)" +
 			"(?<secondBracket>[\\[\\]])(?<trailingBases>\\w*)$");
 
 	/**
