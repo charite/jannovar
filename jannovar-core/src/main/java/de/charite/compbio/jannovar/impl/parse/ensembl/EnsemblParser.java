@@ -47,6 +47,10 @@ public class EnsemblParser implements TranscriptParser {
 	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
 	 */
 	private final ReferenceDictionary refDict;
+	/*
+	 * Contig name mappings
+	 */
+	private final ImmutableMap<String, Integer> contigDict;
 
 	/**
 	 * Path to directory where the to-be-parsed files live
@@ -71,9 +75,12 @@ public class EnsemblParser implements TranscriptParser {
 	 */
 	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers, Section iniSection) {
 		this.refDict = refDict;
+		this.contigDict = refDict.getContigNameToID();
+
+		this.geneIdentifiers = geneIdentifiers;
+
 		this.basePath = basePath;
 		this.iniSection = iniSection;
-		this.geneIdentifiers = geneIdentifiers;
 	}
 
 	@Override
@@ -82,12 +89,12 @@ public class EnsemblParser implements TranscriptParser {
 		final String pathGTF = PathUtil.join(basePath, getINIFileName("gtf"));
 		Map<String, TranscriptModelBuilder> builders = loadTranscriptModels(pathGTF);
 
-//		Map<String, TranscriptModelBuilder> builders = recordsToBuilders(loadRecords(pathGTF));
-
 		// Load mappings that allows mapping from ENSG to HGNC ID.
+		LOGGER.info("Loading ENSEMBL to HGNC mappings...");
 		final Map<String, String> ensgToHgnc = loadEngsToHgnc();
 
 		// Augment information in builders with
+		LOGGER.info("Assigning additional HGNC information to transcripts..");
 		try {
 			new TranscriptModelBuilderHGNCExtender(
 				basePath,
@@ -109,8 +116,10 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("cdna"));
+		LOGGER.info("Adding sequence information from cdna FASTA...");
 		loadFASTA(builders, pathFASTA);
 
+		LOGGER.info("Finalising TranscriptModels...");
 		// Create final list of TranscriptModels.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<>();
 		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
@@ -127,7 +136,9 @@ public class EnsemblParser implements TranscriptParser {
 				}
 			}
 		}
-		return result.build();
+		ImmutableList<TranscriptModel> transcriptModels = result.build();
+		LOGGER.info("Built {} TranscriptModels", transcriptModels.size());
+		return transcriptModels;
 	}
 
 	/**
@@ -155,7 +166,7 @@ public class EnsemblParser implements TranscriptParser {
 				final String[] arr = line.trim().split("\t");
 				ensgToKey.put(arr[6], arr[1]);
 			}
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			throw new TranscriptParseException("Could not parse ENSEMBL mapping files", e);
 		}
 
@@ -182,12 +193,12 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Build mapping from ENSG to HGNC identifier
 		final Map<String, String> result = new HashMap<>();
-		for (Entry<String, String> entry1: ensgToKey.entrySet()) {
+		for (Entry<String, String> entry1 : ensgToKey.entrySet()) {
 			final String ensg = entry1.getKey();
 			final String key = entry1.getValue();
 			final String hgnc = keyToHgnc.get(key);
 			if (hgnc == null) {
-				LOGGER.warn("Found no HGNC identifier for ENSG: ", ensg);
+				LOGGER.debug("Found no HGNC identifier for ENSG: {}", ensg);
 			} else {
 				result.put(ensg, hgnc);
 			}
@@ -202,12 +213,14 @@ public class EnsemblParser implements TranscriptParser {
 	 */
 	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA)
 		throws TranscriptParseException {
+
 		// First, build mapping from RNA accession to builder
 		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
 		for (Entry<String, TranscriptModelBuilder> entry : builders.entrySet()) {
-			txMap.put(entry.getValue().getSequence(), entry.getValue());
-			if (entry.getValue().getTxVersion() != null) {
-				txMap.put(entry.getValue().getSequence() + "." + entry.getValue().getTxVersion(), entry.getValue());
+			TranscriptModelBuilder trnscpModelBuilder = entry.getValue();
+			txMap.put(trnscpModelBuilder.getSequence(), trnscpModelBuilder);
+			if (trnscpModelBuilder.getTxVersion() != null) {
+				txMap.put(trnscpModelBuilder.getSequence() + "." + trnscpModelBuilder.getTxVersion(), trnscpModelBuilder);
 			}
 		}
 
@@ -261,147 +274,6 @@ public class EnsemblParser implements TranscriptParser {
 	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
-	private Map<String, TranscriptModelBuilder> recordsToBuilders(Map<String, List<FeatureRecord>> recordsByGene) {
-		Map<String, TranscriptModelBuilder> result = new HashMap<>();
-		for (Entry<String, List<FeatureRecord>> entry : recordsByGene.entrySet()) {
-			result.putAll(processGeneGFFRecords(entry.getValue()));
-		}
-		return result;
-	}
-
-	/**
-	 * Process the GFFRecord objects for one gene.
-	 */
-	private Map<String, TranscriptModelBuilder> processGeneGFFRecords(List<FeatureRecord> records) {
-		final Map<String, TranscriptModelBuilder> result = new HashMap<>();
-
-		// Factorize the records by the transcript ID
-		final HashMap<String, ArrayList<FeatureRecord>> recordsForTX = new HashMap<>();
-		for (FeatureRecord record : records) {
-			final String txID = (record.getAttributes().get("transcript_id") != null)
-				? record.getAttributes().get("transcript_id") : record.getAttributes().get("transcript_name");
-			if (txID == null)
-				continue; // skip, no transcript ID
-			if (!recordsForTX.containsKey(txID))
-				recordsForTX.put(txID, Lists.newArrayList(record));
-			else
-				recordsForTX.get(txID).add(record);
-		}
-
-		// Now, build TranscriptModelBuilder for each transcript
-		for (Entry<String, ArrayList<FeatureRecord>> txEntry : recordsForTX.entrySet()) {
-			final List<FeatureRecord> featureRecords = txEntry.getValue();
-
-			final FeatureRecord first = featureRecords.get(0);
-			final String geneName = first.getAttributes().get("gene_name");
-			final String geneID = first.getAttributes().get("gene_id");
-			final String txID = first.getAttributes().get("transcript_id");
-			final String txVersion = first.getAttributes().get("transcript_version");
-
-			final TranscriptModelBuilder builder = new TranscriptModelBuilder();
-
-			// Parse out the simple attributes from the mRNA record
-			final Strand strand = (first.getStrand() == FeatureRecord.Strand.FORWARD) ? Strand.FWD : Strand.REV;
-			builder.setStrand(strand);
-			builder.setAccession(txID);
-			builder.setTxVersion(txVersion);
-			builder.setGeneID(geneID);
-			builder.setGeneSymbol(geneName);
-			builder.setSequence(txID);
-
-			// Iterate over the features, interpreting "exon" and "CDS"/"stop_codon" entries
-			GenomeInterval txRegion = null;
-			GenomeInterval cdsRegion = null;
-			boolean wrongContig = false;
-			for (FeatureRecord record : featureRecords) {
-				ImmutableMap<String, Integer> dict = refDict.getContigNameToID();
-				final String seqID = record.getSeqID();
-				if (!dict.containsKey(seqID)) {
-					LOGGER.debug("Skipping record {} on unknown contig {}", record, seqID);
-					wrongContig = true;
-					continue;
-				}
-				if (record.getType().equals("exon")) {
-					final int chrom = dict.get(seqID);
-					GenomeInterval exon = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(),
-						record.getEnd());
-					exon = exon.withStrand(strand);
-					if (txRegion == null)
-						txRegion = exon;
-					else
-						txRegion = txRegion.union(exon);
-					builder.addExonRegion(exon);
-				} else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
-					GenomeInterval cds = new GenomeInterval(refDict, Strand.FWD,
-						refDict.getContigNameToID().get(record.getSeqID()), record.getBegin(), record.getEnd());
-					cds = cds.withStrand(strand);
-					if (cdsRegion == null)
-						cdsRegion = cds;
-					else
-						cdsRegion = cdsRegion.union(cds);
-				}
-			}
-			if (wrongContig)
-				continue; // skip, on wrong contig
-			if (txRegion == null) {
-				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
-				// observed in RefSeq
-				LOGGER.error("No transcript region for {}; skipping", txEntry);
-				continue;
-			}
-			builder.setTXRegion(txRegion);
-			if (cdsRegion == null)
-				cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
-			builder.setCDSRegion(cdsRegion);
-
-			result.put(txID, builder);
-		}
-
-		return result;
-	}
-
-	/**
-	 * Load GFF records, cluster by gene and return
-	 *
-	 * @throws TranscriptParseException on problems with handling the transcript file
-	 */
-	private Map<String, List<FeatureRecord>> loadRecords(String pathGFF) throws TranscriptParseException {
-		Map<String, List<FeatureRecord>> result = new HashMap<>();
-
-		// Open file using GFFParser
-		GFFParser parser;
-		try {
-			parser = new GFFParser(new File(pathGFF));
-		} catch (IOException e) {
-			throw new TranscriptParseException("Problem opening GFF file", e);
-		}
-
-		// Read file record by record, mapping features to genes
-		//
-		// This will only work properly if the full path of feature objects from the current feature has already been
-		// read. Otherwise, we will need some more fancy parsing.
-		int numRecords = 0;
-		try {
-			FeatureRecord record;
-			while ((record = parser.next()) != null) {
-				LOGGER.debug("Loaded GFF record {}", record);
-				numRecords += 1;
-
-				final String geneID = record.getAttributes().get("gene_id");
-				if (!result.containsKey(geneID))
-					result.put(geneID, Lists.newArrayList(record));
-				else
-					result.get(geneID).add(record);
-			}
-		} catch (IOException e) {
-			throw new TranscriptParseException("Problem parsing GFF file", e);
-		}
-
-		LOGGER.info("Loaded {} GFF records for {} genes", numRecords, result.size());
-
-		return result;
-	}
-
 	private Map<String, TranscriptModelBuilder> loadTranscriptModels(String pathGFF) throws TranscriptParseException {
 		LOGGER.info("Loading feature records");
 		// transcriptId: TranscriptModelBuilder
@@ -415,7 +287,6 @@ public class EnsemblParser implements TranscriptParser {
 		}
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
-		ImmutableMap<String, Integer> contigDict = refDict.getContigNameToID();
 		// Read file record by record, mapping features to genes
 		//
 		// This will only work properly if the full path of feature objects from the current feature has already been
@@ -426,58 +297,19 @@ public class EnsemblParser implements TranscriptParser {
 			while ((record = parser.next()) != null) {
 				numRecords++;
 				// filter these out here as they are only discarded later
-				if (record.getAttributes().get("transcript_id") != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
+				if (record.getAttributes()
+					.get("transcript_id") != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record
+					.getType())) {
 					LOGGER.debug("Loaded GFF record {}", record);
 					String transcriptId = record.getAttributes().get("transcript_id");
-
 					if (!results.containsKey(transcriptId)) {
 						// create new TranscriptBuilder
-						TranscriptModelBuilder builder = new TranscriptModelBuilder();
-						// Parse out the simple attributes from the mRNA record
-						Strand strand = parseStrand(record);
-						builder.setStrand(strand);
-						builder.setAccession(transcriptId);
-						builder.setTxVersion(record.getAttributes().get("transcript_version"));
-						builder.setGeneID(record.getAttributes().get("gene_id"));
-						builder.setGeneSymbol(record.getAttributes().get("gene_name"));
-						builder.setSequence(transcriptId);
-
-						if (record.getType().equals("exon")) {
-							GenomeInterval exon = buildGenomeInterval(contigDict, record, strand);
-							builder.setTXRegion(exon);
-							builder.addExonRegion(exon);
-						}
-						else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
-							GenomeInterval cds = buildGenomeInterval(contigDict, record, strand);
-							builder.setCDSRegion(cds);
-						}
+						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);
 						results.put(transcriptId, builder);
-					}
-					else {
+					} else {
 						// update existing
 						TranscriptModelBuilder builder = results.get(transcriptId);
-						Strand strand = parseStrand(record);
-						if (record.getType().equals("exon")) {
-							GenomeInterval exon = buildGenomeInterval(contigDict, record, strand);
-							GenomeInterval txRegion = builder.getTXRegion();
-							if (txRegion == null) {
-								txRegion = exon;
-							} else {
-								txRegion = txRegion.union(exon);
-							}
-							builder.setTXRegion(txRegion);
-							builder.addExonRegion(exon);
-						}
-						else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
-							GenomeInterval cds = buildGenomeInterval(contigDict, record, strand);
-							GenomeInterval cdsRegion = builder.getCDSRegion();
-							if (cdsRegion == null) {
-								cdsRegion = cds;
-							} else {
-								cdsRegion = cdsRegion.union(cds);
-							}
-							builder.setCDSRegion(cdsRegion);
-						}
+						updateExonsTxRegionsAndCds(record, builder);
 					}
 				}
 
@@ -485,39 +317,76 @@ public class EnsemblParser implements TranscriptParser {
 		} catch (IOException e) {
 			throw new TranscriptParseException("Problem parsing GFF file", e);
 		}
-		LOGGER.info("Loaded {} GFF records", numRecords);
 
-		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
-
-		for (Entry<String, TranscriptModelBuilder> entry : results.entrySet()) {
-			String transcriptId = entry.getKey();
-			TranscriptModelBuilder transcriptModelBuilder = entry.getValue();
-
-			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
-			if (txRegion != null) {
-				if (transcriptModelBuilder.getCDSRegion() == null) {
-					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
-				}
-				transcriptModelsWithTxRegion.put(transcriptId, transcriptModelBuilder);
-			} else {
-				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
-				// observed in RefSeq
-				LOGGER.warn("No transcript region for {}; skipping", transcriptId);
-			}
-		}
+		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = getTranscriptModelsWithTxRegion(results);
+		LOGGER.info("Parsed {} GFF records as {} TranscriptModels", numRecords, transcriptModelsWithTxRegion.size());
 
 		return transcriptModelsWithTxRegion;
+	}
+
+	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId) {
+		TranscriptModelBuilder builder = new TranscriptModelBuilder();
+		// Parse out the simple attributes from the mRNA record
+		Strand strand = parseStrand(record);
+		builder.setStrand(strand);
+		builder.setAccession(transcriptId);
+		builder.setTxVersion(record.getAttributes().get("transcript_version"));
+		builder.setGeneID(record.getAttributes().get("gene_id"));
+		builder.setGeneSymbol(record.getAttributes().get("gene_name"));
+		builder.setSequence(transcriptId);
+
+		updateExonsTxRegionsAndCds(record, builder);
+
+		return builder;
+	}
+
+	private void updateExonsTxRegionsAndCds(FeatureRecord record, TranscriptModelBuilder builder) {
+		Strand strand = parseStrand(record);
+		if (record.getType().equals("exon")) {
+			GenomeInterval exon = buildGenomeInterval(record, strand);
+			GenomeInterval txRegion = updateGenomeInterval(exon, builder.getTXRegion());
+			builder.setTXRegion(txRegion);
+			builder.addExonRegion(exon);
+		} else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
+			GenomeInterval cds = buildGenomeInterval(record, strand);
+			GenomeInterval cdsRegion = updateGenomeInterval(cds, builder.getCDSRegion());
+			builder.setCDSRegion(cdsRegion);
+		}
+	}
+
+	private GenomeInterval updateGenomeInterval(GenomeInterval latest, GenomeInterval existing) {
+		return existing == null ? latest : existing.union(latest);
 	}
 
 	private Strand parseStrand(FeatureRecord record) {
 		return (record.getStrand() == FeatureRecord.Strand.FORWARD) ? Strand.FWD : Strand.REV;
 	}
 
-	private GenomeInterval buildGenomeInterval(ImmutableMap<String, Integer> contigDict, FeatureRecord record, Strand strand) {
+	private GenomeInterval buildGenomeInterval(FeatureRecord record, Strand strand) {
 		int chrom = contigDict.get(record.getSeqID());
 		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
-		// TODO: why not just set the strand in the constructor?
+		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so this needs adjusting-post build
+		// rather than being supplied in the constructor.
 		return interval.withStrand(strand);
+	}
+
+	private Map<String, TranscriptModelBuilder> getTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
+		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
+
+		results.forEach((transcriptId, transcriptModelBuilder) -> {
+			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
+			if (txRegion == null) {
+				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
+				// observed in RefSeq
+				LOGGER.warn("No transcript region for {}; skipping", transcriptId);
+			} else {
+				if (transcriptModelBuilder.getCDSRegion() == null) {
+					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
+				}
+				transcriptModelsWithTxRegion.put(transcriptId, transcriptModelBuilder);
+			}
+		});
+		return transcriptModelsWithTxRegion;
 	}
 
 }
