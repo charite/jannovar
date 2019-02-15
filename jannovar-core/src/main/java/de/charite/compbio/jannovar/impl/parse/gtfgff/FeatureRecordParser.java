@@ -18,11 +18,11 @@ public abstract class FeatureRecordParser {
 	 * Parse the line and return the corresponding {@link FeatureRecord}
 	 */
 	public FeatureRecord parseLine(String line) {
-		LOGGER.debug("Parsing GFF line\t{}", new Object[]{line});
+		LOGGER.debug("Parsing GFF line\t{}", line);
 
 		String[] arr = line.trim().split("\\t");
 		if (arr.length != 9)
-			throw new RuntimeException("Wrong number of fields in GFF file!");
+			throw new RuntimeException("Wrong number of fields in GFF file! Got " + arr.length + " in line '" + line + "'");
 
 		final String chrom = arr[0];
 		final String source = arr[1];
@@ -37,14 +37,14 @@ public abstract class FeatureRecordParser {
 			if (!arr[7].equals("."))
 				phase = Integer.parseInt(arr[7]);
 		} catch (NumberFormatException e) {
-			LOGGER.warn("Invalid phase {}", new Object[]{arr[7]});
+			LOGGER.warn("Invalid phase {}", arr[7]);
 		}
 		if (phase < 0 || phase > 3)
 			phase = 0;
 
 		FeatureRecord result = new FeatureRecord(chrom, source, type, beginPos, endPos, score, strand, phase,
 			parseAttributes(arr[8]));
-		LOGGER.debug("Resulting record is {}", new Object[]{result});
+		LOGGER.debug("Resulting record is {}", result);
 		return result;
 	}
 

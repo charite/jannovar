@@ -80,16 +80,16 @@ public class TranscriptModelBuilderHGNCExtender {
 
 		// Augment the information in builders
 		for (TranscriptModelBuilder builder : builders.values()) {
-			if (extractorTX.apply(builder) == null) {
-				LOGGER.info("Transcript {} has no gene ID, not linking to HGNC",
-					new Object[]{builder.getAccession()});
+			String geneId = extractorTX.apply(builder);
+			if (geneId == null) {
+				LOGGER.debug("Transcript {} has no gene ID, not linking to HGNC", builder.getAccession());
 				continue;
 			}
-			if (!recordByGeneID.containsKey(extractorTX.apply(builder))) {
-				LOGGER.info("Gene ID not found in HGNC: {}", new Object[]{extractorTX.apply(builder)});
+			if (!recordByGeneID.containsKey(geneId)) {
+				LOGGER.debug("Gene ID not found in HGNC: {}", geneId);
 				continue;
 			}
-			final HGNCRecord hgncRecord = recordByGeneID.get(extractorTX.apply(builder));
+			final HGNCRecord hgncRecord = recordByGeneID.get(geneId);
 
 			// Update gene symbol/HUGO identifier, after all HGNC is the authority
 			builder.setGeneSymbol(hgncRecord.getSymbol());
@@ -125,7 +125,7 @@ public class TranscriptModelBuilderHGNCExtender {
 	 * Put key/value pair into map if value is not null and not the empty string
 	 */
 	private void putValue(Map<String, String> altIDs, String key, String value) {
-		if (value != null || !"".equals(value))
+		if (value != null && !value.isEmpty())
 			altIDs.put(key, value);
 	}
 
