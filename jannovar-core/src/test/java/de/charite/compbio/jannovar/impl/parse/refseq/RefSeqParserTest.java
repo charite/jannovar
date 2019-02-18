@@ -2,8 +2,13 @@ package de.charite.compbio.jannovar.impl.parse.refseq;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.ensembl.EnsemblParser;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import org.apache.logging.log4j.Level;
@@ -11,18 +16,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.ini4j.Ini;
+import org.ini4j.Profile;
 import org.ini4j.Profile.Section;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RefSeqParserTest {
 
@@ -91,6 +100,8 @@ public class RefSeqParserTest {
 				"XM_005252755.1(11:g.47487489_47517587)", "XM_005252756.1(11:g.47487489_47522484)",
 				"XM_005252757.1(11:g.47487489_47522484)", "XM_005252758.1(11:g.47487489_47545089)"));
 
+		Assert.assertEquals(expected, values);
+
 		Assert.assertEquals("10658", result.get(0).getGeneID());
 		Assert.assertEquals("CELF1", result.get(0).getGeneSymbol());
 		Assert.assertEquals(
@@ -120,6 +131,76 @@ public class RefSeqParserTest {
 			Lists.newArrayList("NM_000539.3(3:g.129247482_129254187)", "NM_001025596.2(11:g.47487489_47510576)",
 				"NM_001172639.1(11:g.47487489_47545540)", "NM_001172640.1(11:g.47487489_47510576)",
 				"NM_006560.3(11:g.47487489_47574792)", "NM_198700.2(11:g.47487489_47516073)"));
+
+		Assert.assertEquals(expected, values);
 	}
 
+	@Ignore
+	@Test
+	public void testRun() throws Exception {
+
+		Path dataDirectory = Paths.get("src/test/resources/build/hg19/refseq").toAbsolutePath();
+
+		Ini iniFile = new Ini();
+		iniFile.load(Paths.get("src/test/resources/build/default_sources.ini").toFile());
+		Profile.Section iniSection = iniFile.get("hg19/refseq");
+		// CAUTION! the real RefDict is built from the download files. Having a mismatched chromosome name will
+		// result in missing transcriptModels
+		ReferenceDictionary refDict = new ReferenceDictParser(dataDirectory.resolve("chromInfo.txt.gz").toString(), dataDirectory.resolve("chr_accessions_GRCh37.p13").toString(), iniSection).parse();
+		RefSeqParser instance = new RefSeqParser(refDict, dataDirectory.toString(), Collections.emptyList(), iniSection);
+		ImmutableList<TranscriptModel> transcripts = instance.run();
+
+		// uncomment this for manual debug
+		checkMatchesOldData(transcripts);
+
+		assertEquals(78865, transcripts.size());
+		System.out.println("Chromsomes: " + transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList()));
+		assertEquals(24L, transcripts.stream().map(TranscriptModel::getChr).distinct().count());
+	}
+
+	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {
+
+		JannovarData oldJannovarData = new JannovarDataSerializer("src/test/resources/build/hg19/hg19_refseq.ser").load();
+
+		Map<String, TranscriptModel> oldTranscripts = oldJannovarData.getTmByAccession();
+		Map<String, TranscriptModel> newTranscripts = transcripts.stream().collect(toMap(TranscriptModel::getAccession, Function
+			.identity()));
+		System.out.printf("Num old chr: %d, transcripts: %d%n", oldTranscripts.values().stream().map(TranscriptModel::getChr).distinct().count(), oldTranscripts.size());
+		System.out.printf("Num new chr: %d, transcripts: %d%n", newTranscripts.values().stream().map(TranscriptModel::getChr).distinct().count(), newTranscripts.size());
+
+		assertEquals(oldTranscripts.keySet(), newTranscripts.keySet());
+
+		Set<TranscriptModel> missingTranscriptModels = Sets.difference(new HashSet<>(oldTranscripts.values()), new HashSet<>(newTranscripts.values()));
+		if (!missingTranscriptModels.isEmpty()) {
+			System.out.println(missingTranscriptModels.size() + " missing txAccessions:");
+			missingTranscriptModels.forEach(tx -> {
+				System.out.println(tx + " " + tx.getSequence());
+			});
+		}
+		assertTrue(missingTranscriptModels.isEmpty());
+
+		assertEquals(oldTranscripts.size(), transcripts.size());
+		oldTranscripts.forEach((s, transcriptModel) -> {
+			TranscriptModel newTranscriptModel = newTranscripts.get(s);
+			if (!transcriptModel.equals(newTranscriptModel)) {
+				System.out.printf("Expected: %s%n", printTranscriptModel(transcriptModel));
+				System.out.printf("But got:  %s%n", printTranscriptModel(newTranscriptModel));
+			}
+			assertEquals(newTranscriptModel, transcriptModel);
+		});
+	}
+
+	private String printTranscriptModel(TranscriptModel transcriptModel) {
+		StringJoiner stringJoiner = new StringJoiner(",");
+		stringJoiner.add(transcriptModel.getAccession());
+		stringJoiner.add(transcriptModel.getGeneID());
+		stringJoiner.add(transcriptModel.getGeneSymbol());
+		stringJoiner.add(transcriptModel.getStrand().toString());
+		stringJoiner.add(transcriptModel.getCDSRegion().toString());
+		stringJoiner.add(transcriptModel.getExonRegions().toString());
+		stringJoiner.add(transcriptModel.getTXRegion().toString());
+		stringJoiner.add(Integer.toString(transcriptModel.getTranscriptSupportLevel()));
+		stringJoiner.add(transcriptModel.getSequence());
+		return stringJoiner.toString();
+	}
 }

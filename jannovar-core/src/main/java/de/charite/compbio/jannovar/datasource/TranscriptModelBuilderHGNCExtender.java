@@ -80,15 +80,16 @@ public class TranscriptModelBuilderHGNCExtender {
 
 		// Augment the information in builders
 		for (TranscriptModelBuilder builder : builders.values()) {
-			if (extractorTX.apply(builder) == null) {
+			String geneId = extractorTX.apply(builder);
+			if (geneId == null) {
 				LOGGER.debug("Transcript {} has no gene ID, not linking to HGNC", builder.getAccession());
 				continue;
 			}
-			if (!recordByGeneID.containsKey(extractorTX.apply(builder))) {
-				LOGGER.debug("Gene ID not found in HGNC: {}", extractorTX.apply(builder));
+			if (!recordByGeneID.containsKey(geneId)) {
+				LOGGER.debug("Gene ID not found in HGNC: {}", geneId);
 				continue;
 			}
-			final HGNCRecord hgncRecord = recordByGeneID.get(extractorTX.apply(builder));
+			final HGNCRecord hgncRecord = recordByGeneID.get(geneId);
 
 			// Update gene symbol/HUGO identifier, after all HGNC is the authority
 			builder.setGeneSymbol(hgncRecord.getSymbol());
