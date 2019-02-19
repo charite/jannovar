@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static java.util.stream.Collectors.*;
 /**
  * Parsing of RefSeq GFF3 files
  *
@@ -105,7 +106,7 @@ public class RefSeqParser implements TranscriptParser {
 		// Use Entrez IDs from RefSeq if no HGNC annotation
 		for (TranscriptModelBuilder val : builders.values()) {
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
-				LOGGER.info("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
+				LOGGER.debug("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
 					val.getGeneID(), val.getAccession());
 				val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), val.getGeneID());
 			}
@@ -206,7 +207,6 @@ public class RefSeqParser implements TranscriptParser {
 	private Map<String, TranscriptModelBuilder> loadTranscriptModels(String pathGFF) throws TranscriptParseException {
 		LOGGER.info("Loading feature records");
 		// transcriptId: TranscriptModelBuilder
-		Map<String, TranscriptModelBuilder> results = new HashMap<>(200000);
 		// Open file using GFFParser
 		GFFParser parser;
 		try {
@@ -214,44 +214,45 @@ public class RefSeqParser implements TranscriptParser {
 		} catch (IOException e) {
 			throw new TranscriptParseException("Problem opening GFF file", e);
 		}
+		// cached values from parsed records
+		Map<String, TranscriptModelBuilder> parentIdToTranscriptModels = new HashMap<>(200000);
+		Map<String, List<String>> transcriptIdToParentIds = new HashMap<>(parentIdToTranscriptModels.size());
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
 		// Read file record by record, mapping features to genes
-		//
-		// This will only work properly if the full path of feature objects from the current feature has already been
-		// read. Otherwise, we will need some more fancy parsing.
 		int numRecords = 0;
 		try {
 			FeatureRecord record;
 			while ((record = parser.next()) != null) {
 				numRecords++;
 				String transcriptId = record.getAttributes().get("transcript_id");
-				if (onlyCurated() && (transcriptId == null || transcriptId.startsWith("X"))) {
-					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
-					continue;
-				}
+				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id as
+				// the transcriptId is only stated for the exon and the proteinId is used as the CDS identifier.
+				// a further complication is that some transcriptIds are used twice by different ParentIds - those in
+				// the pseudoautosomal regions and some others
 				String parentId = record.getAttributes().get("Parent");
 				if (parentId != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
-					if (!results.containsKey(parentId)) {
+					if (!parentIdToTranscriptModels.containsKey(parentId)) {
 						// create new TranscriptBuilder
-						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, parentId);
-						results.put(parentId, builder);
+						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);
+						parentIdToTranscriptModels.put(parentId, builder);
+						updateTransciptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
 					} else {
 						// update existing
-						TranscriptModelBuilder builder = results.get(parentId);
+						TranscriptModelBuilder builder = parentIdToTranscriptModels.get(parentId);
 						updateExonsTxRegionsAndCds(record, builder);
 					}
 				}
-
 			}
 		} catch (IOException e) {
 			throw new TranscriptParseException("Problem parsing GFF file", e);
 		}
 
-		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = getTranscriptModelsWithTxRegion(results);
-		LOGGER.info("Parsed {} GFF records as {} TranscriptModels", numRecords, transcriptModelsWithTxRegion.size());
+		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = mapTranscriptIdsToTranscriptModels(parentIdToTranscriptModels, transcriptIdToParentIds);
 
-		return mapFromAccessionToBuilder(transcriptModelsWithTxRegion, preferPARTranscriptsOnChrX());
+		LOGGER.info("Parsed {} GFF records as {} TranscriptModels", numRecords, transcriptIdToTranscriptModelBuilders.size());
+
+		return transcriptIdToTranscriptModelBuilders;
 	}
 
 	/**
@@ -279,16 +280,30 @@ public class RefSeqParser implements TranscriptParser {
 		return false;
 	}
 
-	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String parentId) {
+	private void updateTransciptIdToParentIds(Map<String, List<String>> transciptIdToParentIds, String transcriptId, String parentId) {
+		if (transcriptId != null) {
+			if (transciptIdToParentIds.containsKey(transcriptId)) {
+				List<String> parentIds = transciptIdToParentIds.get(transcriptId);
+				if (!parentIds.contains(parentId)) {
+					LOGGER.debug("Adding new parentId {} for transcript {}", parentId, transcriptId);
+					parentIds.add(parentId);
+				}
+			} else {
+				transciptIdToParentIds.put(transcriptId, Lists.newArrayList(parentId));
+			}
+		}
+	}
+
+	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId) {
 		TranscriptModelBuilder builder = new TranscriptModelBuilder();
 		// Parse out the simple attributes from the mRNA record
 		Strand strand = parseStrand(record);
 		builder.setStrand(strand);
-		builder.setAccession(parentId);
+		builder.setAccession(transcriptId);
 		builder.setTxVersion(record.getAttributes().get("transcript_version"));
 		builder.setGeneID(parseGeneID(record));
 		builder.setGeneSymbol(record.getAttributes().get("gene"));
-		builder.setSequence(record.getAttributes().get("transcript_id"));
+		builder.setSequence(transcriptId);
 
 		updateExonsTxRegionsAndCds(record, builder);
 
@@ -339,8 +354,14 @@ public class RefSeqParser implements TranscriptParser {
 		return interval.withStrand(strand);
 	}
 
-	private Map<String, TranscriptModelBuilder> getTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
+	private Map<String, TranscriptModelBuilder> mapTranscriptIdsToTranscriptModels(Map<String, TranscriptModelBuilder> parentIdToTranscriptModels, Map<String, List<String>> transciptIdToParentIds) {
+		Map<String, TranscriptModelBuilder> parentIdToTranscriptModelsWithTxRegion = mapParentIdsToTranscriptModelsWithTxRegion(parentIdToTranscriptModels);
+		return mapNonRedundantTranscriptIdsToTranscriptModelBuilder(parentIdToTranscriptModelsWithTxRegion, transciptIdToParentIds);
+	}
+
+	private Map<String, TranscriptModelBuilder> mapParentIdsToTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
 		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
+		boolean onlyCurated = onlyCurated();
 
 		results.forEach((parentId, transcriptModelBuilder) -> {
 			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
@@ -349,43 +370,81 @@ public class RefSeqParser implements TranscriptParser {
 				// observed in RefSeq
 				LOGGER.debug("No transcript region for {}; skipping", parentId);
 			} else {
-				// this was something like 'rna58569', but should be 'XM_005255624.1'
-//				String transcriptId = transcriptModelBuilder.getSequence();
-//				transcriptModelBuilder.setAccession(transcriptId);
 				if (transcriptModelBuilder.getCDSRegion() == null) {
 					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
 				}
-				transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
+				String transcriptId = transcriptModelBuilder.getAccession();
+				if (onlyCurated && (transcriptId == null || transcriptId.startsWith("X"))) {
+					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
+				} else {
+					// The original accession was set to the was something like 'rna58569', but should be 'XM_005255624.1'
+					// 'sequence' here is actually the transcript_id from the GFF file
+					transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
+				}
 			}
 		});
 		return transcriptModelsWithTxRegion;
 	}
 
-	private Map<String, TranscriptModelBuilder> mapFromAccessionToBuilder(Map<String, TranscriptModelBuilder> builders,
-																		  boolean preferPARTranscriptsOnChrX) {
-		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
-		for (TranscriptModelBuilder transcriptModelBuilder : builders.values()) {
-			if (transcriptModelBuilder.getSequence() == null) {
-				// 'sequence' here is actually the transcript_id from the GFF file
+	private Map<String, TranscriptModelBuilder> mapNonRedundantTranscriptIdsToTranscriptModelBuilder(Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion, Map<String, List<String>> transciptIdToParentIds) {
+
+		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = new HashMap<>(transcriptModelsWithTxRegion
+			.size());
+
+		boolean assignPseudoAutosomalTranscriptsToX = preferPARTranscriptsOnChrX();
+		if (assignPseudoAutosomalTranscriptsToX) {
+			LOGGER.info("Pseudoautosomal transcripts will be assigned to X chromosome");
+		}
+
+		int duplicatedTranscriptIdCount = 0;
+		for (Entry<String, List<String>> entry : transciptIdToParentIds.entrySet()) {
+			String transcriptId = entry.getKey();
+			List<String> parentIds = entry.getValue();
+			if (parentIds.isEmpty()) {
 				continue;
 			}
-			TranscriptModelBuilder existingTranscriptBuilder = txMap.get(transcriptModelBuilder.getSequence());
-			if (existingTranscriptBuilder != null) {
-				int newChromosome = transcriptModelBuilder.getTXRegion().getChr();
+			if (parentIds.size() == 1) {
+				TranscriptModelBuilder transcriptModelBuilder = transcriptModelsWithTxRegion.get(parentIds.get(0));
+				transcriptIdToTranscriptModelBuilders.put(transcriptId, transcriptModelBuilder);
+			} else {
+				TranscriptModelBuilder existingTranscriptBuilder = transcriptModelsWithTxRegion.get(parentIds.get(0));
+				TranscriptModelBuilder updatedTranscriptBuilder = transcriptModelsWithTxRegion.get(parentIds.get(1));
 				int currentChromosome = existingTranscriptBuilder.getTXRegion().getChr();
-				if (preferPARTranscriptsOnChrX && currentChromosome == 23 && newChromosome == 24) {
-					LOGGER.warn(
-						"PAR transcripts on chrX are configured to be preferable, so ignoring entry for chromosome '{}' in favor of entry for chromosome '{}' for '{}'",
-						newChromosome, currentChromosome, transcriptModelBuilder.getSequence());
-					continue;
+				int newChromosome = updatedTranscriptBuilder.getTXRegion().getChr();
+				// Pseudoautosomal gene
+				if (currentChromosome == 23 && newChromosome == 24) {
+					// e.g. https://www.ncbi.nlm.nih.gov/nuccore/NM_001636
+					TranscriptModelBuilder preferred = assignPseudoAutosomalTranscriptsToX ? existingTranscriptBuilder : updatedTranscriptBuilder;
+					LOGGER.info("Assigning pseudoautosomal gene {} transcript {} to chromsome {}",
+						preferred.getGeneSymbol(), preferred.getAccession(), preferred.getTXRegion().getChr());
+					transcriptIdToTranscriptModelBuilders.put(transcriptId, preferred);
 				} else {
-					LOGGER.warn(
-						"Found two locations for '{}', now using entry for chromosome '{}' and discarding the entry for chromosome '{}'",
-						transcriptModelBuilder.getSequence(), newChromosome, currentChromosome);
+					duplicatedTranscriptIdCount++;
+					// This is a tricky call - there are about 30 transcripts with duplicated transcriptIds due to imperfect
+					// alignment to the genomic reference
+					LOGGER.warn("Transcript {} has {} possible transcript models - using the longest model", transcriptId, parentIds
+						.size());
+					List<TranscriptModelBuilder> possibleModels = parentIds.stream()
+						.map(transcriptModelsWithTxRegion::get)
+						.collect(toList());
+					TranscriptModelBuilder longestCds = findLongestTranscriptRegion(possibleModels);
+					transcriptIdToTranscriptModelBuilders.put(transcriptId, longestCds);
 				}
 			}
-			txMap.put(transcriptModelBuilder.getSequence(), transcriptModelBuilder);
 		}
-		return txMap;
+		if (duplicatedTranscriptIdCount != 0) {
+			LOGGER.warn("{} duplicated transcript ids", duplicatedTranscriptIdCount);
+		}
+		return transcriptIdToTranscriptModelBuilders;
+	}
+
+	private TranscriptModelBuilder findLongestTranscriptRegion(List<TranscriptModelBuilder> possibleModels) {
+		TranscriptModelBuilder longestCds = possibleModels.get(0);
+		for (TranscriptModelBuilder current : possibleModels) {
+			if (current.getTXRegion().length() > longestCds.getTXRegion().length()) {
+				longestCds = current;
+			}
+		}
+		return longestCds;
 	}
 }
