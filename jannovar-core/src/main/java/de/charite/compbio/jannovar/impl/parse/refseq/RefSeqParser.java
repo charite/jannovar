@@ -219,6 +219,7 @@ public class RefSeqParser implements TranscriptParser {
 		Map<String, List<String>> transcriptIdToParentIds = new HashMap<>(parentIdToTranscriptModels.size());
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
+		boolean onlyCurated = onlyCurated();
 		// Read file record by record, mapping features to genes
 		int numRecords = 0;
 		try {
@@ -226,6 +227,10 @@ public class RefSeqParser implements TranscriptParser {
 			while ((record = parser.next()) != null) {
 				numRecords++;
 				String transcriptId = record.getAttributes().get("transcript_id");
+				if (onlyCurated && (transcriptId == null || transcriptId.startsWith("X"))) {
+					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
+					continue;
+				}
 				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id as
 				// the transcriptId is only stated for the exon and the proteinId is used as the CDS identifier.
 				// a further complication is that some transcriptIds are used twice by different ParentIds - those in
@@ -361,7 +366,6 @@ public class RefSeqParser implements TranscriptParser {
 
 	private Map<String, TranscriptModelBuilder> mapParentIdsToTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
 		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
-		boolean onlyCurated = onlyCurated();
 
 		results.forEach((parentId, transcriptModelBuilder) -> {
 			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
@@ -373,14 +377,9 @@ public class RefSeqParser implements TranscriptParser {
 				if (transcriptModelBuilder.getCDSRegion() == null) {
 					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
 				}
-				String transcriptId = transcriptModelBuilder.getAccession();
-				if (onlyCurated && (transcriptId == null || transcriptId.startsWith("X"))) {
-					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
-				} else {
-					// The original accession was set to the was something like 'rna58569', but should be 'XM_005255624.1'
-					// 'sequence' here is actually the transcript_id from the GFF file
-					transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
-				}
+				// The original accession was set to the was something like 'rna58569', but should be 'XM_005255624.1'
+				// 'sequence' here is actually the transcript_id from the GFF file
+				transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
 			}
 		});
 		return transcriptModelsWithTxRegion;
