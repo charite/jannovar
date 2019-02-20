@@ -241,6 +241,7 @@ public class RefSeqParser implements TranscriptParser {
 						// create new TranscriptBuilder
 						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);
 						parentIdToTranscriptModels.put(parentId, builder);
+						// this method is used to track the rare cases of transcriptIds mapping to multiple parentIds
 						updateTransciptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
 					} else {
 						// update existing
@@ -377,8 +378,6 @@ public class RefSeqParser implements TranscriptParser {
 				if (transcriptModelBuilder.getCDSRegion() == null) {
 					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
 				}
-				// The original accession was set to the was something like 'rna58569', but should be 'XM_005255624.1'
-				// 'sequence' here is actually the transcript_id from the GFF file
 				transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
 			}
 		});
@@ -403,6 +402,8 @@ public class RefSeqParser implements TranscriptParser {
 				continue;
 			}
 			if (parentIds.size() == 1) {
+				// transcriptModelsWithTxRegion used the ParentId as the key (something like 'rna58569'), but we need
+				// the final map to use the transcriptId e.g. 'XM_005255624.1' as the key
 				TranscriptModelBuilder transcriptModelBuilder = transcriptModelsWithTxRegion.get(parentIds.get(0));
 				transcriptIdToTranscriptModelBuilders.put(transcriptId, transcriptModelBuilder);
 			} else {
