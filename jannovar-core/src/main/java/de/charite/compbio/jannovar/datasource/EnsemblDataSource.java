@@ -14,7 +14,8 @@ final class EnsemblDataSource extends DataSource {
 	 * expected keys in data source configuration file
 	 */
 	private final ImmutableList<String> urlKeys = ImmutableList.of(
-		"cdna", "gtf", "chromInfo", "chrToAccessions", "table_gene_main", "table_hgnc");
+		"cdna", "gtf", "chromInfo", "chrToAccessions", "table_gene_main", "table_hgnc",
+		"table_entrezgene");
 
 	EnsemblDataSource(DatasourceOptions options, Section iniSection)
 		throws InvalidDataSourceException {
