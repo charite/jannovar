@@ -28,8 +28,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -135,7 +134,6 @@ public class RefSeqParserTest {
 		Assert.assertEquals(expected, values);
 	}
 
-	@Ignore
 	@Test
 	public void testRun() throws Exception {
 
@@ -150,12 +148,22 @@ public class RefSeqParserTest {
 		RefSeqParser instance = new RefSeqParser(refDict, dataDirectory.toString(), Collections.emptyList(), iniSection);
 		ImmutableList<TranscriptModel> transcripts = instance.run();
 
-		// uncomment this for manual debug
-		checkMatchesOldData(transcripts);
+//		Using UCSC Entrez ID 646999 for transcript NR_024390.1 as HGNC did not provide alternative gene ID
+//		Using UCSC Entrez ID 6801 for transcript XM_005264519.1 as HGNC did not provide alternative gene ID
+//		Using UCSC Entrez ID 6801 for transcript NM_003162.3 as HGNC did not provide alternative gene ID
 
-		assertEquals(78865, transcripts.size());
-		System.out.println("Chromsomes: " + transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList()));
-		assertEquals(24L, transcripts.stream().map(TranscriptModel::getChr).distinct().count());
+//		SH3RF3 NM_001099289.1(2:g.109745997_110107395)
+//		STRN XM_005264519.1(2:g.37070934_37193673)
+//		STRN NM_003162.3(2:g.37064841_37193615)
+//		LOC646999 NR_024390.1(7:g.39649086_39651687)
+//		SLC25A6 NM_001636.3(Y:g.1455045_1461039)
+
+		transcripts.forEach(transcript -> System.out.println(printTranscriptModel(transcript)));
+
+		assertEquals(5, transcripts.size());
+		List<Integer> chromosomes = transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList());
+		System.out.println("Chromsomes: " + chromosomes);
+		assertEquals(ImmutableList.of(2, 7, 24), chromosomes);
 	}
 
 	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {

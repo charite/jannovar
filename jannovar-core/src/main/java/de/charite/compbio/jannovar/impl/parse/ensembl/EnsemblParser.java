@@ -111,23 +111,23 @@ public class EnsemblParser implements TranscriptParser {
 		// Use Entrez IDs from RefSeq if no HGNC annotation
 		for (TranscriptModelBuilder val : builders.values()) {
 			if ("ENSG00000272333".equals(val.getGeneID())) {
-				System.err.println("===>>>===>>> RARKENDARL");
+				LOGGER.error("===>>>===>>> RARKENDARL");
 			}
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
 				if (ensgToEntrez.containsKey(val.getGeneID())) {
 					final String entrezGeneId = ensgToEntrez.get(val.getGeneID());
-					LOGGER.info(
+					LOGGER.debug(
 						"ENSEMBL Gene {} not known to HGNC, annotating with ENTREZ_ID := {} for additional IDs",
 						val.getGeneID(), entrezGeneId);
 					val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entrezGeneId);
 				}
-				LOGGER.info(
+				LOGGER.debug(
 					"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
 					val.getGeneID(), val.getGeneID());
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
 			}
 			if ("ENSG00000272333".equals(val.getGeneID())) {
-				System.err.println("===<<<===<<< RARKENDARL");
+				LOGGER.error("===<<<===<<< RARKENDARL");
 			}
 		}
 

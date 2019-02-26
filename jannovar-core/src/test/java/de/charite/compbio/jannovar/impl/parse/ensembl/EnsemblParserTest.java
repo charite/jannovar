@@ -14,13 +14,10 @@ import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,7 +26,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class EnsemblParserTest {
 
-	@Ignore
 	@Test
 	public void testRun() throws Exception {
 
@@ -44,11 +40,21 @@ public class EnsemblParserTest {
 		EnsemblParser instance = new EnsemblParser(refDict, dataDirectory.toAbsolutePath().toString(), Collections.emptyList(), iniSection);
 		ImmutableList<TranscriptModel> transcripts = instance.run();
 
-		// uncomment this for manual debug
-		checkMatchesOldData(transcripts);
+		transcripts.stream().sorted().forEach(transcriptModel -> System.out.printf("%s %s %n", transcriptModel.getGeneSymbol(), transcriptModel));
 
-		assertEquals(163468, transcripts.size());
-		assertEquals(25L, transcripts.stream().map(TranscriptModel::getChr).distinct().count());
+//		STRN ENST00000263918.4(2:g.37070783_37193615)
+//		STRN ENST00000379213.2(2:g.37075472_37193606)
+//		STRN ENST00000495595.1(2:g.37096846_37130071)
+//		SLC25A6 ENST00000381401.5(X:g.1505045_1511617)
+//		SLC25A6 ENST00000475167.1(X:g.1506204_1510996)
+//		SLC25A6 ENST00000484026.1(X:g.1506238_1510981)
+//		SH3RF3 ENST00000309415.6(2:g.109745997_110259248)
+//		SH3RF3 ENST00000418513.1(2:g.109745804_110065945)
+//		SH3RF3 ENST00000444352.1(2:g.110259080_110262207)
+
+		assertEquals(9, transcripts.size());
+		List<Integer> chromosomes = transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList());
+		assertEquals(ImmutableList.of(2, 23), chromosomes);
 	}
 
 	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {
