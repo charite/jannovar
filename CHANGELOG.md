@@ -11,6 +11,7 @@
   Case in point: `ENSG00000276141` vs. `ENSG00000187667`.
 * Adding `--gene-ids` argument to downloader for creating smaller databases (mostly for test purposes).
 * Adding SV support to jannovar-cli, includes tests.
+* Using ENSEMBL-provided mapping from ENSG to Entrez ID in the case HGNC mapping does not work.
 
 ### jannovar-htsjdk
 

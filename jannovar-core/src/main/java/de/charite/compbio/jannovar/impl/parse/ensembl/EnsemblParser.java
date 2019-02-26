@@ -68,19 +68,17 @@ public class EnsemblParser implements TranscriptParser {
 	private final List<String> geneIdentifiers;
 
 	/**
-	 * @param refDict         path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
-	 * @param basePath        path to where the to-be-parsed files live
-	 * @param iniSection      {@link Section} with configuration from INI file
+	 * @param refDict path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
+	 * @param basePath path to where the to-be-parsed files live
+	 * @param iniSection {@link Section} with configuration from INI file
 	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
 	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers, Section iniSection) {
 		this.refDict = refDict;
 		this.contigDict = refDict.getContigNameToID();
-
-		this.geneIdentifiers = geneIdentifiers;
-
 		this.basePath = basePath;
 		this.iniSection = iniSection;
+		this.geneIdentifiers = geneIdentifiers;
 	}
 
 	@Override
@@ -93,6 +91,10 @@ public class EnsemblParser implements TranscriptParser {
 		LOGGER.info("Loading ENSEMBL to HGNC mappings...");
 		final Map<String, String> ensgToHgnc = loadEngsToHgnc();
 
+		// Load files that give the ENSG to Entrez ID mapping that comes directly from ENSEMBL.
+		LOGGER.info("Loading ENSEMBL to ENTREZ mappings...");
+		final Map<String, String> ensgToEntrez = loadEngsToEntrez();
+
 		// Augment information in builders with
 		LOGGER.info("Assigning additional HGNC information to transcripts..");
 		try {
@@ -102,15 +104,30 @@ public class EnsemblParser implements TranscriptParser {
 				tx -> "HGNC:" + ensgToHgnc.get(tx.getGeneID())
 			).run(builders);
 		} catch (JannovarException e) {
-			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+			throw new UncheckedJannovarException(
+				"Problem extending transcripts with HGNC information", e);
 		}
 
 		// Use Entrez IDs from RefSeq if no HGNC annotation
 		for (TranscriptModelBuilder val : builders.values()) {
+			if ("ENSG00000272333".equals(val.getGeneID())) {
+				System.err.println("===>>>===>>> RARKENDARL");
+			}
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
-				LOGGER.debug("ENSEMBL Gene {} not known to HGNC, only annotating with ENSEMBL_GENE_ID => {}",
+				if (ensgToEntrez.containsKey(val.getGeneID())) {
+					final String entrezGeneId = ensgToEntrez.get(val.getGeneID());
+					LOGGER.info(
+						"ENSEMBL Gene {} not known to HGNC, annotating with ENTREZ_ID := {} for additional IDs",
+						val.getGeneID(), entrezGeneId);
+					val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entrezGeneId);
+				}
+				LOGGER.info(
+					"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
 					val.getGeneID(), val.getGeneID());
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
+			}
+			if ("ENSG00000272333".equals(val.getGeneID())) {
+				System.err.println("===<<<===<<< RARKENDARL");
 			}
 		}
 
@@ -147,6 +164,69 @@ public class EnsemblParser implements TranscriptParser {
 	 */
 	private String getINIFileName(String key) {
 		return new File(iniSection.get(key)).getName();
+	}
+
+	private Map<String, String> loadEngsToEntrez() throws TranscriptParseException {
+		// Read mapping from ENSG to MySQL key
+		final String pathTableGeneMain = PathUtil.join(basePath, getINIFileName("table_gene_main"));
+		final Map<String, String> ensgToKey = new HashMap<>();
+		try (
+			FileInputStream fis = new FileInputStream(pathTableGeneMain);
+			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
+				new BZip2CompressorInputStream(fis) : null;
+			GZIPInputStream gzis = new GZIPInputStream(
+				pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
+			InputStreamReader reader = new InputStreamReader(gzis);
+			BufferedReader bufReader = new BufferedReader(reader)
+		) {
+			String line;
+			while ((line = bufReader.readLine()) != null) {
+				final String[] arr = line.trim().split("\t");
+				ensgToKey.put(arr[6], arr[1]);
+			}
+		} catch (Exception e) {
+			throw new TranscriptParseException(
+				"Could not parse ENSEMBL mapping files ENSG to Entrez", e);
+		}
+
+		// Read mapping from MySQL key to Entrez ID
+		final String pathTableEntrezGene = PathUtil
+			.join(basePath, getINIFileName("table_entrezgene"));
+		final Map<String, String> keyToEntrez = new HashMap<>();
+		try (
+			FileInputStream fis = new FileInputStream(pathTableEntrezGene);
+			BZip2CompressorInputStream bz2is = pathTableEntrezGene.endsWith(".gz.bz2")
+				? new BZip2CompressorInputStream(fis) : null;
+			GZIPInputStream gzis = new GZIPInputStream(
+				pathTableEntrezGene.endsWith(".gz.bz2") ? bz2is : fis);
+			InputStreamReader reader = new InputStreamReader(gzis);
+			BufferedReader bufReader = new BufferedReader(reader)
+		) {
+			String line;
+			while ((line = bufReader.readLine()) != null) {
+				final String[] arr = line.trim().split("\t");
+				if (!arr[0].equals("\\N") && !arr[3].equals("\\N")) {
+					keyToEntrez.put(arr[0], arr[3]);
+				}
+			}
+		} catch (Exception e) {
+			throw new TranscriptParseException(
+				"Could not parse ENSEMBL mapping files ENSG to Entrez", e);
+		}
+
+		// Build mapping from ENSG to Entrez ID
+		final Map<String, String> result = new HashMap<>();
+		for (Entry<String, String> entry1 : ensgToKey.entrySet()) {
+			final String ensg = entry1.getKey();
+			final String key = entry1.getValue();
+			final String entrezId = keyToEntrez.get(key);
+			if (entrezId == null) {
+				LOGGER.warn("Found no Entrez ID identifier for ENSG: ", new Object[]{ensg});
+			} else {
+				result.put(ensg, entrezId);
+			}
+		}
+		return result;
 	}
 
 	private Map<String, String> loadEngsToHgnc() throws TranscriptParseException {
@@ -268,11 +348,11 @@ public class EnsemblParser implements TranscriptParser {
 	/**
 	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
 	 * <p>
-	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the appropriate
-	 * TranscriptModel objects.
+	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the
+	 * appropriate TranscriptModel objects.
 	 * <p>
-	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
-	 * use this for assigning FASTA sequence to the builders.
+	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the
+	 * sequence, so we can use this for assigning FASTA sequence to the builders.
 	 */
 	private Map<String, TranscriptModelBuilder> loadTranscriptModels(String pathGFF) throws TranscriptParseException {
 		LOGGER.info("Loading feature records");
