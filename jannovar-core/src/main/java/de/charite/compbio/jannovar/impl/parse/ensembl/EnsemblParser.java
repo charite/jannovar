@@ -73,7 +73,8 @@ public class EnsemblParser implements TranscriptParser {
 	 * @param iniSection {@link Section} with configuration from INI file
 	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
-	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers, Section iniSection) {
+	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers,
+		Section iniSection) {
 		this.refDict = refDict;
 		this.contigDict = refDict.getContigNameToID();
 		this.basePath = basePath;
@@ -110,9 +111,6 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Use Entrez IDs from RefSeq if no HGNC annotation
 		for (TranscriptModelBuilder val : builders.values()) {
-			if ("ENSG00000272333".equals(val.getGeneID())) {
-				LOGGER.error("===>>>===>>> RARKENDARL");
-			}
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
 				if (ensgToEntrez.containsKey(val.getGeneID())) {
 					final String entrezGeneId = ensgToEntrez.get(val.getGeneID());
@@ -125,9 +123,6 @@ public class EnsemblParser implements TranscriptParser {
 					"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
 					val.getGeneID(), val.getGeneID());
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
-			}
-			if ("ENSG00000272333".equals(val.getGeneID())) {
-				LOGGER.error("===<<<===<<< RARKENDARL");
 			}
 		}
 
@@ -185,8 +180,7 @@ public class EnsemblParser implements TranscriptParser {
 				ensgToKey.put(arr[6], arr[1]);
 			}
 		} catch (Exception e) {
-			throw new TranscriptParseException(
-				"Could not parse ENSEMBL mapping files ENSG to Entrez", e);
+			throw new TranscriptParseException("Could not parse ENSEMBL mapping files", e);
 		}
 
 		// Read mapping from MySQL key to Entrez ID
@@ -210,8 +204,7 @@ public class EnsemblParser implements TranscriptParser {
 				}
 			}
 		} catch (Exception e) {
-			throw new TranscriptParseException(
-				"Could not parse ENSEMBL mapping files ENSG to Entrez", e);
+			throw new TranscriptParseException("Could not parse ENSEMBL mapping files", e);
 		}
 
 		// Build mapping from ENSG to Entrez ID
@@ -229,6 +222,7 @@ public class EnsemblParser implements TranscriptParser {
 		return result;
 	}
 
+
 	private Map<String, String> loadEngsToHgnc() throws TranscriptParseException {
 		// Read mapping from ENSG to MySQL key
 		final String pathTableGeneMain = PathUtil.join(basePath, getINIFileName("table_gene_main"));
@@ -237,7 +231,8 @@ public class EnsemblParser implements TranscriptParser {
 			FileInputStream fis = new FileInputStream(pathTableGeneMain);
 			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
 				new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
+			GZIPInputStream gzis = new GZIPInputStream(
+				pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
 			InputStreamReader reader = new InputStreamReader(gzis);
 			BufferedReader bufReader = new BufferedReader(reader)
 		) {
@@ -255,8 +250,10 @@ public class EnsemblParser implements TranscriptParser {
 		final Map<String, String> keyToHgnc = new HashMap<>();
 		try (
 			FileInputStream fis = new FileInputStream(pathTableHgnc);
-			BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2") ? new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
+			BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2")
+				? new BZip2CompressorInputStream(fis) : null;
+			GZIPInputStream gzis = new GZIPInputStream(
+				pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
 			InputStreamReader reader = new InputStreamReader(gzis);
 			BufferedReader bufReader = new BufferedReader(reader)
 		) {

@@ -8,6 +8,8 @@ import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
  * <p>
  * This is a utility class that can be used in tests of Java code that uses the Jannovar library for the easy
  * construction of a {@link ReferenceDictionary}.
+ * <p>
+ * NB: This is in "main" and not "test" because it is used by testing code in jannovar-htsjdk also.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
