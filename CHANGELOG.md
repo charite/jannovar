@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## HEAD (unreleased)
+
+### jannovar-core
+
+* Decreasing log verbosity in one location when building database.
+
 ## v0.28
 
 ### jannovar-cli
