@@ -114,12 +114,12 @@ public class EnsemblParser implements TranscriptParser {
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
 				if (ensgToEntrez.containsKey(val.getGeneID())) {
 					final String entrezGeneId = ensgToEntrez.get(val.getGeneID());
-					LOGGER.info(
+					LOGGER.debug(
 						"ENSEMBL Gene {} not known to HGNC, annotating with ENTREZ_ID := {} for additional IDs",
 						new Object[]{val.getGeneID(), entrezGeneId});
 					val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entrezGeneId);
 				}
-				LOGGER.info(
+				LOGGER.debug(
 					"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
 					new Object[]{val.getGeneID(), val.getGeneID()});
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
