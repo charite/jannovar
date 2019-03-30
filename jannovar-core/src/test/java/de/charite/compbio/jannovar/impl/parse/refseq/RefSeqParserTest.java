@@ -8,9 +8,7 @@ import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.impl.parse.ensembl.EnsemblParser;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -28,16 +26,16 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class RefSeqParserTest {
 
 	/**
 	 * this test uses this static hg19 reference dictionary
 	 */
-	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
+	private static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	InputStream stream;
 	File dataDirectory;
@@ -159,11 +157,29 @@ public class RefSeqParserTest {
 //		SLC25A6 NM_001636.3(Y:g.1455045_1461039)
 
 		transcripts.forEach(transcript -> System.out.println(printTranscriptModel(transcript)));
+		checkNm1636Transcript(transcripts);
 
 		assertEquals(5, transcripts.size());
 		List<Integer> chromosomes = transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList());
-		System.out.println("Chromsomes: " + chromosomes);
+		System.out.println("Chromosomes: " + chromosomes);
 		assertEquals(ImmutableList.of(2, 7, 24), chromosomes);
+	}
+
+	private static void checkNm1636Transcript(ImmutableList<TranscriptModel> transcripts) {
+		TranscriptModel nm_1636 = transcripts.stream().filter(x -> x.getAccession().equals("NM_001636.3")).findFirst().get();
+
+		GenomeInterval txRegion = nm_1636.getTXRegion().withStrand(Strand.FWD);
+		assertEquals(1455044, txRegion.getBeginPos());
+		assertEquals(1461039, txRegion.getEndPos());
+
+		GenomeInterval cdsRegion = nm_1636.getCDSRegion().withStrand(Strand.FWD);
+		assertEquals(1455494, cdsRegion.getBeginPos());
+		assertEquals(1460902, cdsRegion.getEndPos());
+
+		assertEquals(4, nm_1636.getExonRegions().size());
+		GenomeInterval exon1 = nm_1636.getExonRegions().get(0).withStrand(Strand.FWD);
+		assertEquals(1460791, exon1.getBeginPos());
+		assertEquals(1461039, exon1.getEndPos());
 	}
 
 	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {

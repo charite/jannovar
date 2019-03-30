@@ -7,17 +7,11 @@ import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
-import de.charite.compbio.jannovar.impl.parse.FASTAParser;
-import de.charite.compbio.jannovar.impl.parse.FASTARecord;
-import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
+import de.charite.compbio.jannovar.impl.parse.*;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.Strand;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import de.charite.compbio.jannovar.reference.*;
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 /**
  * Parsing of RefSeq GFF3 files
  *
@@ -227,7 +221,7 @@ public class RefSeqParser implements TranscriptParser {
 			while ((record = parser.next()) != null) {
 				numRecords++;
 				String transcriptId = record.getAttributes().get("transcript_id");
-				if (onlyCurated && (transcriptId == null || transcriptId.startsWith("X"))) {
+				if (onlyCurated && (transcriptId != null && transcriptId.startsWith("X"))) {
 					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
 					continue;
 				}
@@ -376,12 +370,21 @@ public class RefSeqParser implements TranscriptParser {
 				LOGGER.debug("No transcript region for {}; skipping", parentId);
 			} else {
 				if (transcriptModelBuilder.getCDSRegion() == null) {
+					failIfCdsRegionExpected(transcriptModelBuilder);
 					transcriptModelBuilder.setCDSRegion(new GenomeInterval(txRegion.getGenomeBeginPos(), 0));
 				}
 				transcriptModelsWithTxRegion.put(parentId, transcriptModelBuilder);
 			}
 		});
 		return transcriptModelsWithTxRegion;
+	}
+
+	private static void failIfCdsRegionExpected(TranscriptModelBuilder transcriptModelBuilder) {
+		if(Optional.ofNullable(transcriptModelBuilder.getAccession())
+								.map(x -> x.startsWith("NM_") || x.startsWith("XM_"))
+								.orElse(false)) {
+			throw new IllegalStateException("No CDS region found for coding transcript '" + transcriptModelBuilder.getAccession() + "'.");
+		}
 	}
 
 	private Map<String, TranscriptModelBuilder> mapNonRedundantTranscriptIdsToTranscriptModelBuilder(Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion, Map<String, List<String>> transciptIdToParentIds) {
