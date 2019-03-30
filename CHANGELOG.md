@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## v0.29
+
+### jannovar-core 
+
+* Fixing CDS region import in `RefSeqParser`
+
 ## v0.28
 
 ### jannovar-cli
