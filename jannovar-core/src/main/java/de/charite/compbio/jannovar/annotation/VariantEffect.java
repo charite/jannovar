@@ -234,13 +234,6 @@ public enum VariantEffect {
 	 */
 	THREE_PRIME_UTR_TRUNCATION,
 
-	// changes in the splicing region
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001630">SO:0001630</a> A sequence variant
-	 * in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8
-	 * bases of the intron (is a: {@link #SPLICING_VARIANT}).
-	 */
-	SPLICE_REGION_VARIANT,
 	/**
 	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#MODERATE} impact.
 	 */
@@ -249,6 +242,14 @@ public enum VariantEffect {
 	//
 	// LOW Putative Impact
 	//
+
+	// changes in the splicing region
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001630">SO:0001630</a> A sequence variant
+	 * in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8
+	 * bases of the intron (is a: {@link #SPLICING_VARIANT}).
+	 */
+	SPLICE_REGION_VARIANT,
 
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001567">SO:0001567</a> A sequence variant

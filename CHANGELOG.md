@@ -1,10 +1,16 @@
 # Jannovar Changelog
 
-## v0.29
+## develop
 
-### jannovar-core 
+* Putative impact of splice_region_variant has changed from MODERATE to LOW (see issue #439)
 
+## HEAD (unreleased)
+
+### jannovar-core
+
+* Decreasing log verbosity in one location when building database.
 * Fixing CDS region import in `RefSeqParser`
+
 
 ## v0.28
 

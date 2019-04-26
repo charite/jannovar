@@ -156,7 +156,7 @@ public class UCSCParser implements TranscriptParser {
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
 		for (Map.Entry<String, TranscriptModelBuilder> entry : knownGeneMap.entrySet()) {
 			if (entry.getValue().getAltGeneIDs().isEmpty() && entry.getValue().getGeneID() != null) {
-				LOGGER.info("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
+				LOGGER.debug("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
 					new Object[]{entry.getValue().getGeneID(), entry.getValue().getAccession()});
 				entry.getValue().getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entry.getValue().getGeneID());
 			}
