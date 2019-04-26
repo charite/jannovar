@@ -1,5 +1,9 @@
 # Jannovar Changelog
 
+## develop
+
+* Putative impact of splice_region_variant has changed from MODERATE to LOW (see issue #439)
+
 ## HEAD (unreleased)
 
 ### jannovar-core
