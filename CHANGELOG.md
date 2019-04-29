@@ -9,6 +9,8 @@
 ### jannovar-core
 
 * Decreasing log verbosity in one location when building database.
+* Fixing CDS region import in `RefSeqParser`
+
 
 ## v0.28
 
