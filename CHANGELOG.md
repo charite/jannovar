@@ -1,7 +1,10 @@
 # Jannovar Changelog
 
+## develop
+
 ### jannovar-core
 
+* Putative impact of splice_region_variant has changed from MODERATE to LOW (see issue #439)
 * Decreasing log verbosity in one location when building database.
 * Fixing CDS region import in `RefSeqParser`
 * Putative impact of `splice_region_variant has` changed from MODERATE to LOW (see issue #439)
@@ -9,6 +12,10 @@
 * Adding support for rn6 RefSeq transcripts.
   Adding `allowNonCodingNm` directive for data source INI file to disable check that RefSeq NM transcript has CDS.
 * Adding versions to ENST accessions for ENSEMBL.
+
+### jannovar-vardbs
+
+* Bugfix: TSVAnnotator did not use end given column.
 
 ## v0.28
 
