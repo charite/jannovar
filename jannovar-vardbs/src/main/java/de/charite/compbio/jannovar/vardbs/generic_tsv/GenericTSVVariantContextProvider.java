@@ -90,8 +90,10 @@ public class GenericTSVVariantContextProvider implements DatabaseVariantContextP
 			final int delta = options.isOneBasedPositions() ? 0 : 1;
 			final int startPos = Integer.parseInt(tokens[options.getBeginColumnIndex() - 1])
 				- delta;
+			final int endPos = Integer.parseInt(tokens[options.getEndColumnIndex() - 1])
+				- delta;
 			builder.start(startPos);
-			builder.stop(startPos);
+			builder.stop(endPos);
 
 			if (options.getRefAlleleColumnIndex() > 0 && options.getAltAlleleColumnIndex() > 0) {
 				builder.alleles(tokens[options.getRefAlleleColumnIndex() - 1],
