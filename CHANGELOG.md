@@ -2,7 +2,8 @@
 
 ## develop
 
-* Putative impact of splice_region_variant has changed from MODERATE to LOW (see issue #439)
+* Fixing SV annotation using hg38/ucsc for transcripts without gene ID (see #444).
+* Putative impact of `splice_region_variant has` changed from MODERATE to LOW (see issue #439)
 
 ## HEAD (unreleased)
 

@@ -240,6 +240,7 @@ public class UCSCParser implements TranscriptParser {
 		}
 		/* Field 0 has the accession number, e.g., uc010nxr.1. */
 		tib.setAccession(A[0]);
+		tib.setGeneID(".");
 		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing
 		// geneXref file.
 		Integer chrID = refDict.getContigNameToID().get(A[1]);
