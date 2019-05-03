@@ -8,6 +8,7 @@
 * Fixing SV annotation using hg38/ucsc for transcripts without gene ID (see #444).
 * Adding support for rn6 RefSeq transcripts.
   Adding `allowNonCodingNm` directive for data source INI file to disable check that RefSeq NM transcript has CDS.
+* Adding versions to ENST accessions for ENSEMBL.
 
 ## v0.28
 
