@@ -2,10 +2,14 @@
 
 ## v0.31 (UNRELEASED)
 
+### jannovar-core
+
+* Introducing classes for representation of gapped sequences, alignments, and position projection.
+
 ### jannovar-cli
 
-- Using HTTP protocol instead of FTP everywhere as it's possible (#451).
-- Fixing HGVS conversion for indels (#452).
+* Using HTTP protocol instead of FTP everywhere as it's possible (#451).
+* Fixing HGVS conversion for indels (#452).
 
 ## v0.30
 

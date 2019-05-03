@@ -71,4 +71,7 @@ public class ProteinMiscChange extends ProteinChange {
 		return new ProteinMiscChange(onlyPredicted, this.changeType);
 	}
 
+	@Override public String toString() {
+		return "ProteinMiscChange{" + "changeType=" + changeType + '}';
+	}
 }
