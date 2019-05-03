@@ -269,6 +269,13 @@ public class RefSeqParser implements TranscriptParser {
 		return checkFlagInSection(iniSection.fetch("preferPARTranscriptsOnChrX"));
 	}
 
+	/**
+	 * @return {@code true} for allowing empty CDS in transcripts starting with {@code NM_}.
+	 */
+	private boolean allowNonCodingNm() {
+		return checkFlagInSection(iniSection.fetch("allowNonCodingNm"));
+	}
+
 	private static boolean checkFlagInSection(String value) {
 		if (value == null)
 			return false;
@@ -314,10 +321,12 @@ public class RefSeqParser implements TranscriptParser {
 	private String parseGeneID(FeatureRecord featureRecord) {
 		// Dbxref=GeneID:6010,HGNC:10012,HPRD:01584,MIM:180380;
 		String dbxrefs = featureRecord.getAttributes().get("Dbxref");
-		for (String token : Splitter.on(',').split(dbxrefs)) {
-			List<String> keyValue = Splitter.on(':').limit(2).splitToList(token);
-			if (keyValue.size() == 2 && keyValue.get(0).equals("GeneID")) {
-				return keyValue.get(1);
+		if (dbxrefs != null) {
+			for (String token : Splitter.on(',').split(dbxrefs)) {
+				List<String> keyValue = Splitter.on(':').limit(2).splitToList(token);
+				if (keyValue.size() == 2 && keyValue.get(0).equals("GeneID")) {
+					return keyValue.get(1);
+				}
 			}
 		}
 
@@ -379,11 +388,16 @@ public class RefSeqParser implements TranscriptParser {
 		return transcriptModelsWithTxRegion;
 	}
 
-	private static void failIfCdsRegionExpected(TranscriptModelBuilder transcriptModelBuilder) {
-		if(Optional.ofNullable(transcriptModelBuilder.getAccession())
-								.map(x -> x.startsWith("NM_") || x.startsWith("XM_"))
-								.orElse(false)) {
-			throw new IllegalStateException("No CDS region found for coding transcript '" + transcriptModelBuilder.getAccession() + "'.");
+	private void failIfCdsRegionExpected(TranscriptModelBuilder transcriptModelBuilder) {
+		if (Optional.ofNullable(transcriptModelBuilder.getAccession())
+			.map(x -> x.startsWith("NM_") || x.startsWith("XM_"))
+			.orElse(false)) {
+			final String msg = "No CDS region found for coding transcript '" + transcriptModelBuilder.getAccession() + "'.";
+			if (!allowNonCodingNm()) {
+				throw new IllegalStateException(msg);
+			} else {
+				LOGGER.warn(msg);
+			}
 		}
 	}
 

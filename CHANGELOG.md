@@ -1,17 +1,13 @@
 # Jannovar Changelog
 
-## develop
-
-* Fixing SV annotation using hg38/ucsc for transcripts without gene ID (see #444).
-* Putative impact of `splice_region_variant has` changed from MODERATE to LOW (see issue #439)
-
-## HEAD (unreleased)
-
 ### jannovar-core
 
 * Decreasing log verbosity in one location when building database.
 * Fixing CDS region import in `RefSeqParser`
-
+* Putative impact of `splice_region_variant has` changed from MODERATE to LOW (see issue #439)
+* Fixing SV annotation using hg38/ucsc for transcripts without gene ID (see #444).
+* Adding support for rn6 RefSeq transcripts.
+  Adding `allowNonCodingNm` directive for data source INI file to disable check that RefSeq NM transcript has CDS.
 
 ## v0.28
 
