@@ -10,8 +10,8 @@ jdk:
     - openjdk9
     - openjdk10
     - openjdk11
-    - openjdk-ea
-
-matrix:
-    allow_failures:
-        jdk: opendjk-ea
+#    - openjdk-ea
+#
+#matrix:
+#    allow_failures:
+#        jdk: opendjk-ea
