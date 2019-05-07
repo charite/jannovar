@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## develop
+## v0.29
 
 ### jannovar-core
 
