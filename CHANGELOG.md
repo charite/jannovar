@@ -1,5 +1,13 @@
 # Jannovar Changelog
 
+## v0.30
+
+Bugfix release.
+
+### jannovar-core
+
+* Fixing interpretation of `INFO/SVTYPE`, urldecode and only use the first component after splitting at ":".
+
 ## v0.29
 
 ### jannovar-core

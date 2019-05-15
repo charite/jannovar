@@ -14,6 +14,8 @@ import de.charite.compbio.jannovar.reference.*;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -464,7 +466,16 @@ public final class VariantContextAnnotator {
 		throws MissingSVTypeInfoField, InvalidCoordinatesException, MissingEndInfoField,
 		InvalidBreakendDescriptionException {
 
-		final String tmpSVType = vc.getCommonInfo().getAttributeAsString("SVTYPE", null);
+		// Decode urlencoded "SVTYPE" field, split at ":").
+		String tmpSVType;
+		try {
+			final String tmp = URLDecoder.decode(
+				vc.getCommonInfo().getAttributeAsString("SVTYPE", "UTF-8"),
+				"UTF-8");
+			tmpSVType = tmp.split(":")[0];
+		} catch (UnsupportedEncodingException e) {
+			throw new MissingSVTypeInfoField("Could not decode INFO/SVTYPE from: " + vc);
+		}
 		if (tmpSVType == null) {
 			throw new MissingSVTypeInfoField("INFO field SVTYPE not found for variant: " + vc);
 		}
