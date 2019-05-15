@@ -544,41 +544,42 @@ public final class VariantContextAnnotator {
 		}
 
 		// Make case distinction between the known variant types.
-		if (svType.equals("DEL")) {
-			if (gPos2 == null) {
-				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
-			}
-			return new SVDeletion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.startsWith("DEL:ME")) {
+		if (svType.startsWith("DEL:ME") || svType.startsWith("DEL:LINE") || svType.startsWith("DEL:SINE") ||
+			svType.startsWith("DEL:DNA:TcMar-Tigger") || svType.startsWith("DEL:LTR")) {
 			if (gPos2 == null) {
 				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
 			}
 			return new SVMobileElementDeletion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.equals("DUP")) {
+		} if (svType.startsWith("DEL")) {
 			if (gPos2 == null) {
 				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
 			}
-			return new SVDuplication(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.equals("DUP:TANDEM")) {
+			return new SVDeletion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
+		} else if (svType.startsWith("DUP:TANDEM")) {
 			if (gPos2 == null) {
 				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
 			}
 			return new SVTandemDuplication(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.equals("INS")) {
-			return new SVInsertion(gPos, lowerCIPos, upperCIPos);
+		} else if (svType.startsWith("DUP")) {
+			if (gPos2 == null) {
+				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
+			}
+			return new SVDuplication(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
 		} else if (svType.startsWith("INS:ME")) {
 			return new SVMobileElementInsertion(gPos, lowerCIPos, upperCIPos);
-		} else if (svType.equals("INV")) {
+		} else if (svType.startsWith("INS")) {
+			return new SVInsertion(gPos, lowerCIPos, upperCIPos);
+		} else if (svType.startsWith("INV")) {
 			if (gPos2 == null) {
 				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
 			}
 			return new SVInversion(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.equals("CNV")) {
+		} else if (svType.startsWith("CNV")) {
 			if (gPos2 == null) {
 				throw new MissingEndInfoField("Missing INFO/END field in " + vc.toString());
 			}
 			return new SVCopyNumberVariant(gPos, gPos2, lowerCIPos, upperCIPos, lowerCIPos2, upperCIPos2);
-		} else if (svType.equals("BND")) {
+		} else if (svType.startsWith("BND")) {
 			final Matcher matcher = BND_PATTERN.matcher(altStr);
 			if (!matcher.matches()) {
 				throw new InvalidBreakendDescriptionException("Not a valid BND alternative allele: " + vc.toString());

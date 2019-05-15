@@ -7,6 +7,7 @@ Bugfix release.
 ### jannovar-core
 
 * Fixing interpretation of `INFO/SVTYPE`, urldecode and only use the first component after splitting at ":".
+* Interpreting SV type annotation for SV2 more correctly.
 
 ## v0.29
 
