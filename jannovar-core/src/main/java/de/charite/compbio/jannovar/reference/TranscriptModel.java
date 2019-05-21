@@ -154,6 +154,11 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
+	 * @Return the sequence alignment to the exonic genome reference
+	 */
+	public Alignment getSeqAlignment() { return seqAlignment; }
+
+	/**
 	 * @return The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
 	 * "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
 	 */
