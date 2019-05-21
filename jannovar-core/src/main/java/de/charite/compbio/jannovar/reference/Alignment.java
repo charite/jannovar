@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
 import com.google.common.collect.ImmutableList;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +11,12 @@ import java.util.Objects;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
-public final class Alignment {
+public final class Alignment implements Serializable {
+
+	/**
+	 * Class version (for serialization).
+	 */
+	private static final long serialVersionUID = 1L;
 
 	// Reference anchors.
 	private final ImmutableList<Anchor> refAnchors;
@@ -27,6 +33,17 @@ public final class Alignment {
 	public Alignment(List<Anchor> refAnchors, List<Anchor> qryAnchors) {
 		this.refAnchors = ImmutableList.copyOf(refAnchors);
 		this.qryAnchors = ImmutableList.copyOf(qryAnchors);
+	}
+
+	/**
+	 * Create ungapped alignment for the given sequence.
+	 *
+	 * @param length The transcript length to create the alignment for.
+	 * @return Ungapped {@code Alignment}
+	 */
+	public static Alignment createUngappedAlignment(int length) {
+		return new Alignment(ImmutableList.of(new Anchor(0, 0), new Anchor(length, length)),
+			ImmutableList.of(new Anchor(0, 0), new Anchor(length, length)));
 	}
 
 	/**

@@ -31,7 +31,7 @@ public class TranscriptModelBuilder {
 	private Strand strand = Strand.FWD;
 
 	/**
-	 * {@link TranscriptModel#accession} of next {@link TranscriptModel} to build.
+	 * {@code accession} of next {@link TranscriptModel} to build.
 	 */
 	private String accession = null;
 
@@ -42,32 +42,32 @@ public class TranscriptModelBuilder {
 	private String txVersion = null;
 
 	/**
-	 * {@link TranscriptModel#geneSymbol} of next {@link TranscriptModel} to build.
+	 * {@code geneSymbol} of next {@link TranscriptModel} to build.
 	 */
 	private String geneSymbol = null;
 
 	/**
-	 * {@link TranscriptModel#txRegion} of next {@link TranscriptModel} to build.
+	 * {@code txRegion} of next {@link TranscriptModel} to build.
 	 */
 	private GenomeInterval txRegion = null;
 
 	/**
-	 * {@link TranscriptModel#cdsRegion} of next {@link TranscriptModel} to build.
+	 * {@code cdsRegion} of next {@link TranscriptModel} to build.
 	 */
 	private GenomeInterval cdsRegion = null;
 
 	/**
-	 * {@link TranscriptModel#exonRegions} of next {@link TranscriptModel} to build.
+	 * {@code exonRegions} of next {@link TranscriptModel} to build.
 	 */
 	private ArrayList<GenomeInterval> exonRegions = new ArrayList<GenomeInterval>();
 
 	/**
-	 * {@link TranscriptModel#accession} of next {@link TranscriptModel} to build.
+	 * {@code accession} of next {@link TranscriptModel} to build.
 	 */
 	private String sequence = null;
 
 	/**
-	 * {@link TranscriptModel#geneID} of next {@link TranscriptModel} to build.
+	 * {@code geneID} of next {@link TranscriptModel} to build.
 	 */
 	private String geneID = null;
 
@@ -83,11 +83,16 @@ public class TranscriptModelBuilder {
 	;
 
 	/**
-	 * {@link TranscriptModel#transcriptSupportLevel} of next {@link TranscriptModel} to build.
+	 * {@code transcriptSupportLevel} of next {@link TranscriptModel} to build.
 	 *
 	 * @see TranscriptSupportLevels
 	 */
 	private int transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
+
+	/**
+	 * The alignment to use put into the {@link TranscriptModel}.
+	 */
+	private Alignment seqAlignment = null;
 
 	/**
 	 * Reset the builder into the state after initialization.
@@ -105,6 +110,7 @@ public class TranscriptModelBuilder {
 		geneVersion = null;
 		altGeneIDs.clear();
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
+		seqAlignment = null;
 	}
 
 	/**
@@ -112,14 +118,19 @@ public class TranscriptModelBuilder {
 	 */
 	public TranscriptModel build() {
 		// Build list of immutable exons in the correct order.
+		int exonLengthSum = 0;
 		ImmutableSortedSet.Builder<GenomeInterval> builder = ImmutableSortedSet.<GenomeInterval>naturalOrder();
 		if (exonRegions.size() > 0) {
 			if (strand == exonRegions.get(0).getStrand()) {
-				for (int i = 0; i < exonRegions.size(); ++i)
+				for (int i = 0; i < exonRegions.size(); ++i) {
 					builder.add(exonRegions.get(i));
+					exonLengthSum += exonRegions.get(i).length();
+				}
 			} else {
-				for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j)
+				for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j) {
 					builder.add(exonRegions.get(j).withStrand(strand));
+					exonLengthSum += exonRegions.get(j).length();
+				}
 			}
 		}
 
@@ -135,9 +146,13 @@ public class TranscriptModelBuilder {
 			fullGeneID += "." + this.geneVersion;
 		}
 
+		if (seqAlignment == null) {
+			seqAlignment = Alignment.createUngappedAlignment(exonLengthSum);
+		}
+
 		// Create new TranscriptModel object.
 		return new TranscriptModel(fullAccession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-			ImmutableList.copyOf(builder.build()), sequence, fullGeneID, transcriptSupportLevel, altGeneIDs);
+			ImmutableList.copyOf(builder.build()), sequence, fullGeneID, transcriptSupportLevel, altGeneIDs, seqAlignment);
 	}
 
 	/**
@@ -318,4 +333,20 @@ public class TranscriptModelBuilder {
 		this.transcriptSupportLevel = transcriptSupportLevel;
 	}
 
+
+	/**
+	 * @return current alignment
+	 * @see Alignment
+	 */
+	public Alignment getSeqAlignment() {
+		return seqAlignment;
+	}
+
+	/**
+	 * @param seqAlignment the {@link Alignment} to set
+	 * @see Alignment
+	 */
+	public void setSeqAlignment(Alignment seqAlignment) {
+		this.seqAlignment = seqAlignment;
+	}
 }

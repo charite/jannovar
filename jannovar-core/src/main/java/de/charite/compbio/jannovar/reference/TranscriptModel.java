@@ -74,9 +74,14 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	private final int transcriptSupportLevel;
 
 	/**
+	 * The alignment of the transcript sequence to the genomic exon region.
+	 */
+	private final Alignment seqAlignment;
+
+	/**
 	 * Class version (for serialization).
 	 */
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 
 	/**
 	 * Initialize the {@link TranscriptModel} object from the given parameters.
@@ -84,7 +89,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
 		this(accession, geneSymbol, txRegion, cdsRegion, exonRegions, sequence, geneID, transcriptSupportLevel,
-			ImmutableMap.<String, String>of());
+			ImmutableMap.of(), Alignment.createUngappedAlignment(sequence.length()));
 	}
 
 	/**
@@ -92,7 +97,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,
-						   Map<String, String> altGeneIDs) {
+						   Map<String, String> altGeneIDs, Alignment seqAlignment) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -102,6 +107,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		this.geneID = geneID;
 		this.transcriptSupportLevel = transcriptSupportLevel;
 		this.altGeneIDs = ImmutableSortedMap.copyOf(altGeneIDs);
+		this.seqAlignment = seqAlignment;
 		checkForConsistency();
 	}
 
@@ -158,7 +164,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	/**
 	 * Return mapping containing alternative gene IDs, as parsed from RefSeq GFF3 file
 	 * <p>
-	 * The alternative identifiers used are the values of {@link AltGeneIDType} converted to strings.
+	 * The alternative identifiers used are the values of {@code AltGeneIDType} converted to strings.
 	 */
 	public ImmutableSortedMap<String, String> getAltGeneIDs() {
 		return altGeneIDs;
@@ -254,6 +260,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
 		result = prime * result + transcriptSupportLevel;
 		result = prime * result + ((txRegion == null) ? 0 : txRegion.hashCode());
+		result = prime * result + ((seqAlignment == null) ? 0 : seqAlignment.hashCode());
 		return result;
 	}
 
@@ -302,6 +309,11 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 			if (other.txRegion != null)
 				return false;
 		} else if (!txRegion.equals(other.txRegion))
+			return false;
+		if (seqAlignment == null) {
+			if (other.seqAlignment != null)
+				return false;
+		} else if (!seqAlignment.equals(other.seqAlignment))
 			return false;
 		return true;
 	}

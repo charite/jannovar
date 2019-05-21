@@ -5,6 +5,7 @@
 ### jannovar-core
 
 * Introducing classes for representation of gapped sequences, alignments, and position projection.
+* Fixing bug in ENSEMBL transcript database generation (tx version was appended twice)
 
 ### jannovar-cli
 
