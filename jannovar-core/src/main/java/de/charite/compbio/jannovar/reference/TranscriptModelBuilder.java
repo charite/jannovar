@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,7 +79,6 @@ public class TranscriptModelBuilder {
 	 * Map with alternative gene IDs
 	 */
 	private HashMap<String, String> altGeneIDs = new HashMap<String, String>();
-	;
 
 	/**
 	 * {@code transcriptSupportLevel} of next {@link TranscriptModel} to build.
@@ -93,6 +91,11 @@ public class TranscriptModelBuilder {
 	 * The alignment to use put into the {@link TranscriptModel}.
 	 */
 	private Alignment seqAlignment = null;
+
+	/**
+	 * The alignment parts.
+	 */
+	private ArrayList<AlignmentPart> alignmentParts = new ArrayList<>();
 
 	/**
 	 * Reset the builder into the state after initialization.
@@ -111,6 +114,7 @@ public class TranscriptModelBuilder {
 		altGeneIDs.clear();
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 		seqAlignment = null;
+		alignmentParts.clear();
 	}
 
 	/**
@@ -146,6 +150,7 @@ public class TranscriptModelBuilder {
 			fullGeneID += "." + this.geneVersion;
 		}
 
+		// TODO: build alignment from parts
 		if (seqAlignment == null) {
 			seqAlignment = Alignment.createUngappedAlignment(exonLengthSum);
 		}
@@ -333,7 +338,6 @@ public class TranscriptModelBuilder {
 		this.transcriptSupportLevel = transcriptSupportLevel;
 	}
 
-
 	/**
 	 * @return current alignment
 	 * @see Alignment
@@ -348,5 +352,75 @@ public class TranscriptModelBuilder {
 	 */
 	public void setSeqAlignment(Alignment seqAlignment) {
 		this.seqAlignment = seqAlignment;
+	}
+
+	/**
+	 * @return current alignment parts
+	 * @see AlignmentPart
+	 */
+	public ArrayList<AlignmentPart> getAlignmentParts() {
+		return alignmentParts;
+	}
+
+	/**
+	 * @param alignmentParts the {@link AlignmentPart}s to set
+	 * @see AlignmentPart
+	 */
+	public void setSeqAlignment(ArrayList<AlignmentPart> alignmentParts) {
+		this.alignmentParts = alignmentParts;
+	}
+
+	/**
+	 * Describe a part of an alignment, e.g., as parsed from RefSeq.
+	 */
+	public static class AlignmentPart {
+		/**
+		 * 0-based begin position on reference.
+		 */
+		final public int refBeginPos;
+
+		/**
+		 * 0-based begin position on reference.
+		 */
+		final public int refEndPos;
+
+		/**
+		 * 0-based begin position on transcript.
+		 */
+		final public int txBeginPos;
+
+		/**
+		 * 0-based begin position on transcript.
+		 */
+		final public int txEndPos;
+
+		/**
+		 * Description from gaps, as in RefSeq "Gap" tag.
+		 */
+		final public String gap;
+
+		/**
+		 * Construct new alignment part.
+		 *
+		 * @param refBeginPos Begin position in reference (0-based).
+		 * @param refEndPos End position in reference.
+		 * @param txBeginPos Begin position in transcript (0-based).
+		 * @param txEndPos  End position in transcript.
+		 * @param gap Gap description.
+		 */
+		public AlignmentPart(int refBeginPos, int refEndPos, int txBeginPos, int txEndPos,
+			String gap) {
+			this.refBeginPos = refBeginPos;
+			this.refEndPos = refEndPos;
+			this.txBeginPos = txBeginPos;
+			this.txEndPos = txEndPos;
+			this.gap = gap;
+		}
+
+		@Override public String toString() {
+			return "AlignmentPart{" + "refBeginPos=" + refBeginPos + ", refEndPos=" + refEndPos
+				+ ", txBeginPos=" + txBeginPos + ", txEndPos=" + txEndPos + ", gap='" + gap + '\''
+				+ '}';
+		}
 	}
 }
