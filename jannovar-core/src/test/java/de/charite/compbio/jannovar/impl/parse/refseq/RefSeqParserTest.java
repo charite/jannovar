@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.impl.parse.refseq;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -13,9 +14,13 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
+import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.TranscriptPosition;
+import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -242,7 +247,10 @@ public class RefSeqParserTest {
 	 * Build transcripts using a reduced data set for LTBP4 of RefSeq.  The challenge is that the
 	 * transcript sequence contains an indel with respect to the reference.
 	 */
-	@Test public void testBuildLtbp4() throws IOException, TranscriptParseException {
+	@Test public void testBuildLtbp4()
+		throws IOException, TranscriptParseException, ProjectionException {
+		// TODO: test with reverse transcript
+		// TODO: test with NM_001017975.3 which has a leading gap
 		Path dataDirectory = Paths.get("src/test/resources/build/hg19/refseq_ltbp4")
 			.toAbsolutePath();
 
@@ -257,12 +265,39 @@ public class RefSeqParserTest {
 			dataDirectory.resolve("chr_accessions_GRCh37.p13").toString(), iniSection).parse();
 		RefSeqParser instance = new RefSeqParser(refDict, dataDirectory.toString(),
 			Collections.emptyList(), iniSection);
+
 		ImmutableList<TranscriptModel> transcripts = instance.run();
+		assertEquals(3, transcripts.size());
+
+		// Check transcript properties.
 
 		// NM_001042544.1
-		// NM_001042545.1
-		// NM_003573.2
+		// TODO
 
-		transcripts.forEach(transcript -> System.out.println(printTranscriptModel(transcript)));
+		// NM_001042545.1
+		// TODO
+
+		// NM_003573.2
+		TranscriptModel tx2 = transcripts.get(2);
+		assertEquals("NM_003573.2", tx2.getAccession());
+		// Check alignment
+		assertEquals(
+			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, Anchor{gapPos=5033, seqPos=5033}], "
+				+ "qryAnchors=[Anchor{gapPos=0, seqPos=0}, Anchor{gapPos=5033, seqPos=5033}]}",
+			tx2.getSeqAlignment().toString());  // TODO: will break
+		// Check projection from genomic position.
+		TranscriptProjectionDecorator decorator = new TranscriptProjectionDecorator(tx2);
+		TranscriptPosition tx2Pos0 = decorator
+			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123090));
+		assertEquals(3119, tx2Pos0.getPos());
+		TranscriptPosition tx2Pos1 = decorator
+			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123091));
+		assertEquals(3120, tx2Pos1.getPos());  // TODO: will break?
+		TranscriptPosition tx2Pos2 = decorator
+			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123092));
+		assertEquals(3121, tx2Pos2.getPos());  // TODO: will break?
+		TranscriptPosition tx2Pos3 = decorator
+			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123093));
+		assertEquals(3122, tx2Pos3.getPos());  // TODO: will break
 	}
 }
