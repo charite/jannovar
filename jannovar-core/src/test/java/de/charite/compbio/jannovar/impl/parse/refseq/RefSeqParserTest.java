@@ -1,5 +1,9 @@
 package de.charite.compbio.jannovar.impl.parse.refseq;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static org.junit.Assert.assertEquals;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -8,7 +12,26 @@ import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.reference.*;
+import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
+import de.charite.compbio.jannovar.reference.Strand;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.StringJoiner;
+import java.util.TreeSet;
+import java.util.function.Function;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -16,19 +39,10 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.ini4j.Profile.Section;
-import org.junit.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.function.Function;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class RefSeqParserTest {
 
@@ -134,7 +148,6 @@ public class RefSeqParserTest {
 
 	@Test
 	public void testRun() throws Exception {
-
 		Path dataDirectory = Paths.get("src/test/resources/build/hg19/refseq").toAbsolutePath();
 
 		Ini iniFile = new Ini();
@@ -223,5 +236,33 @@ public class RefSeqParserTest {
 		stringJoiner.add(Integer.toString(transcriptModel.getTranscriptSupportLevel()));
 		stringJoiner.add(transcriptModel.getSequence());
 		return stringJoiner.toString();
+	}
+
+	/**
+	 * Build transcripts using a reduced data set for LTBP4 of RefSeq.  The challenge is that the
+	 * transcript sequence contains an indel with respect to the reference.
+	 */
+	@Test public void testBuildLtbp4() throws IOException, TranscriptParseException {
+		Path dataDirectory = Paths.get("src/test/resources/build/hg19/refseq_ltbp4")
+			.toAbsolutePath();
+
+		Ini iniFile = new Ini();
+		iniFile.load(
+			Paths.get("src/test/resources/build/hg19/refseq_ltbp4/default_sources.ini").toFile());
+		Profile.Section iniSection = iniFile.get("hg19/refseq_ltbp4");
+		// CAUTION! the real RefDict is built from the download files. Having a mismatched chromosome name will
+		// result in missing transcriptModels
+		ReferenceDictionary refDict = new ReferenceDictParser(
+			dataDirectory.resolve("chromInfo.txt.gz").toString(),
+			dataDirectory.resolve("chr_accessions_GRCh37.p13").toString(), iniSection).parse();
+		RefSeqParser instance = new RefSeqParser(refDict, dataDirectory.toString(),
+			Collections.emptyList(), iniSection);
+		ImmutableList<TranscriptModel> transcripts = instance.run();
+
+		// NM_001042544.1
+		// NM_001042545.1
+		// NM_003573.2
+
+		transcripts.forEach(transcript -> System.out.println(printTranscriptModel(transcript)));
 	}
 }
