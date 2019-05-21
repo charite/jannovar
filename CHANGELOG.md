@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## v0.31 (UNRELEASED)
+
+### jannovar-cli
+
+- Using HTTP protocol instead of FTP everywhere as it's possible (#451).
+
 ## v0.30
 
 Bugfix release.
