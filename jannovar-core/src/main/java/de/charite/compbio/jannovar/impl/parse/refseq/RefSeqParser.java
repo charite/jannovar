@@ -1,28 +1,43 @@
 package de.charite.compbio.jannovar.impl.parse.refseq;
 
+import static java.util.stream.Collectors.toList;
+
 import com.google.common.base.Splitter;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
-import de.charite.compbio.jannovar.impl.parse.*;
+import de.charite.compbio.jannovar.impl.parse.FASTAParser;
+import de.charite.compbio.jannovar.impl.parse.FASTARecord;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.reference.*;
+import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.Strand;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import de.charite.compbio.jannovar.reference.TranscriptModelBuilder.AlignmentPart;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import javax.annotation.Nullable;
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static java.util.stream.Collectors.toList;
 /**
  * Parsing of RefSeq GFF3 files
  *
@@ -34,12 +49,6 @@ public class RefSeqParser implements TranscriptParser {
 	 * the logger object to use
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(RefSeqParser.class);
-
-	/**
-	 * List of transcript-level feature types
-	 */
-	private static final ImmutableSet<String> TX_LEVEL_FEATURE_TYPES = ImmutableSet.of("mRNA", "ncRNA", "rRNA", "tRNA",
-		"primary_transcript", "transcript");
 
 	/**
 	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
@@ -225,6 +234,8 @@ public class RefSeqParser implements TranscriptParser {
 					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
 					continue;
 				}
+				// Handle the records describing the transcript structure.
+				//
 				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id as
 				// the transcriptId is only stated for the exon and the proteinId is used as the CDS identifier.
 				// a further complication is that some transcriptIds are used twice by different ParentIds - those in
@@ -232,6 +243,9 @@ public class RefSeqParser implements TranscriptParser {
 				String parentId = record.getAttributes().get("Parent");
 				if (parentId != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
 					if (!parentIdToTranscriptModels.containsKey(parentId)) {
+						if (record.getType().equals("cDNA_match")) {
+							throw new TranscriptParseException("Saw cDNA_match before the transcript for " + record);
+						}
 						// create new TranscriptBuilder
 						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);
 						parentIdToTranscriptModels.put(parentId, builder);
@@ -240,7 +254,44 @@ public class RefSeqParser implements TranscriptParser {
 					} else {
 						// update existing
 						TranscriptModelBuilder builder = parentIdToTranscriptModels.get(parentId);
-						updateExonsTxRegionsAndCds(record, builder);
+						updateExonsTxRegionsCdsAndCdnaMatch(record, builder);
+					}
+				}
+				// Handle the cDNA_match type.
+				if ("cDNA_match".equals(record.getType())) {
+					final String target[] = record.getAttributes().get("Target").split(" ");
+					if (!"+".equals(target[3])) {
+						throw new TranscriptParseException(
+							"Can only handle Target on strand '+' for cDNA_match: " + record);
+					}
+
+					final String targetTxId = target[0];
+					final int txBeginPos = Integer.parseInt(target[1]) - 1;
+					final int txEndPos = Integer.parseInt(target[2]);
+					final int refBeginPos = record.getBegin();
+					final int refEndPos = record.getEnd();
+					final String gapStr;
+					if ((refEndPos - refBeginPos != txEndPos - txBeginPos)
+						&& record.getAttributes().get("Gap") == null) {
+						throw new TranscriptParseException(
+							"ref len != tx len but no gap string: " + record);
+					} else {
+						if (record.getAttributes().get("Gap") == null) {
+							gapStr = "M" + (txEndPos - txBeginPos);
+						} else {
+							gapStr = record.getAttributes().get("Gap");
+						}
+					}
+
+					final List<String> parentIds = transcriptIdToParentIds.get(targetTxId);
+					if (parentIds != null) {
+						for (String builderParentId : parentIds) {
+							TranscriptModelBuilder builder = parentIdToTranscriptModels
+								.get(builderParentId);
+							builder.getAlignmentParts().add(
+								new AlignmentPart(refBeginPos, refEndPos, txBeginPos, txEndPos,
+									gapStr));
+						}
 					}
 				}
 			}
@@ -312,7 +363,7 @@ public class RefSeqParser implements TranscriptParser {
 		builder.setGeneSymbol(record.getAttributes().get("gene"));
 		builder.setSequence(transcriptId);
 
-		updateExonsTxRegionsAndCds(record, builder);
+		updateExonsTxRegionsCdsAndCdnaMatch(record, builder);
 
 		return builder;
 	}
@@ -333,7 +384,7 @@ public class RefSeqParser implements TranscriptParser {
 		return null;
 	}
 
-	private void updateExonsTxRegionsAndCds(FeatureRecord record, TranscriptModelBuilder builder) {
+	private void updateExonsTxRegionsCdsAndCdnaMatch(FeatureRecord record, TranscriptModelBuilder builder) {
 		Strand strand = parseStrand(record);
 		if (record.getType().equals("exon")) {
 			GenomeInterval exon = buildGenomeInterval(record, strand);
