@@ -31,7 +31,7 @@ public final class JannovarDataSerializer {
 	/**
 	 * the minimal supported version of Jannovar in this version
 	 */
-	private final String minVersion = "0.21-SNAPSHOT";
+	private final String minVersion = "0.31-SNAPSHOT";
 
 	/**
 	 * the logger object to use

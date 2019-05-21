@@ -44,7 +44,7 @@ public class BuildExampleJannovarDB {
 		ImmutableList<TranscriptModel> tms = parser.run();
 		JannovarData data = new JannovarData(refDict, tms);
 		// write out file
-		new JannovarDataSerializer("mini_" + name + ".ser").save(data);
+		new JannovarDataSerializer("jannovar-htsjdk/src/test/resources/ex_" + name + "/mini_" + name + ".ser").save(data);
 	}
 
 }

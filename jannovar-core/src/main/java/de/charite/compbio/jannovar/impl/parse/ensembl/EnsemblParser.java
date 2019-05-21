@@ -378,8 +378,7 @@ public class EnsemblParser implements TranscriptParser {
 					.get("transcript_id") != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record
 					.getType())) {
 					LOGGER.debug("Loaded GFF record {}", record);
-					String transcriptId = record.getAttributes().get("transcript_id") + "." +
-						record.getAttributes().get("transcript_version");
+					String transcriptId = record.getAttributes().get("transcript_id");
 					if (!results.containsKey(transcriptId)) {
 						// create new TranscriptBuilder
 						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);

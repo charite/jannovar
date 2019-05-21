@@ -6,4 +6,4 @@
 ##jannovarCommand
 ##jannovarVersion
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual
-NC_000001.10	321052	.	C	T	.	PASS	ANN=T|non_coding_transcript_exon_variant|LOW|LOC100132287|100132287|transcript|XR_246673.1|Noncoding|3/4|n.571C>T||571/5993||||;CLASS=DM;MUT=ALT	GT:AD:DP:GQ:PL	0/1:14,7:21:99:181,0,367
+NC_000001.10	321052	.	C	T	.	PASS	ANN=T|intergenic_variant|MODIFIER|FAM138A|645520|transcript|NR_026818.1|Noncoding|||||||286442|;CLASS=DM;MUT=ALT	GT:AD:DP:GQ:PL	0/1:14,7:21:99:181,0,367
