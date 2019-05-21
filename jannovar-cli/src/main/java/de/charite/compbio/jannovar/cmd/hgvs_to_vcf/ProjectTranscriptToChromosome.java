@@ -13,6 +13,9 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParsingException;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.Strand;
+import de.charite.compbio.jannovar.vardbs.base.VariantDescription;
+import de.charite.compbio.jannovar.vardbs.base.VariantNormalizer;
 import htsjdk.samtools.SAMSequenceRecord;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 import htsjdk.variant.variantcontext.Allele;
@@ -47,6 +50,10 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
 	/**
+	 * Normalization of variants.
+	 */
+	VariantNormalizer normalizer;
+	/**
 	 * Configuration
 	 */
 	private ProjectTranscriptToChromosomeOptions options;
@@ -64,6 +71,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		deserializeTranscriptDefinitionFile(options.getDatabaseFilePath());
 		System.err.println("Loading FASTA index...");
 		loadFASTAIndex();
+		normalizer = new VariantNormalizer(options.getPathReferenceFASTA());
 		System.err.println("Opening output VCF file...");
 		try (VariantContextWriter writer = openOutputFile()) {
 			processFile(writer);
@@ -184,7 +192,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		// Try to find matching contig in fasta
 		String nameInFasta = null;
 		for (SAMSequenceRecord record : fasta.getSequenceDictionary().getSequences()) {
-			if (jannovarData.getRefDict().getContigNameToID().containsKey(record.getSequenceName())) {
+			if (contigID.equals(jannovarData.getRefDict().getContigNameToID().get(record.getSequenceName()))) {
 				nameInFasta = record.getSequenceName();
 				break;
 			}
@@ -196,23 +204,20 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 	}
 
 	private void writeVariant(VariantContextWriter writer, GenomeVariant genomeVar) {
-		String nameInFasta = mapContigToFasta(genomeVar.getChrName());
-		List<Allele> alleles = new ArrayList<Allele>();
-		int shift = 0;
-		if (genomeVar.getRef().isEmpty() || genomeVar.getAlt().isEmpty()) {
-			shift = -1;
-			String left = fasta.getSubsequenceAt(nameInFasta, genomeVar.getPos(), genomeVar.getPos())
-				.getBaseString();
-			alleles.add(Allele.create(left + genomeVar.getRef(), true));
-			alleles.add(Allele.create(left + genomeVar.getAlt(), false));
-		} else {
-			alleles.add(Allele.create(genomeVar.getRef(), true));
-			alleles.add(Allele.create(genomeVar.getAlt(), false));
-		}
+		genomeVar = genomeVar.withStrand(Strand.FWD);
+		final String nameInFasta = mapContigToFasta(genomeVar.getChrName());
+		final VariantDescription desc = normalizer.normalizeInsertion(
+			new VariantDescription(nameInFasta, genomeVar.getPos(), genomeVar.getRef(), genomeVar.getAlt())
+		);
+
+		final List<Allele> alleles = Lists.newArrayList(
+			Allele.create(desc.getRef(), true),
+			Allele.create(desc.getAlt(), false)
+		);
 
 		VariantContextBuilder builder = new VariantContextBuilder();
-		builder.chr(genomeVar.getChrName()).start(genomeVar.getPos() + shift + 1)
-			.computeEndFromAlleles(alleles, genomeVar.getPos() + shift + 1).alleles(alleles);
+		builder.chr(nameInFasta).start(desc.getPos() + 1)
+			.computeEndFromAlleles(alleles, desc.getPos() + 1).alleles(alleles);
 
 		writer.add(builder.make());
 	}
