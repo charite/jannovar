@@ -25,7 +25,7 @@ public class HGNCParser {
 	/**
 	 * Download URL for the HGNC complete set TSV file
 	 */
-	public static final String DOWNLOAD_URL = "ftp://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt";
+	public static final String DOWNLOAD_URL = "http://ftp.ebi.ac.uk/pub/databases/genenames/new/tsv/hgnc_complete_set.txt";
 
 	/**
 	 * Path to the file to parser
