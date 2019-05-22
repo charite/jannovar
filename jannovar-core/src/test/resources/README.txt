@@ -24,10 +24,10 @@ java -jar jannovar-cli/target/jannovar-cli-0.31-SNAPSHOT.jar \
     -o jannovar-cli/src/test/resources/hg19_small.ser \
     --gene-ids DDX11L1 FAM138A
 
-# chr19_ltbp4.ser - RefSeq transcripts of LTBP4 with fixes from UCSC
+# hg19_refseq_indels.ser - RefSeq transcripts that have problems because of indels in the transcript.
 
 java -jar jannovar-cli/target/jannovar-cli-0.31-SNAPSHOT.jar \
     download \
     -d hg19/refseq_curated \
-    -o jannovar-core/src/test/resources/chr19_ltbp4.ser \
-    --gene-ids LTBP4
+    -o jannovar-core/src/test/resources/hg19_refseq_indels.ser \
+    --gene-ids LTBP4 MYH7 HFM1

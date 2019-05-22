@@ -47,6 +47,20 @@ public final class Alignment implements Serializable {
 	}
 
 	/**
+	 * @return Query {@link Anchor}s.
+	 */
+	public ImmutableList<Anchor> getRefAnchors() {
+		return refAnchors;
+	}
+
+	/**
+	 * @return Query {@link Anchor}s.
+	 */
+	public ImmutableList<Anchor> getQryAnchors() {
+		return qryAnchors;
+	}
+
+	/**
 	 * @return Return number of leading gaps in reference.
 	 */
 	public int refLeadingGapLength() {
