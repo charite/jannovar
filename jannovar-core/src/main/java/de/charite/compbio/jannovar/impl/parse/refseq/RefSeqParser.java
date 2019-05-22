@@ -242,19 +242,29 @@ public class RefSeqParser implements TranscriptParser {
 				// the pseudoautosomal regions and some others
 				String parentId = record.getAttributes().get("Parent");
 				if (parentId != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
+					final TranscriptModelBuilder builder;
 					if (!parentIdToTranscriptModels.containsKey(parentId)) {
 						if (record.getType().equals("cDNA_match")) {
 							throw new TranscriptParseException("Saw cDNA_match before the transcript for " + record);
 						}
 						// create new TranscriptBuilder
-						TranscriptModelBuilder builder = createNewTranscriptModelBuilder(record, transcriptId);
+						builder = createNewTranscriptModelBuilder(record, transcriptId);
 						parentIdToTranscriptModels.put(parentId, builder);
 						// this method is used to track the rare cases of transcriptIds mapping to multiple parentIds
 						updateTransciptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
 					} else {
 						// update existing
-						TranscriptModelBuilder builder = parentIdToTranscriptModels.get(parentId);
+						builder = parentIdToTranscriptModels.get(parentId);
 						updateExonsTxRegionsCdsAndCdnaMatch(record, builder);
+					}
+
+					if (record.getAttributes().containsKey("Note")) {
+						if (record.getAttributes().get("Note").contains("substitution")) {
+							builder.setHasSubstitutions(true);
+						}
+						if (record.getAttributes().get("Note").contains("indel")) {
+							builder.setHasIndels(true);
+						}
 					}
 				}
 				// Handle the cDNA_match type.

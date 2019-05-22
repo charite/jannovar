@@ -2,8 +2,12 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for building immutable {@link TranscriptModel} objects field-by-field.
@@ -23,6 +27,8 @@ import java.util.HashMap;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptModelBuilder {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptModelBuilder.class);
 
 	/**
 	 * The explicit strand of the target transcript.
@@ -98,6 +104,16 @@ public class TranscriptModelBuilder {
 	private ArrayList<AlignmentPart> alignmentParts = new ArrayList<>();
 
 	/**
+	 * Whether has mismatches.
+	 */
+	private boolean hasSubstitutions = false;
+
+	/**
+	 * Whether has indels.
+	 */
+	private boolean hasIndels = false;
+
+	/**
 	 * Reset the builder into the state after initialization.
 	 */
 	public void reset() {
@@ -114,6 +130,8 @@ public class TranscriptModelBuilder {
 		altGeneIDs.clear();
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 		seqAlignment = null;
+		hasSubstitutions = false;
+		hasIndels = false;
 		alignmentParts.clear();
 	}
 
@@ -150,14 +168,101 @@ public class TranscriptModelBuilder {
 			fullGeneID += "." + this.geneVersion;
 		}
 
-		// TODO: build alignment from parts
 		if (seqAlignment == null) {
-			seqAlignment = Alignment.createUngappedAlignment(exonLengthSum);
+			if (!alignmentParts.isEmpty()) {
+				seqAlignment = buildAlignment();
+			} else {
+				seqAlignment = Alignment.createUngappedAlignment(exonLengthSum);
+			}
 		}
 
 		// Create new TranscriptModel object.
-		return new TranscriptModel(fullAccession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-			ImmutableList.copyOf(builder.build()), sequence, fullGeneID, transcriptSupportLevel, altGeneIDs, seqAlignment);
+		return new TranscriptModel(fullAccession, geneSymbol, txRegion.withStrand(strand),
+			cdsRegion.withStrand(strand), ImmutableList.copyOf(builder.build()), sequence,
+			fullGeneID, transcriptSupportLevel, hasSubstitutions, hasIndels, altGeneIDs, seqAlignment);
+	}
+
+	/**
+	 * Build the {@link Alignment} from the {@link #alignmentParts}.
+	 */
+	private Alignment buildAlignment() {
+		int exonLengthSum = 0;
+		for (int i = 0; i < exonRegions.size(); ++i) {
+			exonLengthSum += exonRegions.get(i).length();
+		}
+
+		// TODO: properly handle reverse transcripts!
+
+		// Check that alignmentParts matches exonRegions.
+		if (alignmentParts.size() != exonRegions.size()) {
+			LOGGER.warn("Number of alignment parts ({}) != number of exons ({}) for {}",
+				new Object[] { alignmentParts.size(), exonRegions.size(), accession });
+			return Alignment.createUngappedAlignment(exonLengthSum);
+		}
+		for (int i = 0; i < alignmentParts.size(); ++i) {
+			final GenomeInterval exonRegion = exonRegions.get(i).withStrand(Strand.FWD);
+			if (alignmentParts.get(i).refBeginPos != exonRegion.getBeginPos()
+				|| alignmentParts.get(i).refEndPos != exonRegion.getEndPos()) {
+				LOGGER.warn("Exon {} does not match alignment part {} (i={}, tx={})",
+					new Object[] { alignmentParts.get(i), exonRegions.get(i), i, accession });
+				return Alignment.createUngappedAlignment(exonLengthSum);
+			}
+		}
+
+		// Build the anchors of the alignment of the transcript to the transcript sequence.
+		final List<Anchor> refAnchors = Lists.newArrayList(new Anchor(0, 0));
+		final List<Anchor> qryAnchors = Lists.newArrayList(new Anchor(0, 0));
+		String prevGapEntry = null;
+		for (int i = 0; i < alignmentParts.size(); ++i) {
+			final AlignmentPart alignmentPart = alignmentParts.get(i);
+			Anchor prevRefAnchor = refAnchors.get(refAnchors.size() - 1);
+			Anchor prevQryAnchor = qryAnchors.get(qryAnchors.size() - 1);
+
+			if (prevQryAnchor.getSeqPos() > alignmentPart.txBeginPos) {
+				throw new RuntimeException("Local alignments overlap in sequence");
+			} else if (prevQryAnchor.getSeqPos() < alignmentPart.txBeginPos) {
+				// Insertion of sequence (and into the query) with respect to the transcript (reference).
+				final int skipped = alignmentPart.txBeginPos - prevQryAnchor.getSeqPos();
+				refAnchors.add(prevRefAnchor.withDeltas(skipped, 0));
+				qryAnchors.add(prevQryAnchor.withDeltas(skipped, skipped));
+				prevRefAnchor = refAnchors.get(refAnchors.size() - 1);
+				prevQryAnchor = qryAnchors.get(qryAnchors.size() - 1);
+			}
+
+			for (final String gapEntry: alignmentPart.gap.split(" ")) {
+				final char operation = gapEntry.charAt(0);
+				final int count = Integer.parseInt(gapEntry.substring(1));
+
+				switch (operation) {
+				case 'M':
+					if (prevGapEntry == null || !prevGapEntry.startsWith("M")) {
+						refAnchors.add(prevRefAnchor.withDeltas(count, count));
+						qryAnchors.add(prevQryAnchor.withDeltas(count, count));
+					} else {
+						// Extend previous "(M)atch block."
+						refAnchors.set(refAnchors.size() - 1, prevRefAnchor.withDeltas(count, count));
+						qryAnchors.set(qryAnchors.size() - 1, prevQryAnchor.withDeltas(count, count));
+					}
+					break;
+				case 'I':
+					refAnchors.add(prevRefAnchor.withDeltas(count, 0));
+					qryAnchors.add(prevQryAnchor.withDeltas(count, count));
+					break;
+				case 'D':
+					refAnchors.add(prevRefAnchor.withDeltas(count, count));
+					qryAnchors.add(prevQryAnchor.withDeltas(count, 0));
+					break;
+				default:
+					throw new RuntimeException("Unexpected operation: " + gapEntry);
+				}
+
+				prevRefAnchor = refAnchors.get(refAnchors.size() - 1);
+				prevQryAnchor = qryAnchors.get(qryAnchors.size() - 1);
+				prevGapEntry = gapEntry;
+			}
+		}
+
+		return new Alignment(refAnchors, qryAnchors);
 	}
 
 	/**
@@ -368,6 +473,38 @@ public class TranscriptModelBuilder {
 	 */
 	public void setSeqAlignment(ArrayList<AlignmentPart> alignmentParts) {
 		this.alignmentParts = alignmentParts;
+	}
+
+	/**
+	 * @return The "has mismatches" flag.
+	 */
+	public boolean isHasSubstitutions() {
+		return hasSubstitutions;
+	}
+
+	/**
+	 * Set "has mismatches flag"
+	 *
+	 * @param b The value to set the flag to.
+	 */
+	public void setHasSubstitutions(boolean b) {
+		this.hasSubstitutions = b;
+	}
+
+	/**
+	 * @return The "has indels" flag.
+	 */
+	public boolean isHasIndels() {
+		return hasIndels;
+	}
+
+	/**
+	 * Set "has indels flag"
+	 *
+	 * @param b The value to set the flag to.
+	 */
+	public void setHasIndels(boolean b) {
+		this.hasIndels = b;
 	}
 
 	/**

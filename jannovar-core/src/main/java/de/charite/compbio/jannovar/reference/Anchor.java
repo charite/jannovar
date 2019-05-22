@@ -47,6 +47,13 @@ public final class Anchor implements Serializable {
 		return seqPos;
 	}
 
+	/**
+	 * @return Return new gap anchor with deltas applied.
+	 */
+	public Anchor withDeltas(int gapDelta, int seqDelta) {
+		return new Anchor(gapPos + gapDelta, seqPos + seqDelta);
+	}
+
 	@Override public String toString() {
 		return "Anchor{" + "gapPos=" + gapPos + ", seqPos=" + seqPos + '}';
 	}

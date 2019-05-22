@@ -87,7 +87,8 @@ public final class TranscriptProjectionDecorator {
 				// Consequently, we have to *subtract* this difference from transcriptPos.
 				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
 				int transcriptPos = tOffset + posInExon;
-				return new TranscriptPosition(transcript, transcriptPos, PositionType.ZERO_BASED);
+				int projectedTranscriptPos = transcript.getSeqAlignment().projectRefToQry(transcriptPos);
+				return new TranscriptPosition(transcript, projectedTranscriptPos, PositionType.ZERO_BASED);
 			}
 			tOffset += region.length();
 		}

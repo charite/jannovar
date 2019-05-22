@@ -6,6 +6,8 @@
 
 * Introducing classes for representation of gapped sequences, alignments, and position projection.
 * Fixing bug in ENSEMBL transcript database generation (tx version was appended twice)
+* Adding flags for "has substitutions" and "has indels" to `TranscriptModel` that get filled for RefSeq transcripts.
+* Correctly parsing of RefSeq transcripts with indels.
 
 ### jannovar-cli
 
