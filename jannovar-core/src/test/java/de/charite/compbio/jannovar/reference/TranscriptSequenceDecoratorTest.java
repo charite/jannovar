@@ -35,7 +35,7 @@ public class TranscriptSequenceDecoratorTest {
 		String sequence = Joiner.on("").join(CODONS);
 		return new TranscriptModel("TEST", "TEST", new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()),
 			new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()), ImmutableList.<GenomeInterval>builder().build(),
-			sequence, "TEST", 1);
+			sequence, "TEST", 1, false, false);
 	}
 
 	private static TranscriptPosition tx(int pos) {

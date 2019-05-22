@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 import de.charite.compbio.jannovar.Immutable;
-
 import java.io.Serializable;
 import java.util.Map;
 
@@ -79,6 +78,16 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	private final Alignment seqAlignment;
 
 	/**
+	 * Whether or not the transcript aligns with mismatches to the reference.
+	 */
+	private final boolean hasSubstitutions;
+
+	/**
+	 * Whether or not the transcript aligns with indels to the reference.
+	 */
+	private final boolean hasIndels;
+
+	/**
 	 * Class version (for serialization).
 	 */
 	private static final long serialVersionUID = 4L;
@@ -86,18 +95,21 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	/**
 	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
-	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
-		this(accession, geneSymbol, txRegion, cdsRegion, exonRegions, sequence, geneID, transcriptSupportLevel,
-			ImmutableMap.of(), Alignment.createUngappedAlignment(sequence.length()));
+	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion,
+		GenomeInterval cdsRegion, ImmutableList<GenomeInterval> exonRegions, String sequence,
+		String geneID, int transcriptSupportLevel, boolean hasIndels, boolean hasSubstitutions) {
+		this(accession, geneSymbol, txRegion, cdsRegion, exonRegions, sequence, geneID,
+			transcriptSupportLevel, hasSubstitutions, hasIndels, ImmutableMap.of(),
+			Alignment.createUngappedAlignment(sequence.length()));
 	}
 
 	/**
 	 * Initialize the {@link TranscriptModel} object from the given parameters.
 	 */
-	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-						   ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,
-						   Map<String, String> altGeneIDs, Alignment seqAlignment) {
+	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion,
+		GenomeInterval cdsRegion, ImmutableList<GenomeInterval> exonRegions, String sequence,
+		String geneID, int transcriptSupportLevel, boolean hasSubstitutions, boolean hasIndels,
+		Map<String, String> altGeneIDs, Alignment seqAlignment) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -108,6 +120,8 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		this.transcriptSupportLevel = transcriptSupportLevel;
 		this.altGeneIDs = ImmutableSortedMap.copyOf(altGeneIDs);
 		this.seqAlignment = seqAlignment;
+		this.hasSubstitutions = hasSubstitutions;
+		this.hasIndels = hasIndels;
 		checkForConsistency();
 	}
 
@@ -226,6 +240,20 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
+	 * @return whether aligns with mismatches
+	 */
+	public boolean isHasSubstitutions() {
+		return hasSubstitutions;
+	}
+
+	/**
+	 * @return whether aligns with indels
+	 */
+	public boolean isHasIndels() {
+		return hasIndels;
+	}
+
+	/**
 	 * @param i 0-based index of the intron's region to return
 	 * @return {@link GenomeInterval} with the intron's region
 	 */
@@ -265,6 +293,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
 		result = prime * result + transcriptSupportLevel;
 		result = prime * result + ((txRegion == null) ? 0 : txRegion.hashCode());
+		result = prime * result + ((seqAlignment == null) ? 0 : seqAlignment.hashCode());
 		result = prime * result + ((seqAlignment == null) ? 0 : seqAlignment.hashCode());
 		return result;
 	}
