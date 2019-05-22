@@ -67,7 +67,10 @@ public final class Anchors {
 		if (anchors.size() < 2) {
 			throw new RuntimeException("Must have at least two anchors!");
 		}
-		assert seqPos <= seqLength(anchors);
+		if (seqPos > seqLength(anchors)) {
+			// Project beyond length to the end.
+			return gapLength(anchors) + seqLength(anchors) - seqPos;
+		}
 
 		int gapPos = 0;
 		for (int idx = 0; idx + 1 < anchors.size(); ++idx) {

@@ -1,8 +1,10 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
 import de.charite.compbio.jannovar.hgvs.nts.change.*;
+import de.charite.compbio.jannovar.impl.util.DNAUtils;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Build {@link NucleotideChange} for a {@link GenomeVariant}.
@@ -31,10 +33,17 @@ public class GenomicNucleotideChangeBuilder {
 	 * @return {@link NucleotideChange} corresponding to {@link #getVariant()}.
 	 */
 	public NucleotideChange build() {
-		final String ref = variant.getRef();
-		final String alt = variant.getAlt();
+		final String ref;
+		final String alt;
+		if (variant.getGenomeInterval().getStrand() == Strand.FWD) {
+			ref = variant.getRef();
+			alt = variant.getAlt();
+		} else {
+			ref = DNAUtils.reverseComplement(variant.getRef());
+			alt = DNAUtils.reverseComplement(variant.getAlt());
+		}
 
-		GenomePosition position = variant.getGenomePos();
+		GenomePosition position = variant.getGenomePos().withStrand(Strand.FWD);
 		final int beginPos = position.getPos();
 
 		if (ref.length() == 1 && alt.length() == 1)

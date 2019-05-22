@@ -191,8 +191,6 @@ public class TranscriptModelBuilder {
 			exonLengthSum += exonRegions.get(i).length();
 		}
 
-		// TODO: properly handle reverse transcripts!
-
 		// Check that alignmentParts matches exonRegions.
 		if (alignmentParts.size() != exonRegions.size()) {
 			LOGGER.warn("Number of alignment parts ({}) != number of exons ({}) for {}",

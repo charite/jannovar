@@ -87,6 +87,7 @@ public final class TranscriptProjectionDecorator {
 				// Consequently, we have to *subtract* this difference from transcriptPos.
 				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
 				int transcriptPos = tOffset + posInExon;
+				// Project for position on genomic exons to position in sequence.
 				int projectedTranscriptPos = transcript.getSeqAlignment().projectRefToQry(transcriptPos);
 				return new TranscriptPosition(transcript, projectedTranscriptPos, PositionType.ZERO_BASED);
 			}
@@ -106,6 +107,7 @@ public final class TranscriptProjectionDecorator {
 	 * @throws ProjectionException if the genome position was not valid
 	 */
 	public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
+		// TODO: adjust for possibly gapped alignments
 		if (!transcript.getCDSRegion().contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the CDS region " + transcript.getCDSRegion());
 		pos = pos.withStrand(transcript.getStrand());
@@ -124,6 +126,7 @@ public final class TranscriptProjectionDecorator {
 	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
 	 */
 	public TranscriptPosition cdsToTranscriptPos(CDSPosition pos) {
+		// TODO: adjust for possibly gapped alignments
 		final GenomePosition cdsBeginPos = transcript.getCDSRegion().getGenomeBeginPos();
 
 		int currPos = 0; // current transcript position
@@ -158,9 +161,18 @@ public final class TranscriptProjectionDecorator {
 	 * @throws ProjectionException on problems with the coordinate transformation (outside of the transcript)
 	 */
 	public GenomePosition transcriptToGenomePos(TranscriptPosition pos) throws ProjectionException {
-		final int targetPos = pos.getPos(); // 0-based target pos
+		final int targetSeqPos = pos.getPos(); // 0-based target pos
+		if (targetSeqPos < 0) {
+			throw new ProjectionException("Invalid transcript sequence position " + targetSeqPos);
+		} else if (targetSeqPos
+			> Anchors.seqLength(transcript.getSeqAlignment().getRefAnchors()) + 1) {
+			throw new ProjectionException("Invalid transcript sequence position " + targetSeqPos);
+		}
+
+		// Project from position in sequence to position on exons.
+		final int targetPos = transcript.getSeqAlignment().projectQryToRef(targetSeqPos);
 		if (targetPos < 0)
-			throw new ProjectionException("Invalid transcript position " + targetPos);
+			throw new ProjectionException("Invalid transcript exon position " + targetPos);
 
 		int currPos = 0; // relative begin position of current exon
 		for (GenomeInterval region : transcript.getExonRegions()) {
@@ -289,6 +301,7 @@ public final class TranscriptProjectionDecorator {
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public CDSPosition projectGenomeToCDSPosition(GenomePosition pos) {
+		// TODO: adjust for possibly gapped alignments
 		// TODO(holtgrem): Test me!
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);

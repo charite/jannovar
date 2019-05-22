@@ -11,7 +11,6 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.VariantDescription;
-
 import java.util.Collection;
 import java.util.EnumSet;
 
