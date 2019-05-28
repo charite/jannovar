@@ -60,7 +60,7 @@ Note that all variants lie within the same gene, as shown in the following, anno
 .. code-block:: text
 
     ##fileformat=VCFv4.2
-    ##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+    ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
     ##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Mode of Inheritance">
     ##contig=<ID=1,length=249250621>
     ##jannovarCommand=annotate-vcf -d data/hg19_refseq.ser -i small.vcf -o small.jv.vcf
@@ -91,7 +91,7 @@ The molecular impact annotation ``ANN`` is suppressed for brevity.
         -o small.ar.vcf --pedigree-file ar.ped
     $ cat small.ar.vcf
     ##fileformat=VCFv4.2
-    ##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+    ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
     ##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Mode of Inheritance">
     ##contig=<ID=1,length=249250621>
     ##jannovarCommand=annotate-vcf -d data/hg19_refseq.ser -i small.vcf -o small.ar.vcf --pedigree-file ar.ped
@@ -120,7 +120,7 @@ Annotating AD Variants
         -o small.ad.vcf --pedigree-file ad.ped
     $ cat small.ad.vcf
     ##fileformat=VCFv4.2
-    ##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+    ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
     ##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Mode of Inheritance">
     ##contig=<ID=1,length=249250621>
     ##jannovarCommand=annotate-vcf -d data/hg19_refseq.ser -i small.vcf -o small.ad.vcf --pedigree-file ad.ped

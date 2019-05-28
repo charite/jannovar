@@ -1,12 +1,15 @@
 # Jannovar Changelog
 
-
 ## develop
+
+### overall
+
+* Fixing `ANN` annotation field to have `.`/unbound cardinality.
 
 ### manual
 
-* adding conda support in installation documentation
-* fixing broken link in quickstart
+* Adding conda support in installation documentation
+* Fixing broken link in quickstart
 
 ## v0.32
 

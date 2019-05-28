@@ -5,6 +5,7 @@ import htsjdk.variant.vcf.VCFFilterHeaderLine;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
+import htsjdk.variant.vcf.VCFHeaderLineCount;
 
 /**
  * Code for adding headers for variant effect to VCF files
@@ -23,7 +24,7 @@ public class VariantEffectHeaderExtender {
 	public void addHeaders(VCFHeader header) {
 		// add INFO line for standardized ANN field
 		header.addMetaDataLine(
-			new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String, Annotation.VCF_ANN_DESCRIPTION_STRING));
+			new VCFInfoHeaderLine("ANN", VCFHeaderLineCount.UNBOUNDED, VCFHeaderLineType.String, Annotation.VCF_ANN_DESCRIPTION_STRING));
 		// add FILTER line for standardized OffExome filter
 		header.addMetaDataLine(
 			new VCFFilterHeaderLine(FILTER_EFFECT_OFF_EXOME, "Variant off-exome in all effect predictions"));
