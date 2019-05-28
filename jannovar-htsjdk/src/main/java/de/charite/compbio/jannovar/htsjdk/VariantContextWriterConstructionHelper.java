@@ -10,6 +10,7 @@ import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
+import htsjdk.variant.vcf.VCFHeaderLineCount;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -123,10 +124,10 @@ public final class VariantContextWriterConstructionHelper {
 	 */
 	public static VCFHeader extendHeaderFields(VCFHeader header) {
 		// add INFO line for standardized ANN field
-		VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String,
+		VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", VCFHeaderLineCount.UNBOUNDED, VCFHeaderLineType.String,
 			Annotation.VCF_ANN_DESCRIPTION_STRING);
 		header.addMetaDataLine(annLine);
-		VCFInfoHeaderLine svAnnLine = new VCFInfoHeaderLine("SVANN", 1, VCFHeaderLineType.String,
+		VCFInfoHeaderLine svAnnLine = new VCFInfoHeaderLine("SVANN", VCFHeaderLineCount.UNBOUNDED, VCFHeaderLineType.String,
 			SVAnnotation.VCF_SVANN_DESCRIPTION_STRING);
 		header.addMetaDataLine(svAnnLine);
 		return header;
