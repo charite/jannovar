@@ -66,7 +66,7 @@ The following shows how to limit the variants to those having a missense functio
     $ bcftools view -i 'ANN ~ "missense"' small.vcf
     ##fileformat=VCFv4.2
     ##FILTER=<ID=PASS,Description="All filters passed">
-    ##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+    ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
     ##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Mode of Inheritance">
     ##contig=<ID=1,length=249250621>
     ##jannovarCommand=annotate-v -d data/hg19_refseq.ser -i small.vcf -o small.jv.vcf

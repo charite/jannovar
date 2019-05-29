@@ -1,9 +1,9 @@
 ##fileformat=VCFv4.2
 ##FILTER=<ID=OffExome,Description="Variant off-exome in all effect predictions">
-##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
 ##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Compatible inheritance modes (AD, AR, XD, XR, MT)">
 ##INFO=<ID=INHERITANCE_RECESSIVE_DETAIL,Number=.,Type=String,Description="Extra annotation for recessive inheritance sub type (AR_HOM_ALT, AR_COMP_HET, XR_HOM_ALT, XR_COMP_HET)">
-##INFO=<ID=SVANN,Number=1,Type=String,Description="Functional SV Annotation:'Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|ERRORS / WARNINGS / INFO'">
+##INFO=<ID=SVANN,Number=.,Type=String,Description="Functional SV Annotation:'Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|ERRORS / WARNINGS / INFO'">
 ##contig=<ID=1,length=249250621>
 ##contig=<ID=10,length=135534747>
 ##description=The gene DDX11L1 matches AUTOSOMAL_DOMINANT and AUTOSOMAL_RECESSIVE
