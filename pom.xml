@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.charite.compbio</groupId>
     <artifactId>Jannovar</artifactId>
-    <version>0.32-SNAPSHOT</version>
+    <version>0.32</version>
     <packaging>pom</packaging>
     <name>Jannovar</name>
 
