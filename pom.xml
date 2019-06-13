@@ -10,10 +10,10 @@
     <properties>
         <htsjdk.version>2.18.2</htsjdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4j.version>2.8.2</log4j.version>
+        <log4j.version>2.11.2</log4j.version>
 
         <junit.version>4.12</junit.version>
-        <slf4j.version>1.7.24</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <guava.version>22.0</guava.version>
         <antlr.version>4.7</antlr.version>
         <antlr4-maven-plugin.version>4.7.2</antlr4-maven-plugin.version>

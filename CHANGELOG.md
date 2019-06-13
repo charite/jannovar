@@ -1,5 +1,18 @@
 # Jannovar Changelog
 
+## v0.32
+
+### overall
+
+* Changing log4j version to 2.11.2
+* Changing slf4j version to 1.7.25
+
+### jannovar-cli
+
+* Adding a simple REST server for annotating single variants.
+    * Launch with `jannovar-cli rest-server -d data/hg19_refseq.ser -d data/hg19_ensembl.ser`
+    * Then, query with `/annotate-var/refseq/hg19/chr7/140453136/A/T` or `/annotate-var/ensembl/hg19/chr7/140453136/A/T`
+
 ## v0.31
 
 ### jannovar-core
