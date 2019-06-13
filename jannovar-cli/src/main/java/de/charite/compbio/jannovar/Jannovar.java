@@ -7,15 +7,15 @@ import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions;
 import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
 import de.charite.compbio.jannovar.cmd.download.JannovarDownloadOptions;
 import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosomeOptions;
+import de.charite.compbio.jannovar.cmd.rest_server.RestServerOptions;
 import de.charite.compbio.jannovar.cmd.statistics.JannovarGatherStatisticsOptions;
+import java.util.function.BiFunction;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparsers;
-
-import java.util.function.BiFunction;
 
 /**
  * This is the driver class for a program called Jannovar.
@@ -32,8 +32,9 @@ public final class Jannovar {
 		ArgumentParser parser = ArgumentParsers.newArgumentParser("jannovar-cli");
 		parser.version(getVersion());
 		parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
-		parser.description("Jannovar CLI performs a series of VCF annotation tasks, including predicted "
-			+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
+		parser.description(
+			"Jannovar CLI performs a series of VCF annotation tasks, including predicted "
+				+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
 		Subparsers subParsers = parser.addSubparsers();
 		JannovarAnnotatePosOptions.setupParser(subParsers);
 		JannovarAnnotateCSVOptions.setupParser(subParsers);
@@ -41,6 +42,7 @@ public final class Jannovar {
 		JannovarDBListOptions.setupParser(subParsers);
 		JannovarDownloadOptions.setupParser(subParsers);
 		JannovarGatherStatisticsOptions.setupParser(subParsers);
+		RestServerOptions.setupParser(subParsers);
 		ProjectTranscriptToChromosomeOptions.setupParser(subParsers);
 		parser.defaultHelp(true);
 		parser.epilog("You can find out more at http://jannovar.rtfd.org");
@@ -56,8 +58,9 @@ public final class Jannovar {
 
 		BiFunction<String[], Namespace, JannovarCommand> factory = args.get("cmd");
 		JannovarCommand cmd = factory.apply(argv, args);
-		if (cmd == null)
+		if (cmd == null) {
 			System.exit(1);
+		}
 
 		// Execute the command.
 		try {
