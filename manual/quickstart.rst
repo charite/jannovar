@@ -5,10 +5,30 @@ Quickstart
 
 This short How-To guides you from downloading the Jannovar program to annotating a VCF file in 4 steps.
 
-#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/|version|/jannovar-|version|.zip>`_.
+.. |link-pre| raw:: html
+
+    <a href="https://github.com/charite/jannovar/releases/download/
+
+.. |link-middle| raw:: html
+
+     /jannovar-
+
+.. |link-post| raw:: html
+
+    .zip"> here </a>
+
+.. |file-pre| raw:: html
+
+    <code class="docutils literal notranslate"><span class="pre">jannovar-cli-
+
+.. |file-post| raw:: html
+
+      .jar </span></code>
+
+#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking |link-pre|\ |version|\ |link-middle|\ |version|\ |link-post|. 
 #. Extract the ZIP archive.
 
-   * you should find file called ``jannovar-cli-|version|.jar`` in the ZIP
+   * you should find file called |file-pre|\ |version|\ |file-post| in the ZIP
    * you should also find a file ``small.vcf`` file in the folder ``examples``
 
 #. Download the `RefSeq <http://www.ncbi.nlm.nih.gov/refseq/>`_ transcript database for the release *hg19/GRCh37*.

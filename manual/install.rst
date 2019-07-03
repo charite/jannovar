@@ -15,6 +15,12 @@ Pre-built Binaries
 Pre-built binaries are available from `Maven Central <https://search.maven.org>`_.
 Download jannovar-cli-\ |version| \.jar from `here <http://search.maven.org/#search%7Cga%7C1%7Cjannovar>`_.
 
+Or the jannovar command line tool is available via `bioconda <https://bioconda.github.io/>`_. You can install it with the command
+
+   .. parsed-literal::
+
+	$ conda install jannovar-cli
+
 
 .. _install_from_source:
 

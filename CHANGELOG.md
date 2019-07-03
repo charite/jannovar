@@ -1,5 +1,13 @@
 # Jannovar Changelog
 
+
+## develop
+
+### manual
+
+* adding conda support in installation documentation
+* fixing broken link in quickstart
+
 ## v0.32
 
 ### overall
