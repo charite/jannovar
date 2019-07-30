@@ -255,13 +255,15 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @return highest {@link PutativeImpact} of all {@link #getEffects}.
 	 */
 	public PutativeImpact getPutativeImpact() {
-		if (effects.isEmpty())
-			return null;
-		VariantEffect worst = effects.iterator().next();
-		for (VariantEffect vt : effects)
-			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
-				worst = vt;
-		return worst.getImpact();
+		if (effects.isEmpty()) {
+			return PutativeImpact.MODIFIER;
+		} else {
+			VariantEffect worst = effects.iterator().next();
+			for (VariantEffect vt : effects)
+				if (worst.getImpact().compareTo(vt.getImpact()) > 0)
+					worst = vt;
+			return worst.getImpact();
+		}
 	}
 
 	/**
@@ -337,9 +339,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 */
 	// TODO: rename to getMostPathogenicVariantEffect
 	public VariantEffect getMostPathogenicVarType() {
-		if (effects.isEmpty())
-			return null;
-		return effects.iterator().next();
+		if (this.effects.isEmpty()) {
+			return VariantEffect.SEQUENCE_VARIANT;
+		} else {
+			return this.effects.iterator().next();
+		}
 	}
 
 	@Override

@@ -13,9 +13,10 @@
 
 ### jannovar-core
 
-* Fixing annotation of SVs that look like sequence variants.
+* Fixing annotation of SVs that look like sequence variants (#456).
   Interpretation is to use the sequence variant annotation code now.
   This fixes a bug with annotating latest ClinVar for GRCh38.
+* Prevent `Annotation.{getPutativeImpact,getPutativeImpact}()` from returning `null` (#458).
 
 ## v0.32
 
