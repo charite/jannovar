@@ -5,6 +5,7 @@
 ### overall
 
 * Fixing `ANN` annotation field to have `.`/unbound cardinality.
+* Bumping several dependencies, including HTSJDK.
 
 ### manual
 
