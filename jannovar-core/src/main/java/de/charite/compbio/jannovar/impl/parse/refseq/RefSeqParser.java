@@ -19,6 +19,7 @@ import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser;
+import de.charite.compbio.jannovar.impl.util.DNAUtils;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -117,6 +118,7 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
+		loadMitochondrialFASTA(builders, PathUtil.join(basePath, "chrMT.fasta"));
 		loadFASTA(builders, pathFASTA);
 
 		// Create final list of TranscriptModels.
@@ -139,6 +141,60 @@ public class RefSeqParser implements TranscriptParser {
 	}
 
 	/**
+	 * Load chrMT sequence (if available) and assign into chrMT builders.
+	 *
+	 * @param builders The transcript builders to update.
+	 * @param pathFasta The path to the chrMT.fasta file.
+	 *
+	 * @throws TranscriptParseException on problems with parsing the FASTA.
+	 */
+	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders, String pathFasta)
+		throws TranscriptParseException {
+		if (!refDict.getContigNameToID().containsKey("chrMT")) {
+			LOGGER.info("The genome does not have a chrMT, skipping.");
+			return;
+		} else if (!new File(pathFasta).exists()) {
+			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[]{ pathFasta });
+			return;
+		}
+
+		final int idMT = refDict.getContigNameToID().get("chrMT");
+
+		String chrMT = "";
+
+		FASTAParser fastaParser;
+		try {
+			fastaParser = new FASTAParser(new File(pathFasta));
+		} catch (IOException e) {
+			throw new TranscriptParseException("Problem with opening FASTA file", e);
+		}
+		FASTARecord record;
+		try {
+			while ((record = fastaParser.next()) != null) {
+				chrMT = record.getSequence();
+				break;
+			}
+		} catch (IOException e) {
+			throw new TranscriptParseException("Problem with reading FASTA file", e);
+		}
+
+		int count = 0;
+		for (TranscriptModelBuilder builder : builders.values()) {
+			if (builder.getTXRegion().getChr() == idMT) {
+				GenomeInterval txRegion = builder.getTXRegion().withStrand(Strand.FWD);
+				String seq = chrMT.substring(txRegion.getBeginPos(), txRegion.getEndPos());
+				if (builder.getTXRegion().getStrand() == Strand.REV) {
+					seq = DNAUtils.reverseComplement(seq);
+				}
+				builder.setSequence(seq);
+				count += 1;
+			}
+		}
+
+		LOGGER.info("Successfully assigned sequence to {} chrMT transcripts.", new Object[] { count });
+	}
+
+	/**
 	 * @param key name of the INI entry
 	 * @return file name from INI <code>key</code.
 	 */
@@ -152,9 +208,21 @@ public class RefSeqParser implements TranscriptParser {
 	 * @throws TranscriptParseException on problems with parsing the FASTA
 	 */
 	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA) throws TranscriptParseException {
-
-		// We must remove variants for which we did not find any sequence
+		// We must remove variants for which we did not find any sequence.  The only exception
+		// is chrMT if we could load the corresponding sequence.
 		Set<String> missingSequence = new HashSet<>(builders.keySet());
+
+		if (refDict.getContigNameToID().containsKey("chrMT")) {
+			final int idMT = refDict.getContigNameToID().get("chrMT");
+			for (TranscriptModelBuilder builder : builders.values()) {
+				if (builder.getTXRegion().getChr() == idMT) {
+					if (builder.getAccession().contains(builder.getAccession()) &&
+							!builder.getAccession().equals(builder.getSequence())) {
+						missingSequence.remove(builder.getAccession());
+					}
+				}
+			}
+		}
 
 		// Next iterate over the FASTA file and assign sequence to the transcript
 		FASTAParser fastaParser;
@@ -223,6 +291,11 @@ public class RefSeqParser implements TranscriptParser {
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
 		boolean onlyCurated = onlyCurated();
+
+		// For chrMT: mapping from Entrez gene ID to the gene synonym with "MT" prefix.  We use this
+		// as RefSeq does not contain any transcript records for mitochondrial genes.
+		Map<String, String> mtEntrezMap = new HashMap<>();
+
 		// Read file record by record, mapping features to genes
 		int numRecords = 0;
 		try {
@@ -234,12 +307,43 @@ public class RefSeqParser implements TranscriptParser {
 					LOGGER.debug("Skipping non-curated transcript {}", transcriptId);
 					continue;
 				}
+
+				// Whether or not the record is on chrMT.
+				boolean isMT = contigDict.containsKey("chrMT") &&
+					contigDict.get("chrMT").equals(contigDict.get(record.getSeqID()));
+
+				// Register chrMT Entrez IDs to the "MT..." gene name.
+				if (isMT && "gene".equals(record.getType())) {
+					String entrezId = null;
+					for (String entry : record.getAttributes().get("Dbxref").split(",")) {
+						if (entry.startsWith("GeneID:")) {
+							entrezId = entry.substring("GeneID:".length());
+							break;
+						}
+					}
+
+					String symbol = null;
+					if (record.getAttributes().get("gene_synonym") == null) {
+						symbol = record.getAttributes().get("gene");
+					} else {
+						for (String entry : record.getAttributes().get("gene_synonym").split(",")) {
+							if (entry.startsWith("MT")) {
+								symbol = entry;
+							}
+						}
+					}
+
+					mtEntrezMap.put(entrezId, symbol);
+				}
+
 				// Handle the records describing the transcript structure.
 				//
 				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id as
 				// the transcriptId is only stated for the exon and the proteinId is used as the CDS identifier.
 				// a further complication is that some transcriptIds are used twice by different ParentIds - those in
-				// the pseudoautosomal regions and some others
+				// the pseudoautosomal regions and some others.
+				//
+				// Also, on chrMT, RefSeq does not contain any exons for the protein-coding genes but only the CDS.
 				String parentId = record.getAttributes().get("Parent");
 				if (parentId != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
 					final TranscriptModelBuilder builder;
@@ -250,8 +354,29 @@ public class RefSeqParser implements TranscriptParser {
 						// create new TranscriptBuilder
 						builder = createNewTranscriptModelBuilder(record, transcriptId);
 						parentIdToTranscriptModels.put(parentId, builder);
+
+						// On chrMT, we use the gene symbol (if available with prefix MT) as the transcript.
+						if (isMT) {
+							if ("CDS".equals(record.getType())) {
+								// Fixup coding exon, need to set transcript and exon region manually.
+								builder.setTXRegion(builder.getCDSRegion());
+								builder.addExonRegion(builder.getCDSRegion());
+								builder.getAltGeneIDs().put("protein_id", record.getAttributes().get("protein_id"));
+							}
+
+							String entrezId = null;
+							for (String entry : record.getAttributes().get("Dbxref").split(",")) {
+								if (entry.startsWith("GeneID:")) {
+									entrezId = entry.substring("GeneID:".length());
+									break;
+								}
+							}
+							transcriptId = mtEntrezMap.get(entrezId);
+							builder.setAccession(transcriptId);
+						}
+
 						// this method is used to track the rare cases of transcriptIds mapping to multiple parentIds
-						updateTransciptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
+						updateTranscriptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
 					} else {
 						// update existing
 						builder = parentIdToTranscriptModels.get(parentId);
@@ -348,7 +473,7 @@ public class RefSeqParser implements TranscriptParser {
 		return false;
 	}
 
-	private void updateTransciptIdToParentIds(Map<String, List<String>> transciptIdToParentIds, String transcriptId, String parentId) {
+	private void updateTranscriptIdToParentIds(Map<String, List<String>> transciptIdToParentIds, String transcriptId, String parentId) {
 		if (transcriptId != null) {
 			if (transciptIdToParentIds.containsKey(transcriptId)) {
 				List<String> parentIds = transciptIdToParentIds.get(transcriptId);

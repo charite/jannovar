@@ -13,7 +13,7 @@ final class RefSeqDataSource extends DataSource {
 	/**
 	 * expected keys in data source configuration file
 	 */
-	private final ImmutableList<String> urlKeys = ImmutableList.of("gff", "rna", "chromInfo", "chrToAccessions");
+	private final ImmutableList<String> urlKeys = ImmutableList.of("gff", "rna", "chromInfo", "chrToAccessions", "faMT");
 
 	RefSeqDataSource(DatasourceOptions options, Section iniSection) throws InvalidDataSourceException {
 		super(options, iniSection);

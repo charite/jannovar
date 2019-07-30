@@ -17,6 +17,8 @@
   Interpretation is to use the sequence variant annotation code now.
   This fixes a bug with annotating latest ClinVar for GRCh38.
 * Prevent `Annotation.{getPutativeImpact,getPutativeImpact}()` from returning `null` (#458).
+* Correctly parsing RefSeq mitochondrial transcripts.
+  Bumping the required versin to `0.33-SNAPSHOT` to higlight this (#463).
 
 ## v0.32
 
