@@ -1,6 +1,8 @@
 # Jannovar Changelog
 
-## develop
+## HEAD (unreleased)
+
+## v0.33
 
 ### overall
 
