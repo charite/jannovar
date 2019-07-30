@@ -11,6 +11,12 @@
 * Adding conda support in installation documentation
 * Fixing broken link in quickstart
 
+### jannovar-core
+
+* Fixing annotation of SVs that look like sequence variants.
+  Interpretation is to use the sequence variant annotation code now.
+  This fixes a bug with annotating latest ClinVar for GRCh38.
+
 ## v0.32
 
 ### overall

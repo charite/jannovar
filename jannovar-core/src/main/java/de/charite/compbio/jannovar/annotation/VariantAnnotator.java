@@ -3,7 +3,6 @@ package de.charite.compbio.jannovar.annotation;
 import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
-import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
@@ -112,38 +111,27 @@ public final class VariantAnnotator {
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
-		boolean isStructuralVariant = (change.getRef().length() >= 1000 || change.getAlt().length() >= 1000);
 		if (candidateTranscripts.isEmpty()) {
-			if (isStructuralVariant)
-				buildSVAnnotation(annotations, change, null);
-			else
-				buildNonSVAnnotation(annotations, change, qr.getLeft(), qr.getRight());
+			buildAnnotation(annotations, change, qr.getLeft(), qr.getRight());
 			return new VariantAnnotations(change, annotations);
 		}
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
 		// transcripts and collect annotations for each (they are collected in annovarFactory).
-		for (TranscriptModel tm : candidateTranscripts)
-			if (isStructuralVariant)
-				buildSVAnnotation(annotations, change, tm);
-			else
-				buildNonSVAnnotation(annotations, change, tm);
+		for (TranscriptModel tm : candidateTranscripts) {
+			buildAnnotation(annotations, change, tm);
+		}
 
 		return new VariantAnnotations(change, annotations);
 	}
 
-	private void buildSVAnnotation(List<Annotation> annotations, GenomeVariant change, TranscriptModel transcript)
-		throws AnnotationException {
-		annotations.add(new StructuralVariantAnnotationBuilder(transcript, change).build());
-	}
-
-	private void buildNonSVAnnotation(List<Annotation> annotations, GenomeVariant change, TranscriptModel leftNeighbor,
+	private void buildAnnotation(List<Annotation> annotations, GenomeVariant change, TranscriptModel leftNeighbor,
 									  TranscriptModel rightNeighbor) throws AnnotationException {
-		buildNonSVAnnotation(annotations, change, leftNeighbor);
-		buildNonSVAnnotation(annotations, change, rightNeighbor);
+		buildAnnotation(annotations, change, leftNeighbor);
+		buildAnnotation(annotations, change, rightNeighbor);
 	}
 
-	private void buildNonSVAnnotation(List<Annotation> annotations, GenomeVariant change, TranscriptModel transcript)
+	private void buildAnnotation(List<Annotation> annotations, GenomeVariant change, TranscriptModel transcript)
 		throws InvalidGenomeVariant {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
 			annotations.add(new AnnotationBuilderDispatcher(transcript, change, options).build());
