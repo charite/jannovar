@@ -1,6 +1,10 @@
 # Jannovar Changelog
 
-## HEAD (unreleased)
+## develop
+
+### jannovar-htsjdk
+
+* Bumping HTSJDK dependency to v2.20.3 because 2.20.0 has a bug in the VariantContextBuilder
 
 ## v0.33
 
