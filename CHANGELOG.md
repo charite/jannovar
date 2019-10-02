@@ -1,6 +1,17 @@
 # Jannovar Changelog
 
-## HEAD (unreleased)
+## development
+
+### jannovar-cli
+
+* disabeling ensemble for mouse (does not work with an hgnc file)
+* updating broken links in download source file
+* Adding faMT genomes for all refseq annotations
+
+### jannovar-core
+
+* Change hard-coded chrMT renaming into a new one where it can use multiple genomes from multiple species. Still need improvement
+* Update RefSeq parser that does not run into null-pointer exceptions on mouse and rat genome (e.g. when no exon defines the gene name)
 
 ## v0.33
 
