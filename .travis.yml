@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 language: java
 
 # NB: oraclejdk10 is deprecated
