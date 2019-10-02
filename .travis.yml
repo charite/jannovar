@@ -1,17 +1,18 @@
-sudo: true
+sudo: false
+dist: trusty
 language: java
 
 # NB: oraclejdk10 is deprecated
-#jdk:
-#    - oraclejdk8
-#    - oraclejdk9
-#    - oraclejdk11
-#    - openjdk8
-#    - openjdk9
-#    - openjdk10
-#    - openjdk11
-#    - openjdk-ea
-#
+jdk:
+   - oraclejdk8
+   - oraclejdk9
+   - oraclejdk11
+   - openjdk8
+   - openjdk9
+   - openjdk10
+   - openjdk11
+   - openjdk-ea
+
 #matrix:
 #    allow_failures:
 #        jdk: opendjk-ea
