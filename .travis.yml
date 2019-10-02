@@ -13,6 +13,11 @@ jdk:
    - openjdk11
    - openjdk-ea
 
-#matrix:
-#    allow_failures:
-#        jdk: opendjk-ea
+matrix:
+    allow_failures:
+        jdk:
+             - oraclejdk11
+             - openjdk9
+             - openjdk10
+             - openjdk11
+             - openjdk-ea
