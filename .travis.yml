@@ -1,5 +1,4 @@
-sudo: false
-dist: trusty
+dist: bionic
 language: java
 
 # NB: oraclejdk10 is deprecated
