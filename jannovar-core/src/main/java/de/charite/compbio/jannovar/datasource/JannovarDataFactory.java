@@ -78,7 +78,7 @@ public abstract class JannovarDataFactory {
 				LOGGER.info("Downloading {}", url);
 				URL src = new URL(url);
 				final String fileName;
-				if (url.contains("251831106")) {
+				if (url.contains("viewer.cgi?save=file&db=nuccore&report=fasta&id=")) {
 					fileName = "chrMT.fasta";
 				} else {
 					fileName = new File(src.getPath()).getName();
