@@ -76,6 +76,13 @@ public abstract class DataSource {
 	 * @return list of keys that are required to have a URL for download in {@link #iniSection}
 	 */
 	protected abstract ImmutableList<String> getURLKeys();
+	
+	/**
+	 * @return list of keys that are optional to have a URL for download in {@link #iniSection}
+	 */
+	protected ImmutableList<String> getOptionalURLKeys() {
+		return ImmutableList.of();
+	}
 
 	/**
 	 * @return list of URLs with files to download for this data source
@@ -84,6 +91,11 @@ public abstract class DataSource {
 		ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
 		for (String key : getURLKeys())
 			builder.add(iniSection.fetch(key));
+		for (String key : getOptionalURLKeys())
+			if (iniSection.containsKey(key)) {
+				builder.add(iniSection.fetch(key));
+			}
+			
 		// Always download hgnc_complete_set.txt
 		builder.add(HGNCParser.DOWNLOAD_URL);
 		return builder.build();

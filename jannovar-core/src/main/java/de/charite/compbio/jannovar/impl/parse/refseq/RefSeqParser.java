@@ -118,7 +118,8 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
-		loadMitochondrialFASTA(builders, PathUtil.join(basePath, "chrMT.fasta"));
+		loadMitochondrialFASTA(builders);
+		
 		loadFASTA(builders, pathFASTA);
 
 		// Create final list of TranscriptModels.
@@ -144,19 +145,26 @@ public class RefSeqParser implements TranscriptParser {
 	 * Load chrMT sequence (if available) and assign into chrMT builders.
 	 *
 	 * @param builders The transcript builders to update.
-	 * @param pathFasta The path to the chrMT.fasta file.
+	 * @param pathFasta The path to the fasta file.
 	 *
 	 * @throws TranscriptParseException on problems with parsing the FASTA.
 	 */
-	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders, String pathFasta)
+	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders)
 		throws TranscriptParseException {
 		if (!refDict.getContigNameToID().containsKey("chrMT")) {
 			LOGGER.info("The genome does not have a chrMT, skipping.");
 			return;
-		} else if (!new File(pathFasta).exists()) {
+		} else if (!iniSection.containsKey("faMT")) {
+			LOGGER.warn("Key for chrMT FASTA File does not exist, skipping.");
+			return;
+		}
+		
+		final String pathFasta = PathUtil.join(basePath, getINIFileName("faMT"));
+		if (!new File(pathFasta).exists()) {
 			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[]{ pathFasta });
 			return;
 		}
+		
 
 		final int idMT = refDict.getContigNameToID().get("chrMT");
 
@@ -199,7 +207,11 @@ public class RefSeqParser implements TranscriptParser {
 	 * @return file name from INI <code>key</code.
 	 */
 	private String getINIFileName(String key) {
-		return new File(iniSection.get(key)).getName();
+		String name = new File(iniSection.get(key)).getName();
+		if (name.contains("?")) {
+			name = name.split("\\?")[0];
+		}
+		return name;
 	}
 
 	/**

@@ -77,12 +77,8 @@ public abstract class JannovarDataFactory {
 			for (String url : dataSource.getDownloadURLs()) {
 				LOGGER.info("Downloading {}", url);
 				URL src = new URL(url);
-				final String fileName;
-				if (url.contains("viewer.cgi?save=file&db=nuccore&report=fasta&id=")) {
-					fileName = "chrMT.fasta";
-				} else {
-					fileName = new File(src.getPath()).getName();
-				}
+				final String fileName = new File(src.getPath()).getName();
+				
 				File dest = new File(PathUtil.join(targetDir, fileName));
 				downloader.copyURLToFile(src, dest);
 

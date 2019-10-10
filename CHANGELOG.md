@@ -10,7 +10,8 @@
 
 ### jannovar-core
 
-* Change hard-coded chrMT renaming into a new one where it can use multiple genomes from multiple species. Still need improvement
+* Remove hard-coded chrMT renaming. Filenames for download that have a ? in their URL will be splitted and only the first part before the ? is used a file name in the download path.
+* Making faMT annotation for refSeq optional
 * Update RefSeq parser that does not run into null-pointer exceptions on mouse and rat genome (e.g. when no exon defines the gene name)
 
 ## v0.33
