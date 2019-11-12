@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## development
+## develop
 
 ### jannovar-cli
 
@@ -13,6 +13,11 @@
 * Remove hard-coded chrMT renaming. Filenames for download that have a ? in their URL will be splitted and only the first part before the ? is used a file name in the download path.
 * Making faMT annotation for refSeq optional
 * Update RefSeq parser that does not run into null-pointer exceptions on mouse and rat genome (e.g. when no exon defines the gene name)
+
+### jannovar-htsjdk
+
+* Bumping HTSJDK dependency to v2.20.3 because 2.20.0 has a bug in the VariantContextBuilder
+
 
 ## v0.33
 
