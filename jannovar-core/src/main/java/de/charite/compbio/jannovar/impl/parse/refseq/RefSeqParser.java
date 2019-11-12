@@ -118,7 +118,8 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
-		loadMitochondrialFASTA(builders, PathUtil.join(basePath, "chrMT.fasta"));
+		loadMitochondrialFASTA(builders);
+		
 		loadFASTA(builders, pathFASTA);
 
 		// Create final list of TranscriptModels.
@@ -144,19 +145,26 @@ public class RefSeqParser implements TranscriptParser {
 	 * Load chrMT sequence (if available) and assign into chrMT builders.
 	 *
 	 * @param builders The transcript builders to update.
-	 * @param pathFasta The path to the chrMT.fasta file.
+	 * @param pathFasta The path to the fasta file.
 	 *
 	 * @throws TranscriptParseException on problems with parsing the FASTA.
 	 */
-	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders, String pathFasta)
+	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders)
 		throws TranscriptParseException {
 		if (!refDict.getContigNameToID().containsKey("chrMT")) {
 			LOGGER.info("The genome does not have a chrMT, skipping.");
 			return;
-		} else if (!new File(pathFasta).exists()) {
+		} else if (!iniSection.containsKey("faMT")) {
+			LOGGER.warn("Key for chrMT FASTA File does not exist, skipping.");
+			return;
+		}
+		
+		final String pathFasta = PathUtil.join(basePath, getINIFileName("faMT"));
+		if (!new File(pathFasta).exists()) {
 			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[]{ pathFasta });
 			return;
 		}
+		
 
 		final int idMT = refDict.getContigNameToID().get("chrMT");
 
@@ -199,7 +207,11 @@ public class RefSeqParser implements TranscriptParser {
 	 * @return file name from INI <code>key</code.
 	 */
 	private String getINIFileName(String key) {
-		return new File(iniSection.get(key)).getName();
+		String name = new File(iniSection.get(key)).getName();
+		if (name.contains("?")) {
+			name = name.split("\\?")[0];
+		}
+		return name;
 	}
 
 	/**
@@ -291,7 +303,10 @@ public class RefSeqParser implements TranscriptParser {
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
 		boolean onlyCurated = onlyCurated();
-
+		
+		// Some exons do not have a gene name in mm9 and rat releases.
+		// Therefore we select collect the name from the gene.
+		Map<String, String> entrezMap = new HashMap<>();
 		// For chrMT: mapping from Entrez gene ID to the gene synonym with "MT" prefix.  We use this
 		// as RefSeq does not contain any transcript records for mitochondrial genes.
 		Map<String, String> mtEntrezMap = new HashMap<>();
@@ -311,30 +326,30 @@ public class RefSeqParser implements TranscriptParser {
 				// Whether or not the record is on chrMT.
 				boolean isMT = contigDict.containsKey("chrMT") &&
 					contigDict.get("chrMT").equals(contigDict.get(record.getSeqID()));
-
-				// Register chrMT Entrez IDs to the "MT..." gene name.
-				if (isMT && "gene".equals(record.getType())) {
-					String entrezId = null;
-					for (String entry : record.getAttributes().get("Dbxref").split(",")) {
-						if (entry.startsWith("GeneID:")) {
-							entrezId = entry.substring("GeneID:".length());
-							break;
-						}
-					}
+				if ("gene".equals(record.getType())) {
+					
+					String entrezId = parseGeneID(record);
 
 					String symbol = null;
-					if (record.getAttributes().get("gene_synonym") == null) {
-						symbol = record.getAttributes().get("gene");
-					} else {
-						for (String entry : record.getAttributes().get("gene_synonym").split(",")) {
-							if (entry.startsWith("MT")) {
-								symbol = entry;
+					symbol = record.getAttributes().get("gene");
+					entrezMap.put(entrezId, symbol);
+					
+					// Register chrMT Entrez IDs to the "MT..." gene name.
+					if (isMT) {
+						if (record.getAttributes().get("gene_synonym") == null) {
+							symbol = record.getAttributes().get("gene");
+						} else {
+							for (String entry : record.getAttributes().get("gene_synonym").split(",")) {
+								if (entry.startsWith("MT")) {
+									symbol = entry;
+								}
 							}
 						}
-					}
 
-					mtEntrezMap.put(entrezId, symbol);
+						mtEntrezMap.put(entrezId, symbol);
+					}
 				}
+				
 
 				// Handle the records describing the transcript structure.
 				//
@@ -352,7 +367,7 @@ public class RefSeqParser implements TranscriptParser {
 							throw new TranscriptParseException("Saw cDNA_match before the transcript for " + record);
 						}
 						// create new TranscriptBuilder
-						builder = createNewTranscriptModelBuilder(record, transcriptId);
+						builder = createNewTranscriptModelBuilder(record, transcriptId, entrezMap);
 						parentIdToTranscriptModels.put(parentId, builder);
 
 						// On chrMT, we use the gene symbol (if available with prefix MT) as the transcript.
@@ -364,13 +379,13 @@ public class RefSeqParser implements TranscriptParser {
 								builder.getAltGeneIDs().put("protein_id", record.getAttributes().get("protein_id"));
 							}
 
-							String entrezId = null;
-							for (String entry : record.getAttributes().get("Dbxref").split(",")) {
-								if (entry.startsWith("GeneID:")) {
-									entrezId = entry.substring("GeneID:".length());
-									break;
-								}
-							}
+							String entrezId = parseGeneID(record);
+							
+//							// skip on chrMT some tRNA that do not have any Dbxref. This happens in mm9 and rat v6
+//							if (record.getAttributes().get("gbkey") == "tRNA" && entrezId == null) {
+//								continue;
+//							}
+							
 							transcriptId = mtEntrezMap.get(entrezId);
 							builder.setAccession(transcriptId);
 						}
@@ -487,15 +502,22 @@ public class RefSeqParser implements TranscriptParser {
 		}
 	}
 
-	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId) {
+	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId, Map<String, String> notMtEntrezMap) {
 		TranscriptModelBuilder builder = new TranscriptModelBuilder();
 		// Parse out the simple attributes from the mRNA record
 		Strand strand = parseStrand(record);
 		builder.setStrand(strand);
 		builder.setAccession(transcriptId);
 		builder.setTxVersion(record.getAttributes().get("transcript_version"));
-		builder.setGeneID(parseGeneID(record));
-		builder.setGeneSymbol(record.getAttributes().get("gene"));
+		String geneID = parseGeneID(record);
+		builder.setGeneID(geneID);
+		
+		String gene = record.getAttributes().get("gene");
+		
+		if (gene == null && geneID != null && notMtEntrezMap.containsKey(geneID)) {
+			gene = notMtEntrezMap.get(geneID);
+		}
+		builder.setGeneSymbol(gene);
 		builder.setSequence(transcriptId);
 
 		updateExonsTxRegionsCdsAndCdnaMatch(record, builder);
