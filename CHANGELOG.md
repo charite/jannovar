@@ -14,6 +14,7 @@
 * Remove hard-coded chrMT renaming. Filenames for download that have a ? in their URL will be splitted and only the first part before the ? is used a file name in the download path.
 * Making faMT annotation for refSeq optional
 * Update RefSeq parser that does not run into null-pointer exceptions on mouse and rat genome (e.g. when no exon defines the gene name)
+* Fixing issue with block substitutions (#475).
 
 ### jannovar-htsjdk
 
