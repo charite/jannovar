@@ -150,8 +150,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
 			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3,
-				wtAASeq.substring(refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3),
-				varAASeq.substring(varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
+				wtAASeq.substring(refChangeBeginPos.getPos() / 3, Math.min((refChangeLastPos.getPos() + 1 + 2) / 3, wtAASeq.length())),
+				varAASeq.substring(varChangeBeginPos.getPos() / 3, Math.min((varChangeLastPos.getPos() + 1 + 2) / 3, varAASeq.length())));
 
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
