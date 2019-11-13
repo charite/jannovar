@@ -15,6 +15,9 @@
 * Making faMT annotation for refSeq optional
 * Update RefSeq parser that does not run into null-pointer exceptions on mouse and rat genome (e.g. when no exon defines the gene name)
 * Fixing issue with block substitutions (#475).
+* Fixing RefSeq build to properly assign transcript model (use best match with alignment) in the case of duplicates.
+* Fixing issue in projection in the case of leading gaps (has no effect on CDS position prediction).
+* Adding `TranscriptModel.getTrimmedSequence()` that removes leading and trailing (unaligned in RefSeq) sequence.
 
 ### jannovar-htsjdk
 

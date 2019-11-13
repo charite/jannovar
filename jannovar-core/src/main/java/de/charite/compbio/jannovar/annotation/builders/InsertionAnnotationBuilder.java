@@ -86,7 +86,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		} catch (ProjectionException e) {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
-		if (DuplicationChecker.isDuplication(transcript.getSequence(), change.getAlt(), txPos.getPos())) {
+		if (DuplicationChecker.isDuplication(transcript.getTrimmedSequence(), change.getAlt(), txPos.getPos())) {
 			NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
 			if (change.getAlt().length() == 1) {
 				try {

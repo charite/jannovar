@@ -168,6 +168,15 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
+	 * @return mDNA sequence of the spliced RNA of this known gene transcript with leading and
+	 * trailing sequences removed.
+	 */
+	public String getTrimmedSequence() {
+		final Alignment ali = seqAlignment;
+		return sequence.substring(ali.refLeadingGapLength(), sequence.length() - ali.refTrailingGapLength());
+	}
+
+	/**
 	 * @Return the sequence alignment to the exonic genome reference
 	 */
 	public Alignment getSeqAlignment() { return seqAlignment; }
