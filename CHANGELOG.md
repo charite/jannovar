@@ -7,6 +7,7 @@
 * disabeling ensemble for mouse (does not work with an hgnc file)
 * updating broken links in download source file
 * Adding faMT genomes for all refseq annotations
+* bumping dependency on lombok
 
 ### jannovar-core
 
