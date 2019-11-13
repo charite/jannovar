@@ -119,7 +119,7 @@ public class RefSeqParser implements TranscriptParser {
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
 		loadMitochondrialFASTA(builders);
-		
+
 		loadFASTA(builders, pathFASTA);
 
 		// Create final list of TranscriptModels.
@@ -158,13 +158,13 @@ public class RefSeqParser implements TranscriptParser {
 			LOGGER.warn("Key for chrMT FASTA File does not exist, skipping.");
 			return;
 		}
-		
+
 		final String pathFasta = PathUtil.join(basePath, getINIFileName("faMT"));
 		if (!new File(pathFasta).exists()) {
 			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[]{ pathFasta });
 			return;
 		}
-		
+
 
 		final int idMT = refDict.getContigNameToID().get("chrMT");
 
@@ -303,7 +303,7 @@ public class RefSeqParser implements TranscriptParser {
 
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
 		boolean onlyCurated = onlyCurated();
-		
+
 		// Some exons do not have a gene name in mm9 and rat releases.
 		// Therefore we select collect the name from the gene.
 		Map<String, String> entrezMap = new HashMap<>();
@@ -327,13 +327,13 @@ public class RefSeqParser implements TranscriptParser {
 				boolean isMT = contigDict.containsKey("chrMT") &&
 					contigDict.get("chrMT").equals(contigDict.get(record.getSeqID()));
 				if ("gene".equals(record.getType())) {
-					
+
 					String entrezId = parseGeneID(record);
 
 					String symbol = null;
 					symbol = record.getAttributes().get("gene");
 					entrezMap.put(entrezId, symbol);
-					
+
 					// Register chrMT Entrez IDs to the "MT..." gene name.
 					if (isMT) {
 						if (record.getAttributes().get("gene_synonym") == null) {
@@ -349,7 +349,7 @@ public class RefSeqParser implements TranscriptParser {
 						mtEntrezMap.put(entrezId, symbol);
 					}
 				}
-				
+
 
 				// Handle the records describing the transcript structure.
 				//
@@ -380,12 +380,12 @@ public class RefSeqParser implements TranscriptParser {
 							}
 
 							String entrezId = parseGeneID(record);
-							
+
 //							// skip on chrMT some tRNA that do not have any Dbxref. This happens in mm9 and rat v6
 //							if (record.getAttributes().get("gbkey") == "tRNA" && entrezId == null) {
 //								continue;
 //							}
-							
+
 							transcriptId = mtEntrezMap.get(entrezId);
 							builder.setAccession(transcriptId);
 						}
@@ -511,9 +511,9 @@ public class RefSeqParser implements TranscriptParser {
 		builder.setTxVersion(record.getAttributes().get("transcript_version"));
 		String geneID = parseGeneID(record);
 		builder.setGeneID(geneID);
-		
+
 		String gene = record.getAttributes().get("gene");
-		
+
 		if (gene == null && geneID != null && notMtEntrezMap.containsKey(geneID)) {
 			gene = notMtEntrezMap.get(geneID);
 		}
@@ -646,14 +646,15 @@ public class RefSeqParser implements TranscriptParser {
 				} else {
 					duplicatedTranscriptIdCount++;
 					// This is a tricky call - there are about 30 transcripts with duplicated transcriptIds due to imperfect
-					// alignment to the genomic reference
-					LOGGER.warn("Transcript {} has {} possible transcript models - using the longest model", transcriptId, parentIds
+					// alignment to the genomic reference.  We chose the one with the best match between alignment from cDNA_match
+					// and exons.
+					LOGGER.warn("Transcript {} has {} possible transcript models - picking best by cDNA_match", transcriptId, parentIds
 						.size());
 					List<TranscriptModelBuilder> possibleModels = parentIds.stream()
 						.map(transcriptModelsWithTxRegion::get)
 						.collect(toList());
-					TranscriptModelBuilder longestCds = findLongestTranscriptRegion(possibleModels);
-					transcriptIdToTranscriptModelBuilders.put(transcriptId, longestCds);
+					TranscriptModelBuilder bestModel = findBestModelByCdnaMatch(possibleModels);
+					transcriptIdToTranscriptModelBuilders.put(transcriptId, bestModel);
 				}
 			}
 		}
@@ -663,13 +664,45 @@ public class RefSeqParser implements TranscriptParser {
 		return transcriptIdToTranscriptModelBuilders;
 	}
 
-	private TranscriptModelBuilder findLongestTranscriptRegion(List<TranscriptModelBuilder> possibleModels) {
-		TranscriptModelBuilder longestCds = possibleModels.get(0);
+	private static int countCdnaMatches(TranscriptModelBuilder model) {
+		int result = 0;
+		int i = 0;
+		for (AlignmentPart part : model.getAlignmentParts()) {
+			if (i >= model.getExonRegions().size()) {
+				continue;
+			}
+			final GenomeInterval exon = model.getExonRegions().get(i).withStrand(Strand.FWD);
+
+			final int partBegin;
+			final int partEnd;
+
+			if (part.refBeginPos < part.refEndPos) {
+				partBegin = part.refBeginPos;
+				partEnd = part.refEndPos;
+			} else {
+				partEnd = part.refBeginPos;
+				partBegin = part.refEndPos;
+			}
+
+			if (exon.getBeginPos() == partBegin && exon.getEndPos() == partEnd) {
+				result += 1;
+			}
+
+			i += 1;
+		}
+		return result;
+	}
+
+	private TranscriptModelBuilder findBestModelByCdnaMatch(List<TranscriptModelBuilder> possibleModels) {
+		TranscriptModelBuilder bestMatch = possibleModels.get(0);
+		int bestMatchCount = countCdnaMatches(bestMatch);
 		for (TranscriptModelBuilder current : possibleModels) {
-			if (current.getTXRegion().length() > longestCds.getTXRegion().length()) {
-				longestCds = current;
+			int currentMatchCount = countCdnaMatches(current);
+			if (currentMatchCount > bestMatchCount) {
+				bestMatch = current;
+				bestMatchCount = currentMatchCount;
 			}
 		}
-		return longestCds;
+		return bestMatch;
 	}
 }

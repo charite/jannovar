@@ -47,7 +47,7 @@ public final class TranscriptProjectionDecorator {
 		try {
 			TranscriptPosition tBeginPos = genomeToTranscriptPos(transcript.getCDSRegion().getGenomeBeginPos());
 			TranscriptPosition tEndPos = genomeToTranscriptPos(transcript.getCDSRegion().getGenomeEndPos());
-			return transcript.getSequence().substring(tBeginPos.getPos(), tEndPos.getPos());
+			return transcript.getTrimmedSequence().substring(tBeginPos.getPos(), tEndPos.getPos());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS begin/end must be translatable into transcript positions");
 		}
@@ -59,7 +59,7 @@ public final class TranscriptProjectionDecorator {
 	public String getTranscriptStartingAtCDS() {
 		try {
 			TranscriptPosition tBeginPos = genomeToTranscriptPos(transcript.getCDSRegion().getGenomeBeginPos());
-			return transcript.getSequence().substring(tBeginPos.getPos(), transcript.getSequence().length());
+			return transcript.getTrimmedSequence().substring(tBeginPos.getPos(), transcript.getTrimmedSequence().length());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS begin must be translatable into transcript positions");
 		}
@@ -88,7 +88,8 @@ public final class TranscriptProjectionDecorator {
 				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
 				int transcriptPos = tOffset + posInExon;
 				// Project for position on genomic exons to position in sequence.
-				int projectedTranscriptPos = transcript.getSeqAlignment().projectRefToQry(transcriptPos);
+				int projectedTranscriptPos = transcript.getSeqAlignment().projectRefToQry(transcriptPos) -
+					transcript.getSeqAlignment().refLeadingGapLength();
 				return new TranscriptPosition(transcript, projectedTranscriptPos, PositionType.ZERO_BASED);
 			}
 			tOffset += region.length();

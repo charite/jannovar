@@ -50,7 +50,7 @@ public final class TranscriptSequenceChangeHelper {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval())
 			|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
-			return transcript.getSequence(); // non-coding change, does not affect transcript
+			return transcript.getTrimmedSequence(); // non-coding change, does not affect transcript
 
 		// Get transcript position for the change position.
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
@@ -62,7 +62,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Update base in string using StringBuilder.
-		StringBuilder builder = new StringBuilder(transcript.getSequence());
+		StringBuilder builder = new StringBuilder(transcript.getTrimmedSequence());
 		if (change.getType() == GenomeVariantType.SNV)
 			builder.setCharAt(tPos.getPos(), change.getAlt().charAt(0));
 		else
@@ -73,7 +73,7 @@ public final class TranscriptSequenceChangeHelper {
 	private String getTranscriptWithRangeInRefAffected(GenomeVariant change) {
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval()))
-			return transcript.getSequence();
+			return transcript.getTrimmedSequence();
 
 		// Get transcript begin and end position.
 		GenomePosition changeBeginPos = change.getGenomeInterval().getGenomeBeginPos();
@@ -94,7 +94,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Build resulting transcript string.
-		StringBuilder builder = new StringBuilder(transcript.getSequence());
+		StringBuilder builder = new StringBuilder(transcript.getTrimmedSequence());
 		builder.delete(tBeginPos.getPos(), tEndPos.getPos());
 		builder.insert(tBeginPos.getPos(), change.getAlt());
 		return builder.toString();

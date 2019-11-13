@@ -414,16 +414,16 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx0Decorator = new TranscriptProjectionDecorator(tx0);
 		TranscriptPosition tx0Pos0 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870425));
-		assertEquals(1, tx0Pos0.getPos());
+		assertEquals(0, tx0Pos0.getPos());
 		TranscriptPosition tx0Pos1 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870424));
-		assertEquals(2, tx0Pos1.getPos());
+		assertEquals(1, tx0Pos1.getPos());
 		TranscriptPosition tx0Pos2 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870423));
-		assertEquals(3, tx0Pos2.getPos());
+		assertEquals(2, tx0Pos2.getPos());
 		TranscriptPosition tx0Pos3 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870422));
-		assertEquals(4, tx0Pos3.getPos());
+		assertEquals(3, tx0Pos3.getPos());
 	}
 
 	/**

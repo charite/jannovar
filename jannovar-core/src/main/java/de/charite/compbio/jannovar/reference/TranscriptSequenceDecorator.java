@@ -80,10 +80,10 @@ public final class TranscriptSequenceDecorator {
 		int frameShift = cdsPos.getPos() % 3;
 		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
 		int endPos = codonStart + 3;
-		if (transcript.getSequence().length() < endPos)
+		if (transcript.getTrimmedSequence().length() < endPos)
 			throw new InvalidCodonException("Could not access codon " + codonStart + " - " + endPos
-				+ ", transcript sequence length is " + transcript.getSequence().length());
-		return transcript.getSequence().substring(codonStart, endPos);
+				+ ", transcript sequence length is " + transcript.getTrimmedSequence().length());
+		return transcript.getTrimmedSequence().substring(codonStart, endPos);
 	}
 
 	/**
@@ -102,9 +102,9 @@ public final class TranscriptSequenceDecorator {
 		int frameShift = cdsPos.getPos() % 3;
 		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
 		int endPos = codonStart + 3 * count;
-		if (endPos > transcript.getSequence().length())
-			endPos = transcript.getSequence().length();
-		return transcript.getSequence().substring(codonStart, endPos);
+		if (endPos > transcript.getTrimmedSequence().length())
+			endPos = transcript.getTrimmedSequence().length();
+		return transcript.getTrimmedSequence().substring(codonStart, endPos);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public final class TranscriptSequenceDecorator {
 	 * @return the codon affected by a change at the given position
 	 */
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos) {
-		return getCodonsStartingFrom(txPos, cdsPos, transcript.getSequence().length());
+		return getCodonsStartingFrom(txPos, cdsPos, transcript.getTrimmedSequence().length());
 	}
 
 }
