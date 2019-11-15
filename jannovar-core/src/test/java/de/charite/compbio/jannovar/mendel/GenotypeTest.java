@@ -215,8 +215,14 @@ public class GenotypeTest {
 		Genotype two = new Genotype(Arrays.asList(1, 2));
 		Genotype three = new Genotype(Arrays.asList(1, 1));
 		Genotype four = new Genotype(Collections.singletonList(1));
-		assertTrue(one.equals(two));
-		assertFalse(one.equals(three));
-		assertFalse(one.equals(four));
+		assertEquals(one, two);
+		assertNotEquals(one, three);
+		assertNotEquals(one, four);
+	}
+
+	@Test
+	public void testToString() {
+		System.out.println(new Genotype(Arrays.asList(1, 2)));
+		System.out.println(new Genotype(Collections.emptyList()));
 	}
 }
