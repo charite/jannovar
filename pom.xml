@@ -10,7 +10,7 @@
     <properties>
         <htsjdk.version>2.20.3</htsjdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4j.version>2.11.2</log4j.version>
+        <log4j.version>2.13.3</log4j.version>
 
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.25</slf4j.version>
