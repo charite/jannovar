@@ -47,3 +47,11 @@ Open README.md and CHANGELOG.md and adjust the files accordingly
 
 * "mvn versions:set" is useful for bumping versions
 
+## Troubleshooting
+
+In the case that you see the error message `gpg: signing failed: Inappropriate ioctl for device` then you can fix this with the following Bash `export`.
+
+```bash
+export GPG_TTY=$(tty)
+```
+
