@@ -171,6 +171,7 @@
                     <doctitle>${project.artifactId}, ${project.version}</doctitle>
                     <destDir>${project.version}</destDir>
                     <reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/api/</reportOutputDirectory>
+                    <source>1.8</source>
                 </configuration>
                 <executions>
                     <execution>
