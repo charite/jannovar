@@ -7,6 +7,12 @@
 * Switching to Github Workflows for continuous integration.
 * Bumping a couple of dependencies.
 
+### jannovar-core
+
+* Apply fix for (#498, PR #499 by @roland-ewald of @limbus-medtec).
+  This fixes a problem with right-shifting deletions on amino acid sequences.
+  See the tickes and merge request for details.
+
 ## v0.34
 
 ### jannovar-cli

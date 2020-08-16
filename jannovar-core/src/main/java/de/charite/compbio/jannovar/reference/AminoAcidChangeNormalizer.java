@@ -7,6 +7,9 @@ package de.charite.compbio.jannovar.reference;
  */
 public final class AminoAcidChangeNormalizer {
 
+	/** Utility class, should not be instantiated.*/
+	private AminoAcidChangeNormalizer() {}
+
 	/**
 	 * Search for stop codon in <code>change.alt</code> and truncate afterwards.
 	 *
@@ -21,44 +24,44 @@ public final class AminoAcidChangeNormalizer {
 	}
 
 	/**
-	 * Normalize deletion {@link AminoAcidChange} for amino acid string
-	 * <p>
-	 * Return <code>change</code> if it is not a clean deletion.
+	 * This shifts the amino acid and its position to be reported in the <code>proteinChange</code> HGVS annotation to the
+	 * first position where the amino acids actually differ. This is necessary because
+	 * {@link AminoAcidChangeNormalizer#truncateBothSides(AminoAcidChange)} does not suffice in all situations.
 	 *
-	 * @param ref    reference amino acid string to change
-	 * @param change the {@link AminoAcidChange} to normalize
-	 * @return normalized AminoAcidChange
+	 * @param change the original amino acid change to be shifted
+	 * @param wtAASeq the wildtype amino acid sequence (i.e. the translated reference sequence)
+	 * @param varAASeq the predicted amino acid sequence induced by the variant
+	 * @return the amino acid change shifted to the first difference in the sequence, or the end of the ref/alt CDS
 	 */
-	public static AminoAcidChange normalizeDeletion(String ref, AminoAcidChange change) {
-		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
-			return change;
-
-		// Compute shift of deletion.
-		int shift = 0;
-		final int LEN = change.getRef().length();
-		while (change.getPos() + LEN + shift < ref.length()
-			&& ref.charAt(change.getPos()) == ref.charAt(change.getPos() + LEN + shift))
-			shift += 1;
-		if (shift == 0)
-			return change;
-
-		// Build new AminoAcidChange.
-		StringBuilder changeRefBuilder = new StringBuilder();
-		changeRefBuilder.append(ref.substring(change.getPos() + shift, change.getPos() + shift + change.getRef().length()));
-		return new AminoAcidChange(change.getPos() + shift, changeRefBuilder.toString(), "");
+	public static AminoAcidChange shiftSynonymousChange(AminoAcidChange change, String wtAASeq, String varAASeq) {
+	  AminoAcidChange aminoAcidChange = truncateBothSides(change);
+		int position = aminoAcidChange.getPos();
+		int originalPosition = position;
+		int maxPosition = Math.min(
+				wtAASeq.length() - aminoAcidChange.getRef().length(),
+				varAASeq.length() - aminoAcidChange.getAlt().length());
+		while (position < maxPosition && wtAASeq.charAt(position) != '*'
+				&& wtAASeq.charAt(position) == varAASeq.charAt(position)) {
+			position++;
+		}
+		if (position == originalPosition) {
+			return aminoAcidChange;
+		}
+		return new AminoAcidChange(position,
+				wtAASeq.substring(position, position + aminoAcidChange.getRef().length()),
+				varAASeq.substring(position, position + aminoAcidChange.getAlt().length()));
 	}
 
 	/**
 	 * Truncate {@link AminoAcidChange} from both sides for matching ref/alt prefixes/suffixes.
 	 * <p>
 	 * Truncating of the prefixes is given higher priority to conform with the HGVS notation (you have to call
-	 * {@link #shiftInsertion}) afterwards.
+	 * {@link #shiftSynonymousChange}) afterwards.
 	 *
 	 * @param aaChange {@link AminoAcidChange} to truncate
 	 * @return updated {@link AminoAcidChange}
 	 */
-	public static AminoAcidChange truncateBothSides(AminoAcidChange aaChange) {
-		// TODO(holtgrem): Test me!
+	private static AminoAcidChange truncateBothSides(AminoAcidChange aaChange) {
 
 		// Truncate suffixes / from the right.
 		final int REFLEN = aaChange.getRef().length() - 1;
@@ -82,40 +85,6 @@ public final class AminoAcidChangeNormalizer {
 				aaChange.getAlt().substring(truncPrefix));
 
 		return aaChange;
-	}
-
-	/**
-	 * Shift insertion {@link AminoAcidChange} to the right in WT AA sequence.
-	 * <p>
-	 * Returns <code>aaChange</code> if <code>aaChange.ref</code> is not the empty string.
-	 *
-	 * @param aaChange {@link AminoAcidChange} to normalize
-	 * @param wtAASeq  WT AA sequence to use for shifting
-	 * @return updated {@link AminoAcidChange}
-	 */
-	public static AminoAcidChange shiftInsertion(AminoAcidChange aaChange, String wtAASeq) {
-		// TODO(holtgrem): Test me!
-		if (aaChange.getRef().length() != 0)
-			return aaChange;
-
-		// Insert the alternative bases at the position indicated by txPos.
-		StringBuilder builder = new StringBuilder(wtAASeq);
-		builder.insert(aaChange.getPos(), aaChange.getAlt());
-
-		// Execute algorithm and compute the shift.
-		int pos = aaChange.getPos();
-		int shift = 0;
-		final int LEN = aaChange.getAlt().length();
-		final String seq = builder.toString();
-		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
-			++shift;
-			++pos;
-		}
-
-		if (shift == 0) // only rebuild if shift > 0
-			return aaChange;
-		else
-			return new AminoAcidChange(pos, "", seq.substring(pos, pos + LEN));
 	}
 
 }
