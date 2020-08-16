@@ -26,18 +26,18 @@ public final class AminoAcidChangeNormalizer {
 	 * Return <code>change</code> if it is not a clean deletion.
 	 *
 	 * @param ref    reference amino acid string to change
+	 * @param alt    alternated amino acid string to compare
 	 * @param change the {@link AminoAcidChange} to normalize
 	 * @return normalized AminoAcidChange
 	 */
-	public static AminoAcidChange normalizeDeletion(String ref, AminoAcidChange change) {
-		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
+	public static AminoAcidChange normalizeDeletion(String ref, String alt, AminoAcidChange change) {
+		if (change.getRef().length() == 0)
 			return change;
 
 		// Compute shift of deletion.
 		int shift = 0;
-		final int LEN = change.getRef().length();
-		while (change.getPos() + LEN + shift < ref.length()
-			&& ref.charAt(change.getPos()) == ref.charAt(change.getPos() + LEN + shift))
+		while (change.getPos() + shift < ref.length() && change.getPos() + shift < alt.length()
+				&& ref.charAt(change.getPos() + shift) == alt.charAt(change.getPos() + shift))
 			shift += 1;
 		if (shift == 0)
 			return change;
@@ -45,7 +45,9 @@ public final class AminoAcidChangeNormalizer {
 		// Build new AminoAcidChange.
 		StringBuilder changeRefBuilder = new StringBuilder();
 		changeRefBuilder.append(ref.substring(change.getPos() + shift, change.getPos() + shift + change.getRef().length()));
-		return new AminoAcidChange(change.getPos() + shift, changeRefBuilder.toString(), "");
+		StringBuilder changeAltBuilder = new StringBuilder();
+		changeAltBuilder.append(alt.substring(change.getPos() + shift, change.getPos() + shift + change.getAlt().length()));
+		return new AminoAcidChange(change.getPos() + shift, changeRefBuilder.toString(), changeAltBuilder.toString());
 	}
 
 	/**

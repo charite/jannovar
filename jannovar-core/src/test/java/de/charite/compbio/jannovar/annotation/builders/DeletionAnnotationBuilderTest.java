@@ -327,6 +327,20 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
+	public void testForwardInternalFrameShiftNormalization() throws InvalidGenomeVariant {
+		// The following starts with a codon but still causes a shift in the nucleotide sequence.
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6645991,
+				PositionType.ZERO_BASED), "GAGAAACCCT", "");
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assert.assertEquals("946_955del", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu316Leufs*25)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+	}
+
+	@Test
 	public void testForwardNonFrameShiftDeletion() throws InvalidGenomeVariant {
 		// clean (FS of begin position is 0) deletion of one codon, starting in intron (thus no "exon3" annotation is
 		// generated).
