@@ -179,8 +179,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			final String insertAA = varAASeq.substring(insertAAPos, insertAAPos + insertAALength);
 			this.aaChange = new AminoAcidChange(insertAAPos, delAA, insertAA);
 			this.aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
-			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(aaChange);
-			this.aaChange = AminoAcidChangeNormalizer.shiftInsertion(aaChange, wtAASeq);
+			this.aaChange = AminoAcidChangeNormalizer.shiftSynonymousChange(aaChange, wtAASeq, varAASeq);
 			// Obtain amino acid insertion position.
 			this.varAAInsertPos = this.aaChange.getPos();
 		}

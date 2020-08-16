@@ -153,6 +153,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				wtAASeq.substring(refChangeBeginPos.getPos() / 3, Math.min((refChangeLastPos.getPos() + 1 + 2) / 3, wtAASeq.length())),
 				varAASeq.substring(varChangeBeginPos.getPos() / 3, Math.min((varChangeLastPos.getPos() + 1 + 2) / 3, varAASeq.length())));
 
+			// Shift change in case it is by chance synonymous
+			this.aaChange = AminoAcidChangeNormalizer.shiftSynonymousChange(this.aaChange, wtAASeq, varAASeq);
+
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
 		}
