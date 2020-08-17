@@ -23,10 +23,10 @@ public final class AminoAcidChangeNormalizer {
 	/**
 	 * Normalize deletion {@link AminoAcidChange} for amino acid string
 	 * <p>
-	 * Return <code>change</code> if it is not a clean deletion.
+	 * Return normalized <code>change</code>.
 	 *
 	 * @param ref    reference amino acid string to change
-	 * @param alt    alternated amino acid string to compare
+	 * @param alt    alternative amino acid string to compare with the wild-type (ref)
 	 * @param change the {@link AminoAcidChange} to normalize
 	 * @return normalized AminoAcidChange
 	 */
