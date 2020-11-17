@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
 import com.google.common.collect.ImmutableList;
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -14,11 +13,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 class Gene {
 	private final String name;
 	private final ImmutableList<TranscriptModel> transcripts;
-	private final ReferenceDictionary refDict;
 	private final GenomeInterval region;
 
-	public Gene(ReferenceDictionary refDict, String name, ImmutableList<TranscriptModel> transcripts) {
-		this.refDict = refDict;
+	public Gene(String name, ImmutableList<TranscriptModel> transcripts) {
 		this.name = name;
 		this.transcripts = transcripts;
 		this.region = buildGeneRegion();
@@ -30,10 +27,6 @@ class Gene {
 
 	public ImmutableList<TranscriptModel> getTranscripts() {
 		return transcripts;
-	}
-
-	public ReferenceDictionary getRefDict() {
-		return refDict;
 	}
 
 	public GenomeInterval getRegion() {
@@ -60,7 +53,7 @@ class Gene {
 	private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
 		lhs = lhs.withStrand(Strand.FWD);
 		rhs = rhs.withStrand(Strand.FWD);
-		return new GenomeInterval(lhs.getGenomeBeginPos().getRefDict(), Strand.FWD, lhs.getGenomeBeginPos().getChr(), Math.min(
+		return new GenomeInterval(lhs.getGenomeBeginPos().getContig(), Strand.FWD, Math.min(
 			lhs.getBeginPos(), rhs.getBeginPos()), Math.max(lhs.getEndPos(), rhs.getEndPos()));
 	}
 

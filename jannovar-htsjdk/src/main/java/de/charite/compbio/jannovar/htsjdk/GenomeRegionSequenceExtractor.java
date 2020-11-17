@@ -43,7 +43,7 @@ public class GenomeRegionSequenceExtractor {
 	 */
 	public String load(GenomeInterval region) {
 		region = region.withStrand(Strand.FWD);
-		String contigName = region.getRefDict().getContigIDToName().get(region.getChr());
+		String contigName = region.getContigName();
 		contigName = mapContigToFasta(contigName);
 		ReferenceSequence seq = indexedFile.getSubsequenceAt(contigName, region.getBeginPos() + 1, region.getEndPos());
 		return new String(seq.getBases());

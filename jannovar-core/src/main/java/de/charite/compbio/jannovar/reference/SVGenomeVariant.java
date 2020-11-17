@@ -114,7 +114,7 @@ public abstract class SVGenomeVariant implements SVDescription {
 
 	@Override
 	public String getChrName() {
-		return genomePos.getRefDict().getContigIDToName().get(genomePos.getChr());
+		return genomePos.getChrName();
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public abstract class SVGenomeVariant implements SVDescription {
 
 	@Override
 	public String getChr2Name() {
-		return genomePos.getRefDict().getContigIDToName().get(genomePos2.getChr());
+		return genomePos.getChrName();
 	}
 
 	@Override

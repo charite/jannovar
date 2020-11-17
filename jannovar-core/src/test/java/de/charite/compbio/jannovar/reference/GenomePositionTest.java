@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.reference;
 
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +12,18 @@ public class GenomePositionTest {
 	/**
 	 * this test uses this static hg19 reference dictionary
 	 */
-	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
+	private final static ReferenceDictionary refDict = HG19RefDictBuilder.build();
+
+	private static final Contig chr1 = refDict.getContigByName("1");
+
+	@Test
+	public void testContigBasedConstructorOneBasedPositionType() {
+		GenomePosition pos = new GenomePosition(chr1, Strand.FWD, 23, PositionType.ONE_BASED);
+
+		Assert.assertEquals(pos.getStrand(), Strand.FWD);
+		Assert.assertEquals(pos.getChr(), 1);
+		Assert.assertEquals(pos.getPos(), 22);
+	}
 
 	@Test
 	public void testConstructorDefaultPositionType() {

@@ -218,7 +218,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			for (Interval<TranscriptModel> itv : chrom.getTMIntervalTree().getIntervals()) {
 				TranscriptModel tm = itv.getValue();
 				if (!geneMap.containsKey(tm.getGeneSymbol()))
-					geneMap.put(tm.getGeneSymbol(), new GeneBuilder(jannovarDB.getRefDict(), tm.getGeneSymbol()));
+					geneMap.put(tm.getGeneSymbol(), new GeneBuilder(tm.getGeneSymbol()));
 				geneMap.get(tm.getGeneSymbol()).addTranscriptModel(tm);
 			}
 

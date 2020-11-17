@@ -1,7 +1,6 @@
 package de.charite.compbio.jannovar.mendel.filter;
 
 import com.google.common.collect.ImmutableList;
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import org.slf4j.Logger;
@@ -19,19 +18,17 @@ class GeneBuilder {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneBuilder.class);
 
-	private final ReferenceDictionary refDict;
-	private String name = null;
+	private final String name;
 	private final ImmutableList.Builder<TranscriptModel> builder = new ImmutableList.Builder<TranscriptModel>();
 	private final ArrayList<TranscriptModel> tmpModels = new ArrayList<TranscriptModel>();
 
-	public GeneBuilder(ReferenceDictionary refDict, String name) {
-		this.refDict = refDict;
+	public GeneBuilder(String name) {
 		this.name = name;
 	}
 
 	public void addTranscriptModel(TranscriptModel tm) {
 		if (tmpModels.isEmpty()) { // always add first
-			LOGGER.trace("Adding first transcript {} to gene {}.", new Object[]{tm, name});
+			LOGGER.trace("Adding first transcript {} to gene {}.", tm, name);
 			builder.add(tm);
 			tmpModels.add(tm);
 			return;
@@ -52,7 +49,7 @@ class GeneBuilder {
 	}
 
 	public Gene build() {
-		final Gene gene = new Gene(refDict, name, builder.build());
+		final Gene gene = new Gene(name, builder.build());
 		LOGGER.trace("Creating gene {} (lengt={})", new Object[]{gene, name});
 		return gene;
 	}
@@ -61,7 +58,4 @@ class GeneBuilder {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 }
