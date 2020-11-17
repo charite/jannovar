@@ -1,5 +1,15 @@
 # Jannovar Changelog
 
+## v0.35
+
+### jannovar-core
+
+- Update Genotype internals to pre-calculate values.
+
+### jannovar-cli
+
+- Fixing `default_sources.ini` file.
+
 ## v0.34
 
 ### jannovar-cli
