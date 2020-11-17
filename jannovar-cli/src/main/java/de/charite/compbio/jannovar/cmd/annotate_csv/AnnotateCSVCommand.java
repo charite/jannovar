@@ -5,6 +5,7 @@ import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -131,12 +132,12 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 			throw new JannovarException("[ERROR] Input string for the chromosomal change " + changeStr
 				+ " does not fit the regular expression ... :(");
 
-		int chr = refDict.getContigNameToID().get(match.group(1));
+		Contig contig = refDict.getContigByName(match.group(1));
 		int pos = Integer.parseInt(match.group(2));
 		String ref = match.group(3);
 		String alt = match.group(4);
 
-		return new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeVariant(new GenomePosition(contig, Strand.FWD, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 }

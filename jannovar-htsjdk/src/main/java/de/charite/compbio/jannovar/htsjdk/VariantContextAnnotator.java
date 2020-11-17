@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
@@ -254,18 +255,17 @@ public final class VariantContextAnnotator {
 	public GenomeVariant buildGenomeVariant(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
-		Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
-		if (boxedInt == null)
+		Contig contig = refDict.getContigByName(vc.getContig());
+		if (contig == null)
 			throw new InvalidCoordinatesException("Unknown reference " + vc.getContig(),
 				AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
-		int chr = boxedInt.intValue();
 
 		// Build the GenomeChange object.
 		final String ref = vc.getReference().getBaseString();
 		final Allele altAllele = vc.getAlternateAllele(alleleID);
 		final String alt = altAllele.getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeVariant(new GenomePosition(contig, Strand.FWD, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	/**
@@ -493,30 +493,28 @@ public final class VariantContextAnnotator {
 		}
 
 		// Get start position.
-		final Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
-		if (boxedInt == null) {
+		Contig contig = refDict.getContigByName(vc.getContig());
+		if (contig == null) {
 			throw new InvalidCoordinatesException("Unknown reference " + vc.getContig(),
 				AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 		}
-		final int chr = boxedInt.intValue();
 		final int pos = vc.getStart();
-		final GenomePosition gPos = new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED);
+		final GenomePosition gPos = new GenomePosition(contig, Strand.FWD, pos, PositionType.ONE_BASED);
 
 		// Get end position, if any.
 		final GenomePosition gPos2;
 		if (vc.getCommonInfo().hasAttribute("END")) {
-			final String contig2 = vc.getCommonInfo().getAttributeAsString("CHR2", vc.getContig());
-			final Integer boxedInt2 = refDict.getContigNameToID().get(contig2);
-			if (boxedInt2 == null) {
+			final String chr2 = vc.getCommonInfo().getAttributeAsString("CHR2", vc.getContig());
+			final Contig contig2 = refDict.getContigByName(chr2);
+			if (contig2 == null) {
 				throw new InvalidCoordinatesException("Unknown reference " + contig2,
 					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 			}
-			final int chr2 = boxedInt2.intValue();
 			final int pos2 = vc.getCommonInfo().getAttributeAsInt("END", -1);
 			if (pos2 == -1) {
 				throw new InvalidCoordinatesException(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 			}
-			gPos2 = new GenomePosition(refDict, Strand.FWD, chr2, pos2, PositionType.ZERO_BASED);
+			gPos2 = new GenomePosition(contig2, Strand.FWD, pos2, PositionType.ZERO_BASED);
 		} else {
 			gPos2 = null;
 		}

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.reference.*;
@@ -75,8 +76,9 @@ public final class VariantAnnotator {
 		if (chromosomeMap.get(chr) == null)
 			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
 
+		Contig contig = refDict.getContigById(chr);
 		// Build the GenomeChange to build annotation for.
-		GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
+		GenomePosition pos = new GenomePosition(contig, Strand.FWD, position, posType);
 		GenomeVariant change = new GenomeVariant(pos, ref, alt);
 
 		return buildAnnotations(change);

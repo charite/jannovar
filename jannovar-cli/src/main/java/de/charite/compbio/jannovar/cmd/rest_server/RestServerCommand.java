@@ -16,6 +16,7 @@ import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -70,15 +71,12 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 				final VariantAnnotator annotator = new VariantAnnotator(jvData.getRefDict(),
 					jvData.getChromosomes(), new AnnotationBuilderOptions(true, false));
 
-				final Integer boxedInt = jvData.getRefDict().getContigNameToID().get(chromosome);
-				if (boxedInt == null) {
+				final Contig contig = jvData.getRefDict().getContigByName(chromosome);
+				if (contig == null) {
 					throw new InvalidCoordinatesException("Unknown reference " + chromosome,
 						AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 				}
-				final int chr = boxedInt.intValue();
-
-				final GenomePosition gPos = new GenomePosition(jvData.getRefDict(), Strand.FWD, chr,
-					position, PositionType.ONE_BASED);
+				final GenomePosition gPos = new GenomePosition(contig, Strand.FWD, position, PositionType.ONE_BASED);
 				final VariantAnnotations annotations = annotator
 					.buildAnnotations(new GenomeVariant(gPos, reference, alternative));
 
