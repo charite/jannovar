@@ -55,13 +55,18 @@
             <artifactId>jannovar-hgvs</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <!--Use filtering so that maven will replace placeholders 
+                <!--Use filtering so that maven will replace placeholders
                     with values from the pom e.g. ${project.version} -->
                 <filtering>true</filtering>
             </resource>
@@ -88,7 +93,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Specify the resources which need to be made accessible to 
+            <!-- Specify the resources which need to be made accessible to
                 the user -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -105,7 +110,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/main/resources</directory>
-                                    <!--Use filtering so that maven will 
+                                    <!--Use filtering so that maven will
                                         replace placeholders with values from the pom e.g. ${project.version} -->
                                     <filtering>true</filtering>
                                     <includes>

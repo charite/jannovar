@@ -1,6 +1,5 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import com.google.common.io.Files;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
@@ -9,13 +8,16 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GenomeRegionSequenceExtractorTest {
 
@@ -36,10 +38,12 @@ public class GenomeRegionSequenceExtractorTest {
 	 */
 	JannovarData jannovarData;
 
-	@BeforeClass
-	public static void setUpClass() throws Exception {
+	@TempDir
+	static File tmpDir;
+
+	@BeforeAll
+	public static void setUpClass() {
 		// copy out files to temporary directory
-		File tmpDir = Files.createTempDir();
 		fastaPath = tmpDir + "/ref.fa";
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.fa", new File(fastaPath));
 		String faiPath = tmpDir + "/ref.fa.fai";
@@ -50,7 +54,7 @@ public class GenomeRegionSequenceExtractorTest {
 		ResourceUtils.copyResourceToFile("/ex_fbn1/mini_fbn1.ser", new File(dbPath));
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws FileNotFoundException, SerializationException {
 		this.indexedFile = new IndexedFastaSequenceFile(new File(fastaPath));
 		this.jannovarData = new JannovarDataSerializer(dbPath).load();
@@ -61,7 +65,7 @@ public class GenomeRegionSequenceExtractorTest {
 		GenomeRegionSequenceExtractor extractor = new GenomeRegionSequenceExtractor(jannovarData, this.indexedFile);
 		GenomeInterval region = new GenomeInterval(new GenomePosition(jannovarData.getRefDict(), Strand.FWD, 1, 99), 51);
 		String seq = extractor.load(region);
-		Assert.assertEquals("CTTTAGGCCTGGGAATCAGGAGTGCTATGACAATTTCCTCCAAAGTGGAGA", seq);
+		assertEquals("CTTTAGGCCTGGGAATCAGGAGTGCTATGACAATTTCCTCCAAAGTGGAGA", seq);
 	}
 
 }
