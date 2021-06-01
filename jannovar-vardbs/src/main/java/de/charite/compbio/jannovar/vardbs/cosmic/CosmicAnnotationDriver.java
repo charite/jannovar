@@ -15,6 +15,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRecord> {
 
 	public CosmicAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)

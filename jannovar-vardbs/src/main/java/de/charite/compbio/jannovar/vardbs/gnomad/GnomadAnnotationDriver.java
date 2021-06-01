@@ -17,6 +17,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class GnomadAnnotationDriver extends AbstractDBAnnotationDriver<GnomadRecord> {
 
 	public GnomadAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)

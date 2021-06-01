@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.vardbs.base;
 /**
  * Helper for packing allele number together with <code>RecordType</code>.
  */
+@Deprecated
 public class AnnotatingRecord<RecordType> {
 
 	/**

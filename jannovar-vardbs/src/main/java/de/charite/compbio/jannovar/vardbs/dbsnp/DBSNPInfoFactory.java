@@ -7,6 +7,7 @@ import htsjdk.variant.vcf.VCFHeader;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class DBSNPInfoFactory {
 
 	public DBSNPInfo build(VCFHeader vcfHeader) {

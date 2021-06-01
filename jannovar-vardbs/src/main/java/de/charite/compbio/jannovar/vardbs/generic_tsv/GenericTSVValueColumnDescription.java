@@ -7,6 +7,7 @@ import htsjdk.variant.vcf.VCFHeaderLineType;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class GenericTSVValueColumnDescription {
 
 	private int columnIndex = 6;
