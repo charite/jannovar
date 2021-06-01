@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
+[![Build Status](https://github.com/charite/jannovar/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/charite/jannovar/actions/workflows/ci.yml)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
 [![API Docs](https://img.shields.io/badge/api-v0.34-blue.svg?style=flat)](http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.34)
 [![Install with Bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](https://bioconda.github.io/recipes/jannovar-cli/README.html)
