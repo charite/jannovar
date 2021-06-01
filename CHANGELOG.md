@@ -1,5 +1,12 @@
 # Jannovar Changelog
 
+## HEAD (unreleased)
+
+### overall
+
+* Switching to Github Workflows for continuous integration.
+* Bumping a couple of dependencies.
+
 ## v0.34
 
 ### jannovar-cli
