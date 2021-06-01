@@ -13,6 +13,11 @@
   This fixes a problem with right-shifting deletions on amino acid sequences.
   See the tickes and merge request for details.
 
+### jannovar-vardbs
+
+* Deprecating previous content of the package.
+  The deprecated classes are due to be removed in v0.36.
+
 ## v0.34
 
 ### jannovar-cli

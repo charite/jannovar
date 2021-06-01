@@ -5,6 +5,7 @@ package de.charite.compbio.jannovar.vardbs.gnomad;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public enum GnomadPopulation {
 	/**
 	 * African/African American

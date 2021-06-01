@@ -7,6 +7,7 @@ import de.charite.compbio.jannovar.JannovarException;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class JannovarVarDBException extends JannovarException {
 
 	private static final long serialVersionUID = 1L;

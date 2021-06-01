@@ -15,6 +15,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSNPRecord> {
 
 	/**

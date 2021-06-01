@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 final class GnomadVariantContextToRecordConverter implements VariantContextToRecordConverter<GnomadRecord> {
 
 	@Override

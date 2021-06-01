@@ -17,6 +17,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord> {
 
 	public ExacAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)

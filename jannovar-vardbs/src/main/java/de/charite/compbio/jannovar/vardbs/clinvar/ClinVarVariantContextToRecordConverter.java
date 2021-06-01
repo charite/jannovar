@@ -16,6 +16,7 @@ import java.util.TreeMap;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 final class ClinVarVariantContextToRecordConverter implements VariantContextToRecordConverter<ClinVarRecord> {
 
 	private static <T> T getFromList(List<T> lst, int idx, T defaultValue) {

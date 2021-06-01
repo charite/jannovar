@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class GenericTSVVariantContextProvider implements DatabaseVariantContextProvider {
 
 	private final GenericTSVAnnotationOptions options;
