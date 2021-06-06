@@ -1221,7 +1221,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(12, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("1068_1071del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu358del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("(Glu357Lysfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 

@@ -135,8 +135,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			final int varAAEndPos = Math.min(changeBeginPos.getPos() / 3 + delta, varAASeq.length());
 			final String insAA = varAASeq.substring(changeBeginPos.getPos() / 3, varAAEndPos);
 			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, delAA, insAA);
-			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(this.aaChange);
-			this.aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, varAASeq, this.aaChange);
+			this.aaChange = AminoAcidChangeNormalizer.shiftSynonymousChange(this.aaChange, wtAASeq, varAASeq);
 		}
 
 		public Annotation build() {
