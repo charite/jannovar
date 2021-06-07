@@ -1,3 +1,4 @@
+
 # Jannovar Changelog
 
 ## HEAD (unreleased)
@@ -13,10 +14,16 @@
   This fixes a problem with right-shifting deletions on amino acid sequences.
   See the tickes and merge request for details.
 
+### jannovar-cli
+
+* Adding command `vardb-import` for importing annotations from VCF files into H2 database files.
+* Adding command `vardb-list` for listing annotation meta data from `vardb-import`.
+
 ### jannovar-vardbs
 
 * Deprecating previous content of the package.
   The deprecated classes are due to be removed in v0.36.
+* Adding modules for importing VCF files into H2 database files and listing the meta data conents.
 
 ## v0.34
 

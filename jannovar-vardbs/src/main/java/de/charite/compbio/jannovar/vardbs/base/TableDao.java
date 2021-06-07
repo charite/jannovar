@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.Immutable;
 
@@ -19,6 +20,8 @@ import java.util.Map;
  */
 @Immutable
 public final class TableDao implements Closeable {
+	/** Maximal length of reference/alternative allele. */
+	public static final int MAX_ALLELE_LENGTH = 1000;
 	/** Database table name that stores tables. */
 	public static final String TABLE_NAME_TABLE = "jannovar_meta_table";
 	/** Database table name that store fields. */
@@ -90,11 +93,15 @@ public final class TableDao implements Closeable {
 			final PreparedStatement stmtTable = this.conn.prepareStatement(
 				"DELETE FROM " + TABLE_NAME_TABLE + " WHERE name = ?");
 			final PreparedStatement stmtField = this.conn.prepareStatement(
-				"DELETE FROM " + TABLE_NAME_FIELD + " WHERE table_name = ?")) {
+				"DELETE FROM " + TABLE_NAME_FIELD + " WHERE table_name = ?");
+			final PreparedStatement stmtDrop = this.conn.prepareStatement(
+				"DROP TABLE IF EXISTS " + tableName
+			)) {
 			stmtTable.setString(1, tableName);
 			stmtTable.executeUpdate();
 			stmtField.setString(1, tableName);
 			stmtField.executeUpdate();
+			stmtDrop.executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem with H2 query", e);
 		}
@@ -107,6 +114,19 @@ public final class TableDao implements Closeable {
 	 * @throws JannovarVarDBException In the case of problems with the H2 database.
 	 */
 	public void createTable(Table table) throws JannovarVarDBException {
+		final Table prevTable = getTable(table.getName());
+		if (prevTable != null) {
+			// Do not perform creation twice but guard against change in definition.
+			if (!prevTable.equals(table)) {
+				throw new JannovarVarDBException(
+					"Table " + table.getName() + " already exist, and definition differs " +
+						prevTable + " != " + table + "(update not implemented yet!"
+				);
+			} else {
+				return;
+			}
+		}
+
 		try (
 			final PreparedStatement stmtTable = this.conn.prepareStatement(
 				"INSERT INTO " + TABLE_NAME_TABLE + " (name, default_prefix) VALUES (?, ?)");
@@ -125,6 +145,45 @@ public final class TableDao implements Closeable {
 				stmtField.setString(5, field.getDescription());
 				stmtField.executeUpdate();
 			}
+
+			final List<String> fieldLines = new ArrayList<>();
+			for (TableField field : table.getFields()) {
+				String fieldType;
+				switch (field.getType()) {
+					case "Integer":
+						fieldType = "INT";
+						break;
+					case "Float":
+						fieldType = "DOUBLE";
+						break;
+					case "Boolean":
+						fieldType = "BOOLEAN";
+						break;
+					case "String":
+						fieldType = "VARCHAR (" + MAX_ALLELE_LENGTH + ")";
+						break;
+					default:
+						throw new RuntimeException("Invalid field type " + field.getType());
+				}
+
+				fieldLines.add(String.format("%s %s", field.getName(), fieldType));
+			}
+
+			this.conn.prepareStatement(
+				"CREATE TABLE " + table.getName() + " (\n" +
+					"  genome_build VARCHAR(50) NOT NULL,\n" +
+					"  contig VARCHAR(50) NOT NULL,\n" +
+					"  start VARCHAR(50) NOT NULL,\n" +
+					"  end VARCHAR(50) NOT NULL,\n" +
+					"  ref VARCHAR(" + MAX_ALLELE_LENGTH + ") NOT NULL,\n" +
+					"  alt VARCHAR(" + MAX_ALLELE_LENGTH + ") NOT NULL,\n" +
+					Joiner.on(", \n  ").join(fieldLines) +
+				"\n)"
+			).executeUpdate();
+			this.conn.prepareStatement(
+				"CREATE PRIMARY KEY ON " + table.getName() +
+					" (genome_build, contig, start, end, ref, alt);"
+			).executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem with H2 query", e);
 		}
@@ -167,7 +226,10 @@ public final class TableDao implements Closeable {
 
 			stmtTable.setString(1, tableName);
 			final ResultSet rsTable = stmtTable.executeQuery();
-			rsTable.next();
+			if (!rsTable.next()) {
+				rsTable.close();
+				return null;
+			}
 			final Table result = new Table(
 				rsTable.getString("name"),
 				rsTable.getString("default_prefix"),
@@ -187,16 +249,19 @@ public final class TableDao implements Closeable {
 	 */
 	public void initializeDatabase() throws JannovarVarDBException {
 		try {
-			final PreparedStatement stmtTable = this.conn.prepareStatement(
+			this.conn.prepareStatement(
 				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME_TABLE + "(\n" +
 					"id IDENTITY NOT NULL PRIMARY KEY,\n" +
 					"name VARCHAR(100) NOT NULL,\n" +
 					"default_prefix VARCHAR(100) NOT NULL\n" +
-				")"
-			);
-			stmtTable.executeUpdate();
+				");"
+			).executeUpdate();
+			this.conn.prepareStatement(
+				"CREATE UNIQUE INDEX IF NOT EXISTS " + TABLE_NAME_TABLE + "_name ON " +
+					TABLE_NAME_TABLE + " (name);"
+			).executeUpdate();
 
-			final PreparedStatement stmtField = this.conn.prepareStatement(
+			this.conn.prepareStatement(
 				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME_FIELD + "(\n" +
 					"id IDENTITY NOT NULL PRIMARY KEY,\n" +
 					"table_name VARCHAR(100) NOT NULL,\n" +
@@ -204,9 +269,12 @@ public final class TableDao implements Closeable {
 					"type VARCHAR(100) NOT NULL,\n" +
 					"count VARCHAR(100) NOT NULL,\n" +
 					"description VARCHAR(255)\n" +
-					")"
-			);
-			stmtField.executeUpdate();
+					");"
+			).executeUpdate();
+			this.conn.prepareStatement(
+				"CREATE UNIQUE INDEX IF NOT EXISTS " + TABLE_NAME_FIELD + "_table_name_name ON " +
+					TABLE_NAME_FIELD + " (table_name, name);"
+			).executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem querying H2 database", e);
 		}

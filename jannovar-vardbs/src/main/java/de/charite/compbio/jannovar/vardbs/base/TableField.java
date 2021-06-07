@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
+import com.google.common.base.Objects;
 import de.charite.compbio.jannovar.Immutable;
 
 /**
@@ -51,5 +52,18 @@ public final class TableField {
 			", count='" + count + '\'' +
 			", description='" + description + '\'' +
 			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TableField that = (TableField) o;
+		return Objects.equal(getName(), that.getName()) && Objects.equal(getType(), that.getType()) && Objects.equal(getCount(), that.getCount()) && Objects.equal(getDescription(), that.getDescription());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getName(), getType(), getCount(), getDescription());
 	}
 }
