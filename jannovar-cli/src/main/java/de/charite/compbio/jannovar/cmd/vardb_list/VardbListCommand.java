@@ -49,7 +49,7 @@ public class VardbListCommand extends JannovarAnnotationCommand {
 		try (final Connection conn = DriverManager.getConnection(
 			"jdbc:h2:"
 				+ dbPath
-				+ ";TRACE_LEVEL_FILE=0;MV_STORE=FALSE;DB_CLOSE_ON_EXIT=FALSE",
+				+ ";TRACE_LEVEL_FILE=0;MV_STORE=FALSE;DB_CLOSE_ON_EXIT=FALSE;ACCESS_MODE_DATA=r",
 			"sa",
 			"");) {
 			new ListCommand(new ListOptions(options.getDbPath())).run(conn);

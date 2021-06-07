@@ -18,6 +18,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: add versions table
+//       - add jannovar version
+//       - add version for each imported database file
+
 /**
  * Import a VCF file to a Jannovar H2 database file.
  */
@@ -217,6 +221,8 @@ public final class ImportCommand {
 
 		return new Table(
 			options.getTableName(),
+			options.getDbName(),
+			options.getDbVersion(),
 			options.getDefaultPrefix(),
 			fields
 		);

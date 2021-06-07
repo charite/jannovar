@@ -18,12 +18,13 @@
 
 * Adding command `vardb-import` for importing annotations from VCF files into H2 database files.
 * Adding command `vardb-list` for listing annotation meta data from `vardb-import`.
+* Adding command `vardb-annotate` for annotating VCF files from Jannovar H2 database files.
 
 ### jannovar-vardbs
 
 * Deprecating previous content of the package.
   The deprecated classes are due to be removed in v0.36.
-* Adding modules for importing VCF files into H2 database files and listing the meta data conents.
+* Adding modules for importing VCF files into H2 database files, listing the meta data conents, and annotating VCF files.
 
 ## v0.34
 

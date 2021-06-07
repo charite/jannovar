@@ -39,6 +39,8 @@ public class VardbImportTest {
 	public void testVardbImport() throws JannovarVarDBException {
 		new ImportCommand(new ImportOptions(
 			"GRCh37",
+			"gnomad.exomes",
+			"2.1.1",
 			h2Path.substring(0, h2Path.length() - 6),
 			ImmutableList.of(dbGnomadExomesPath),
 			"gnomad_exomes_r2_1_1",
