@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.Immutable;
 
@@ -44,5 +45,18 @@ public final class Table {
 			", defaultPrefix='" + defaultPrefix + '\'' +
 			", fields=" + fields +
 			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Table table = (Table) o;
+		return Objects.equal(getName(), table.getName()) && Objects.equal(getDefaultPrefix(), table.getDefaultPrefix()) && Objects.equal(getFields(), table.getFields());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getName(), getDefaultPrefix(), getFields());
 	}
 }
