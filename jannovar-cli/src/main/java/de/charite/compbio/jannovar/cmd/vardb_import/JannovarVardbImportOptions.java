@@ -9,6 +9,7 @@ import de.charite.compbio.jannovar.cmd.statistics.JannovarGatherStatisticsOption
 import net.sourceforge.argparse4j.inf.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -24,6 +25,8 @@ public class JannovarVardbImportOptions extends JannovarBaseOptions {
 	private String dbPath = null;
 	private List<String> vcfPaths = new ArrayList<>();
 	private String tableName = null;
+	private String dbName = null;
+	private String dbVersion = null;
 	private String defaultPrefix = null;
 	private List<String> vcfInfoFields = new ArrayList<>();
 	private boolean truncateTable = false;
@@ -52,6 +55,8 @@ public class JannovarVardbImportOptions extends JannovarBaseOptions {
 		requiredGroup.addArgument("--database-file").help("Path to database file").required(true);
 		requiredGroup.addArgument("--vcf-files").help("Path to VCF file(s)").nargs("+").required(true);
 		requiredGroup.addArgument("--table-name").help("Name of table after import").required(true);
+		requiredGroup.addArgument("--db-name").help("Datbase name").required(true);
+		requiredGroup.addArgument("--db-version").help("Database version").required(true);
 		requiredGroup.addArgument("--default-prefix").help("Default prefix for annotating").required(true);
 		requiredGroup.addArgument("--vcf-info-fields").help("INFO fields to import").nargs("+").required(true);
 		requiredGroup.addArgument("--truncate-table").help("Truncate table before first import")
@@ -68,22 +73,36 @@ public class JannovarVardbImportOptions extends JannovarBaseOptions {
 		genomeBuild = args.get("genome_build");
 		dbPath = args.getString("database_file");
 		final List<String> vcfFilesList = new ArrayList<>();
-		for (Object s: args.getList("vcf_info_fields")) {
-			for (String t: ((String)s).split(",")) {
-				vcfFilesList.add(t);
-			}
+		for (Object s: args.getList("vcf_files")) {
+			vcfFilesList.addAll(Arrays.asList(((String) s).split(",")));
 		}
-		vcfPaths = args.getList("vcf_files");
+		vcfPaths = vcfFilesList;
 		tableName = args.getString("table_name");
+		dbName = args.get("db_name");
+		dbVersion = args.get("db_version");
 		defaultPrefix = args.getString("default_prefix");
 		final List<String> vcfInfoFieldsList = new ArrayList<>();
 		for (Object s: args.getList("vcf_info_fields")) {
-			for (String t: ((String)s).split(",")) {
-				vcfInfoFieldsList.add(t);
-			}
+			vcfInfoFieldsList.addAll(Arrays.asList(((String) s).split(",")));
 		}
 		vcfInfoFields = vcfInfoFieldsList;
 		truncateTable = args.getBoolean("truncate_table");
+	}
+
+	public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+
+	public String getDbVersion() {
+		return dbVersion;
+	}
+
+	public void setDbVersion(String dbVersion) {
+		this.dbVersion = dbVersion;
 	}
 
 	public String getGenomeBuild() {

@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.cmd.vardb_import;
 
+import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
@@ -52,6 +53,8 @@ public class VardbImportCommand extends JannovarAnnotationCommand {
 
 			final ImportCommand cmd = new ImportCommand(new ImportOptions(
 				options.getGenomeBuild(),
+				options.getDbName(),
+				options.getDbVersion(),
 				options.getDbPath(),
 				options.getVcfPaths(),
 				options.getTableName(),

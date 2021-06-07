@@ -22,6 +22,8 @@ import java.util.Map;
 public final class TableDao implements Closeable {
 	/** Maximal length of reference/alternative allele. */
 	public static final int MAX_ALLELE_LENGTH = 1000;
+	/** Database table name that stores versions. */
+	public static final String TABLE_NAME_VERSIONS = "jannovar_meta_versions";
 	/** Database table name that stores tables. */
 	public static final String TABLE_NAME_TABLE = "jannovar_meta_table";
 	/** Database table name that store fields. */
@@ -71,6 +73,8 @@ public final class TableDao implements Closeable {
 				final String tableName = rsTable.getString("name");
 				resultBuilder.add(new Table(
 					tableName,
+					"db_name",
+					"db_version",
 					rsTable.getString("default_prefix"),
 					ImmutableList.copyOf(fieldsByTable.getOrDefault(tableName, new ArrayList<>()))
 				));
@@ -85,22 +89,27 @@ public final class TableDao implements Closeable {
 	/**
 	 * Delete table entry with the given name.
 	 *
-	 * @param tableName The name of the table to remove.
+	 * @param table The table to remove.
 	 * @throws JannovarVarDBException In the case of problems with the H2 database.
 	 */
-	public void deleteTable(String tableName) throws JannovarVarDBException {
+	public void deleteTable(Table table) throws JannovarVarDBException {
 		try (
 			final PreparedStatement stmtTable = this.conn.prepareStatement(
 				"DELETE FROM " + TABLE_NAME_TABLE + " WHERE name = ?");
 			final PreparedStatement stmtField = this.conn.prepareStatement(
 				"DELETE FROM " + TABLE_NAME_FIELD + " WHERE table_name = ?");
+			final PreparedStatement stmtVersion = this.conn.prepareStatement(
+				"DELETE FROM " + TABLE_NAME_VERSIONS + " WHERE name = ? AND version = ?");
 			final PreparedStatement stmtDrop = this.conn.prepareStatement(
-				"DROP TABLE IF EXISTS " + tableName
+				"DROP TABLE IF EXISTS " + table.getName()
 			)) {
-			stmtTable.setString(1, tableName);
+			stmtTable.setString(1, table.getName());
 			stmtTable.executeUpdate();
-			stmtField.setString(1, tableName);
+			stmtField.setString(1, table.getName());
 			stmtField.executeUpdate();
+			stmtVersion.setString(1, table.getDbName());
+			stmtVersion.setString(2, table.getDbVersion());
+			stmtVersion.executeUpdate();
 			stmtDrop.executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem with H2 query", e);
@@ -184,6 +193,15 @@ public final class TableDao implements Closeable {
 				"CREATE PRIMARY KEY ON " + table.getName() +
 					" (genome_build, contig, start, end, ref, alt);"
 			).executeUpdate();
+
+			final PreparedStatement stmt = this.conn.prepareStatement(
+				"INSERT INTO " + TABLE_NAME_VERSIONS + " (name, table_name, genome_build, version) VALUES " +
+					"(?, ?, ?, ?);");
+			stmt.setString(1, table.getDbName());
+			stmt.setString(2, table.getName());  // TODO
+			stmt.setString(3, "NA");  // TODO
+			stmt.setString(4, table.getDbVersion());
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem with H2 query", e);
 		}
@@ -198,7 +216,7 @@ public final class TableDao implements Closeable {
 	public void updateTable(Table table) throws JannovarVarDBException {
 		try {
 			this.conn.setAutoCommit(false);
-			deleteTable(table.getName());
+			deleteTable(table);
 			createTable(table);
 			this.conn.commit();
 		} catch (SQLException e) {
@@ -214,7 +232,7 @@ public final class TableDao implements Closeable {
 		) {
 			stmtField.setString(1, tableName);
 			final ResultSet rsField = stmtField.executeQuery();
-			ImmutableList.Builder fieldBuilder = ImmutableList.builder();
+			ImmutableList.Builder<TableField> fieldBuilder = ImmutableList.builder();
 			while (rsField.next()) {
 				fieldBuilder.add(new TableField(
 					rsField.getString("name"),
@@ -232,6 +250,8 @@ public final class TableDao implements Closeable {
 			}
 			final Table result = new Table(
 				rsTable.getString("name"),
+				"db_name",
+				"db_version",
 				rsTable.getString("default_prefix"),
 				fieldBuilder.build()
 			);
@@ -275,6 +295,28 @@ public final class TableDao implements Closeable {
 				"CREATE UNIQUE INDEX IF NOT EXISTS " + TABLE_NAME_FIELD + "_table_name_name ON " +
 					TABLE_NAME_FIELD + " (table_name, name);"
 			).executeUpdate();
+
+			this.conn.prepareStatement(
+				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME_VERSIONS + " (\n" +
+					"  name VARCHAR(100) NOT NULL,\n" +
+					"  genome_build VARCHAR(100) NOT NULL,\n" +
+					"  table_name VARCHAR(100) NOT NULL,\n" +
+					"  version VARCHAR(100) NOT NULL\n" +
+					");\n"
+			).executeUpdate();
+			this.conn.prepareStatement(
+				"CREATE PRIMARY KEY IF NOT EXISTS " + TABLE_NAME_VERSIONS + "_PK ON " + TABLE_NAME_VERSIONS +
+					" (name, genome_build, version);"
+			).executeUpdate();
+			final PreparedStatement stmt = this.conn.prepareStatement(
+				"MERGE INTO " + TABLE_NAME_VERSIONS + " (name, genome_build, table_name, version) VALUES " +
+					"(?, ?, ?, ?);");
+			stmt.setString(1, "jannovar");
+			stmt.setString(2, "NA");
+			stmt.setString(3, "NA");
+			final String version = TableDao.class.getPackage().getSpecificationVersion();
+			stmt.setString(4, (version != null) ? version : "<no version>");
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new JannovarVarDBException("Problem querying H2 database", e);
 		}

@@ -3,6 +3,8 @@ package de.charite.compbio.jannovar.utils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Helper class with static methods for handling resources in tests
@@ -28,13 +30,8 @@ public class ResourceUtils {
 	 * Copy resource at the given path to the given output {@link File}.
 	 */
 	public static void copyResourceToFile(String path, File outFile) {
-		try (InputStream input = ResourceUtils.class.getResourceAsStream(path);
-			 OutputStream os = new FileOutputStream(outFile)) {
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = input.read(buffer)) > 0) {
-				os.write(buffer, 0, length);
-			}
+		try (InputStream input = ResourceUtils.class.getResourceAsStream(path)) {
+			Files.copy(input, outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException("Problem with copying resource to file", e);
 		}
