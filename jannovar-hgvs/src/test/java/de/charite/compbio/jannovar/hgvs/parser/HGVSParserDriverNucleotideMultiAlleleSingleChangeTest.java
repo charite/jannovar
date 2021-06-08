@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.hgvs.parser;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 // TODO(holtgrew): Test with onlyPredicted flag ("(...)") once this works
 
@@ -17,7 +17,7 @@ public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 
 	HGVSParser driver;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		driver = new HGVSParser();
 	}
@@ -29,8 +29,8 @@ public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 
@@ -41,8 +41,8 @@ public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 

@@ -4,8 +4,8 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSLexer;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_deletionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Parser for HGVS deletion nucleotide changes.
@@ -18,7 +18,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithPositionWithoutDeletedString() {
 		Antlr4HGVSParser parser = buildParserForString("123del", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals("(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del)",
+		Assertions.assertEquals("(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del)",
 			nt_change_deletion.toStringTree(parser));
 	}
 
@@ -26,7 +26,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithPositionWithDeletedLength() {
 		Antlr4HGVSParser parser = buildParserForString("123del1", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del (nt_number 1))",
 			nt_change_deletion.toStringTree(parser));
 	}
@@ -35,7 +35,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithPositionWithDeletedString() {
 		Antlr4HGVSParser parser = buildParserForString("123delTA", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del (nt_string TA))",
 			nt_change_deletion.toStringTree(parser));
 	}
@@ -44,7 +44,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithRangeWithDeletedString() {
 		Antlr4HGVSParser parser = buildParserForString("123_124delAT", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"(nt_change_deletion (nt_range (nt_point_location (nt_base_location (nt_number 123))) _ (nt_point_location (nt_base_location (nt_number 124)))) del (nt_string AT))",
 			nt_change_deletion.toStringTree(parser));
 	}
@@ -53,7 +53,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithRangeWithDeletedLength() {
 		Antlr4HGVSParser parser = buildParserForString("123_124del2", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"(nt_change_deletion (nt_range (nt_point_location (nt_base_location (nt_number 123))) _ (nt_point_location (nt_base_location (nt_number 124)))) del (nt_number 2))",
 			nt_change_deletion.toStringTree(parser));
 	}
@@ -62,7 +62,7 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	public void testWithRangeWithoutDeletedString() {
 		Antlr4HGVSParser parser = buildParserForString("123_124del", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"(nt_change_deletion (nt_range (nt_point_location (nt_base_location (nt_number 123))) _ (nt_point_location (nt_base_location (nt_number 124)))) del)",
 			nt_change_deletion.toStringTree(parser));
 	}

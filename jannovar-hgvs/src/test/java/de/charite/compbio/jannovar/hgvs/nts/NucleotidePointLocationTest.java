@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class NucleotidePointLocationTest {
 
@@ -12,10 +12,10 @@ public class NucleotidePointLocationTest {
 		NucleotidePointLocation location2 = new NucleotidePointLocation(123, -3, false);
 		NucleotidePointLocation location3 = new NucleotidePointLocation(123, 3, false);
 
-		Assert.assertTrue(location1.equals(location2));
-		Assert.assertTrue(location2.equals(location1));
-		Assert.assertFalse(location1.equals(location3));
-		Assert.assertFalse(location3.equals(location1));
+		Assertions.assertTrue(location1.equals(location2));
+		Assertions.assertTrue(location2.equals(location1));
+		Assertions.assertFalse(location1.equals(location3));
+		Assertions.assertFalse(location3.equals(location1));
 	}
 
 	@Test
@@ -23,10 +23,10 @@ public class NucleotidePointLocationTest {
 		NucleotidePointLocation location1 = new NucleotidePointLocation(123, -3, false);
 		NucleotidePointLocation location2 = new NucleotidePointLocation(123, 0, true);
 
-		Assert.assertEquals("124-3", location1.toHGVSString());
-		Assert.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("*124", location2.toHGVSString());
+		Assertions.assertEquals("124-3", location1.toHGVSString());
+		Assertions.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("*124", location2.toHGVSString());
 	}
 
 }

@@ -5,9 +5,9 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MultiAlleleNucleotideVariantTest {
 
@@ -16,7 +16,7 @@ public class MultiAlleleNucleotideVariantTest {
 	private NucleotideChangeAllele firstAllele;
 	private NucleotideChangeAllele secondAllele;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		firstAllele = NucleotideChangeAllele.build(VariantConfiguration.IN_CIS,
 			NucleotideSubstitution.build(false, 99, "A", "G"),
@@ -32,30 +32,30 @@ public class MultiAlleleNucleotideVariantTest {
 	}
 
 	public void testStaticFactoryMakeSingleChangeVariant() {
-		Assert.assertEquals(singleAlleleVariant, SingleAlleleNucleotideVariant.makeSingleChangeVariant(
+		Assertions.assertEquals(singleAlleleVariant, SingleAlleleNucleotideVariant.makeSingleChangeVariant(
 			SequenceType.CODING_DNA, "REF", NucleotideSubstitution.build(false, 99, "A", "G")));
 	}
 
 	public void testStaticFactoryBuild() {
-		Assert.assertEquals(multiAlleleVariant, SingleAlleleNucleotideVariant.build(SequenceType.CODING_DNA, "REF",
+		Assertions.assertEquals(multiAlleleVariant, SingleAlleleNucleotideVariant.build(SequenceType.CODING_DNA, "REF",
 			VariantConfiguration.IN_CIS, NucleotideSubstitution.build(false, 99, "C", "T"),
 			NucleotideSubstitution.build(false, 300, "A", "G")));
 	}
 
 	@Test
 	public void testToHGVSStringSingleChange() {
-		Assert.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString());
+		Assertions.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("REF:c.[100A>G;301A>C]", singleAlleleVariant.toHGVSString());
 	}
 
 	@Test
 	public void testToHGVSStringMultiChange() {
-		Assert.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]",
+		Assertions.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]",
 			multiAlleleVariant.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]",
+		Assertions.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]",
 			multiAlleleVariant.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]", multiAlleleVariant.toHGVSString());
+		Assertions.assertEquals("REF:c.[100A>G;301A>C];[34T>C;301A>G]", multiAlleleVariant.toHGVSString());
 	}
 
 }

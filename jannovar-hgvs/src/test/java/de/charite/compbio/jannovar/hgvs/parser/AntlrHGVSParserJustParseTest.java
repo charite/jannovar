@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 // TODO(holtgrewe): Add support for "c.[83G=/83G>C]"
 

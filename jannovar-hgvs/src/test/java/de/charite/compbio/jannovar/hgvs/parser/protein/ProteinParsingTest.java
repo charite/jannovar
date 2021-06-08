@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser.protein;
 
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParsingTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Systematically test parsing of protein changes

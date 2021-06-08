@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class NucleotideRangeTest {
 
@@ -11,7 +11,7 @@ public class NucleotideRangeTest {
 	private NucleotidePointLocation firstLoc2;
 	private NucleotidePointLocation lastLoc;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		firstLoc = new NucleotidePointLocation(123, 0, false);
 		firstLoc2 = new NucleotidePointLocation(123, 0, false);
@@ -20,8 +20,8 @@ public class NucleotideRangeTest {
 
 	@Test
 	public void testEquals() {
-		Assert.assertEquals(firstLoc, firstLoc2);
-		Assert.assertNotEquals(lastLoc, firstLoc);
+		Assertions.assertEquals(firstLoc, firstLoc2);
+		Assertions.assertNotEquals(lastLoc, firstLoc);
 	}
 
 	/**
@@ -31,8 +31,8 @@ public class NucleotideRangeTest {
 	public void testToHGVSStringRange() {
 		NucleotideRange range = new NucleotideRange(firstLoc, lastLoc);
 
-		Assert.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 	}
 
 	/**
@@ -42,8 +42,8 @@ public class NucleotideRangeTest {
 	public void testToHGVSStringSinglePos() {
 		NucleotideRange range = new NucleotideRange(firstLoc, firstLoc2);
 
-		Assert.assertEquals("124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("124", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 
 	}
 

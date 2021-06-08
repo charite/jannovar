@@ -4,8 +4,8 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSLexer;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_stringContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test parsing of nucleotide strings.
@@ -18,14 +18,14 @@ public class HGVSParserNucleotideStringTest extends HGVSParserTestBase {
 	public void testWithDNA() {
 		Antlr4HGVSParser parser = buildParserForString("CGAT", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_stringContext nt_string = parser.nt_string();
-		Assert.assertEquals("(nt_string CGAT)", nt_string.toStringTree(parser));
+		Assertions.assertEquals("(nt_string CGAT)", nt_string.toStringTree(parser));
 	}
 
 	@Test
 	public void testWithRNA() {
 		Antlr4HGVSParser parser = buildParserForString("CGAU", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_stringContext nt_string = parser.nt_string();
-		Assert.assertEquals("(nt_string CGAU)", nt_string.toStringTree(parser));
+		Assertions.assertEquals("(nt_string CGAU)", nt_string.toStringTree(parser));
 	}
 
 }

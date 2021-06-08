@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.hgvs.parser;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import org.apache.logging.log4j.Level;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the HGVSParserDriver for parsing nucleotide delitions.
@@ -16,7 +16,7 @@ public class HGVSParserDriverNucleotideDeletionTest {
 
 	HGVSParser driver;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		driver = new HGVSParser(false);
 	}
@@ -32,8 +32,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 
@@ -45,8 +45,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 
@@ -59,8 +59,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 
@@ -73,8 +73,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
+			Assertions.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assertions.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}
 

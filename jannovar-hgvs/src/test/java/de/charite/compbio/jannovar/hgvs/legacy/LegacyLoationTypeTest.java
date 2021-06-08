@@ -1,22 +1,22 @@
 package de.charite.compbio.jannovar.hgvs.legacy;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LegacyLoationTypeTest {
 
 
 	@Test
 	public void testLegacyStringToLocationType() {
-		Assert.assertEquals(LegacyLocationType.EXONIC, LegacyLocationType.getTypeForLegacyString("E"));
-		Assert.assertEquals(LegacyLocationType.EXONIC, LegacyLocationType.getTypeForLegacyString("EX"));
-		Assert.assertEquals(LegacyLocationType.INTRONIC, LegacyLocationType.getTypeForLegacyString("IVS"));
+		Assertions.assertEquals(LegacyLocationType.EXONIC, LegacyLocationType.getTypeForLegacyString("E"));
+		Assertions.assertEquals(LegacyLocationType.EXONIC, LegacyLocationType.getTypeForLegacyString("EX"));
+		Assertions.assertEquals(LegacyLocationType.INTRONIC, LegacyLocationType.getTypeForLegacyString("IVS"));
 	}
 
 	@Test
 	public void testToLegacyString() {
-		Assert.assertEquals("EX", LegacyLocationType.EXONIC.getLegacyString());
-		Assert.assertEquals("IVS", LegacyLocationType.INTRONIC.getLegacyString());
+		Assertions.assertEquals("EX", LegacyLocationType.EXONIC.getLegacyString());
+		Assertions.assertEquals("IVS", LegacyLocationType.INTRONIC.getLegacyString());
 	}
 
 }

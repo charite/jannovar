@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Feeds valid change descriptions to the lexer to see whether this works at least.
