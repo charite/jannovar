@@ -2,11 +2,19 @@
 
 ## HEAD (unreleased)
 
+**Highlight: Pre-Built Databases**
+
+We now provide pre-built databases via Zenodo.
+This addresses various issues that were caused by changing upstream data URLs.
+See `README.md` for details.
+
 ### overall
 
 * Switching to Github Workflows for continuous integration.
 * Bumping a couple of dependencies.
 * Switching to JUNIT 5.
+* Pre-built databases are now available via Zenodo (see `README.md` for instructions).
+  We provide shell scripts instead of using Java programs for downloading the files.
 
 ### jannovar-core
 
