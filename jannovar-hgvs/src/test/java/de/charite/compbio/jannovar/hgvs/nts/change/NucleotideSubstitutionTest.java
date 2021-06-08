@@ -1,16 +1,16 @@
 package de.charite.compbio.jannovar.hgvs.nts.change;
 
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class NucleotideSubstitutionTest {
 
 	private NucleotideSubstitution subWithOffset;
 	private NucleotideSubstitution subWithoutOffset;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		subWithOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 1, false), "A", "T");
 		subWithoutOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 0, false), "A", "T");
@@ -18,22 +18,22 @@ public class NucleotideSubstitutionTest {
 
 	@Test
 	public void testBuildWithOffset() {
-		Assert.assertEquals(subWithOffset, NucleotideSubstitution.buildWithOffset(true, 10, 1, "A", "T"));
+		Assertions.assertEquals(subWithOffset, NucleotideSubstitution.buildWithOffset(true, 10, 1, "A", "T"));
 	}
 
 	@Test
 	public void testBuildWithoutOffset() {
-		Assert.assertEquals(subWithoutOffset, NucleotideSubstitution.buildWithOffset(true, 10, 0, "A", "T"));
+		Assertions.assertEquals(subWithoutOffset, NucleotideSubstitution.buildWithOffset(true, 10, 0, "A", "T"));
 	}
 
 	@Test
 	public void testToStringWithOffset() {
-		Assert.assertEquals("(11+1A>T)", subWithOffset.toHGVSString());
+		Assertions.assertEquals("(11+1A>T)", subWithOffset.toHGVSString());
 	}
 
 	@Test
 	public void testToStringWithoutOffset() {
-		Assert.assertEquals("(11A>T)", subWithoutOffset.toHGVSString());
+		Assertions.assertEquals("(11A>T)", subWithoutOffset.toHGVSString());
 	}
 
 }

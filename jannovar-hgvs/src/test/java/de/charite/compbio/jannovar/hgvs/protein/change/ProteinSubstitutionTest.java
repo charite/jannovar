@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ProteinSubstitutionTest {
 
@@ -12,7 +12,7 @@ public class ProteinSubstitutionTest {
 	private ProteinSubstitution sub2;
 	private ProteinSubstitution sub3;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		sub1 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123, 0, false), "G");
 		sub2 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123, 0, false), "G");
@@ -21,21 +21,21 @@ public class ProteinSubstitutionTest {
 
 	@Test
 	public void testEquals() {
-		Assert.assertTrue(sub1.equals(sub2));
-		Assert.assertTrue(sub2.equals(sub1));
-		Assert.assertFalse(sub1.equals(sub3));
-		Assert.assertFalse(sub3.equals(sub1));
+		Assertions.assertTrue(sub1.equals(sub2));
+		Assertions.assertTrue(sub2.equals(sub1));
+		Assertions.assertFalse(sub1.equals(sub3));
+		Assertions.assertFalse(sub3.equals(sub1));
 	}
 
 	@Test
 	public void testToHGVSString() {
-		Assert.assertEquals("(A124G)", sub1.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("(Ala124Gly)", sub1.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("(A124G)", sub1.toHGVSString());
+		Assertions.assertEquals("(A124G)", sub1.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("(Ala124Gly)", sub1.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("(A124G)", sub1.toHGVSString());
 	}
 
 	@Test
 	public void testFactoryMethod() {
-		Assert.assertEquals(sub1, ProteinSubstitution.build(true, "A", 123, "G"));
+		Assertions.assertEquals(sub1, ProteinSubstitution.build(true, "A", 123, "G"));
 	}
 }

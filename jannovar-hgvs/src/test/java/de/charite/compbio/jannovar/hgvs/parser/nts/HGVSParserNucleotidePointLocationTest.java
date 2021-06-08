@@ -4,8 +4,8 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSLexer;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_point_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for parsing nucleotide point locations
@@ -18,28 +18,28 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testPositiveNumberAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("123", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location (nt_number 123)))", loc.toStringTree(parser));
+		Assertions.assertEquals("(nt_point_location (nt_base_location (nt_number 123)))", loc.toStringTree(parser));
 	}
 
 	@Test
 	public void testUpstreamNumberAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("-123", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)))", loc.toStringTree(parser));
+		Assertions.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)))", loc.toStringTree(parser));
 	}
 
 	@Test
 	public void testDownstreamPositionAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("*123", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)))", loc.toStringTree(parser));
+		Assertions.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)))", loc.toStringTree(parser));
 	}
 
 	@Test
 	public void testPositiveNumberWithPositiveOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("123+4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location (nt_number 123)) (nt_offset + (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location (nt_number 123)) (nt_offset + (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 
@@ -47,7 +47,7 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testPositiveNumberWithNegativeOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("123-4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location (nt_number 123)) (nt_offset - (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location (nt_number 123)) (nt_offset - (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 
@@ -55,7 +55,7 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testUpstreamPositionWithPositiveOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("-123+4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)) (nt_offset + (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)) (nt_offset + (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 
@@ -63,7 +63,7 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testUpstreamPositionWithNegativeOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("-123-4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)) (nt_offset - (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location - (nt_number 123)) (nt_offset - (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 
@@ -71,7 +71,7 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testDownstreamPositionWithPositiveOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("*123+4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)) (nt_offset + (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)) (nt_offset + (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 
@@ -79,7 +79,7 @@ public class HGVSParserNucleotidePointLocationTest extends HGVSParserTestBase {
 	public void testDownstreamPositionWithNegativeOffsetAsPointLocation() {
 		Antlr4HGVSParser parser = buildParserForString("*123-4", Antlr4HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_point_locationContext loc = parser.nt_point_location();
-		Assert.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)) (nt_offset - (nt_number 4)))",
+		Assertions.assertEquals("(nt_point_location (nt_base_location * (nt_number 123)) (nt_offset - (nt_number 4)))",
 			loc.toStringTree(parser));
 	}
 

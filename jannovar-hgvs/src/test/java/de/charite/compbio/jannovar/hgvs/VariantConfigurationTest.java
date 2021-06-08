@@ -1,33 +1,33 @@
 package de.charite.compbio.jannovar.hgvs;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class VariantConfigurationTest {
 
 	@Test
 	public void testChimericToHVSSeparator() {
-		Assert.assertEquals("//", VariantConfiguration.CHIMERIC.toHGVSSeparator());
+		Assertions.assertEquals("//", VariantConfiguration.CHIMERIC.toHGVSSeparator());
 	}
 
 	@Test
 	public void testMosaicToHVSSeparator() {
-		Assert.assertEquals("/", VariantConfiguration.MOSAIC.toHGVSSeparator());
+		Assertions.assertEquals("/", VariantConfiguration.MOSAIC.toHGVSSeparator());
 	}
 
 	@Test
 	public void testInCisToHVSSeparator() {
-		Assert.assertEquals(";", VariantConfiguration.IN_CIS.toHGVSSeparator());
+		Assertions.assertEquals(";", VariantConfiguration.IN_CIS.toHGVSSeparator());
 	}
 
 	@Test
 	public void testUnknownCisTransToHVSSeparator() {
-		Assert.assertEquals("(;)", VariantConfiguration.UNKNOWN_CIS_TRANS.toHGVSSeparator());
+		Assertions.assertEquals("(;)", VariantConfiguration.UNKNOWN_CIS_TRANS.toHGVSSeparator());
 	}
 
 	@Test
 	public void testSingleOriginToHVSSeparator() {
-		Assert.assertEquals(",", VariantConfiguration.SINGLE_ORIGIN.toHGVSSeparator());
+		Assertions.assertEquals(",", VariantConfiguration.SINGLE_ORIGIN.toHGVSSeparator());
 	}
 
 }

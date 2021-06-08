@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ProteinExtensionTest {
 
@@ -12,7 +12,7 @@ public class ProteinExtensionTest {
 	private ProteinExtension normalExtension;
 	private ProteinExtension noTerExtension;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		position = new ProteinPointLocation("A", 123, 0, false);
 		normalExtension = new ProteinExtension(false, position, "T", 23);
@@ -21,26 +21,26 @@ public class ProteinExtensionTest {
 
 	@Test
 	public void testBuildNormalExtension() {
-		Assert.assertEquals(normalExtension, ProteinExtension.build(false, position, "T", 23));
+		Assertions.assertEquals(normalExtension, ProteinExtension.build(false, position, "T", 23));
 	}
 
 	@Test
 	public void testBuildNoTerExtension() {
-		Assert.assertEquals(noTerExtension, ProteinExtension.buildWithoutTerminal(false, position, "T"));
+		Assertions.assertEquals(noTerExtension, ProteinExtension.buildWithoutTerminal(false, position, "T"));
 	}
 
 	@Test
 	public void testNormalExtensionToHGVSString() {
-		Assert.assertEquals("A124Text*23", normalExtension.toHGVSString());
-		Assert.assertEquals("Ala124Thrext*23", normalExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("A124Text*23", normalExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("A124Text*23", normalExtension.toHGVSString());
+		Assertions.assertEquals("Ala124Thrext*23", normalExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("A124Text*23", normalExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testNoTerExtensionToHGVSString() {
-		Assert.assertEquals("A124Text*?", noTerExtension.toHGVSString());
-		Assert.assertEquals("Ala124Thrext*?", noTerExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("A124Text*?", noTerExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("A124Text*?", noTerExtension.toHGVSString());
+		Assertions.assertEquals("Ala124Thrext*?", noTerExtension.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("A124Text*?", noTerExtension.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 }

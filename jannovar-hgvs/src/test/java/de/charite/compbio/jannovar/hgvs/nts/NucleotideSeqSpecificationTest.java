@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.hgvs.nts;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class NucleotideSeqSpecificationTest {
 
@@ -10,39 +10,39 @@ public class NucleotideSeqSpecificationTest {
 	public void testConstructWithCount() {
 		NucleotideSeqDescription spec = new NucleotideSeqDescription(4);
 
-		Assert.assertEquals(null, spec.getNucleotides());
-		Assert.assertEquals(4, spec.length());
-		Assert.assertFalse(spec.isBlank());
+		Assertions.assertEquals(null, spec.getNucleotides());
+		Assertions.assertEquals(4, spec.length());
+		Assertions.assertFalse(spec.isBlank());
 
-		Assert.assertEquals("4", spec.toHGVSString());
-		Assert.assertEquals("4", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("4", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("4", spec.toHGVSString());
+		Assertions.assertEquals("4", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("4", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testConstructWithAASeq() {
 		NucleotideSeqDescription spec = new NucleotideSeqDescription("ACGT");
 
-		Assert.assertEquals("ACGT", spec.getNucleotides());
-		Assert.assertEquals(4, spec.length());
-		Assert.assertFalse(spec.isBlank());
+		Assertions.assertEquals("ACGT", spec.getNucleotides());
+		Assertions.assertEquals(4, spec.length());
+		Assertions.assertFalse(spec.isBlank());
 
-		Assert.assertEquals("ACGT", spec.toHGVSString());
-		Assert.assertEquals("ACGT", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("ACGT", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("ACGT", spec.toHGVSString());
+		Assertions.assertEquals("ACGT", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("ACGT", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testConstructBlank() {
 		NucleotideSeqDescription spec = new NucleotideSeqDescription();
 
-		Assert.assertEquals(null, spec.getNucleotides());
-		Assert.assertEquals(-1, spec.length());
-		Assert.assertTrue(spec.isBlank());
+		Assertions.assertEquals(null, spec.getNucleotides());
+		Assertions.assertEquals(-1, spec.length());
+		Assertions.assertTrue(spec.isBlank());
 
-		Assert.assertEquals("", spec.toHGVSString());
-		Assert.assertEquals("", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assertions.assertEquals("", spec.toHGVSString());
+		Assertions.assertEquals("", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals("", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 }
