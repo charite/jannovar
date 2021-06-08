@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.filter.impl.gt;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for GenotypeFilterAnnotator augmenting of Genotypes
@@ -18,7 +18,7 @@ public class GenotypeFilterAnnotatorAugmentGenotypeTest extends GenotypeFilterTe
 
 	GenotypeFilterAnnotator annotator;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		annotator = new GenotypeFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
 	}
@@ -30,7 +30,7 @@ public class GenotypeFilterAnnotatorAugmentGenotypeTest extends GenotypeFilterTe
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals("[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]",
+		Assertions.assertEquals("[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]",
 			annotator.gtWithAppliedFilters(gt).toString());
 	}
 

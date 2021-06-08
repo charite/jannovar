@@ -5,9 +5,9 @@ import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for GenotypeFilterAnnotator
@@ -18,7 +18,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 
 	GenotypeFilterAnnotator annotator;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		annotator = new GenotypeFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
 	}
@@ -31,7 +31,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -43,7 +43,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_GQ),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -55,7 +55,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -67,7 +67,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HET),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -79,7 +79,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HET),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -91,7 +91,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_COV_HOM_ALT),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -103,7 +103,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT),
 			annotator.getFiltersFor(gt));
 	}
 
@@ -115,7 +115,7 @@ public class GenotypeFilterAnnotatorFreebayesTest extends GenotypeFilterTestBase
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF),
+		Assertions.assertEquals(ImmutableList.of(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF),
 			annotator.getFiltersFor(gt));
 	}
 
