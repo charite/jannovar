@@ -240,7 +240,7 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 			final ParserRuleContext singleton = ctx.nt_number(0) != null ? ctx.nt_number(0)
 				: ctx.nt_string(0);
 			final int singletonStart = singleton.getSourceInterval().a;
-			final int insStart = ctx.NT_DEL().getSourceInterval().a;
+			final int insStart = ctx.NT_INS().getSourceInterval().a;
 			if (singletonStart < insStart) {
 				hasOnlyDelBases = true;
 			} else {
