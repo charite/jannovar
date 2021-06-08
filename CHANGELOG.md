@@ -29,6 +29,7 @@
 ### jannovar-hgvs
 
 * Fixing parsing of unchanged (`=`) for nucleic acide sequences (#493).
+* Fixing issue with HGVS `delins` with `del` bases but no `ins` bases (#491).
 
 ## v0.34
 
