@@ -21,4 +21,13 @@ public class NucleotideParsingTest extends HGVSParsingTestBase {
 				parseString(PREFIX + t + s);
 	}
 
+	@Test
+	public void testNucleotideSingleVarUnchanged() {
+		String[] types = {"c.", "m.", "n.", "g.", "r."};
+		String[] changes = {"76A=", "67_76="};
+		for (String t : types)
+			for (String s : changes)
+				parseString(PREFIX + t + s);
+	}
+
 }

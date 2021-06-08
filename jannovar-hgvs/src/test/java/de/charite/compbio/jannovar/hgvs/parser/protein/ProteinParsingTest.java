@@ -70,6 +70,13 @@ public class ProteinParsingTest extends HGVSParsingTestBase {
 	}
 
 	@Test
+	public void testProteinUnchanged() {
+		String[] arr = {"p.G33=", "p.Arg97_Cys100="};
+		for (String s : arr)
+			parseString(PREFIX + s);
+	}
+
+	@Test
 	public void testProteinSingleLongFrameShift() {
 		String[] arr = {"p.Arg97Profs*23", "p.A97Pfs*23"};
 		for (String s : arr)

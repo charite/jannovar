@@ -26,6 +26,10 @@
   The deprecated classes are due to be removed in v0.36.
 * Adding modules for importing VCF files into H2 database files, listing the meta data conents, and annotating VCF files.
 
+### jannovar-hgvs
+
+* Fixing parsing of unchanged (`=`) for nucleic acide sequences (#493).
+
 ## v0.34
 
 ### jannovar-cli
