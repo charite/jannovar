@@ -1,12 +1,12 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DBSNPInfoTest {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -16,11 +16,11 @@ public class DBSNPInfoTest {
 
 		DBSNPInfo info = new DBSNPInfo("date", "source", 123, "ref", "phasing");
 
-		Assert.assertEquals("date", info.getFileDate());
-		Assert.assertEquals("source", info.getSource());
-		Assert.assertEquals(123, info.getDbSNPBuildID());
-		Assert.assertEquals("ref", info.getReference());
-		Assert.assertEquals("phasing", info.getPhasing());
+		Assertions.assertEquals("date", info.getFileDate());
+		Assertions.assertEquals("source", info.getSource());
+		Assertions.assertEquals(123, info.getDbSNPBuildID());
+		Assertions.assertEquals("ref", info.getReference());
+		Assertions.assertEquals("phasing", info.getPhasing());
 	}
 
 }

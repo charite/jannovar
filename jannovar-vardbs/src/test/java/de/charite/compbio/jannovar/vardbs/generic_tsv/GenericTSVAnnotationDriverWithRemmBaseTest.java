@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions.MultipleMatchBehaviour;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -27,7 +27,7 @@ public class GenericTSVAnnotationDriverWithRemmBaseTest {
 	// File to annotate
 	protected VCFFileReader vcfReader;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		// Setup dbSNP VCF file
 		File tmpDir = Files.createTempDir();

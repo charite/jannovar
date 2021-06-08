@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -34,7 +34,7 @@ public class AlleleMatcherTest {
 	// VCF record read from vcfMultiple
 	static VariantContext vcMultiple;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		// Write out FASTA file with FAI such that we can read it
 		File tmpDir = Files.createTempDir();
@@ -76,12 +76,12 @@ public class AlleleMatcherTest {
 		AlleleMatcher matcher = new AlleleMatcher(fastaPath);
 		Collection<GenotypeMatch> matches = matcher.matchGenotypes(vcSingle, vcSingle);
 
-		assertEquals(1, matches.size());
+		Assertions.assertEquals(1, matches.size());
 		GenotypeMatch first = (GenotypeMatch) matches.toArray()[0];
-		Assert.assertSame(vcSingle, first.getObsVC());
-		Assert.assertSame(vcSingle, first.getDBVC());
-		Assert.assertEquals(1, first.getObservedAllele());
-		Assert.assertEquals(1, first.getDbAllele());
+		Assertions.assertSame(vcSingle, first.getObsVC());
+		Assertions.assertSame(vcSingle, first.getDBVC());
+		Assertions.assertEquals(1, first.getObservedAllele());
+		Assertions.assertEquals(1, first.getDbAllele());
 	}
 
 	/**
@@ -92,12 +92,12 @@ public class AlleleMatcherTest {
 		AlleleMatcher matcher = new AlleleMatcher(fastaPath);
 		Collection<GenotypeMatch> matches = matcher.matchGenotypes(vcSingle, vcMultiple);
 
-		assertEquals(1, matches.size());
+		Assertions.assertEquals(1, matches.size());
 		GenotypeMatch first = (GenotypeMatch) matches.toArray()[0];
-		Assert.assertSame(vcSingle, first.getObsVC());
-		Assert.assertSame(vcMultiple, first.getDBVC());
-		Assert.assertEquals(1, first.getObservedAllele());
-		Assert.assertEquals(2, first.getDbAllele());
+		Assertions.assertSame(vcSingle, first.getObsVC());
+		Assertions.assertSame(vcMultiple, first.getDBVC());
+		Assertions.assertEquals(1, first.getObservedAllele());
+		Assertions.assertEquals(2, first.getDbAllele());
 	}
 
 	/**
@@ -108,12 +108,12 @@ public class AlleleMatcherTest {
 		AlleleMatcher matcher = new AlleleMatcher(fastaPath);
 		Collection<GenotypeMatch> matches = matcher.matchGenotypes(vcMultiple, vcSingle);
 
-		assertEquals(1, matches.size());
+		Assertions.assertEquals(1, matches.size());
 		GenotypeMatch first = (GenotypeMatch) matches.toArray()[0];
-		Assert.assertSame(vcMultiple, first.getObsVC());
-		Assert.assertSame(vcSingle, first.getDBVC());
-		Assert.assertEquals(2, first.getObservedAllele());
-		Assert.assertEquals(1, first.getDbAllele());
+		Assertions.assertSame(vcMultiple, first.getObsVC());
+		Assertions.assertSame(vcSingle, first.getDBVC());
+		Assertions.assertEquals(2, first.getObservedAllele());
+		Assertions.assertEquals(1, first.getDbAllele());
 	}
 
 	/**
@@ -124,17 +124,17 @@ public class AlleleMatcherTest {
 		AlleleMatcher matcher = new AlleleMatcher(fastaPath);
 		Collection<GenotypeMatch> matches = matcher.matchGenotypes(vcMultiple, vcMultiple);
 
-		assertEquals(2, matches.size());
+		Assertions.assertEquals(2, matches.size());
 		GenotypeMatch first = (GenotypeMatch) matches.toArray()[0];
-		Assert.assertSame(vcMultiple, first.getObsVC());
-		Assert.assertSame(vcMultiple, first.getDBVC());
-		Assert.assertEquals(1, first.getObservedAllele());
-		Assert.assertEquals(1, first.getDbAllele());
+		Assertions.assertSame(vcMultiple, first.getObsVC());
+		Assertions.assertSame(vcMultiple, first.getDBVC());
+		Assertions.assertEquals(1, first.getObservedAllele());
+		Assertions.assertEquals(1, first.getDbAllele());
 		GenotypeMatch second = (GenotypeMatch) matches.toArray()[1];
-		Assert.assertSame(vcMultiple, second.getObsVC());
-		Assert.assertSame(vcMultiple, second.getDBVC());
-		Assert.assertEquals(2, second.getObservedAllele());
-		Assert.assertEquals(2, second.getDbAllele());
+		Assertions.assertSame(vcMultiple, second.getObsVC());
+		Assertions.assertSame(vcMultiple, second.getDBVC());
+		Assertions.assertEquals(2, second.getObservedAllele());
+		Assertions.assertEquals(2, second.getDbAllele());
 	}
 
 }

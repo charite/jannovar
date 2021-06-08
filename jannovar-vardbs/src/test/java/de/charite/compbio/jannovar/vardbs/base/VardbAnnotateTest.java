@@ -5,15 +5,15 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VardbAnnotateTest {
 
@@ -22,7 +22,7 @@ public class VardbAnnotateTest {
 	protected Connection conn;
 	protected String inputVcfPath;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws SQLException {
 		tmpDir = Files.createTempDir();
 
@@ -63,7 +63,7 @@ public class VardbAnnotateTest {
 		VCFFileReader vcfReader = new VCFFileReader(new File(outputVcfPath), false);
 		VariantContext vc = null;
 		for (VariantContext record : vcfReader) {
-			assertEquals("There should only be one record in the output file", null, vc);
+			assertEquals(null, vc, "There should only be one record in the output file");
 			vc = record;
 		}
 		assertNotEquals(null, vc);
@@ -96,7 +96,7 @@ public class VardbAnnotateTest {
 		VCFFileReader vcfReader = new VCFFileReader(new File(outputVcfPath), false);
 		VariantContext vc = null;
 		for (VariantContext record : vcfReader) {
-			assertEquals("There should only be one record in the output file", null, vc);
+			assertEquals(null, vc, "There should only be one record in the output file");
 			vc = record;
 		}
 		assertNotEquals(null, vc);
@@ -127,7 +127,7 @@ public class VardbAnnotateTest {
 		VCFFileReader vcfReader = new VCFFileReader(new File(outputVcfPath), false);
 		VariantContext vc = null;
 		for (VariantContext record : vcfReader) {
-			assertEquals("There should only be one record in the output file", null, vc);
+			assertEquals(null, vc, "There should only be one record in the output file");
 			vc = record;
 		}
 		assertNotEquals(null, vc);

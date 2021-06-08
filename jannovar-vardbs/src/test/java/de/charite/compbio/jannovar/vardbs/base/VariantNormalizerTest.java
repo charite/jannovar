@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.vardbs.base;
 
 import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ public class VariantNormalizerTest {
 	static String fastaPath;
 	static VariantNormalizer normalizer;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		fastaPath = tmpDir + "/braf.fasta";
@@ -28,10 +28,10 @@ public class VariantNormalizerTest {
 		VariantDescription descIn = new VariantDescription("braf", 19, "G", "C");
 		VariantDescription descOut = normalizer.normalizeVariant(descIn);
 
-		Assert.assertEquals("braf", descOut.getChrom());
-		Assert.assertEquals(19, descOut.getPos());
-		Assert.assertEquals("G", descOut.getRef());
-		Assert.assertEquals("C", descOut.getAlt());
+		Assertions.assertEquals("braf", descOut.getChrom());
+		Assertions.assertEquals(19, descOut.getPos());
+		Assertions.assertEquals("G", descOut.getRef());
+		Assertions.assertEquals("C", descOut.getAlt());
 	}
 
 	@Test
@@ -40,10 +40,10 @@ public class VariantNormalizerTest {
 		VariantDescription descIn = new VariantDescription("braf", 19, "G", "GCT");
 		VariantDescription descOut = normalizer.normalizeVariant(descIn);
 
-		Assert.assertEquals("braf", descOut.getChrom());
-		Assert.assertEquals(19, descOut.getPos());
-		Assert.assertEquals("", descOut.getRef());
-		Assert.assertEquals("CT", descOut.getAlt());
+		Assertions.assertEquals("braf", descOut.getChrom());
+		Assertions.assertEquals(19, descOut.getPos());
+		Assertions.assertEquals("", descOut.getRef());
+		Assertions.assertEquals("CT", descOut.getAlt());
 	}
 
 	@Test
@@ -52,10 +52,10 @@ public class VariantNormalizerTest {
 		VariantDescription descIn = new VariantDescription("braf", 180, "TGT", "T");
 		VariantDescription descOut = normalizer.normalizeVariant(descIn);
 
-		Assert.assertEquals("braf", descOut.getChrom());
-		Assert.assertEquals(175, descOut.getPos());
-		Assert.assertEquals("TG", descOut.getRef());
-		Assert.assertEquals("", descOut.getAlt());
+		Assertions.assertEquals("braf", descOut.getChrom());
+		Assertions.assertEquals(175, descOut.getPos());
+		Assertions.assertEquals("TG", descOut.getRef());
+		Assertions.assertEquals("", descOut.getAlt());
 	}
 
 	@Test
@@ -64,10 +64,10 @@ public class VariantNormalizerTest {
 		VariantDescription descIn = new VariantDescription("braf", 180, "T", "TGT");
 		VariantDescription descOut = normalizer.normalizeVariant(descIn);
 
-		Assert.assertEquals("braf", descOut.getChrom());
-		Assert.assertEquals(175, descOut.getPos());
-		Assert.assertEquals("", descOut.getRef());
-		Assert.assertEquals("TG", descOut.getAlt());
+		Assertions.assertEquals("braf", descOut.getChrom());
+		Assertions.assertEquals(175, descOut.getPos());
+		Assertions.assertEquals("", descOut.getRef());
+		Assertions.assertEquals("TG", descOut.getAlt());
 	}
 
 }

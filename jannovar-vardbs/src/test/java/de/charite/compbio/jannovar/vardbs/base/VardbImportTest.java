@@ -3,8 +3,8 @@ package de.charite.compbio.jannovar.vardbs.base;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ public class VardbImportTest {
 	protected String dbGnomadExomesPath;
 	protected Connection conn;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws SQLException {
 		File tmpDir = Files.createTempDir();
 

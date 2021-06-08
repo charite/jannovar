@@ -10,9 +10,9 @@ import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,7 +31,7 @@ public class DBVariantContextAnnotatorFactoryTest {
 	VCFFileReader vcfReader;
 	ByteArrayOutputStream outStream;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		File tmpDir = Files.createTempDir();
 		pathDBVCF = tmpDir + "/dbsnp.vcf.gz";
@@ -73,7 +73,7 @@ public class DBVariantContextAnnotatorFactoryTest {
 		for (VariantContext vc : vcfReader)
 			writer.add(annotator.annotateVariantContext(vc));
 
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"##fileformat=VCFv4.2\n"
 				+ "##INFO=<ID=CAF,Number=R,Type=Float,Description=\"Allele frequencies from dbSNP. "
 				+ "Original description: An ordered, comma delimited list of allele frequencies based "

@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ public class DBSNPVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/dbsnp.vcf.gz";
@@ -32,7 +32,7 @@ public class DBSNPVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		DBSNPRecord record = converter.convert(vc);
-		Assert.assertEquals("DBSNPRecord [chrom=1, pos=10018, id=rs775809821, ref=TA, alt=[T], "
+		Assertions.assertEquals("DBSNPRecord [chrom=1, pos=10018, id=rs775809821, ref=TA, alt=[T], "
 			+ "filter=[], rsID=775809821, rsPos=10020, reversed=false, "
 			+ "variantProperty=null, geneInfos=[DBSNPGeneInfo [symbol=DDX11L1, id=100287102]], "
 			+ "dbSNPBuildID=144, variantAlleleOrigin=UNSPECIFIED, "

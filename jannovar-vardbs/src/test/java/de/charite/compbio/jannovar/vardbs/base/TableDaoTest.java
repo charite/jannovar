@@ -1,28 +1,29 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
 import com.google.common.collect.Lists;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 import static org.junit.Assert.assertEquals;
 
 public class TableDaoTest {
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+	@TempDir
+	public File folder;
 
 	public String dbPath;
 	public Connection conn;
 	private TableDao tableDao;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
-		this.dbPath = folder.getRoot() + "/test";
+		this.dbPath = new File(folder, "testdb").toString();
 		this.conn = DriverManager.getConnection(
 			"jdbc:h2:"
 				+ this.dbPath
@@ -32,7 +33,7 @@ public class TableDaoTest {
 		this.tableDao = new TableDao(this.conn);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
 		this.conn.close();
 	}
@@ -59,7 +60,7 @@ public class TableDaoTest {
 		this.tableDao.createTable(table);
 
 		final Table tableDb = this.tableDao.getTable(table.getName());
-		assertEquals(table.toString(), tableDb.toString());
+		Assertions.assertEquals(table.toString(), tableDb.toString());
 	}
 
 	@Test
@@ -87,14 +88,14 @@ public class TableDaoTest {
 		this.tableDao.updateTable(table2);
 
 		final Table tableDb = this.tableDao.getTable(table.getName());
-		assertEquals(table2.toString(), tableDb.toString());
+		Assertions.assertEquals(table2.toString(), tableDb.toString());
 	}
 
 	@Test
 	public void testGetAllTables() throws Exception {
 		this.tableDao.initializeDatabase();
 
-		assertEquals("[]", this.tableDao.getAllTables().toString());
+		Assertions.assertEquals("[]", this.tableDao.getAllTables().toString());
 
 		final Table table = new Table(
 			"name",
@@ -107,7 +108,7 @@ public class TableDaoTest {
 		);
 		this.tableDao.createTable(table);
 
-		assertEquals(
+		Assertions.assertEquals(
 			"[Table{name='name', dbName='db_name', dbVersion='db_version', defaultPrefix='PREFIX', fields=[" +
 			"TableField{name='field1', type='Integer', count='1', description='Some description'}]}]",
 			this.tableDao.getAllTables().toString()

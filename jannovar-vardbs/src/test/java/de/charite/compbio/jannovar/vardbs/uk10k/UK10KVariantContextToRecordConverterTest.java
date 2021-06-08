@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ public class UK10KVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/uk10k.vcf.gz";
@@ -32,7 +32,7 @@ public class UK10KVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		UK10KRecord record = converter.convert(vc);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"UK10KRecord [chrom=1, pos=28589, id=., ref=T, alt=[TTGG], filter=[], "
 				+ "altAlleleCounts=[7226], chromCount=7562, altAlleleFrequencies=[0.9555673102353874]]",
 			record.toString());

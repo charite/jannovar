@@ -1,16 +1,8 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
 import com.google.common.collect.Lists;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TableTest {
 	@Test
@@ -25,7 +17,7 @@ public class TableTest {
 			)
 		);
 
-		assertEquals(
+		Assertions.assertEquals(
 			"Table{name='name', dbName='db_name', dbVersion='db_version', defaultPrefix='PREFIX', " +
 				"fields=[TableField{name='field1', type='Integer', count='1', description='Some description'}]}",
 			table.toString()

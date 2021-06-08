@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Collections;
  */
 public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends CosmicAnnotationDriverBaseTest {
 
-	@Before
+	@BeforeEach
 	public void setUpClass() throws Exception {
 		super.setUpClass();
 		options.setReportOverlapping(true);
@@ -33,24 +33,24 @@ public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends Cosmi
 		VCFHeader header = vcfReader.getFileHeader();
 
 		// Check header before extension
-		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(0, header.getInfoHeaderLines().size());
-		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(0, header.getIDHeaderLines().size());
-		Assert.assertEquals(0, header.getOtherHeaderLines().size());
+		Assertions.assertEquals(0, header.getFilterLines().size());
+		Assertions.assertEquals(0, header.getInfoHeaderLines().size());
+		Assertions.assertEquals(0, header.getFormatHeaderLines().size());
+		Assertions.assertEquals(0, header.getIDHeaderLines().size());
+		Assertions.assertEquals(0, header.getOtherHeaderLines().size());
 
 		driver.constructVCFHeaderExtender().addHeaders(header);
 
 		// Check header after extension
-		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(3, header.getInfoHeaderLines().size());
-		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(3, header.getIDHeaderLines().size());
-		Assert.assertEquals(0, header.getOtherHeaderLines().size());
+		Assertions.assertEquals(0, header.getFilterLines().size());
+		Assertions.assertEquals(3, header.getInfoHeaderLines().size());
+		Assertions.assertEquals(0, header.getFormatHeaderLines().size());
+		Assertions.assertEquals(3, header.getIDHeaderLines().size());
+		Assertions.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_CNT"));
-		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_SNP"));
-		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_IDS"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("COSMIC_CNT"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("COSMIC_SNP"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("COSMIC_IDS"));
 	}
 
 	@Test
@@ -58,22 +58,22 @@ public class CosmicAnnotationDriverReportOverlappingAsMatchingTest extends Cosmi
 		CosmicAnnotationDriver driver = new CosmicAnnotationDriver(cosmicVCFPath, fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 
-		Assert.assertEquals(0, vc.getAttributes().size());
-		Assert.assertEquals(".", vc.getID());
+		Assertions.assertEquals(0, vc.getAttributes().size());
+		Assertions.assertEquals(".", vc.getID());
 
 		VariantContext annotated = driver.annotateVariantContext(vc);
 
-		Assert.assertEquals("COSM814119", annotated.getID());
+		Assertions.assertEquals("COSM814119", annotated.getID());
 
-		Assert.assertEquals(3, annotated.getAttributes().size());
+		Assertions.assertEquals(3, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[CNT, IDS, SNP]", keys.toString());
+		Assertions.assertEquals("[CNT, IDS, SNP]", keys.toString());
 
-		Assert.assertEquals("34", annotated.getAttributeAsString("CNT", null));
-		Assert.assertEquals("[COSM814119, COSM814119, COSM814119]",
+		Assertions.assertEquals("34", annotated.getAttributeAsString("CNT", null));
+		Assertions.assertEquals("[COSM814119, COSM814119, COSM814119]",
 			annotated.getAttributeAsString("IDS", null));
-		Assert.assertEquals("true", annotated.getAttributeAsString("SNP", "false"));
+		Assertions.assertEquals("true", annotated.getAttributeAsString("SNP", "false"));
 	}
 
 }
