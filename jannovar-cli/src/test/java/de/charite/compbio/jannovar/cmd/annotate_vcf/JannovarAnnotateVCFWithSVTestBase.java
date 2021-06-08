@@ -8,8 +8,8 @@ import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.testutils.ResourceUtils;
-import org.junit.BeforeClass;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class JannovarAnnotateVCFWithSVTestBase {
 	/**
 	 * Path to .ser file.
 	 */
-	static String dbPath;
+	static File dbPath;
 
 	/**
 	 * The {@link JannovarData} to load the test data into.
@@ -40,13 +40,14 @@ public class JannovarAnnotateVCFWithSVTestBase {
 	/**
 	 * Temporary directory to use
 	 */
-	static TemporaryFolder tmpFolder;
+	@TempDir
+	static File tmpFolder;
 
 	/**
 	 * Create a new VCF path using the header from the given file name and return the path to the output VCF file.
 	 */
 	public static String createTempVcfWithLine(String pathHeaderVcf, String vcfLine) throws Exception {
-		final String tmpPath = tmpFolder.newFolder() + "/test_file.vcf";
+		final String tmpPath = new File(tmpFolder, "test_file.vcf").toString();
 		ResourceUtils.copyResourceToFile(pathHeaderVcf, new File(tmpPath));
 		try (FileWriter fw = new FileWriter(new File(tmpPath), true);
 			 BufferedWriter bw = new BufferedWriter(fw);
@@ -59,13 +60,11 @@ public class JannovarAnnotateVCFWithSVTestBase {
 	/**
 	 * Copy out .ser file to temporary directory for tests and load.
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
-		tmpFolder = new TemporaryFolder();
-		tmpFolder.create();
-		dbPath = tmpFolder.newFolder() + "/chr1_oma1_to_jun.ser";
-		ResourceUtils.copyResourceToFile("/chr1_oma1_to_jun.ser", new File(dbPath));
-		jvData = new JannovarDataSerializer(dbPath).load();
+		dbPath = new File(tmpFolder,  "chr1_oma1_to_jun.ser");
+		ResourceUtils.copyResourceToFile("/chr1_oma1_to_jun.ser", dbPath);
+		jvData = new JannovarDataSerializer(dbPath.toString()).load();
 
 		oma1 = jvData.getTmByAccession().get("NM_145243.3");
 //		jun = jvData.getTmByAccession().get("NM_002228.3");
@@ -91,9 +90,8 @@ public class JannovarAnnotateVCFWithSVTestBase {
 	protected String runJannovarOnVCFLine(String pathHeader, String vcfLine) throws Exception {
 		final String tmpVcfFile = createTempVcfWithLine(pathHeader, vcfLine);
 
-		final File outFolder = tmpFolder.newFolder();
-		final String outPath = outFolder.toString() + "/output.jv.vcf";
-		String[] argv = new String[]{"annotate-vcf", "-o", outPath, "-d", dbPath, "-i", tmpVcfFile};
+		final String outPath = new File(tmpFolder, "output.jv.vcf").toString();
+		String[] argv = new String[]{"annotate-vcf", "-o", outPath, "-d", dbPath.toString(), "-i", tmpVcfFile};
 		System.err.println(Joiner.on(" ").join(argv));
 
 		Jannovar.main(argv);

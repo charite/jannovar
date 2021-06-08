@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JannovarAnnotateSVMultiGeneVCFTest extends JannovarAnnotateVCFWithSVTestBase {
 
@@ -17,7 +17,7 @@ public class JannovarAnnotateSVMultiGeneVCFTest extends JannovarAnnotateVCFWithS
 			"|,transcript_ablation&coding_transcript_variant|HIGH|JUN|3725|transcript|NM_002228.3|Coding|;" +
 			"SVTYPE=DEL";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }
