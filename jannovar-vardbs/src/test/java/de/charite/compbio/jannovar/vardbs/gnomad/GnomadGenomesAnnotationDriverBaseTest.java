@@ -17,7 +17,7 @@ public class GnomadGenomesAnnotationDriverBaseTest {
 	protected DBAnnotationOptions options;
 
 	@Before
-	public void setUpClass() throws Exception {
+	public void setUp() throws Exception {
 		options = DBAnnotationOptions.createDefaults();
 
 		File tmpDir = Files.createTempDir();

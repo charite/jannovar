@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.vardbs.dbsnp;
 import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ public class DBSNPInfoFactoryTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/dbsnp.vcf.gz";
@@ -30,11 +30,11 @@ public class DBSNPInfoFactoryTest {
 		DBSNPInfoFactory factory = new DBSNPInfoFactory();
 		DBSNPInfo info = factory.build(vcfReader.getFileHeader());
 
-		Assert.assertEquals("20160408", info.getFileDate());
-		Assert.assertEquals("dbSNP", info.getSource());
-		Assert.assertEquals(147, info.getDbSNPBuildID());
-		Assert.assertEquals("GRCh37.p13", info.getReference());
-		Assert.assertEquals("partial", info.getPhasing());
+		Assertions.assertEquals("20160408", info.getFileDate());
+		Assertions.assertEquals("dbSNP", info.getSource());
+		Assertions.assertEquals(147, info.getDbSNPBuildID());
+		Assertions.assertEquals("GRCh37.p13", info.getReference());
+		Assertions.assertEquals("partial", info.getPhasing());
 	}
 
 }

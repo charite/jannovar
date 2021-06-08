@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Collections;
  */
 public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPAnnotationDriverBaseTest {
 
-	@Before
+	@BeforeEach
 	public void setUpClass() throws Exception {
 		super.setUpClass();
 		options.setReportOverlapping(false);
@@ -33,27 +33,27 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 		VCFHeader header = vcfReader.getFileHeader();
 
 		// Check header before extension
-		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(0, header.getInfoHeaderLines().size());
-		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(0, header.getIDHeaderLines().size());
-		Assert.assertEquals(0, header.getOtherHeaderLines().size());
+		Assertions.assertEquals(0, header.getFilterLines().size());
+		Assertions.assertEquals(0, header.getInfoHeaderLines().size());
+		Assertions.assertEquals(0, header.getFormatHeaderLines().size());
+		Assertions.assertEquals(0, header.getIDHeaderLines().size());
+		Assertions.assertEquals(0, header.getOtherHeaderLines().size());
 
 		driver.constructVCFHeaderExtender().addHeaders(header);
 
 		// Check header after extension
-		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(6, header.getInfoHeaderLines().size());
-		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(6, header.getIDHeaderLines().size());
-		Assert.assertEquals(0, header.getOtherHeaderLines().size());
+		Assertions.assertEquals(0, header.getFilterLines().size());
+		Assertions.assertEquals(6, header.getInfoHeaderLines().size());
+		Assertions.assertEquals(0, header.getFormatHeaderLines().size());
+		Assertions.assertEquals(6, header.getIDHeaderLines().size());
+		Assertions.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
+		Assertions.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
 	}
 
 	@Test
@@ -61,23 +61,23 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 		DBSNPAnnotationDriver driver = new DBSNPAnnotationDriver(dbSNPVCFPath, fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 
-		Assert.assertEquals(0, vc.getAttributes().size());
-		Assert.assertEquals(".", vc.getID());
+		Assertions.assertEquals(0, vc.getAttributes().size());
+		Assertions.assertEquals(".", vc.getID());
 
 		VariantContext annotated = driver.annotateVariantContext(vc);
 
-		Assert.assertEquals("rs540538026", annotated.getID());
+		Assertions.assertEquals("rs540538026", annotated.getID());
 
-		Assert.assertEquals(4, annotated.getAttributes().size());
+		Assertions.assertEquals(4, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[CAF, COMMON, G5, IDS]", keys.toString());
+		Assertions.assertEquals("[CAF, COMMON, G5, IDS]", keys.toString());
 
-		Assert.assertEquals("[0.97324, 0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
-		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
-		Assert.assertNull(annotated.getAttributeAsString("G5A", null));
-		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("COMMON", null));
-		Assert.assertEquals("[rs540538026, ., .]", annotated.getAttributeAsString("IDS", null));
+		Assertions.assertEquals("[0.97324, 0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
+		Assertions.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
+		Assertions.assertNull(annotated.getAttributeAsString("G5A", null));
+		Assertions.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("COMMON", null));
+		Assertions.assertEquals("[rs540538026, ., .]", annotated.getAttributeAsString("IDS", null));
 	}
 
 }

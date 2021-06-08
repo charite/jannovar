@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ public class ExacVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/exac.vcf.gz";
@@ -32,7 +32,7 @@ public class ExacVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		ExacRecord record = converter.convert(vc);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"ExacRecord [chrom=1, pos=13371, id=., ref=G, alt=[C], filter=[], "
 				+ "alleleCounts={AFR=[0], AMR=[0], EAS=[0], FIN=[0], NFE=[0], OTH=[0], SAS=[2], ALL=[2]}, "
 				+ "alleleHetCounts={AFR=[0], AMR=[0], EAS=[0], FIN=[0], NFE=[0], OTH=[0], SAS=[0], ALL=[0]}, "

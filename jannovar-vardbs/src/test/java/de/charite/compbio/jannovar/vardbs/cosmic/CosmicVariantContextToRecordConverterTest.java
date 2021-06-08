@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ public class CosmicVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/cosmic.vcf.gz";
@@ -32,7 +32,7 @@ public class CosmicVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		CosmicRecord record = converter.convert(vc);
-		Assert.assertEquals("CosmicRecord [chrom=1, pos=1230, id=COSM1231, ref=A, alt=[C], cnt=1, snp=false]", record.toString());
+		Assertions.assertEquals("CosmicRecord [chrom=1, pos=1230, id=COSM1231, ref=A, alt=[C], cnt=1, snp=false]", record.toString());
 	}
 
 }

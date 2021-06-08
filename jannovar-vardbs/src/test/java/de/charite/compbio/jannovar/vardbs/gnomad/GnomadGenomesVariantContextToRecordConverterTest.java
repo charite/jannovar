@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ public class GnomadGenomesVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 
@@ -33,7 +33,7 @@ public class GnomadGenomesVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		GnomadRecord record = converter.convert(vc);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"GnomadRecord [chrom=1, pos=10066, id=., ref=T, alt=[TAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCC], "
 				+ "filter=[RF, LCR], popmax=[FIN], alleleCounts={AFR=[0], AMR=[0], ASJ=[0], EAS=[0], FIN=[1], "
 				+ "NFE=[0], OTH=[0], POPMAX=[1], ALL=[1]}, alleleHetCounts={AFR=[0], AMR=[0], ASJ=[0], EAS=[0], "

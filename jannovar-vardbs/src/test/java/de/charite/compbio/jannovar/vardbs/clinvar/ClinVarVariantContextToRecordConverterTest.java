@@ -5,9 +5,9 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ public class ClinVarVariantContextToRecordConverterTest {
 	static String vcfPath;
 	static VCFFileReader vcfReader;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		vcfPath = tmpDir + "/clinvar.vcf.gz";
@@ -37,7 +37,7 @@ public class ClinVarVariantContextToRecordConverterTest {
 			vc = it.next();
 
 		ClinVarRecord record = converter.convert(vc);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"ClinVarRecord [chrom=1, pos=2160305, id=rs387907305, ref=G, alt=[A, T], annotations={1=[ClinVarAnnotation "
 				+ "[alleleMapping=1, hgvsVariant=NC_000001.10:g.2160306G>A, sourceInfos=[ClinVarAnnotationSourceInfo "
 				+ "[dbName=OMIM_Allelic_Variant, dbId=164780.0003], ClinVarAnnotationSourceInfo [dbName=UniProtKB_(protein), "

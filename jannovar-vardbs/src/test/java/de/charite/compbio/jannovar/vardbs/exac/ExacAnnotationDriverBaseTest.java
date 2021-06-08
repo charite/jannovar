@@ -4,7 +4,7 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -16,8 +16,8 @@ public class ExacAnnotationDriverBaseTest {
 	protected VCFFileReader vcfReader;
 	protected DBAnnotationOptions options;
 
-	@Before
-	public void setUpClass() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		options = DBAnnotationOptions.createDefaults();
 
 		// Setup dbSNP VCF file
