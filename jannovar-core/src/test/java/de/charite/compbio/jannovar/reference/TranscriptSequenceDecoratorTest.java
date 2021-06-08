@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import de.charite.compbio.jannovar.data.Contig;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,8 +34,11 @@ public class TranscriptSequenceDecoratorTest {
 
 	private static TranscriptModel getTestTranscriptModel() {
 		String sequence = Joiner.on("").join(CODONS);
-		return new TranscriptModel("TEST", "TEST", new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()),
-			new GenomeInterval(null, Strand.FWD, 1, 0, sequence.length()), ImmutableList.<GenomeInterval>builder().build(),
+		Contig contig = new Contig(1, "1", 1);
+		return new TranscriptModel("TEST", "TEST",
+			new GenomeInterval(contig, Strand.FWD, 0, sequence.length()),
+			new GenomeInterval(contig, Strand.FWD, 0, sequence.length()),
+			ImmutableList.<GenomeInterval>builder().build(),
 			sequence, "TEST", 1, false, false);
 	}
 

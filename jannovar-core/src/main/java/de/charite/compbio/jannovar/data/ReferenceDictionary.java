@@ -5,7 +5,9 @@ import de.charite.compbio.jannovar.Immutable;
 
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 // NOTE(holtgrem): Part of the public interface of the Jannovar library.
 
@@ -50,6 +52,9 @@ public class ReferenceDictionary implements Serializable {
 	 */
 	private final ImmutableMap<String, Integer> contigID;
 
+	private final ImmutableMap<Integer, Contig> contigsById;
+	private final ImmutableMap<String, Contig> contigsByName;
+
 	/**
 	 * stores primary name for each numeric chromsomomeID/contigID
 	 */
@@ -72,6 +77,27 @@ public class ReferenceDictionary implements Serializable {
 		this.contigID = contigID;
 		this.contigName = contigName;
 		this.contigLength = contigLength;
+
+		Set<Contig> contigs = createContigs(contigID, contigLength);
+		contigsByName = contigs.stream()
+			.collect(ImmutableMap.toImmutableMap(Contig::getName, Function.identity()));
+
+		// ids mapped to contigs with primary names
+		contigsById = contigName.values()
+			.stream()
+			.map(contigsByName::get)
+			.collect(ImmutableMap.toImmutableMap(Contig::getId, Function.identity()));
+	}
+
+	private Set<Contig> createContigs(ImmutableMap<String, Integer> contigID, ImmutableMap<Integer, Integer> contigLength) {
+		Set<Contig> contigs = new LinkedHashSet<>(contigID.size());
+		for(Map.Entry<String, Integer> entry : contigID.entrySet()) {
+			String name = entry.getKey();
+			Integer id = entry.getValue();
+			Integer length = contigLength.get(id);
+			contigs.add(new Contig(id, name, length));
+		}
+		return contigs;
 	}
 
 	/**
@@ -79,6 +105,14 @@ public class ReferenceDictionary implements Serializable {
 	 */
 	public ImmutableMap<String, Integer> getContigNameToID() {
 		return contigID;
+	}
+
+	public Contig getContigById(int contigId) {
+		return contigsById.get(contigId);
+	}
+
+	public Contig getContigByName(String contigName) {
+		return contigsByName.get(contigName);
 	}
 
 	/**

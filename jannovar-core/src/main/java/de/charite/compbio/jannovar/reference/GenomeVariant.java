@@ -54,8 +54,7 @@ public final class GenomeVariant implements VariantDescription {
 		}
 
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
-			PositionType.ZERO_BASED);
+		this.pos = new GenomePosition(pos.getContig(), pos.getStrand(), corr.position, PositionType.ZERO_BASED);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
@@ -89,8 +88,9 @@ public final class GenomeVariant implements VariantDescription {
 		else if (strand != pos.getStrand() /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
-			PositionType.ZERO_BASED).shifted(delta).withStrand(strand);
+		this.pos = new GenomePosition(pos.getContig(), pos.getStrand(), corr.position, PositionType.ZERO_BASED)
+			.shifted(delta)
+			.withStrand(strand);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public final class GenomeVariant implements VariantDescription {
 
 	@Override
 	public String getChrName() {
-		return this.pos.getRefDict().getContigIDToName().get(this.pos.getChr());
+		return pos.getChrName();
 	}
 
 	public GenomePosition getGenomePos() {

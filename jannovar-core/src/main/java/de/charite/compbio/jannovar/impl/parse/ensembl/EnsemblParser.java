@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.impl.parse.ensembl;
 import com.google.common.collect.*;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
+import de.charite.compbio.jannovar.data.Contig;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
@@ -440,8 +441,8 @@ public class EnsemblParser implements TranscriptParser {
 	}
 
 	private GenomeInterval buildGenomeInterval(FeatureRecord record, Strand strand) {
-		int chrom = contigDict.get(record.getSeqID());
-		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
+		Contig contig = refDict.getContigByName(record.getSeqID());
+		GenomeInterval interval = new GenomeInterval(contig, Strand.FWD, record.getBegin(), record.getEnd());
 		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so this needs adjusting-post build
 		// rather than being supplied in the constructor.
 		return interval.withStrand(strand);

@@ -270,7 +270,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		// TODO(holtgrem): test me!
 		GenomeInterval exonRegionL = exonRegions.get(i);
 		GenomeInterval exonRegionR = exonRegions.get(i + 1);
-		return new GenomeInterval(exonRegionL.refDict, exonRegionL.getStrand(), exonRegionL.getChr(),
+		return new GenomeInterval(exonRegionL.getContig(), exonRegionL.getStrand(),
 			exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
 	}
 
