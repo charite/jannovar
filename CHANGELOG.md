@@ -6,6 +6,7 @@
 
 * Switching to Github Workflows for continuous integration.
 * Bumping a couple of dependencies.
+* Switching to JUNIT 5.
 
 ### jannovar-core
 
