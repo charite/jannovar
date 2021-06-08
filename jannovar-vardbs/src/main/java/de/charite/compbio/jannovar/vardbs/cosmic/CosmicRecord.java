@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
+@Deprecated
 public class CosmicRecord {
 
 	// Fields up to the INFO column

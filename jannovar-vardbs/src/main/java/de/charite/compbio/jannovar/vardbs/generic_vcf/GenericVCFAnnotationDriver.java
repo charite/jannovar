@@ -15,6 +15,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<VariantContext> {
 
 	private final GenericVCFAnnotationOptions genericVcfOptions;
@@ -42,7 +43,7 @@ public class GenericVCFAnnotationDriver extends AbstractDBAnnotationDriver<Varia
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
 			final int alleleNo = entry.getKey();
 			for (GenotypeMatch m : entry.getValue()) {
-				// Select first or match. 
+				// Select first or match.
 				if (!annotatingRecord.containsKey(alleleNo) || m.isMatch()) {
 					annotatingRecord.put(alleleNo, matchToRecord.get(m));
 					if (m.isMatch()) { // stop looking forward in case of match

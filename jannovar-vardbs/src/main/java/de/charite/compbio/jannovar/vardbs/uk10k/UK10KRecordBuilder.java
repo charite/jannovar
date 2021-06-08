@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.vardbs.uk10k;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class UK10KRecordBuilder {
 
 	/**

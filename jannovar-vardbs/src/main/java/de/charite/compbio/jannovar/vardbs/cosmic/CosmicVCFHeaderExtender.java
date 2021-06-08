@@ -12,6 +12,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class CosmicVCFHeaderExtender extends VCFHeaderExtender {
 
 	public CosmicVCFHeaderExtender(DBAnnotationOptions options) {

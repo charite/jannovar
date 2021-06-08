@@ -1,3 +1,6 @@
+# H2
+*.trace.db
+
 # Antlr tokens
 *.tokens
 

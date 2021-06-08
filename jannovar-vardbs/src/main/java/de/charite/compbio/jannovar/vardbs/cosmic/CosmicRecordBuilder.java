@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.vardbs.cosmic;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class CosmicRecordBuilder {
 
 	/**

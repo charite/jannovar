@@ -10,6 +10,10 @@ import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosome
 import de.charite.compbio.jannovar.cmd.rest_server.RestServerOptions;
 import de.charite.compbio.jannovar.cmd.statistics.JannovarGatherStatisticsOptions;
 import java.util.function.BiFunction;
+
+import de.charite.compbio.jannovar.cmd.vardb_annotate.vardb_import.JannovarVardbAnnotateOptions;
+import de.charite.compbio.jannovar.cmd.vardb_import.JannovarVardbImportOptions;
+import de.charite.compbio.jannovar.cmd.vardb_list.JannovarVardbListOptions;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -42,6 +46,9 @@ public final class Jannovar {
 		JannovarDBListOptions.setupParser(subParsers);
 		JannovarDownloadOptions.setupParser(subParsers);
 		JannovarGatherStatisticsOptions.setupParser(subParsers);
+		JannovarVardbImportOptions.setupParser(subParsers);
+		JannovarVardbListOptions.setupParser(subParsers);
+		JannovarVardbAnnotateOptions.setupParser(subParsers);
 		RestServerOptions.setupParser(subParsers);
 		ProjectTranscriptToChromosomeOptions.setupParser(subParsers);
 		parser.defaultHelp(true);

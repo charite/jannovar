@@ -13,6 +13,7 @@ import java.util.Map.Entry;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecord> {
 
 	public UK10KAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)

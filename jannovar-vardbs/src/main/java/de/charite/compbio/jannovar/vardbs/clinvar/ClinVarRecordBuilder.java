@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class ClinVarRecordBuilder {
 
 	/**

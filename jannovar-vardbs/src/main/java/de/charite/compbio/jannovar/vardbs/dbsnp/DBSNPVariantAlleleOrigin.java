@@ -5,6 +5,7 @@ package de.charite.compbio.jannovar.vardbs.dbsnp;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public enum DBSNPVariantAlleleOrigin {
 	/**
 	 * Unspecified variant allele origin

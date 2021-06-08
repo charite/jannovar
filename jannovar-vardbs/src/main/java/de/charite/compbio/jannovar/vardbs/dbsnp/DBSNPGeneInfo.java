@@ -7,6 +7,7 @@ import de.charite.compbio.jannovar.Immutable;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 @Immutable
 public final class DBSNPGeneInfo {
 

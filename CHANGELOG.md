@@ -1,5 +1,35 @@
 # Jannovar Changelog
 
+## HEAD (unreleased)
+
+### overall
+
+* Switching to Github Workflows for continuous integration.
+* Bumping a couple of dependencies.
+
+### jannovar-core
+
+* Apply fix for (#498, PR #499 by @roland-ewald of @limbus-medtec).
+  This fixes a problem with right-shifting deletions on amino acid sequences.
+  See the tickes and merge request for details.
+
+### jannovar-cli
+
+* Adding command `vardb-import` for importing annotations from VCF files into H2 database files.
+* Adding command `vardb-list` for listing annotation meta data from `vardb-import`.
+* Adding command `vardb-annotate` for annotating VCF files from Jannovar H2 database files.
+
+### jannovar-vardbs
+
+* Deprecating previous content of the package.
+  The deprecated classes are due to be removed in v0.36.
+* Adding modules for importing VCF files into H2 database files, listing the meta data conents, and annotating VCF files.
+
+### jannovar-hgvs
+
+* Fixing parsing of unchanged (`=`) for nucleic acide sequences (#493).
+* Fixing issue with HGVS `delins` with `del` bases but no `ins` bases (#491).
+
 ## v0.35
 
 ### jannovar-core

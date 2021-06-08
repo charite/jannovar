@@ -6,6 +6,7 @@ package de.charite.compbio.jannovar.vardbs.generic_tsv;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public enum GenericTSVAnnotationTarget {
 	/**
 	 * TSV file annotates a position.

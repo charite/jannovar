@@ -7,6 +7,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
+@Deprecated
 public interface VariantContextToRecordConverter<RecordType> {
 
 	/**
