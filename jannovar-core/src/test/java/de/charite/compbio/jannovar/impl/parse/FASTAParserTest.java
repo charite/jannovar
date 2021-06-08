@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,7 +13,7 @@ public class FASTAParserTest {
 	InputStream stream;
 	String lines;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		lines = ">1 comment 1\nACGT\nAACT\n\nACGT\n>2 comment 2\nAA\n\nAA\n\n";
 		stream = new ByteArrayInputStream(lines.getBytes());
@@ -24,17 +24,17 @@ public class FASTAParserTest {
 		FASTAParser parser = new FASTAParser(stream);
 
 		FASTARecord first = parser.next();
-		Assert.assertEquals("1", first.getID());
-		Assert.assertEquals("comment 1", first.getComment());
-		Assert.assertEquals("ACGTAACTACGT", first.getSequence());
+		Assertions.assertEquals("1", first.getID());
+		Assertions.assertEquals("comment 1", first.getComment());
+		Assertions.assertEquals("ACGTAACTACGT", first.getSequence());
 
 		FASTARecord second = parser.next();
-		Assert.assertEquals("2", second.getID());
-		Assert.assertEquals("comment 2", second.getComment());
-		Assert.assertEquals("AAAA", second.getSequence());
+		Assertions.assertEquals("2", second.getID());
+		Assertions.assertEquals("comment 2", second.getComment());
+		Assertions.assertEquals("AAAA", second.getSequence());
 
 		FASTARecord third = parser.next();
-		Assert.assertNull(third);
+		Assertions.assertNull(third);
 	}
 
 }

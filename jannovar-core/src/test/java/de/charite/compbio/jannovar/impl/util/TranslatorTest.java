@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.impl.util;
 
 import de.charite.compbio.jannovar.annotation.AnnotationException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for the TranscriptModel class.
@@ -14,7 +14,7 @@ public class TranslatorTest {
 
 	Translator translator;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		translator = Translator.getTranslator();
 	}
@@ -24,8 +24,8 @@ public class TranslatorTest {
 	 */
 	@Test
 	public void testTranslateDna_tooShort() throws AnnotationException {
-		Assert.assertEquals("", translator.translateDNA("A"));
-		Assert.assertEquals("", translator.translateDNA("AC"));
+		Assertions.assertEquals("", translator.translateDNA("A"));
+		Assertions.assertEquals("", translator.translateDNA("AC"));
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class TranslatorTest {
 	 */
 	@Test
 	public void testTranslateDna_short() throws AnnotationException {
-		Assert.assertEquals("T", translator.translateDNA("ACT"));
+		Assertions.assertEquals("T", translator.translateDNA("ACT"));
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class TranslatorTest {
 	 */
 	@Test
 	public void testTranslateDna_longer() throws AnnotationException {
-		Assert.assertEquals("M*S", translator.translateDNA("ATGTAGAGT"));
+		Assertions.assertEquals("M*S", translator.translateDNA("ATGTAGAGT"));
 	}
 
 	/**
@@ -49,6 +49,6 @@ public class TranslatorTest {
 	 */
 	@Test
 	public void testTranslateDna_tooLonger() throws AnnotationException {
-		Assert.assertEquals("T", translator.translateDNA("ACTG"));
+		Assertions.assertEquals("T", translator.translateDNA("ACTG"));
 	}
 }

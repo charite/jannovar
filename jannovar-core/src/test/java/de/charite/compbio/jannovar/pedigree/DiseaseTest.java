@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.pedigree;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-import static org.junit.Assert.assertEquals;
-
 public class DiseaseTest {
 
 	@Test
