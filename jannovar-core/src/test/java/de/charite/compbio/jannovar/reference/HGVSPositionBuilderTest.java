@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HGVSPositionBuilderTest {
 
@@ -37,7 +37,7 @@ public class HGVSPositionBuilderTest {
 	 */
 	TranscriptModel ncInfoForward;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		this.transcriptForward = TranscriptModelFactory
 			.parseKnownGenesLine(
@@ -71,11 +71,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardUpstreamOfTranscription() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-204",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640061, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-225",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640040, PositionType.ZERO_BASED)).toHGVSString());
@@ -84,11 +84,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardDownstreamOfTranscription() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*69",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6649340, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*88",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6649359, PositionType.ZERO_BASED)).toHGVSString());
@@ -97,11 +97,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardUpstreamOfCDS() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-1",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640668, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-21",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640648, PositionType.ZERO_BASED)).toHGVSString());
@@ -110,11 +110,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardDownstreamOfCDS() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*1",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6649272, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*8",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6649279, PositionType.ZERO_BASED)).toHGVSString());
@@ -123,11 +123,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardCDSExon() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"381",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6641049, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"360",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6641028, PositionType.ZERO_BASED)).toHGVSString());
@@ -136,11 +136,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardCDSIntron() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"691-217",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6641900, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"690+142",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6641500, PositionType.ZERO_BASED)).toHGVSString());
@@ -149,19 +149,19 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardNonCDSExon() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-39",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640630, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-14",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640655, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-14",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640655, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-115",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640150, PositionType.ZERO_BASED)).toHGVSString());
@@ -170,11 +170,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testForwardNonCDSIntron() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-69-20",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640580, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-70+5",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640200, PositionType.ZERO_BASED)).toHGVSString());
@@ -183,11 +183,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testReverseUpstreamOfTranscription() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoReverse);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-562",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 23696359, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"-582",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 23696379, PositionType.ZERO_BASED)).toHGVSString());
@@ -196,11 +196,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testReverseDownstreamOfTranscription() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoReverse);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*2522",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 23685939, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"*2542",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 23685919, PositionType.ZERO_BASED)).toHGVSString());
@@ -209,11 +209,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testNonCodingForwardExon() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.ncInfoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"1",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 11873, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"355",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 12612, PositionType.ZERO_BASED)).toHGVSString());
@@ -222,11 +222,11 @@ public class HGVSPositionBuilderTest {
 	@Test
 	public void testNonCodingForwardIntron() {
 		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.ncInfoForward);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"354+1",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 12227, PositionType.ZERO_BASED)).toHGVSString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"355-1",
 			builderForward.getNucleotidePointLocation(
 				new GenomePosition(refDict, Strand.FWD, 1, 12611, PositionType.ZERO_BASED)).toHGVSString());

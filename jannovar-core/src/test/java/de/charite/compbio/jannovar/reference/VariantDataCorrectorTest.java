@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for the VariantCorrectorData class.
@@ -16,9 +16,9 @@ public class VariantDataCorrectorTest {
 	@Test
 	public void testSingleNucleotide() {
 		VariantDataCorrector corr = new VariantDataCorrector("C", "T", 100);
-		Assert.assertEquals(corr.position, 100);
-		Assert.assertEquals(corr.ref, "C");
-		Assert.assertEquals(corr.alt, "T");
+		Assertions.assertEquals(corr.position, 100);
+		Assertions.assertEquals(corr.ref, "C");
+		Assertions.assertEquals(corr.alt, "T");
 	}
 
 	/**
@@ -27,9 +27,9 @@ public class VariantDataCorrectorTest {
 	@Test
 	public void testInsertion() {
 		VariantDataCorrector corr = new VariantDataCorrector("CGAT", "C", 100);
-		Assert.assertEquals(corr.position, 101);
-		Assert.assertEquals(corr.ref, "GAT");
-		Assert.assertEquals(corr.alt, "");
+		Assertions.assertEquals(corr.position, 101);
+		Assertions.assertEquals(corr.ref, "GAT");
+		Assertions.assertEquals(corr.alt, "");
 	}
 
 	/**
@@ -38,9 +38,9 @@ public class VariantDataCorrectorTest {
 	@Test
 	public void testSubstitution() {
 		VariantDataCorrector corr = new VariantDataCorrector("CCGA", "CGAT", 100);
-		Assert.assertEquals(corr.position, 101);
-		Assert.assertEquals(corr.ref, "CGA");
-		Assert.assertEquals(corr.alt, "GAT");
+		Assertions.assertEquals(corr.position, 101);
+		Assertions.assertEquals(corr.ref, "CGA");
+		Assertions.assertEquals(corr.alt, "GAT");
 	}
 
 	/**
@@ -49,9 +49,9 @@ public class VariantDataCorrectorTest {
 	@Test
 	public void testDeletion() {
 		VariantDataCorrector corr = new VariantDataCorrector("C", "CGAT", 100);
-		Assert.assertEquals(corr.position, 101);
-		Assert.assertEquals(corr.ref, "");
-		Assert.assertEquals(corr.alt, "GAT");
+		Assertions.assertEquals(corr.position, 101);
+		Assertions.assertEquals(corr.ref, "");
+		Assertions.assertEquals(corr.alt, "GAT");
 	}
 
 }

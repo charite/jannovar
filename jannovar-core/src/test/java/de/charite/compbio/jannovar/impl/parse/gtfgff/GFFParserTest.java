@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class GFFParserTest {
 	InputStream stream;
 	String lines;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		lines = "##gff-version 3\n"
 			+ "NC_000003.11\tBestRefSeq\tgene\t129247482\t129254187\t.\t+\t.\tID=gene7867;Name=RHO;Dbxref=GeneID:6010,HGNC:10012,HPRD:01584,MIM:180380;description=rhodopsin;gbkey=Gene;gene=RHO;gene_synonym=CSNBAD1,OPN2,RP4;part=1%2F1\n"
@@ -41,11 +41,11 @@ public class GFFParserTest {
 		while ((record = parser.next()) != null)
 			records.add(record);
 
-		Assert.assertEquals(12, records.size());
-		Assert.assertEquals(
+		Assertions.assertEquals(12, records.size());
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=NC_000003.11, source=BestRefSeq, type=gene, begin=129247481, end=129254187, score=., strand=FORWARD, phase=0, attributes={Dbxref=GeneID:6010,HGNC:10012,HPRD:01584,MIM:180380, ID=gene7867, Name=RHO, description=rhodopsin, gbkey=Gene, gene=RHO, gene_synonym=CSNBAD1,OPN2,RP4, part=1%2F1}]",
 			records.get(0).toString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=NC_000003.11, source=BestRefSeq, type=CDS, begin=129252450, end=129252561, score=., strand=FORWARD, phase=0, attributes={Dbxref=CCDS:CCDS3063.1,GeneID:6010,Genbank:NP_000530.1,HGNC:10012,HPRD:01584,MIM:180380, ID=cds13732, Name=NP_000530.1, Parent=rna17010, gbkey=CDS, gene=RHO, product=rhodopsin, protein_id=NP_000530.1}]",
 			records.get(11).toString());
 	}

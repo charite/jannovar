@@ -1,13 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenotypeCallsBuilderTest {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -20,9 +20,9 @@ public class GenotypeCallsBuilderTest {
 
 		GenotypeCalls calls = builder.build();
 
-		Assert.assertEquals(1, calls.getPayload());
-		Assert.assertEquals(1, calls.getNSamples());
-		Assert.assertEquals("Genotype [alleleNumbers=[0, 1]]", calls.getGenotypeForSample("example").toString());
+		Assertions.assertEquals(1, calls.getPayload());
+		Assertions.assertEquals(1, calls.getNSamples());
+		Assertions.assertEquals("Genotype [alleleNumbers=[0, 1]]", calls.getGenotypeForSample("example").toString());
 	}
 
 }

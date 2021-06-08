@@ -9,8 +9,8 @@ import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,8 +18,7 @@ import java.util.*;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 
 /**
  * @author Jules Jacobsen <j.jacobsen@qmul.ac.uk>
@@ -52,9 +51,9 @@ public class EnsemblParserTest {
 //		SH3RF3 ENST00000418513.1(2:g.109745804_110065945)
 //		SH3RF3 ENST00000444352.1(2:g.110259080_110262207)
 
-		assertEquals(9, transcripts.size());
+		Assertions.assertEquals(9, transcripts.size());
 		List<Integer> chromosomes = transcripts.stream().map(TranscriptModel::getChr).distinct().sorted().collect(toList());
-		assertEquals(ImmutableList.of(2, 23), chromosomes);
+		Assertions.assertEquals(ImmutableList.of(2, 23), chromosomes);
 	}
 
 	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {
@@ -66,7 +65,7 @@ public class EnsemblParserTest {
 		System.out.println("Num old transcripts: " + oldTranscripts.size());
 		System.out.println("Num new transcripts: " + newTranscripts.size());
 
-		assertEquals(oldTranscripts.keySet(), newTranscripts.keySet());
+		Assertions.assertEquals(oldTranscripts.keySet(), newTranscripts.keySet());
 
 		Set<TranscriptModel> missingTranscriptModels = Sets.difference(new HashSet<>(oldTranscripts.values()), new HashSet<>(newTranscripts.values()));
 		if (!missingTranscriptModels.isEmpty()) {
@@ -75,12 +74,12 @@ public class EnsemblParserTest {
 				System.out.println(tx + " " + tx.getSequence());
 			});
 		}
-		assertTrue(missingTranscriptModels.isEmpty());
+		Assertions.assertTrue(missingTranscriptModels.isEmpty());
 
-		assertEquals(oldTranscripts.size(), transcripts.size());
+		Assertions.assertEquals(oldTranscripts.size(), transcripts.size());
 		oldTranscripts.forEach((s, transcriptModel) -> {
 			TranscriptModel newTranscriptModel = newTranscripts.get(s);
-			assertEquals(newTranscriptModel, transcriptModel);
+			Assertions.assertEquals(newTranscriptModel, transcriptModel);
 		});
 	}
 }

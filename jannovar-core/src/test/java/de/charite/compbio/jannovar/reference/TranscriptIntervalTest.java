@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TranscriptIntervalTest {
 
@@ -29,7 +29,7 @@ public class TranscriptIntervalTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 			"uc009vmz.1\tchr1\t+\t11539294\t11541938\t11539294\t11539294\t2\t"
@@ -44,19 +44,19 @@ public class TranscriptIntervalTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
-		Assert.assertEquals(interval.getTranscript(), this.infoForward);
-		Assert.assertEquals(interval.getBeginPos(), 23);
-		Assert.assertEquals(interval.getEndPos(), 45);
-		Assert.assertEquals(interval.length(), 22);
+		Assertions.assertEquals(interval.getTranscript(), this.infoForward);
+		Assertions.assertEquals(interval.getBeginPos(), 23);
+		Assertions.assertEquals(interval.getEndPos(), 45);
+		Assertions.assertEquals(interval.length(), 22);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
-		Assert.assertEquals(interval.getTranscript(), this.infoForward);
-		Assert.assertEquals(interval.getBeginPos(), 23);
-		Assert.assertEquals(interval.getEndPos(), 45);
-		Assert.assertEquals(interval.length(), 22);
+		Assertions.assertEquals(interval.getTranscript(), this.infoForward);
+		Assertions.assertEquals(interval.getBeginPos(), 23);
+		Assertions.assertEquals(interval.getEndPos(), 45);
+		Assertions.assertEquals(interval.length(), 22);
 	}
 
 }

@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the {@link TranscriptModel} class.
@@ -34,7 +34,7 @@ public class TranscriptModelTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 			"uc009vmz.1\tchr1\t+\t11539294\t11541938\t11539294\t11539294\t2\t"
@@ -49,13 +49,13 @@ public class TranscriptModelTest {
 	@Test
 	public void testForwardTranscript() {
 		TranscriptModel info = builderForward.build();
-		Assert.assertEquals(info, infoForward);
+		Assertions.assertEquals(info, infoForward);
 	}
 
 	@Test
 	public void testReverseTranscript() {
 		TranscriptModel info = builderReverse.build();
-		Assert.assertEquals(info, infoReverse);
+		Assertions.assertEquals(info, infoReverse);
 	}
 
 }

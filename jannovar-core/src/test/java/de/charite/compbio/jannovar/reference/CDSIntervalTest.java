@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CDSIntervalTest {
 
@@ -29,7 +29,7 @@ public class CDSIntervalTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 			"uc009vmz.1\tchr1\t+\t11539294\t11541938\t11539294\t11539294\t2\t"
@@ -44,19 +44,19 @@ public class CDSIntervalTest {
 	@Test
 	public void testConstructor() {
 		CDSInterval interval = new CDSInterval(this.infoForward, 23, 45);
-		Assert.assertEquals(interval.getTranscript(), this.infoForward);
-		Assert.assertEquals(interval.getBeginPos(), 23);
-		Assert.assertEquals(interval.getEndPos(), 45);
-		Assert.assertEquals(interval.length(), 22);
+		Assertions.assertEquals(interval.getTranscript(), this.infoForward);
+		Assertions.assertEquals(interval.getBeginPos(), 23);
+		Assertions.assertEquals(interval.getEndPos(), 45);
+		Assertions.assertEquals(interval.length(), 22);
 	}
 
 	@Test
 	public void testConstructorOneBased() {
 		CDSInterval interval = new CDSInterval(this.infoForward, 23, 45, PositionType.ONE_BASED);
-		Assert.assertEquals(interval.getTranscript(), this.infoForward);
-		Assert.assertEquals(interval.getBeginPos(), 22);
-		Assert.assertEquals(interval.getEndPos(), 45);
-		Assert.assertEquals(interval.length(), 23);
+		Assertions.assertEquals(interval.getTranscript(), this.infoForward);
+		Assertions.assertEquals(interval.getBeginPos(), 22);
+		Assertions.assertEquals(interval.getEndPos(), 45);
+		Assertions.assertEquals(interval.length(), 23);
 	}
 
 }

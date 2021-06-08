@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.mendel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.pedigree.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 	List<GenotypeCalls> gcList;
 	ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> result;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // grandfather
@@ -39,332 +39,361 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(7, pedigree.getMembers().size());
+		Assertions.assertEquals(7, pedigree.getMembers().size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant1() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, HET, HET, HET, HET, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant2() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, REF, REF, REF, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant3() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant4() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(UKN, UKN, UKN, UKN, UKN, UKN, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant5() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant6() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant7() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, HET, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant8() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, HET, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant9() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant10() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(ALT, REF, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant11() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, ALT, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant12() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, ALT, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant13() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, ALT, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant14() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, REF, HET, ALT), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant15() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, ALT, REF, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant16() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, REF, ALT, REF, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant17() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, HET, ALT, REF, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant18() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT, HET, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant19() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant20() throws IncompatiblePedigreeException {
 		// This is not AD as we require the mutation to be heterozygous
 		gcList = getGenotypeCallsList(lst(HET, REF, REF, UKN, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant21() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, HET, REF, UKN, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant22() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, HET, UKN, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant23() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, UKN, HET, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant24() throws IncompatiblePedigreeException {
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, UKN, REF, HET, HET), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant25() throws IncompatiblePedigreeException {
 		// We require at least one heterozygous variant
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, UKN, REF, UKN, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant26() throws IncompatiblePedigreeException {
 		// We require at heterozygous variants
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT, REF, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant27() throws IncompatiblePedigreeException {
 		// We require at heterozygous variants
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, UKN, REF, ALT, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant28() throws IncompatiblePedigreeException {
 		// We require at heterozygous variants
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT, REF, UKN, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
+	@Test
 	public void testCaseNegativesOneVariant29() throws IncompatiblePedigreeException {
 		// We require at heterozygous variants
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT, REF, ALT, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -373,11 +402,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -386,11 +415,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -399,11 +428,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -412,11 +441,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -425,11 +454,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -438,11 +467,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -451,11 +480,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -464,11 +493,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -476,11 +505,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -488,11 +517,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, UKN, HET, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -500,11 +529,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, HET, UKN, UKN, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -512,11 +541,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, UKN, UKN, HET, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -524,11 +553,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(UKN, REF, REF, HET, REF, HET, REF), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -536,11 +565,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, UKN, REF, HET, UKN, HET, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -548,11 +577,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(UKN, REF, REF, HET, UKN, UKN, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -560,11 +589,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 		gcList = getGenotypeCallsList(lst(REF, REF, UKN, UKN, UKN, HET, UKN), ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -573,11 +602,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(2, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -586,11 +615,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -599,11 +628,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(2, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -612,11 +641,11 @@ public class MendelianCompatibilityCheckerADMediumTest extends MendelianCompatib
 			ChromosomeType.AUTOSOMAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(2, result.get(ModeOfInheritance.ANY).size());
 	}
 
 }

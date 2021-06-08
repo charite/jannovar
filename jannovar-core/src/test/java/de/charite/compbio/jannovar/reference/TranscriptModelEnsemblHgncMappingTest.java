@@ -4,9 +4,9 @@ import com.google.common.io.Files;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.testutils.ResourceUtils;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -42,7 +42,7 @@ public class TranscriptModelEnsemblHgncMappingTest {
 	/**
 	 * Copy out .ser file to temporary directory for tests and load.
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		dbPath = tmpDir + "/chr15_whammp3.ser";
@@ -55,7 +55,7 @@ public class TranscriptModelEnsemblHgncMappingTest {
 
 	@Test
 	public void testHgncId() throws Exception {
-		Assert.assertEquals("HGNC:27892", whammp3.getAltGeneIDs().get("HGNC_ID"));
+		Assertions.assertEquals("HGNC:27892", whammp3.getAltGeneIDs().get("HGNC_ID"));
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.impl.intervals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
@@ -148,8 +148,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(1, 2);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(1, 4, "a"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(1, 4, "a"), res.getEntries().get(0));
 	}
 
 	@Test
@@ -157,8 +157,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList2(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(13, 16);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(9, 20, "f"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(9, 20, "f"), res.getEntries().get(0));
 	}
 
 	@Test
@@ -166,9 +166,9 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList3(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(30, 31);
 
-		Assert.assertEquals(2, res.getEntries().size());
-		Assert.assertEquals(new Triple(29, 34, "i"), res.getEntries().get(0));
-		Assert.assertEquals(new Triple(30, 33, "j"), res.getEntries().get(1));
+		Assertions.assertEquals(2, res.getEntries().size());
+		Assertions.assertEquals(new Triple(29, 34, "i"), res.getEntries().get(0));
+		Assertions.assertEquals(new Triple(30, 33, "j"), res.getEntries().get(1));
 	}
 
 	@Test
@@ -176,8 +176,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(1, 3);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(1, 4, "a"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(1, 4, "a"), res.getEntries().get(0));
 	}
 
 	@Test
@@ -185,10 +185,10 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(6, 8);
 
-		Assert.assertEquals(3, res.getEntries().size());
-		Assert.assertEquals(new Triple(4, 8, "c"), res.getEntries().get(0));
-		Assert.assertEquals(new Triple(5, 7, "d"), res.getEntries().get(1));
-		Assert.assertEquals(new Triple(5, 9, "b"), res.getEntries().get(2));
+		Assertions.assertEquals(3, res.getEntries().size());
+		Assertions.assertEquals(new Triple(4, 8, "c"), res.getEntries().get(0));
+		Assertions.assertEquals(new Triple(5, 7, "d"), res.getEntries().get(1));
+		Assertions.assertEquals(new Triple(5, 9, "b"), res.getEntries().get(2));
 	}
 
 	@Test
@@ -196,8 +196,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(11, 13);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(11, 16, "f"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(11, 16, "f"), res.getEntries().get(0));
 	}
 
 	// Tests not finding any interval
@@ -206,9 +206,9 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(20, 21);
 
-		Assert.assertEquals(0, res.getEntries().size());
-		Assert.assertEquals(new Triple(16, 20, "e"), res.getLeft());
-		Assert.assertEquals(new Triple(30, 67, "g"), res.getRight());
+		Assertions.assertEquals(0, res.getEntries().size());
+		Assertions.assertEquals(new Triple(16, 20, "e"), res.getLeft());
+		Assertions.assertEquals(new Triple(30, 67, "g"), res.getRight());
 	}
 
 	// Tests not finding an interval but getting the right neighbor
@@ -217,9 +217,9 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(512, 513);
 
-		Assert.assertEquals(0, res.getEntries().size());
-		Assert.assertEquals(new Triple(30, 67, "g"), res.getLeft());
-		Assert.assertEquals(null, res.getRight());
+		Assertions.assertEquals(0, res.getEntries().size());
+		Assertions.assertEquals(new Triple(30, 67, "g"), res.getLeft());
+		Assertions.assertEquals(null, res.getRight());
 	}
 
 	// Tests not finding an interval but getting the right neighbor
@@ -228,9 +228,9 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList1(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(69, 70);
 
-		Assert.assertEquals(0, res.getEntries().size());
-		Assert.assertEquals(new Triple(30, 67, "g"), res.getLeft());
-		Assert.assertEquals(null, res.getRight());
+		Assertions.assertEquals(0, res.getEntries().size());
+		Assertions.assertEquals(new Triple(30, 67, "g"), res.getLeft());
+		Assertions.assertEquals(null, res.getRight());
 	}
 
 	// Tests median
@@ -239,8 +239,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList4(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(5, 6);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(0, 11, "a"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(0, 11, "a"), res.getEntries().get(0));
 	}
 
 	// Tests median
@@ -249,8 +249,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList4(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(25, 26);
 
-		Assert.assertEquals(1, res.getEntries().size());
-		Assert.assertEquals(new Triple(15, 36, "b"), res.getEntries().get(0));
+		Assertions.assertEquals(1, res.getEntries().size());
+		Assertions.assertEquals(new Triple(15, 36, "b"), res.getEntries().get(0));
 	}
 
 }

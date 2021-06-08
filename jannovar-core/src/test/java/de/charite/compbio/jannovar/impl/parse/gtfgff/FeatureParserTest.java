@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class FeatureParserTest {
 	InputStream stream;
 	String lines;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		lines = "3\tprotein_coding\texon\t129247483\t129247937\t.\t+\t.\tgene_id \"ENSG00000163914\"; transcript_id \"ENST00000296271\"; exon_number \"1\"; gene_name \"RHO\"; gene_biotype \"protein_coding\"; transcript_name \"RHO-001\"; exon_id \"ENSE00001079597\";\n"
 			+ "3\tprotein_coding\tCDS\t129247577\t129247937\t.\t+\t0\tgene_id \"ENSG00000163914\"; transcript_id \"ENST00000296271\"; exon_number \"1\"; gene_name \"RHO\"; gene_biotype \"protein_coding\"; transcript_name \"RHO-001\"; protein_id \"ENSP00000296271\";\n"
@@ -40,11 +40,11 @@ public class FeatureParserTest {
 		while ((record = parser.next()) != null)
 			records.add(record);
 
-		Assert.assertEquals(12, records.size());
-		Assert.assertEquals(
+		Assertions.assertEquals(12, records.size());
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=3, source=protein_coding, type=exon, begin=129247482, end=129247937, score=., strand=FORWARD, phase=0, attributes={exon_id=ENSE00001079597, exon_number=1, gene_biotype=protein_coding, gene_id=ENSG00000163914, gene_name=RHO, transcript_id=ENST00000296271, transcript_name=RHO-001}]",
 			records.get(0).toString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=3, source=protein_coding, type=stop_codon, begin=129252558, end=129252561, score=., strand=FORWARD, phase=0, attributes={exon_number=5, gene_biotype=protein_coding, gene_id=ENSG00000163914, gene_name=RHO, transcript_id=ENST00000296271, transcript_name=RHO-001}]",
 			records.get(11).toString());
 	}
