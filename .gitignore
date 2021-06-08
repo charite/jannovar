@@ -1,3 +1,6 @@
+# Downloaded data
+/data
+
 # H2
 *.trace.db
 
