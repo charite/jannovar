@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.mendel;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.pedigree.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	private Pedigree inconsistentMTpedigree;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // father
@@ -50,12 +50,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(4, pedigree.getMembers().size());
+		Assertions.assertEquals(4, pedigree.getMembers().size());
 	}
 
 	@Test
 	public void testSizeOfInconsistentPedigree() {
-		Assert.assertEquals(4, inconsistentMTpedigree.getMembers().size());
+		Assertions.assertEquals(4, inconsistentMTpedigree.getMembers().size());
 	}
 
 	/**
@@ -68,12 +68,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, REF), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -86,12 +86,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, REF, REF, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -104,12 +104,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, REF, ALT, REF), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -122,12 +122,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, ALT, REF, REF), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -140,12 +140,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(ALT, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -159,12 +159,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(HET, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -177,12 +177,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(UKN, UKN, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -195,12 +195,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, UKN, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -213,12 +213,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, ALT, HET, REF), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -233,12 +233,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(HET, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	/**
@@ -256,12 +256,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, HET, ALT, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -269,12 +269,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, ALT, ALT, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -282,12 +282,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -295,12 +295,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(UKN, HET, HET, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -308,12 +308,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(UKN, ALT, HET, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -321,12 +321,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, HET, UKN, HET), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -334,12 +334,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(UKN, UKN, UKN, ALT), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	@Test
@@ -347,12 +347,12 @@ public class InheritanceCheckerMTSmallTest extends MendelianCompatibilityChecker
 		gcList = getGenotypeCallsList(lst(REF, HET, UKN, UKN), ChromosomeType.MITOCHONDRIAL);
 		result = checker.checkMendelianInheritance(gcList);
 
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
-		Assert.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
-		Assert.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_DOMINANT).size());
+		Assertions.assertEquals(0, result.get(ModeOfInheritance.X_RECESSIVE).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.MITOCHONDRIAL).size());
+		Assertions.assertEquals(1, result.get(ModeOfInheritance.ANY).size());
 	}
 
 	// @Test

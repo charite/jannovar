@@ -9,9 +9,9 @@ import de.charite.compbio.jannovar.reference.SVBreakend;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.testutils.ResourceUtils;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ public class SVBreakendAnnotationBuilderTest {
 	/**
 	 * Copy out .ser file to temporary directory for tests and load.
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		dbPath = tmpDir + "/chr1_oma1_to_jun.ser";
@@ -55,13 +55,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.58946661, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, STRUCTURAL_VARIANT, CODING_SEQUENCE_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -76,13 +76,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.58957158, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, STRUCTURAL_VARIANT, INTRON_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -97,13 +97,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.58946503, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, THREE_PRIME_UTR_EXON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -118,13 +118,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.59012404, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, FIVE_PRIME_UTR_EXON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -139,13 +139,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.59012356, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, FIVE_PRIME_UTR_INTRON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -160,13 +160,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.59012450, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, UPSTREAM_GENE_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -181,13 +181,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.58941394, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, DOWNSTREAM_GENE_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -202,13 +202,13 @@ public class SVBreakendAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVBreakendAnnotationBuilder(oma1, svBnd).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVBreakend{genomePos=1:g.59017450, genomePos2=1:g.43, posCILowerBound=0, posCIUpperBound=0" +
 				", pos2CILowerBound=0, pos2CIUpperBound=0, posRefBases=A, pos2RefBases=T, side=LEFT_END}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[TRANSLOCATION, INTERGENIC_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);

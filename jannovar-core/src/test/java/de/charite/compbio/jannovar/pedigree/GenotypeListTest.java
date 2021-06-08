@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.pedigree;
 
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.mendel.GenotypeCalls;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenotypeListTest {
 
@@ -17,7 +17,7 @@ public class GenotypeListTest {
 	 */
 	GenotypeList list;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws PedParseException {
 
 		// create pedigrees (with 4 and 5 people)
@@ -39,8 +39,8 @@ public class GenotypeListTest {
 
 	@Test
 	public void testIsNamesEqual() {
-		Assert.assertTrue(list.namesEqual(pedigree1));
-		Assert.assertFalse(list.namesEqual(pedigree2));
+		Assertions.assertTrue(list.namesEqual(pedigree1));
+		Assertions.assertFalse(list.namesEqual(pedigree2));
 	}
 
 }

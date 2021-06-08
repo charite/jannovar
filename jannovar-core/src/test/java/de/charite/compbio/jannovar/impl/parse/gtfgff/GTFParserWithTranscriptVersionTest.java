@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.impl.parse.gtfgff;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class GTFParserWithTranscriptVersionTest {
 	InputStream stream;
 	String lines;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		lines = "3\tensembl_havana\tgene\t129528640\t129535169\t.\t+\t.\tgene_id \"ENSG00000163914\"; gene_version \"4\"; gene_name \"RHO\"; gene_source \"ensembl_havana\"; gene_biotype \"protein_coding\";\n" +
 			"3\tensembl_havana\ttranscript\t129528640\t129535169\t.\t+\t.\tgene_id \"ENSG00000163914\"; gene_version \"4\"; transcript_id \"ENST00000296271\"; transcript_version \"3\"; gene_name \"RHO\"; gene_source \"ensembl_havana\"; gene_biotype \"protein_coding\"; transcript_name \"RHO-001\"; transcript_source \"ensembl_havana\"; transcript_biotype \"protein_coding\"; tag \"CCDS\"; ccds_id \"CCDS3063\";\n" +
@@ -44,11 +44,11 @@ public class GTFParserWithTranscriptVersionTest {
 		while ((record = parser.next()) != null)
 			records.add(record);
 
-		Assert.assertEquals(16, records.size());
-		Assert.assertEquals(
+		Assertions.assertEquals(16, records.size());
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=3, source=ensembl_havana, type=gene, begin=129528639, end=129535169, score=., strand=FORWARD, phase=0, attributes={gene_biotype=protein_coding, gene_id=ENSG00000163914, gene_name=RHO, gene_source=ensembl_havana, gene_version=4}]",
 			records.get(0).toString());
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"FeatureRecord [seqID=3, source=ensembl_havana, type=UTR, begin=129533718, end=129535169, score=., strand=FORWARD, phase=0, attributes={ccds_id=CCDS3063, gene_biotype=protein_coding, gene_id=ENSG00000163914, gene_name=RHO, gene_source=ensembl_havana, gene_version=4, tag=CCDS, transcript_biotype=protein_coding, transcript_id=ENST00000296271, transcript_name=RHO-001, transcript_source=ensembl_havana, transcript_version=3}]",
 			records.get(15).toString());
 	}

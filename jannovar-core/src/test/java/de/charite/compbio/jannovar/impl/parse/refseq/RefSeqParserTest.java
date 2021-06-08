@@ -45,10 +45,9 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.ini4j.Profile.Section;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 public class RefSeqParserTest {
 
@@ -64,7 +63,8 @@ public class RefSeqParserTest {
 	// INI section for curated transcripts
 	Section curatedIniSection;
 
-	@Before public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		dataDirectory = new File("src/test/data/mini_refseq");
 
 		String allLines = "[hg19/refseq]\n" + "type=refseq\n" + "alias=MT,M,chrM\n"
@@ -89,7 +89,8 @@ public class RefSeqParserTest {
 		curatedIniSection = ini.get("hg19/refseq");
 	}
 
-	@After public void tearDown() throws Exception {
+	@AfterEach
+	public void tearDown() throws Exception {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration conf = ctx.getConfiguration();
 		conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
@@ -100,7 +101,7 @@ public class RefSeqParserTest {
 			new ArrayList<String>(), allIniSection);
 		ImmutableList<TranscriptModel> result = parser.run();
 
-		Assert.assertEquals(12, result.size());
+		Assertions.assertEquals(12, result.size());
 
 		SortedSet<String> values = new TreeSet<String>();
 		for (TranscriptModel tx : result) {
@@ -116,11 +117,11 @@ public class RefSeqParserTest {
 			"XM_005252756.1(11:g.47487489_47522484)", "XM_005252757.1(11:g.47487489_47522484)",
 			"XM_005252758.1(11:g.47487489_47545089)"));
 
-		Assert.assertEquals(expected, values);
+		Assertions.assertEquals(expected, values);
 
-		Assert.assertEquals("10658", result.get(0).getGeneID());
-		Assert.assertEquals("CELF1", result.get(0).getGeneSymbol());
-		Assert.assertEquals(
+		Assertions.assertEquals("10658", result.get(0).getGeneID());
+		Assertions.assertEquals("CELF1", result.get(0).getGeneSymbol());
+		Assertions.assertEquals(
 			"{CCDS_ID=CCDS7938|CCDS7939|CCDS31482|CCDS53622|CCDS53623, COSMIC_ID=CELF1, "
 				+ "ENSEMBL_GENE_ID=ENSG00000149187, ENTREZ_ID=10658, "
 				+ "HGNC_ALIAS=CUG-BP|hNab50|BRUNOL2|NAB50|CUGBP|NAPOR|EDEN-BP, "
@@ -135,7 +136,7 @@ public class RefSeqParserTest {
 			new ArrayList<>(), curatedIniSection);
 		ImmutableList<TranscriptModel> result = parser.run();
 
-		Assert.assertEquals(6, result.size());
+		Assertions.assertEquals(6, result.size());
 
 		SortedSet<String> values = new TreeSet<String>();
 		for (TranscriptModel tx : result) {
@@ -148,7 +149,7 @@ public class RefSeqParserTest {
 			"NM_001172640.1(11:g.47487489_47510576)", "NM_006560.3(11:g.47487489_47574792)",
 			"NM_198700.2(11:g.47487489_47516073)"));
 
-		Assert.assertEquals(expected, values);
+		Assertions.assertEquals(expected, values);
 	}
 
 	@Test public void testRun() throws Exception {
@@ -179,11 +180,11 @@ public class RefSeqParserTest {
 		transcripts.forEach(transcript -> System.out.println(printTranscriptModel(transcript)));
 		checkNm1636Transcript(transcripts);
 
-		assertEquals(5, transcripts.size());
+		Assertions.assertEquals(5, transcripts.size());
 		List<Integer> chromosomes = transcripts.stream().map(TranscriptModel::getChr).distinct()
 			.sorted().collect(toList());
 		System.out.println("Chromosomes: " + chromosomes);
-		assertEquals(ImmutableList.of(2, 7, 24), chromosomes);
+		Assertions.assertEquals(ImmutableList.of(2, 7, 24), chromosomes);
 	}
 
 	private static void checkNm1636Transcript(ImmutableList<TranscriptModel> transcripts) {
@@ -191,17 +192,17 @@ public class RefSeqParserTest {
 			.filter(x -> x.getAccession().equals("NM_001636.3")).findFirst().get();
 
 		GenomeInterval txRegion = nm_1636.getTXRegion().withStrand(Strand.FWD);
-		assertEquals(1455044, txRegion.getBeginPos());
-		assertEquals(1461039, txRegion.getEndPos());
+		Assertions.assertEquals(1455044, txRegion.getBeginPos());
+		Assertions.assertEquals(1461039, txRegion.getEndPos());
 
 		GenomeInterval cdsRegion = nm_1636.getCDSRegion().withStrand(Strand.FWD);
-		assertEquals(1455494, cdsRegion.getBeginPos());
-		assertEquals(1460902, cdsRegion.getEndPos());
+		Assertions.assertEquals(1455494, cdsRegion.getBeginPos());
+		Assertions.assertEquals(1460902, cdsRegion.getEndPos());
 
-		assertEquals(4, nm_1636.getExonRegions().size());
+		Assertions.assertEquals(4, nm_1636.getExonRegions().size());
 		GenomeInterval exon1 = nm_1636.getExonRegions().get(0).withStrand(Strand.FWD);
-		assertEquals(1460791, exon1.getBeginPos());
-		assertEquals(1461039, exon1.getEndPos());
+		Assertions.assertEquals(1460791, exon1.getBeginPos());
+		Assertions.assertEquals(1461039, exon1.getEndPos());
 	}
 
 	private void checkMatchesOldData(ImmutableList<TranscriptModel> transcripts) throws Exception {
@@ -219,7 +220,7 @@ public class RefSeqParserTest {
 			newTranscripts.values().stream().map(TranscriptModel::getChr).distinct().count(),
 			newTranscripts.size());
 
-		assertEquals(oldTranscripts.keySet(), newTranscripts.keySet());
+		Assertions.assertEquals(oldTranscripts.keySet(), newTranscripts.keySet());
 
 		Set<TranscriptModel> missingTranscriptModels = Sets
 			.difference(new HashSet<>(oldTranscripts.values()),
@@ -229,7 +230,7 @@ public class RefSeqParserTest {
 			//			missingTranscriptModels.forEach(tx -> System.out.println(printTranscriptModel(tx)));
 		}
 
-		assertEquals(oldTranscripts.size(), transcripts.size());
+		Assertions.assertEquals(oldTranscripts.size(), transcripts.size());
 		oldTranscripts.forEach((s, transcriptModel) -> {
 			TranscriptModel newTranscriptModel = newTranscripts.get(s);
 			if (!transcriptModel.equals(newTranscriptModel)) {
@@ -278,17 +279,17 @@ public class RefSeqParserTest {
 			Collections.emptyList(), iniSection);
 
 		ImmutableList<TranscriptModel> transcripts = instance.run();
-		assertEquals(3, transcripts.size());
+		Assertions.assertEquals(3, transcripts.size());
 
 		// Check transcript properties.
 
 		// NM_001042544.1
 		TranscriptModel tx0 = transcripts.get(0);
-		assertTrue(tx0.isHasIndels());
-		assertFalse(tx0.isHasSubstitutions());
-		assertEquals("NM_001042544.1", tx0.getAccession());
+		Assertions.assertTrue(tx0.isHasIndels());
+		Assertions.assertFalse(tx0.isHasSubstitutions());
+		Assertions.assertEquals("NM_001042544.1", tx0.getAccession());
 		// Check alignment
-		assertEquals(
+		Assertions.assertEquals(
 			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, " +
 				"Anchor{gapPos=3235, seqPos=3235}, Anchor{gapPos=3236, seqPos=3235}, " +
 				"Anchor{gapPos=5145, seqPos=5144}], qryAnchors=[Anchor{gapPos=0, seqPos=0}, " +
@@ -299,24 +300,24 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx0Decorator = new TranscriptProjectionDecorator(tx0);
 		TranscriptPosition tx0Pos0 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123094));
-		assertEquals(3234, tx0Pos0.getPos());
+		Assertions.assertEquals(3234, tx0Pos0.getPos());
 		TranscriptPosition tx0Pos1 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123095));
-		assertEquals(3236, tx0Pos1.getPos());
+		Assertions.assertEquals(3236, tx0Pos1.getPos());
 		TranscriptPosition tx0Pos2 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123096));
-		assertEquals(3237, tx0Pos2.getPos());
+		Assertions.assertEquals(3237, tx0Pos2.getPos());
 		TranscriptPosition tx0Pos3 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123097));
-		assertEquals(3238, tx0Pos3.getPos());
+		Assertions.assertEquals(3238, tx0Pos3.getPos());
 
 		// NM_001042545.1
 		TranscriptModel tx1 = transcripts.get(1);
-		assertTrue(tx1.isHasIndels());
-		assertFalse(tx1.isHasSubstitutions());
-		assertEquals("NM_001042545.1", tx1.getAccession());
+		Assertions.assertTrue(tx1.isHasIndels());
+		Assertions.assertFalse(tx1.isHasSubstitutions());
+		Assertions.assertEquals("NM_001042545.1", tx1.getAccession());
 		// Check alignment
-		assertEquals(
+		Assertions.assertEquals(
 			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, " +
 				"Anchor{gapPos=3051, seqPos=3051}, Anchor{gapPos=3052, seqPos=3051}, " +
 				"Anchor{gapPos=4961, seqPos=4960}], qryAnchors=[Anchor{gapPos=0, seqPos=0}, " +
@@ -327,24 +328,24 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx1Decorator = new TranscriptProjectionDecorator(tx1);
 		TranscriptPosition tx1Pos0 = tx1Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123094));
-		assertEquals(3050, tx1Pos0.getPos());
+		Assertions.assertEquals(3050, tx1Pos0.getPos());
 		TranscriptPosition tx1Pos1 = tx1Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123095));
-		assertEquals(3052, tx1Pos1.getPos());
+		Assertions.assertEquals(3052, tx1Pos1.getPos());
 		TranscriptPosition tx1Pos2 = tx1Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123096));
-		assertEquals(3053, tx1Pos2.getPos());
+		Assertions.assertEquals(3053, tx1Pos2.getPos());
 		TranscriptPosition tx1Pos3 = tx1Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123097));
-		assertEquals(3054, tx1Pos3.getPos());
+		Assertions.assertEquals(3054, tx1Pos3.getPos());
 
 		// NM_003573.2
 		TranscriptModel tx2 = transcripts.get(2);
-		assertTrue(tx2.isHasIndels());
-		assertFalse(tx2.isHasSubstitutions());
-		assertEquals("NM_003573.2", tx2.getAccession());
+		Assertions.assertTrue(tx2.isHasIndels());
+		Assertions.assertFalse(tx2.isHasSubstitutions());
+		Assertions.assertEquals("NM_003573.2", tx2.getAccession());
 		// Check alignment
-		assertEquals(
+		Assertions.assertEquals(
 			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, Anchor{gapPos=3124, seqPos=3124}, "
 				+ "Anchor{gapPos=3125, seqPos=3124}, Anchor{gapPos=5034, seqPos=5033}], "
 				+ "qryAnchors=[Anchor{gapPos=0, seqPos=0}, Anchor{gapPos=3124, seqPos=3124}, "
@@ -354,16 +355,16 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx2Decorator = new TranscriptProjectionDecorator(tx2);
 		TranscriptPosition tx2Pos0 = tx2Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123094));
-		assertEquals(3123, tx2Pos0.getPos());
+		Assertions.assertEquals(3123, tx2Pos0.getPos());
 		TranscriptPosition tx2Pos1 = tx2Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123095));
-		assertEquals(3125, tx2Pos1.getPos());
+		Assertions.assertEquals(3125, tx2Pos1.getPos());
 		TranscriptPosition tx2Pos2 = tx2Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123096));
-		assertEquals(3126, tx2Pos2.getPos());
+		Assertions.assertEquals(3126, tx2Pos2.getPos());
 		TranscriptPosition tx2Pos3 = tx2Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 19, 41123097));
-		assertEquals(3127, tx2Pos3.getPos());
+		Assertions.assertEquals(3127, tx2Pos3.getPos());
 	}
 
 	/**
@@ -390,21 +391,21 @@ public class RefSeqParserTest {
 			Collections.emptyList(), iniSection);
 
 		ImmutableList<TranscriptModel> transcripts = instance.run();
-		assertEquals(3, transcripts.size());
+		Assertions.assertEquals(3, transcripts.size());
 
-		assertEquals("NM_001017975.3", transcripts.get(0).getAccession());
-		assertEquals("NM_006304.1", transcripts.get(1).getAccession());
-		assertEquals("XM_005270552.1", transcripts.get(2).getAccession());
+		Assertions.assertEquals("NM_001017975.3", transcripts.get(0).getAccession());
+		Assertions.assertEquals("NM_006304.1", transcripts.get(1).getAccession());
+		Assertions.assertEquals("XM_005270552.1", transcripts.get(2).getAccession());
 
 		// Check transcript properties.
 
 		// NM_001017975.3
 		TranscriptModel tx0 = transcripts.get(0);
-		assertTrue(tx0.isHasIndels());
-		assertFalse(tx0.isHasSubstitutions());
-		assertEquals("NM_001017975.3", tx0.getAccession());
+		Assertions.assertTrue(tx0.isHasIndels());
+		Assertions.assertFalse(tx0.isHasSubstitutions());
+		Assertions.assertEquals("NM_001017975.3", tx0.getAccession());
 		// Check alignment
-		assertEquals(
+		Assertions.assertEquals(
 			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, " +
 				"Anchor{gapPos=1, seqPos=0}, Anchor{gapPos=4932, seqPos=4931}], " +
 				"qryAnchors=[Anchor{gapPos=0, seqPos=0}, Anchor{gapPos=1, seqPos=1}, " +
@@ -414,16 +415,16 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx0Decorator = new TranscriptProjectionDecorator(tx0);
 		TranscriptPosition tx0Pos0 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870425));
-		assertEquals(0, tx0Pos0.getPos());
+		Assertions.assertEquals(0, tx0Pos0.getPos());
 		TranscriptPosition tx0Pos1 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870424));
-		assertEquals(1, tx0Pos1.getPos());
+		Assertions.assertEquals(1, tx0Pos1.getPos());
 		TranscriptPosition tx0Pos2 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870423));
-		assertEquals(2, tx0Pos2.getPos());
+		Assertions.assertEquals(2, tx0Pos2.getPos());
 		TranscriptPosition tx0Pos3 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 91870422));
-		assertEquals(3, tx0Pos3.getPos());
+		Assertions.assertEquals(3, tx0Pos3.getPos());
 	}
 
 	/**
@@ -432,7 +433,8 @@ public class RefSeqParserTest {
 	 * This is challenging as the transcripts on the reverse strand and NM_000257.2 aligns
 	 * with gaps.
 	 */
-	@Test public void testBuildMyh7()
+	@Test
+	public void testBuildMyh7()
 		throws IOException, TranscriptParseException, ProjectionException {
 		Path dataDirectory = Paths.get("src/test/resources/build/hg19/refseq_myh7")
 			.toAbsolutePath();
@@ -450,22 +452,22 @@ public class RefSeqParserTest {
 			Collections.emptyList(), iniSection);
 
 		ImmutableList<TranscriptModel> transcripts = instance.run();
-		assertEquals(4, transcripts.size());
+		Assertions.assertEquals(4, transcripts.size());
 
-		assertEquals("NM_000257.2", transcripts.get(0).getAccession());
-		assertEquals("XR_245686.1", transcripts.get(1).getAccession());
-		assertEquals("XM_005267697.1", transcripts.get(2).getAccession());
-		assertEquals("XM_005267696.1", transcripts.get(3).getAccession());
+		Assertions.assertEquals("NM_000257.2", transcripts.get(0).getAccession());
+		Assertions.assertEquals("XR_245686.1", transcripts.get(1).getAccession());
+		Assertions.assertEquals("XM_005267697.1", transcripts.get(2).getAccession());
+		Assertions.assertEquals("XM_005267696.1", transcripts.get(3).getAccession());
 
 		// Check transcript properties.
 
 		// NM_000257.2
 		TranscriptModel tx0 = transcripts.get(0);
-		assertTrue(tx0.isHasIndels());
-		assertTrue(tx0.isHasSubstitutions());
-		assertEquals("NM_000257.2", tx0.getAccession());
+		Assertions.assertTrue(tx0.isHasIndels());
+		Assertions.assertTrue(tx0.isHasSubstitutions());
+		Assertions.assertEquals("NM_000257.2", tx0.getAccession());
 		// Check alignment
-		assertEquals(
+		Assertions.assertEquals(
 			"Alignment{refAnchors=[Anchor{gapPos=0, seqPos=0}, "
 				+ "Anchor{gapPos=6, seqPos=6}, Anchor{gapPos=7, seqPos=6}, "
 				+ "Anchor{gapPos=15, seqPos=14}, Anchor{gapPos=22, seqPos=21}, "
@@ -484,31 +486,31 @@ public class RefSeqParserTest {
 		TranscriptProjectionDecorator tx0Decorator = new TranscriptProjectionDecorator(tx0);
 		TranscriptPosition tx0Pos0 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903495));
-		assertEquals(0, tx0Pos0.getPos());
+		Assertions.assertEquals(0, tx0Pos0.getPos());
 		TranscriptPosition tx0Pos1 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903494));
-		assertEquals(1, tx0Pos1.getPos());
+		Assertions.assertEquals(1, tx0Pos1.getPos());
 		TranscriptPosition tx0Pos2 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903493));
-		assertEquals(2, tx0Pos2.getPos());
+		Assertions.assertEquals(2, tx0Pos2.getPos());
 		TranscriptPosition tx0Pos3 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903492));
-		assertEquals(3, tx0Pos3.getPos());
+		Assertions.assertEquals(3, tx0Pos3.getPos());
 		TranscriptPosition tx0Pos4 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903491));
-		assertEquals(4, tx0Pos4.getPos());
+		Assertions.assertEquals(4, tx0Pos4.getPos());
 		TranscriptPosition tx0Pos5 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903490));
-		assertEquals(5, tx0Pos5.getPos());
+		Assertions.assertEquals(5, tx0Pos5.getPos());
 		TranscriptPosition tx0Pos6 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903489));
-		assertEquals(7, tx0Pos6.getPos());
+		Assertions.assertEquals(7, tx0Pos6.getPos());
 		TranscriptPosition tx0Pos7 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903488));
-		assertEquals(8, tx0Pos7.getPos());
+		Assertions.assertEquals(8, tx0Pos7.getPos());
 		TranscriptPosition tx0Pos8 = tx0Decorator
 			.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 14, 23903487));
-		assertEquals(9, tx0Pos8.getPos());
+		Assertions.assertEquals(9, tx0Pos8.getPos());
 	}
 
 }

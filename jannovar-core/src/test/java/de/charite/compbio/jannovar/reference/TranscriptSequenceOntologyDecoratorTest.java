@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TranscriptSequenceOntologyDecoratorTest {
 
@@ -30,7 +30,7 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
@@ -55,10 +55,10 @@ public class TranscriptSequenceOntologyDecoratorTest {
 
 		GenomeInterval expectedStart = new GenomeInterval(refDict, Strand.FWD, 1, 6640669, 6640672,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedStart, decorator.getStartCodonInterval());
+		Assertions.assertEquals(expectedStart, decorator.getStartCodonInterval());
 		GenomeInterval expectedStop = new GenomeInterval(refDict, Strand.FWD, 1, 6649269, 6649272,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedStop, decorator.getStopCodonInterval());
+		Assertions.assertEquals(expectedStop, decorator.getStopCodonInterval());
 	}
 
 	@Test
@@ -67,10 +67,10 @@ public class TranscriptSequenceOntologyDecoratorTest {
 
 		GenomeInterval expectedStop = new GenomeInterval(refDict, Strand.FWD, 1, 23688461, 23688464,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedStop, decorator.getStopCodonInterval());
+		Assertions.assertEquals(expectedStop, decorator.getStopCodonInterval());
 		GenomeInterval expectedStart = new GenomeInterval(refDict, Strand.FWD, 1, 23694495, 23694498,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedStart, decorator.getStartCodonInterval());
+		Assertions.assertEquals(expectedStart, decorator.getStartCodonInterval());
 	}
 
 	@Test
@@ -79,10 +79,10 @@ public class TranscriptSequenceOntologyDecoratorTest {
 
 		GenomeInterval expectedFivePrime = new GenomeInterval(refDict, Strand.FWD, 1, 6640062, 6640669,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedFivePrime, decorator.getFivePrimeUTRInterval());
+		Assertions.assertEquals(expectedFivePrime, decorator.getFivePrimeUTRInterval());
 		GenomeInterval expectedThreePrime = new GenomeInterval(refDict, Strand.FWD, 1, 6649272, 6649340,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedThreePrime, decorator.getThreePrimeUTRInterval());
+		Assertions.assertEquals(expectedThreePrime, decorator.getThreePrimeUTRInterval());
 	}
 
 
@@ -94,12 +94,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
 			new GenomeInterval(refDict, Strand.FWD, 1, 6640062, 6640196),
 			new GenomeInterval(refDict, Strand.FWD, 1, 6640600, 6640669)
 		);
-		Assert.assertEquals(expectedFivePrimes, decorator.getFivePrimeUTRExonIntervals());
+		Assertions.assertEquals(expectedFivePrimes, decorator.getFivePrimeUTRExonIntervals());
 
 		ImmutableList<GenomeInterval> expectedThreePrimes = ImmutableList.of(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6649272, 6649340)
 		);
-		Assert.assertEquals(expectedThreePrimes, decorator.getThreePrimeUTRExonIntervals());
+		Assertions.assertEquals(expectedThreePrimes, decorator.getThreePrimeUTRExonIntervals());
 	}
 
 
@@ -107,23 +107,23 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithXPrimeUTRExonForward() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6640061, 6640062)
 		));
-		Assert.assertTrue(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertTrue(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6640062, 6640063)
 		));
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6640196, 6640197)
 		));
 
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6649271, 6649272)
 		));
-		Assert.assertTrue(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertTrue(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6649272, 6649273)
 		));
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 6649340, 6649341)
 		));
 	}
@@ -134,10 +134,10 @@ public class TranscriptSequenceOntologyDecoratorTest {
 
 		GenomeInterval expectedFivePrime = new GenomeInterval(refDict, Strand.FWD, 1, 23694498, 23696357,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedFivePrime, decorator.getFivePrimeUTRInterval());
+		Assertions.assertEquals(expectedFivePrime, decorator.getFivePrimeUTRInterval());
 		GenomeInterval expectedThreePrime = new GenomeInterval(refDict, Strand.FWD, 1, 23685940, 23688461,
 			PositionType.ZERO_BASED);
-		Assert.assertEquals(expectedThreePrime, decorator.getThreePrimeUTRInterval());
+		Assertions.assertEquals(expectedThreePrime, decorator.getThreePrimeUTRInterval());
 	}
 
 	@Test
@@ -148,12 +148,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
 			new GenomeInterval(refDict, Strand.FWD, 1, 23695858, 23696357),
 			new GenomeInterval(refDict, Strand.FWD, 1, 23694498, 23694558)
 		);
-		Assert.assertEquals(expectedFivePrimes, decorator.getFivePrimeUTRExonIntervals());
+		Assertions.assertEquals(expectedFivePrimes, decorator.getFivePrimeUTRExonIntervals());
 
 		ImmutableList<GenomeInterval> expectedThreePrimes = ImmutableList.of(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23685940, 23688461)
 		);
-		Assert.assertEquals(expectedThreePrimes, decorator.getThreePrimeUTRExonIntervals());
+		Assertions.assertEquals(expectedThreePrimes, decorator.getThreePrimeUTRExonIntervals());
 	}
 
 
@@ -161,23 +161,23 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithXPrimeUTRExonReverse() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoReverse);
 
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23695859, 23695858)
 		));
-		Assert.assertTrue(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertTrue(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23695857, 23695859)
 		));
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23695857, 23695858)
 		));
 
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23685939, 23685940)
 		));
-		Assert.assertTrue(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertTrue(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23685934, 23685941)
 		));
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTRExon(
 			new GenomeInterval(refDict, Strand.FWD, 1, 23688461, 23688462)
 		));
 	}
@@ -187,12 +187,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testTranslationalStartSiteOverlapForward() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6640666, 6640669, PositionType.ZERO_BASED)));
 		for (int i = 1; i <= 5; ++i)
-			Assert.assertTrue(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
+			Assertions.assertTrue(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
 				6640666 + i, 6640669 + i, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithTranslationalStartSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6640672, 6640675, PositionType.ZERO_BASED)));
 	}
 
@@ -200,12 +200,12 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testTranslationalStopSiteOverlapForward() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6649266, 6649269, PositionType.ZERO_BASED)));
 		for (int i = 1; i <= 5; ++i)
-			Assert.assertTrue(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
+			Assertions.assertTrue(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
 				6649266 + i, 6649269 + i, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithTranslationalStopSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6649272, 6649275, PositionType.ZERO_BASED)));
 	}
 
@@ -213,13 +213,13 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testFivePrimeUTROverlapForward() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640059,
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640059,
 			6640062, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640060,
+		Assertions.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640060,
 			6640063, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640668,
+		Assertions.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640668,
 			6640671, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640669,
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640669,
 			6640672, PositionType.ZERO_BASED)));
 	}
 
@@ -227,13 +227,13 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testThreePrimeUTROverlapForward() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649269,
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649269,
 			6649272, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
+		Assertions.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
 			6649273, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649339,
+		Assertions.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649339,
 			6649342, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
 			6649343, PositionType.ZERO_BASED)));
 	}
 
@@ -241,9 +241,9 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testLiesInExonForwardSuccess() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertTrue(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640669, 6640672,
+		Assertions.assertTrue(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640669, 6640672,
 			PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6646754, 6646757,
+		Assertions.assertTrue(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6646754, 6646757,
 			PositionType.ZERO_BASED)));
 	}
 
@@ -251,7 +251,7 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testLiesInExonForwardFailure() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640195, 6640198,
+		Assertions.assertFalse(decorator.liesInExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640195, 6640198,
 			PositionType.ZERO_BASED)));
 	}
 
@@ -259,9 +259,9 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testLiesInCDSExonForwardSuccess() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertTrue(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640669, 6640672,
+		Assertions.assertTrue(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640669, 6640672,
 			PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6646754, 6646757,
+		Assertions.assertTrue(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6646754, 6646757,
 			PositionType.ZERO_BASED)));
 	}
 
@@ -269,7 +269,7 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testLiesInCDSExonForwardFailure() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640668, 6640671,
+		Assertions.assertFalse(decorator.liesInCDSExon(new GenomeInterval(refDict, Strand.FWD, 1, 6640668, 6640671,
 			PositionType.ZERO_BASED)));
 	}
 
@@ -277,11 +277,11 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testLiesInIntron() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640195, 6640600,
+		Assertions.assertFalse(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640195, 6640600,
 			PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640196, 6640600,
+		Assertions.assertTrue(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640196, 6640600,
 			PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640196, 6640601,
+		Assertions.assertFalse(decorator.liesInIntron(new GenomeInterval(refDict, Strand.FWD, 1, 6640196, 6640601,
 			PositionType.ZERO_BASED)));
 	}
 
@@ -290,23 +290,23 @@ public class TranscriptSequenceOntologyDecoratorTest {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
 		// donor region
-		Assert.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642350,
+		Assertions.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642350,
 			6642356, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642350,
+		Assertions.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642350,
 			6642357, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642366,
+		Assertions.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642366,
 			6642370, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642367,
+		Assertions.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642367,
 			6642370, PositionType.ZERO_BASED)));
 
 		// acceptor region
-		Assert.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642100,
+		Assertions.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642100,
 			6642109, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642100,
+		Assertions.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642100,
 			6642110, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642119,
+		Assertions.assertTrue(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642119,
 			6642125, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642120,
+		Assertions.assertFalse(decorator.overlapsWithSpliceRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6642120,
 			6642125, PositionType.ZERO_BASED)));
 	}
 
@@ -314,13 +314,13 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithSpliceDonorSite() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6645978, 6645980, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6645977,
+		Assertions.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6645977,
 			6645980, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6645975,
+		Assertions.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6645975,
 			6645977, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6645972, 6645976, PositionType.ZERO_BASED)));
 	}
 
@@ -328,13 +328,13 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithSpliceAcceptorSite() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6642117, 6642119, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6642116,
+		Assertions.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6642116,
 			6642119, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6642113,
+		Assertions.assertTrue(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1, 6642113,
 			6642117, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
+		Assertions.assertFalse(decorator.overlapsWithSpliceAcceptorSite(new GenomeInterval(refDict, Strand.FWD, 1,
 			6642112, 6642115, PositionType.ZERO_BASED)));
 	}
 
@@ -342,11 +342,11 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithUpstreamRegion() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6640062,
+		Assertions.assertFalse(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6640062,
 			6640064, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6640061,
+		Assertions.assertTrue(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6640061,
 			6640064, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6635060,
+		Assertions.assertFalse(decorator.overlapsWithUpstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6635060,
 			6635061, PositionType.ZERO_BASED)));
 
 	}
@@ -355,11 +355,11 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithDownstreamRegion() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6649339,
+		Assertions.assertFalse(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6649339,
 			6649340, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
+		Assertions.assertTrue(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
 			6649341, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6659339,
+		Assertions.assertFalse(decorator.overlapsWithDownstreamRegion(new GenomeInterval(refDict, Strand.FWD, 1, 6659339,
 			6659340, PositionType.ZERO_BASED)));
 	}
 
@@ -367,11 +367,11 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithFivePrimeUTR() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640669,
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640669,
 			6640670, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640668,
+		Assertions.assertTrue(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640668,
 			6640670, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640061,
+		Assertions.assertFalse(decorator.overlapsWithFivePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6640061,
 			6640062, PositionType.ZERO_BASED)));
 
 	}
@@ -380,11 +380,11 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	public void testOverlapsWithThreePrimeUTR() {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
 			6649272, PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
+		Assertions.assertTrue(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649270,
 			6649273, PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
+		Assertions.assertFalse(decorator.overlapsWithThreePrimeUTR(new GenomeInterval(refDict, Strand.FWD, 1, 6649340,
 			6649341, PositionType.ZERO_BASED)));
 
 	}

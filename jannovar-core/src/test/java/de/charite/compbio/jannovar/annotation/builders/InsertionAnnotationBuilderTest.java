@@ -8,9 +8,9 @@ import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 // TODO(holtgrem): What exactly should be counted as stop gain?
 // TODO(holtgrem): check distance computation in annotation, for upstream/downstream etc. also in on other tests
@@ -39,7 +39,7 @@ public class InsertionAnnotationBuilderTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory
 			.parseKnownGenesLine(
@@ -69,11 +69,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(null, anno.getAnnoLoc());
-		Assert.assertEquals(null, anno.getCDSNTChange());
-		Assert.assertEquals(null, anno.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(null, anno.getAnnoLoc());
+		Assertions.assertEquals(null, anno.getCDSNTChange());
+		Assertions.assertEquals(null, anno.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -81,11 +81,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(null, anno.getAnnoLoc());
-		Assert.assertEquals(null, anno.getCDSNTChange());
-		Assert.assertEquals(null, anno.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(null, anno.getAnnoLoc());
+		Assertions.assertEquals(null, anno.getCDSNTChange());
+		Assertions.assertEquals(null, anno.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -94,21 +94,21 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6632062,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(null, anno.getAnnoLoc());
-		Assert.assertEquals(null, anno.getCDSNTChange());
-		Assert.assertEquals(null, anno.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(null, anno.getAnnoLoc());
+		Assertions.assertEquals(null, anno.getCDSNTChange());
+		Assertions.assertEquals(null, anno.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno.getEffects());
 
 		// downstream intergenic
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6700340,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
-		Assert.assertEquals(null, anno2.getAnnoLoc());
-		Assert.assertEquals(null, anno2.getCDSNTChange());
-		Assert.assertEquals(null, anno2.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
+		Assertions.assertEquals(null, anno2.getAnnoLoc());
+		Assertions.assertEquals(null, anno2.getCDSNTChange());
+		Assertions.assertEquals(null, anno2.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno2.getEffects());
 	}
 
 	@Test
@@ -116,11 +116,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6646098,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(3, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("1044+8_1044+9insA", anno.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(3, anno.getAnnoLoc().getRank());
+		Assertions.assertEquals("1044+8_1044+9insA", anno.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -128,11 +128,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
 			PositionType.ZERO_BASED), "", "C");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("-1dup", anno.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(1, anno.getAnnoLoc().getRank());
+		Assertions.assertEquals("-1dup", anno.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -140,11 +140,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649272,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("2067_*1insA", anno.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(10, anno.getAnnoLoc().getRank());
+		Assertions.assertEquals("2067_*1insA", anno.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -153,11 +153,11 @@ public class InsertionAnnotationBuilderTest {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
 			PositionType.ZERO_BASED), "", "ACT");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
-		Assert.assertEquals(2, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("691-1_691insACT", anno.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assertions.assertEquals(2, anno.getAnnoLoc().getRank());
+		Assertions.assertEquals("691-1_691insACT", anno.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", anno.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno.getEffects());
 	}
 
@@ -173,33 +173,33 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AGC");
 		Annotation annotation1agc = new InsertionAnnotationBuilder(infoForward, change1agc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1agc.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation1agc.getAnnoLoc().getRank());
-		Assert.assertEquals("2066_2067insAGC", annotation1agc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1agc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1agc.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1agc.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation1agc.getAnnoLoc().getRank());
+		Assertions.assertEquals("2066_2067insAGC", annotation1agc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1agc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1agc.getEffects());
 
 		// The WT stop codon is destroyed but there is a new one downstream
 		GenomeVariant change1tgc = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
 			PositionType.ZERO_BASED), "", "TGC");
 		Annotation annotation1tgc = new InsertionAnnotationBuilder(infoForward, change1tgc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1tgc.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation1tgc.getAnnoLoc().getRank());
-		Assert.assertEquals("2066_2067insTGC", annotation1tgc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Tyrext*24)", annotation1tgc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1tgc.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1tgc.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation1tgc.getAnnoLoc().getRank());
+		Assertions.assertEquals("2066_2067insTGC", annotation1tgc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Tyrext*24)", annotation1tgc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1tgc.getEffects());
 
 		// Test case where the start codon is destroyed.
 		GenomeVariant change2agc = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640670,
 			PositionType.ZERO_BASED), "", "AGC");
 		Annotation annotation2agc = new InsertionAnnotationBuilder(infoForward, change2agc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2agc.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2agc.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insAGC", annotation2agc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2agc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.START_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation2agc.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2agc.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insAGC", annotation2agc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2agc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.START_LOST),
 			annotation2agc.getEffects());
 
 		// Test cases where the start codon is not subjected to an insertion.
@@ -209,11 +209,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TAA");
 		Annotation annotation3taa = new InsertionAnnotationBuilder(infoForward, change3taa,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3taa.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3taa.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insTAA", annotation3taa.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2*)", annotation3taa.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
+		Assertions.assertEquals(infoForward.getAccession(), annotation3taa.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3taa.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insTAA", annotation3taa.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2*)", annotation3taa.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
 			annotation3taa.getEffects());
 
 		// Directly insert some base and then a stop codon.
@@ -221,11 +221,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TCCTAA");
 		Annotation annotation3tcctaa = new InsertionAnnotationBuilder(infoForward, change3tcctaa,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3tcctaa.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3tcctaa.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insTCCTAA", annotation3tcctaa.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2_Gly3delinsSer)", annotation3tcctaa.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
+		Assertions.assertEquals(infoForward.getAccession(), annotation3tcctaa.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3tcctaa.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insTCCTAA", annotation3tcctaa.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2_Gly3delinsSer)", annotation3tcctaa.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
 			annotation3tcctaa.getEffects());
 
 		// Insertion without a new stop codon that is no duplication.
@@ -233,22 +233,22 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TCCTCCTCC");
 		Annotation annotation4tcctcctcc = new InsertionAnnotationBuilder(infoForward, change4tcctcctcc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4tcctcctcc.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4tcctcctcc.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insTCCTCCTCC", annotation4tcctcctcc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Met1_Asp2insSerSerSer)", annotation4tcctcctcc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation4tcctcctcc.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4tcctcctcc.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4tcctcctcc.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insTCCTCCTCC", annotation4tcctcctcc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Met1_Asp2insSerSerSer)", annotation4tcctcctcc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation4tcctcctcc.getEffects());
 
 		// Insertion without a new stop codon that is a duplication.
 		GenomeVariant change5gatggc = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640672,
 			PositionType.ZERO_BASED), "", "GATGGC");
 		Annotation annotation5gatggc = new InsertionAnnotationBuilder(infoForward, change5gatggc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5gatggc.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5gatggc.getAnnoLoc().getRank());
-		Assert.assertEquals("5_6insTGGCGA", annotation5gatggc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2_Gly3dup)", annotation5gatggc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+		Assertions.assertEquals(infoForward.getAccession(), annotation5gatggc.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5gatggc.getAnnoLoc().getRank());
+		Assertions.assertEquals("5_6insTGGCGA", annotation5gatggc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2_Gly3dup)", annotation5gatggc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
 			VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation5gatggc.getEffects());
 	}
 
@@ -261,21 +261,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("2_3insA", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("2_3insA", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
 		// Try to insert all non-duplicate NTs between 3 and 4.
 
@@ -283,31 +283,31 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation3a = new InsertionAnnotationBuilder(infoForward, change3a, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3a.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3a.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insA", annotation3a.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Argfs*37)", annotation3a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3a.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3a.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3a.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insA", annotation3a.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Argfs*37)", annotation3a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3a.getEffects());
 
 		GenomeVariant change3c = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640672,
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation3c = new InsertionAnnotationBuilder(infoForward, change3c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3c.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3c.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insC", annotation3c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Argfs*37)", annotation3c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3c.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3c.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3c.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insC", annotation3c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Argfs*37)", annotation3c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3c.getEffects());
 
 		GenomeVariant change3t = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640672,
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation3t = new InsertionAnnotationBuilder(infoForward, change3t, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3t.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3t.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insT", annotation3t.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2*)", annotation3t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3t.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3t.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3t.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insT", annotation3t.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2*)", annotation3t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3t.getEffects());
 
 		// Try to insert all non-duplicate NTs between 4 and 5.
 
@@ -315,21 +315,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation4c = new InsertionAnnotationBuilder(infoForward, change4c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4c.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4c.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insC", annotation4c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Alafs*37)", annotation4c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation4c.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4c.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4c.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insC", annotation4c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Alafs*37)", annotation4c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation4c.getEffects());
 
 		GenomeVariant change4t = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640673,
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation4t = new InsertionAnnotationBuilder(infoForward, change4t, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4t.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4t.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insT", annotation4t.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Valfs*37)", annotation4t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation4t.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4t.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4t.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insT", annotation4t.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Valfs*37)", annotation4t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation4t.getEffects());
 
 		// Try to insert all non-duplicate NTs between 5 and 6.
 
@@ -337,21 +337,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation5g = new InsertionAnnotationBuilder(infoForward, change5g, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5g.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5g.getAnnoLoc().getRank());
-		Assert.assertEquals("5_6insG", annotation5g.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Glufs*37)", annotation5g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation5g.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation5g.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5g.getAnnoLoc().getRank());
+		Assertions.assertEquals("5_6insG", annotation5g.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Glufs*37)", annotation5g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation5g.getEffects());
 
 		GenomeVariant change5t = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640674,
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation5t = new InsertionAnnotationBuilder(infoForward, change5t, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5t.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5t.getAnnoLoc().getRank());
-		Assert.assertEquals("5_6insT", annotation5t.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly3Argfs*36)", annotation5t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation5t.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation5t.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5t.getAnnoLoc().getRank());
+		Assertions.assertEquals("5_6insT", annotation5t.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly3Argfs*36)", annotation5t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation5t.getEffects());
 
 		// It appears to be impossible to force a stop loss for this transcript.
 
@@ -360,32 +360,32 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation6t = new InsertionAnnotationBuilder(infoForward, change6t, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation6t.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation6t.getAnnoLoc().getRank());
-		Assert.assertEquals("2066_2067insT", annotation6t.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Tyrext*15)", annotation6t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation6t.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation6t.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation6t.getAnnoLoc().getRank());
+		Assertions.assertEquals("2066_2067insT", annotation6t.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Tyrext*15)", annotation6t.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation6t.getEffects());
 
 		GenomeVariant change6c = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation6c = new InsertionAnnotationBuilder(infoForward, change6c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation6c.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation6c.getAnnoLoc().getRank());
-		Assert.assertEquals("2065_2066insC", annotation6c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Serext*15)", annotation6c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation6c.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation6c.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation6c.getAnnoLoc().getRank());
+		Assertions.assertEquals("2065_2066insC", annotation6c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Serext*15)", annotation6c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation6c.getEffects());
 
 		// Test for no change when inserting into stop codon.
 		GenomeVariant change7g = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation7g = new InsertionAnnotationBuilder(infoForward, change7g, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation7g.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation7g.getAnnoLoc().getRank());
-		Assert.assertEquals("2065_2066insG", annotation7g.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation7g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation7g.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation7g.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation7g.getAnnoLoc().getRank());
+		Assertions.assertEquals("2065_2066insG", annotation7g.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation7g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation7g.getEffects());
 	}
 
 	@Test
@@ -397,21 +397,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insGA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insGA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
 			PositionType.ZERO_BASED), "", "AG");
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("2_3insAG", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("2_3insAG", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
 		// Try to insert some non-duplicate NT pairs between 3 and 4.
 
@@ -419,31 +419,31 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AC");
 		Annotation annotation3ac = new InsertionAnnotationBuilder(infoForward, change3ac,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3ac.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3ac.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insAC", annotation3ac.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Thrfs*10)", annotation3ac.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3ac.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3ac.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3ac.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insAC", annotation3ac.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Thrfs*10)", annotation3ac.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3ac.getEffects());
 
 		GenomeVariant change3cg = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640672,
 			PositionType.ZERO_BASED), "", "CG");
 		Annotation annotation3cg = new InsertionAnnotationBuilder(infoForward, change3cg,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3cg.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3cg.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insCG", annotation3cg.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Argfs*10)", annotation3cg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3cg.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3cg.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insCG", annotation3cg.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Argfs*10)", annotation3cg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
 
 		GenomeVariant change3ta = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640672,
 			PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation3ta = new InsertionAnnotationBuilder(infoForward, change3ta,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3ta.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3ta.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insTA", annotation3ta.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2*)", annotation3ta.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3ta.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3ta.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insTA", annotation3ta.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2*)", annotation3ta.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
 
 		// Try to insert some non-duplicate NT pairs between 4 and 5.
 
@@ -451,21 +451,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CT");
 		Annotation annotation4ct = new InsertionAnnotationBuilder(infoForward, change4ct,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4ct.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4ct.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insCT", annotation4ct.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Alafs*10)", annotation4ct.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4ct.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4ct.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insCT", annotation4ct.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Alafs*10)", annotation4ct.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
 
 		GenomeVariant change4tg = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640673,
 			PositionType.ZERO_BASED), "", "TG");
 		Annotation annotation4tg = new InsertionAnnotationBuilder(infoForward, change4tg,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4tg.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4tg.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insTG", annotation4tg.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Valfs*10)", annotation4tg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4tg.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4tg.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insTG", annotation4tg.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Valfs*10)", annotation4tg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
 
 		// Try to insert some non-duplicate NT pairs between 5 and 6.
 
@@ -473,21 +473,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GC");
 		Annotation annotation5gc = new InsertionAnnotationBuilder(infoForward, change5gc,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5gc.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5gc.getAnnoLoc().getRank());
-		Assert.assertEquals("5_6insGC", annotation5gc.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Glufs*10)", annotation5gc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation5gc.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5gc.getAnnoLoc().getRank());
+		Assertions.assertEquals("5_6insGC", annotation5gc.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Glufs*10)", annotation5gc.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation3ta.getEffects());
 
 		GenomeVariant change5ta = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640674,
 			PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation5ta = new InsertionAnnotationBuilder(infoForward, change5ta,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5ta.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5ta.getAnnoLoc().getRank());
-		Assert.assertEquals("5_6insTA", annotation5ta.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly3Thrfs*9)", annotation5ta.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation5ta.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5ta.getAnnoLoc().getRank());
+		Assertions.assertEquals("5_6insTA", annotation5ta.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly3Thrfs*9)", annotation5ta.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation3cg.getEffects());
 	}
 
 	@Test
@@ -501,21 +501,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "ACTAGACT");
 		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoForward, change4actagact,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4actagact.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
-		Assert.assertEquals("6_7insTAGACTAC", annotation4actagact.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly3*)", annotation4actagact.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation4actagact.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4actagact.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
+		Assertions.assertEquals("6_7insTAGACTAC", annotation4actagact.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly3*)", annotation4actagact.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation4actagact.getEffects());
 
 		GenomeVariant change4cgtg = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640673,
 			PositionType.ZERO_BASED), "", "CGTG");
 		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoForward, change4cgtg,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4cgtg.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insCGTG", annotation4cgtg.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2Alafs*2)", annotation4cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4cgtg.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4cgtg.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insCGTG", annotation4cgtg.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2Alafs*2)", annotation4cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4cgtg.getEffects());
 	}
 
 	@Test
@@ -530,21 +530,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation1c = new InsertionAnnotationBuilder(infoReverse, change1c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation1c.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1c.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insG", annotation1c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1c.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation1c.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1c.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insG", annotation1c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1c.getEffects());
 
 		GenomeVariant change1g = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694497,
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1g = new InsertionAnnotationBuilder(infoReverse, change1g, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation1g.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1g.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insC", annotation1g.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1g.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation1g.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1g.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insC", annotation1g.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1g.getEffects());
 
 		// Insert A and C between nucleotides 2 and 3.
 
@@ -552,21 +552,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation2a = new InsertionAnnotationBuilder(infoReverse, change2a, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation2a.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2a.getAnnoLoc().getRank());
-		Assert.assertEquals("2_3insA", annotation2a.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2a.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation2a.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2a.getAnnoLoc().getRank());
+		Assertions.assertEquals("2_3insA", annotation2a.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2a.getEffects());
 
 		GenomeVariant change2c = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694496,
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation2c = new InsertionAnnotationBuilder(infoReverse, change2c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation2c.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2c.getAnnoLoc().getRank());
-		Assert.assertEquals("2_3insC", annotation2c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2c.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation2c.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2c.getAnnoLoc().getRank());
+		Assertions.assertEquals("2_3insC", annotation2c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2c.getEffects());
 
 		// Insertions between nucleotides 3 and 4.
 
@@ -574,21 +574,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation3a = new InsertionAnnotationBuilder(infoReverse, change3a, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation3a.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3a.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insA", annotation3a.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala2Serfs*16)", annotation3a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3a.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation3a.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3a.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insA", annotation3a.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala2Serfs*16)", annotation3a.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3a.getEffects());
 
 		GenomeVariant change3c = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694495,
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation3c = new InsertionAnnotationBuilder(infoReverse, change3c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation3c.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3c.getAnnoLoc().getRank());
-		Assert.assertEquals("3_4insC", annotation3c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala2Argfs*16)", annotation3c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3c.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation3c.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3c.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_4insC", annotation3c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala2Argfs*16)", annotation3c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation3c.getEffects());
 
 		// Some insertions into stop codon
 
@@ -596,21 +596,21 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation4g = new InsertionAnnotationBuilder(infoReverse, change4g, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation4g.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation4g.getAnnoLoc().getRank());
-		Assert.assertEquals("1411_1412insC", annotation4g.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*471Serext*7)", annotation4g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4g.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation4g.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation4g.getAnnoLoc().getRank());
+		Assertions.assertEquals("1411_1412insC", annotation4g.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*471Serext*7)", annotation4g.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4g.getEffects());
 
 		GenomeVariant change4c = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688463,
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation4c = new InsertionAnnotationBuilder(infoReverse, change4c, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation4c.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation4c.getAnnoLoc().getRank());
-		Assert.assertEquals("1411_1412insG", annotation4c.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation4c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation4c.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation4c.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation4c.getAnnoLoc().getRank());
+		Assertions.assertEquals("1411_1412insG", annotation4c.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation4c.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation4c.getEffects());
 	}
 
 	@Test
@@ -624,11 +624,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "ACTAGACT");
 		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoReverse, change4actagact,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation4actagact.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
-		Assert.assertEquals("4_5insAGTCTAGT", annotation4actagact.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala2Glufs*16)", annotation4actagact.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION),
+		Assertions.assertEquals(infoReverse.getAccession(), annotation4actagact.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
+		Assertions.assertEquals("4_5insAGTCTAGT", annotation4actagact.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala2Glufs*16)", annotation4actagact.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION),
 			annotation4actagact.getEffects());
 
 		// This insertion will be shifted.
@@ -636,22 +636,22 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CGTG");
 		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoReverse, change4cgtg,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation4cgtg.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
-		Assert.assertEquals("6_7insCGCA", annotation4cgtg.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala3Argfs*16)", annotation4cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4cgtg.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation4cgtg.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
+		Assertions.assertEquals("6_7insCGCA", annotation4cgtg.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala3Argfs*16)", annotation4cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation4cgtg.getEffects());
 
 		// Insert whole stop codon.
 		GenomeVariant change5cgtg = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694492,
 			PositionType.ZERO_BASED), "", "ATTA");
 		Annotation annotation5cgtg = new InsertionAnnotationBuilder(infoReverse, change5cgtg,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.getAccession(), annotation5cgtg.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation5cgtg.getAnnoLoc().getRank());
-		Assert.assertEquals("6_7insTAAT", annotation5cgtg.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala3*)", annotation5cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation5cgtg.getEffects());
+		Assertions.assertEquals(infoReverse.getAccession(), annotation5cgtg.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation5cgtg.getAnnoLoc().getRank());
+		Assertions.assertEquals("6_7insTAAT", annotation5cgtg.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala3*)", annotation5cgtg.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation5cgtg.getEffects());
 	}
 
 	@Test
@@ -664,11 +664,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionAfterExon1 = new InsertionAnnotationBuilder(infoForward, varInsertionAfterExon1,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionAfterExon1.getTranscript().getAccession());
-		Assert.assertEquals(0, annoInsertionAfterExon1.getAnnoLoc().getRank());
-		Assert.assertEquals("-70_-70+1insA", annoInsertionAfterExon1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annoInsertionAfterExon1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionAfterExon1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annoInsertionAfterExon1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-70_-70+1insA", annoInsertionAfterExon1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annoInsertionAfterExon1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT),
 			annoInsertionAfterExon1.getEffects());
 
@@ -676,22 +676,22 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionAfterExon2 = new InsertionAnnotationBuilder(infoForward, varInsertionAfterExon2,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionAfterExon2.getTranscript().getAccession());
-		Assert.assertEquals(1, annoInsertionAfterExon2.getAnnoLoc().getRank());
-		Assert.assertEquals("690_690+1insA", annoInsertionAfterExon2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annoInsertionAfterExon2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionAfterExon2.getTranscript().getAccession());
+		Assertions.assertEquals(1, annoInsertionAfterExon2.getAnnoLoc().getRank());
+		Assertions.assertEquals("690_690+1insA", annoInsertionAfterExon2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annoInsertionAfterExon2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annoInsertionAfterExon2.getEffects());
 
 		GenomeVariant varInsertionAfterExon3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642359,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionAfterExon3 = new InsertionAnnotationBuilder(infoForward, varInsertionAfterExon3,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionAfterExon3.getTranscript().getAccession());
-		Assert.assertEquals(2, annoInsertionAfterExon3.getAnnoLoc().getRank());
-		Assert.assertEquals("932_932+1insA", annoInsertionAfterExon3.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annoInsertionAfterExon3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionAfterExon3.getTranscript().getAccession());
+		Assertions.assertEquals(2, annoInsertionAfterExon3.getAnnoLoc().getRank());
+		Assertions.assertEquals("932_932+1insA", annoInsertionAfterExon3.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annoInsertionAfterExon3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annoInsertionAfterExon3.getEffects());
 
 		// directly before the exons
@@ -700,11 +700,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionBeforeExon1 = new InsertionAnnotationBuilder(infoForward, varInsertionBeforeExon1,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon1.getTranscript().getAccession());
-		Assert.assertEquals(1, annoInsertionBeforeExon1.getAnnoLoc().getRank());
-		Assert.assertEquals("-69-1_-69insA", annoInsertionBeforeExon1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annoInsertionBeforeExon1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annoInsertionBeforeExon1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-69-1_-69insA", annoInsertionBeforeExon1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annoInsertionBeforeExon1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT),
 			annoInsertionBeforeExon1.getEffects());
 
@@ -712,22 +712,22 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionBeforeExon2 = new InsertionAnnotationBuilder(infoForward, varInsertionBeforeExon2,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon2.getTranscript().getAccession());
-		Assert.assertEquals(2, annoInsertionBeforeExon2.getAnnoLoc().getRank());
-		Assert.assertEquals("691-1_691insA", annoInsertionBeforeExon2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annoInsertionBeforeExon2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon2.getTranscript().getAccession());
+		Assertions.assertEquals(2, annoInsertionBeforeExon2.getAnnoLoc().getRank());
+		Assertions.assertEquals("691-1_691insA", annoInsertionBeforeExon2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annoInsertionBeforeExon2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annoInsertionBeforeExon2.getEffects());
 
 		GenomeVariant varInsertionBeforeExon3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6645978,
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annoInsertionBeforeExon3 = new InsertionAnnotationBuilder(infoForward, varInsertionBeforeExon3,
 			new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon3.getTranscript().getAccession());
-		Assert.assertEquals(3, annoInsertionBeforeExon3.getAnnoLoc().getRank());
-		Assert.assertEquals("933-1_933insA", annoInsertionBeforeExon3.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annoInsertionBeforeExon3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionBeforeExon3.getTranscript().getAccession());
+		Assertions.assertEquals(3, annoInsertionBeforeExon3.getAnnoLoc().getRank());
+		Assertions.assertEquals("933-1_933insA", annoInsertionBeforeExon3.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annoInsertionBeforeExon3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annoInsertionBeforeExon3.getEffects());
 	}
 
@@ -748,11 +748,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("*255dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("*255dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -772,11 +772,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AAG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-37_-36insCTT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-37_-36insCTT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -796,11 +796,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("492_493insGA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("492_493insGA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -819,11 +819,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("511_512dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("511_512dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -851,11 +851,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("769_771dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("769_771dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -893,11 +893,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("439dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Met147Asnfs*8)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(5, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("439dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Met147Asnfs*8)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -920,11 +920,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AGA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("325_327dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Arg109dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("325_327dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Arg109dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -944,11 +944,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("956dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("956dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -974,11 +974,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CTCTTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("766_771dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu256_Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("766_771dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu256_Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -1001,11 +1001,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CTGCTGCTCTTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("760_771dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu254_Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("760_771dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu254_Phe257dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -1030,11 +1030,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AGT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("424_426dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Thr142dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("424_426dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Thr142dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -1059,11 +1059,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TTTGTT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("439_444dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asn147_Lys148dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("439_444dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asn147_Lys148dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -1086,11 +1086,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TTTTAGTTTGTT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("439_450dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asn147_Lys150dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("439_450dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asn147_Lys150dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -1117,11 +1117,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GAAAAG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("949_954dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*319Gluext*2)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("949_954dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*319Gluext*2)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.getEffects());
 	}
 
 	/**
@@ -1150,11 +1150,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TCC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("474_476dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu158dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("474_476dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu158dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
 			VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.getEffects());
 	}
 
@@ -1180,11 +1180,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "ATCG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("628_629insCGAT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu210Profs*61)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(6, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("628_629insCGAT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu210Profs*61)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1207,11 +1207,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(15, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("2265_2266insCC", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Tyr756Profs*21)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(15, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("2265_2266insCC", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Tyr756Profs*21)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1236,11 +1236,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("93_94insA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gln32Thrfs*39)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("93_94insA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gln32Thrfs*39)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1263,11 +1263,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AGCG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(19, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("6318_6319insAGCG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Trp2107Serfs*6)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(19, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("6318_6319insAGCG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Trp2107Serfs*6)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1292,11 +1292,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CAT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(19, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("6882_6883insCAT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asp2294_Glu2295insHis)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(19, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("6882_6883insCAT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asp2294_Glu2295insHis)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
 	}
 
 	/**
@@ -1319,11 +1319,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AAGT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(111, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("21594_21595insACTT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val7199Thrfs*8)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(111, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("21594_21595insACTT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val7199Thrfs*8)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1349,11 +1349,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("15_16insTTC", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ile5_Lys6insPhe)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("15_16insTTC", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ile5_Lys6insPhe)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
 	}
 
 	/**
@@ -1378,11 +1378,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("8108_8109insTG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser2704Alafs*301)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("8108_8109insTG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser2704Alafs*301)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1405,11 +1405,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "CTG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("6858_6859insCAG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Thr2286_Thr2287insGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("6858_6859insCAG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Thr2286_Thr2287insGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION), annotation1.getEffects());
 	}
 
 	/**
@@ -1432,11 +1432,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GACT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("608_609insGACT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gln204Thrfs*4)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(6, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("608_609insGACT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gln204Thrfs*4)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1459,11 +1459,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TGA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1147_1148insTGA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Pro383delinsLeuThr)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1147_1148insTGA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Pro383delinsLeuThr)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION), annotation1.getEffects());
 	}
 
 	/**
@@ -1489,11 +1489,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "T");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("730_731insT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asn244Ilefs*52)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("730_731insT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asn244Ilefs*52)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1514,11 +1514,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "ATGC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1806_1807insATGC", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser603Metfs*144)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1806_1807insATGC", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser603Metfs*144)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1540,11 +1540,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TTTG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("255_256insAACA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val86Asnfs*13)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("255_256insAACA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val86Asnfs*13)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1567,11 +1567,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TCT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("863_864insTCT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu288dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("863_864insTCT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu288dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
 			VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.getEffects());
 	}
 
@@ -1595,11 +1595,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AAAA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("118_119insAAAA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly40Glufs*10)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("118_119insAAAA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly40Glufs*10)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1622,11 +1622,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GTA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("3442_3443insGTA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser1147dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("3442_3443insGTA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser1147dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
 			VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.getEffects());
 	}
 
@@ -1650,11 +1650,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "AA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("328_329insAA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly110Glufs*51)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("328_329insAA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly110Glufs*51)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 
 	/**
@@ -1677,11 +1677,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("286dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu96Profs*16)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("286dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu96Profs*16)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1708,11 +1708,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "C");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1_2insC", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1_2insC", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 	}
 
 	/**
@@ -1735,11 +1735,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("2_3insA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("2_3insA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 	}
 
 	//
@@ -1766,11 +1766,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("*28_*29insTA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("*28_*29insTA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1793,11 +1793,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "TAAT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("*18_*21dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("*18_*21dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1822,11 +1822,11 @@ public class InsertionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "", "GACA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("*5_*6insGACA", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(8, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("*5_*6insGACA", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	// The following variant from the Platinum Genome project caused problems against hg19/ucsc:
@@ -1849,11 +1849,11 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 		// The following result is equal to the one of Mutalyzer.
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("660_686dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ala225_Asp233dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("660_686dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ala225_Asp233dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
 			VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.getEffects());
 	}
 
@@ -1878,11 +1878,11 @@ public class InsertionAnnotationBuilderTest {
 		// Mutalyzer: NM_001258274.1(MLH1_v001):c.940_941insTAAG NM_001258274.1(MLH1_i001):p.(Glu316*)
 		//
 		// The UCSC transcript DNA sequence is bogus here.
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("589_590insTAAG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu198insLeuSer*)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("589_590insTAAG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu198insLeuSer*)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
 			annotation1.getEffects());
 	}
 
@@ -1904,11 +1904,11 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1588-2_1588-1insT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(8, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1588-2_1588-1insT", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 2, 167140961,
@@ -1916,11 +1916,11 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(8, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("1587+1_1587+2insT", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(8, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("1587+1_1587+2insT", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation2.getEffects());
 	}
 
@@ -1942,12 +1942,12 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("126dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("126dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
 
@@ -1969,12 +1969,12 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("73_73+1insG", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("73_73+1insG", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
 
@@ -1996,12 +1996,12 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
-		Assert.assertEquals(16, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1429_1431dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser477dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
+		Assertions.assertEquals(16, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1429_1431dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser477dup)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
 			annotation1.getEffects());
 	}
@@ -2024,11 +2024,11 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
 
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1250dup", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly418Argfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1250dup", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly418Argfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.getEffects());
 	}
 }

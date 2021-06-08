@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.mendel;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ModeOfInheritanceTest {
 	/**
@@ -9,7 +9,7 @@ public class ModeOfInheritanceTest {
 	 */
 	@Test
 	public void testSize() {
-		Assert.assertEquals(6, ModeOfInheritance.values().length);
+		Assertions.assertEquals(6, ModeOfInheritance.values().length);
 	}
 
 }

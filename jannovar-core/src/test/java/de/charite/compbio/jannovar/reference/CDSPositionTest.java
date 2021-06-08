@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CDSPositionTest {
 
@@ -29,7 +29,7 @@ public class CDSPositionTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 			"uc009vmz.1\tchr1\t+\t11539294\t11541938\t11539294\t11539294\t2\t"
@@ -44,15 +44,15 @@ public class CDSPositionTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10);
-		Assert.assertEquals(pos.getTranscript(), this.infoForward);
-		Assert.assertEquals(pos.getPos(), 10);
+		Assertions.assertEquals(pos.getTranscript(), this.infoForward);
+		Assertions.assertEquals(pos.getPos(), 10);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10, PositionType.ZERO_BASED);
-		Assert.assertEquals(pos.getTranscript(), this.infoForward);
-		Assert.assertEquals(pos.getPos(), 10);
+		Assertions.assertEquals(pos.getTranscript(), this.infoForward);
+		Assertions.assertEquals(pos.getPos(), 10);
 	}
 
 }

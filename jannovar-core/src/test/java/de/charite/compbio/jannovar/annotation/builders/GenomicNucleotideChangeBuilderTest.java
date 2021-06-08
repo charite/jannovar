@@ -5,9 +5,9 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.Strand;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenomicNucleotideChangeBuilderTest {
 
@@ -18,7 +18,7 @@ public class GenomicNucleotideChangeBuilderTest {
 	private GenomeVariant varSub;
 	private GenomeVariant varInv;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		varIns = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 100), "", "CGAT");
 		varDel = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 100), "CGAT", "");
@@ -29,27 +29,27 @@ public class GenomicNucleotideChangeBuilderTest {
 
 	@Test
 	public void testInsertion() {
-		Assert.assertEquals("100_101insCGAT", new GenomicNucleotideChangeBuilder(varIns).build().toHGVSString());
+		Assertions.assertEquals("100_101insCGAT", new GenomicNucleotideChangeBuilder(varIns).build().toHGVSString());
 	}
 
 	@Test
 	public void testDeletion() {
-		Assert.assertEquals("101_104delCGAT", new GenomicNucleotideChangeBuilder(varDel).build().toHGVSString());
+		Assertions.assertEquals("101_104delCGAT", new GenomicNucleotideChangeBuilder(varDel).build().toHGVSString());
 	}
 
 	@Test
 	public void testSNV() {
-		Assert.assertEquals("101C>T", new GenomicNucleotideChangeBuilder(varSNV).build().toHGVSString());
+		Assertions.assertEquals("101C>T", new GenomicNucleotideChangeBuilder(varSNV).build().toHGVSString());
 	}
 
 	@Test
 	public void testSubstitution() {
-		Assert.assertEquals("101_103delCGAinsTTT", new GenomicNucleotideChangeBuilder(varSub).build().toHGVSString());
+		Assertions.assertEquals("101_103delCGAinsTTT", new GenomicNucleotideChangeBuilder(varSub).build().toHGVSString());
 	}
 
 	@Test
 	public void testInversion() {
-		Assert.assertEquals("101_104inv", new GenomicNucleotideChangeBuilder(varInv).build().toHGVSString());
+		Assertions.assertEquals("101_104inv", new GenomicNucleotideChangeBuilder(varInv).build().toHGVSString());
 	}
 
 }

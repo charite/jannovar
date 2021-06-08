@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TranscriptModelBuilderTest {
 
@@ -14,7 +14,7 @@ public class TranscriptModelBuilderTest {
 
 	TranscriptModelBuilder builder;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		builder = new TranscriptModelBuilder();
 	}
@@ -33,16 +33,16 @@ public class TranscriptModelBuilderTest {
 
 		TranscriptModel info = builder.build();
 
-		Assert.assertEquals(Strand.REV, info.getStrand());
-		Assert.assertEquals(1, info.getChr());
-		Assert.assertEquals("accession", info.getAccession());
-		Assert.assertEquals("ENTREZ10", info.getGeneID());
-		Assert.assertEquals("gene-symbol", info.getGeneSymbol());
-		Assert.assertEquals(builder.getTXRegion(), info.getTXRegion());
-		Assert.assertEquals(builder.getCDSRegion(), info.getCDSRegion());
-		Assert.assertEquals(builder.getSequence(), info.getSequence());
-		Assert.assertEquals(1, info.getExonRegions().size());
-		Assert.assertEquals(builder.getExonRegions().get(0), info.getExonRegions().get(0));
+		Assertions.assertEquals(Strand.REV, info.getStrand());
+		Assertions.assertEquals(1, info.getChr());
+		Assertions.assertEquals("accession", info.getAccession());
+		Assertions.assertEquals("ENTREZ10", info.getGeneID());
+		Assertions.assertEquals("gene-symbol", info.getGeneSymbol());
+		Assertions.assertEquals(builder.getTXRegion(), info.getTXRegion());
+		Assertions.assertEquals(builder.getCDSRegion(), info.getCDSRegion());
+		Assertions.assertEquals(builder.getSequence(), info.getSequence());
+		Assertions.assertEquals(1, info.getExonRegions().size());
+		Assertions.assertEquals(builder.getExonRegions().get(0), info.getExonRegions().get(0));
 	}
 
 }

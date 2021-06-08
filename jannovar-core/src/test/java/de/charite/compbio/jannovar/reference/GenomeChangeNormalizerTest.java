@@ -2,9 +2,9 @@ package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenomeChangeNormalizerTest {
 
@@ -38,7 +38,7 @@ public class GenomeChangeNormalizerTest {
 	 */
 	TranscriptProjectionDecorator projectorReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory
 			.parseKnownGenesLine(
@@ -71,7 +71,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "A", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
 		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "C", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "", "C", Strand.FWD);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -110,7 +110,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "", "G", Strand.FWD);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "GTGC", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(2), "", "GCGT", Strand.FWD);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.REV);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -138,7 +138,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "A", Strand.REV);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class GenomeChangeNormalizerTest {
 		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
 		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.REV);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		Assert.assertEquals(change, updatedChange);
+		Assertions.assertEquals(change, updatedChange);
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "T", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-1), "", "T", Strand.REV);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -168,7 +168,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "T", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-1), "", "T", Strand.REV);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -178,7 +178,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "", "AA", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-4), "", "AA", Strand.REV);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -188,7 +188,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "GTCACGTCCGGCGCG", "", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeDeletion(this.infoForward, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "TCACGTCCGGCGCGG", "", Strand.FWD);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class GenomeChangeNormalizerTest {
 		GenomeVariant change = new GenomeVariant(gPos, "AA", "", Strand.FWD);
 		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeDeletion(this.infoReverse, change, txPos);
 		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-3), "AA", "", Strand.FWD);
-		Assert.assertEquals(expectedChange, updatedChange);
+		Assertions.assertEquals(expectedChange, updatedChange);
 	}
 
 }

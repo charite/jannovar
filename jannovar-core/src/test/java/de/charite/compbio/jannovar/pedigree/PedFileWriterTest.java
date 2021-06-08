@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.pedigree;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class PedFileWriterTest {
 
 	File tmpFile;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		this.tmpFile = File.createTempFile("output", "ped");
 	}
@@ -39,7 +39,7 @@ public class PedFileWriterTest {
 		expectedContents.append("fam\tmother\t0\t0\t2\t0\n");
 		expectedContents.append("fam\tson\tfather\tmother\t1\t0\n");
 		expectedContents.append("fam\tdaughter\tfather\tmother\t2\t0\n");
-		Assert.assertEquals(expectedContents.toString(), fileContents);
+		Assertions.assertEquals(expectedContents.toString(), fileContents);
 	}
 
 }

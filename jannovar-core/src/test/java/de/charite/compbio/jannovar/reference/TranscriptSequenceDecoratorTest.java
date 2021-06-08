@@ -2,8 +2,8 @@ package de.charite.compbio.jannovar.reference;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link TranscriptSequenceDecorator}.
@@ -19,15 +19,15 @@ public class TranscriptSequenceDecoratorTest {
 	@Test
 	public void testGetCodonAt() throws Exception {
 		TranscriptSequenceDecorator decorator = new TranscriptSequenceDecorator(MODEL);
-		Assert.assertEquals(CODONS[CODONS.length - 1], decorator.getCodonAt(tx(START_LAST_CODON), cds(START_LAST_CODON)));
-		Assert.assertEquals(CODONS[0], decorator.getCodonAt(tx(0), cds(0)));
+		Assertions.assertEquals(CODONS[CODONS.length - 1], decorator.getCodonAt(tx(START_LAST_CODON), cds(START_LAST_CODON)));
+		Assertions.assertEquals(CODONS[0], decorator.getCodonAt(tx(0), cds(0)));
 	}
 
 	@Test
 	public void testGetCodonsStartingFrom() throws Exception {
 		TranscriptSequenceDecorator decorator = new TranscriptSequenceDecorator(MODEL);
-		Assert.assertEquals(CODONS[0] + CODONS[1], decorator.getCodonsStartingFrom(tx(0), cds(0), 2));
-		Assert.assertEquals(CODONS[CODONS.length - 2] + CODONS[CODONS.length - 1],
+		Assertions.assertEquals(CODONS[0] + CODONS[1], decorator.getCodonsStartingFrom(tx(0), cds(0), 2));
+		Assertions.assertEquals(CODONS[CODONS.length - 2] + CODONS[CODONS.length - 1],
 			decorator.getCodonsStartingFrom(tx(9), cds(9), 2));
 	}
 

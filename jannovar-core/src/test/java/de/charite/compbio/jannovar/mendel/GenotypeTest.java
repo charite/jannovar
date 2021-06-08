@@ -1,13 +1,13 @@
 package de.charite.compbio.jannovar.mendel;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:j.jacobsen@qmul.ac.uk">Jules Jacobsen</a>
