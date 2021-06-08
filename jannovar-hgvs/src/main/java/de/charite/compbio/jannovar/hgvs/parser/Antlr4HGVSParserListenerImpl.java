@@ -318,6 +318,31 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 		setValue(ctx, change);
 	}
 
+
+	/**
+	 * Leaving of nt_change_unchanged rule
+	 * <p>
+	 * Construct {@link NucleotideUnchanged} from children's values and labels and label ctx with
+	 * this.
+	 */
+	@Override
+	public void exitNt_change_unchanged(Nt_change_unchangedContext ctx) {
+		LOGGER.debug("Leaving nt_change_unchanged");
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+				(NucleotidePointLocation) getValue(ctx.nt_point_location()));
+		final NucleotideUnchanged change;
+		if (ctx.nt_string() != null)
+			change = new NucleotideUnchanged(false, range,
+				new NucleotideSeqDescription(ctx.nt_string().getText()));
+		else
+			change = new NucleotideUnchanged(false, range, new NucleotideSeqDescription());
+		setValue(ctx, change);
+	}
+
 	/**
 	 * Leaving of nt_change_duplication rule
 	 * <p>

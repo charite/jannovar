@@ -115,6 +115,7 @@ aa_change_inner
 	| aa_change_substitution
 	| aa_change_ssr
 	| aa_change_insertion
+	| aa_change_unchanged
 	| aa_change_misc
 ;
 
@@ -129,6 +130,16 @@ aa_change_deletion
 		AA_NUMBER
 		| aa_string
 	)?
+;
+
+
+/** amino acid unchanged */
+aa_change_unchanged
+:
+	(
+		aa_point_location
+		| aa_range
+	) AA_EQUAL
 ;
 
 /** amino acid duplication */
@@ -373,6 +384,7 @@ nt_change_inner
 	| nt_change_inversion
 	| nt_change_substitution
 	| nt_change_ssr
+	| nt_change_unchanged
 	| nt_change_misc
 ;
 
@@ -400,6 +412,18 @@ nt_change_duplication
 		nt_number
 		| nt_string
 	)?
+;
+
+/** unchanged nucleotides */
+nt_change_unchanged
+:
+	(
+		(
+		    nt_point_location
+		    nt_string
+		)
+		| nt_range
+	) NT_EQUAL
 ;
 
 /** nucleotide replacement/indel/delins */

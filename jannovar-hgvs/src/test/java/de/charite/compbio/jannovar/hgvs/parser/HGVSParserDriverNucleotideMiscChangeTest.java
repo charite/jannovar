@@ -23,7 +23,7 @@ public class HGVSParserDriverNucleotideMiscChangeTest {
 	@Test
 	public void testParseString() {
 		String hgvsStrings[] = new String[]{"XXX:r.(?)", "XXX:r.?", "XXX:r.spl?", "XXX:r.(spl?)", "XXX:r.=",
-			"XXX:r.(=)", "XXX:r.0", "XXX:r.(0)"};
+			"XXX:r.(=)", "XXX:r.0", "XXX:r.(0)", "XXX:c.97A=", "XXX:c.79_97="};
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
