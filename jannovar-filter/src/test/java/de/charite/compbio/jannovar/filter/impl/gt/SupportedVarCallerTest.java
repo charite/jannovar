@@ -2,8 +2,8 @@ package de.charite.compbio.jannovar.filter.impl.gt;
 
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the SupportedVarCaller enum
@@ -21,7 +21,7 @@ public class SupportedVarCallerTest extends GenotypeFilterTestBase {
 			+ "0/1:139,0,255:170:75:43:86,9,48,27:95,75:138,0,261:127\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(SupportedVarCaller.BCFTOOLS, SupportedVarCaller.guessFromGenotype(gt));
+		Assertions.assertEquals(SupportedVarCaller.BCFTOOLS, SupportedVarCaller.guessFromGenotype(gt));
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class SupportedVarCallerTest extends GenotypeFilterTestBase {
 			+ "GT:GQ:DP:RO:QR:AO:QA:GL\t0/0:50.5085:10:7:228:2:24:0,-0.568818,-14.1241";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(SupportedVarCaller.FREEBAYES, SupportedVarCaller.guessFromGenotype(gt));
+		Assertions.assertEquals(SupportedVarCaller.FREEBAYES, SupportedVarCaller.guessFromGenotype(gt));
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class SupportedVarCallerTest extends GenotypeFilterTestBase {
 			+ "MQ0=248;QD=0.14;SOR=2.303\t" + "GT:AD:DP:GQ:PL\t1/1:117,133:250:6:63,6,0\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(SupportedVarCaller.GATK_CALLER, SupportedVarCaller.guessFromGenotype(gt));
+		Assertions.assertEquals(SupportedVarCaller.GATK_CALLER, SupportedVarCaller.guessFromGenotype(gt));
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class SupportedVarCallerTest extends GenotypeFilterTestBase {
 			+ "GT:GL:GOF:GQ:NR:NV\t1/1:-14.5,-0.9,0.0:29.0:10:5:5\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 		Genotype gt = variant.getGenotype("individual");
-		Assert.assertEquals(SupportedVarCaller.PLATYPUS, SupportedVarCaller.guessFromGenotype(gt));
+		Assertions.assertEquals(SupportedVarCaller.PLATYPUS, SupportedVarCaller.guessFromGenotype(gt));
 	}
 
 }

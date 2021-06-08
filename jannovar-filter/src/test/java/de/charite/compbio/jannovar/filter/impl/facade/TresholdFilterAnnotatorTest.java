@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.filter.impl.facade;
 import de.charite.compbio.jannovar.filter.facade.GenotypeThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import htsjdk.variant.variantcontext.VariantContext;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for ThresholdFilterAnnotator
@@ -16,7 +16,7 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
 	GenotypeThresholdFilterAnnotator annotator;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		annotator =
 			new GenotypeThresholdFilterAnnotator(ThresholdFilterOptions.buildDefaultOptions());
@@ -33,8 +33,8 @@ public class TresholdFilterAnnotatorTest extends TresholdFilterTestBase {
 
 		VariantContext updatedVC = annotator.annotateVariantContext(variant);
 
-		Assert.assertEquals("[]", updatedVC.getFilters().toString());
-		Assert.assertEquals(
+		Assertions.assertEquals("[]", updatedVC.getFilters().toString());
+		Assertions.assertEquals(
 			"[VC Unknown @ 1:17452 Q35.74 of type=SNP alleles=[G*, A] attr={} "
 				+ "GT=[[individual G*/A GQ 10 DP 5 AD 4,0 PL 63,6,0 FT MinAafHet;MinCovHet;MinGq]] filters=",
 			updatedVC.toString());
