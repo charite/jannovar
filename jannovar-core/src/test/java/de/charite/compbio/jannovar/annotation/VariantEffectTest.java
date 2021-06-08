@@ -1,11 +1,10 @@
 package de.charite.compbio.jannovar.annotation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.junit.Assert.assertFalse;
 
 /**
  * Unit tests for {@link VariantEffect}s.
@@ -19,10 +18,9 @@ public class VariantEffectTest {
 		Set<String> soTerms = new HashSet<String>();
 		for (VariantEffect variantEffect : VariantEffect.values()) {
 			if (variantEffect.getSequenceOntologyTerm() != null) {
-				assertFalse(
-					"SO terms should be unique, but '" + variantEffect + "' defines '"
-						+ variantEffect.getSequenceOntologyTerm() + "', which is already taken.",
-					soTerms.contains(variantEffect.getSequenceOntologyTerm()));
+				Assertions.assertFalse(
+					soTerms.contains(variantEffect.getSequenceOntologyTerm()), "SO terms should be unique, but '" + variantEffect + "' defines '"
+						+ variantEffect.getSequenceOntologyTerm() + "', which is already taken.");
 				soTerms.add(variantEffect.getSequenceOntologyTerm());
 			}
 		}
@@ -33,10 +31,9 @@ public class VariantEffectTest {
 		Set<String> soTerms = new HashSet<String>();
 		for (VariantEffect variantEffect : VariantEffect.values()) {
 			if (variantEffect.getSequenceOID() != null) {
-				assertFalse(
-					"SO terms should be unique, but '" + variantEffect + "' defines '"
-						+ variantEffect.getSequenceOID() + "', which is already taken.",
-					soTerms.contains(variantEffect.getSequenceOID()));
+				Assertions.assertFalse(
+					soTerms.contains(variantEffect.getSequenceOID()), "SO terms should be unique, but '" + variantEffect + "' defines '"
+						+ variantEffect.getSequenceOID() + "', which is already taken.");
 				soTerms.add(variantEffect.getSequenceOID());
 			}
 		}

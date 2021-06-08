@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Test for the matching of alleles
  *

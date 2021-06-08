@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static de.charite.compbio.jannovar.impl.parse.refseq.RefSeqFastaRecordIdFormat.*;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link RefSeqFastaRecordIdFormat}.

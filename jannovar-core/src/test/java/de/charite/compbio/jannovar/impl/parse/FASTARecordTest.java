@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.impl.parse;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FASTARecordTest {
 
@@ -9,9 +9,9 @@ public class FASTARecordTest {
 	public void test() {
 		FASTARecord record = new FASTARecord("id", "comment foo", "ACGT");
 
-		Assert.assertEquals("id", record.getID());
-		Assert.assertEquals("comment foo", record.getComment());
-		Assert.assertEquals("ACGT", record.getSequence());
+		Assertions.assertEquals("id", record.getID());
+		Assertions.assertEquals("comment foo", record.getComment());
+		Assertions.assertEquals("ACGT", record.getSequence());
 	}
 
 }

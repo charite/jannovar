@@ -9,9 +9,9 @@ import de.charite.compbio.jannovar.reference.SVInsertion;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.testutils.ResourceUtils;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ public class SVInsertionAnnotationBuilderTest {
 	/**
 	 * Copy out .ser file to temporary directory for tests and load.
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		File tmpDir = Files.createTempDir();
 		dbPath = tmpDir + "/chr1_oma1_to_jun.ser";
@@ -54,12 +54,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.58946661, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, STRUCTURAL_VARIANT, CODING_SEQUENCE_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -73,12 +73,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.58957158, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, STRUCTURAL_VARIANT, INTRON_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -92,12 +92,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.58946503, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, THREE_PRIME_UTR_EXON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -111,12 +111,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.59012404, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, FIVE_PRIME_UTR_EXON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -130,12 +130,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.59012356, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, FIVE_PRIME_UTR_INTRON_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -149,12 +149,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.59012450, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, UPSTREAM_GENE_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -168,12 +168,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.58942734, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INSERTION, DOWNSTREAM_GENE_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);
@@ -187,12 +187,12 @@ public class SVInsertionAnnotationBuilderTest {
 		);
 		final SVAnnotation anno = new SVInsertionAnnotationBuilder(oma1, svIns).build();
 
-		Assert.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
-		Assert.assertEquals(
+		Assertions.assertEquals(anno.getTranscript().toString(), "NM_145243.3(1:g.58946391_59012446)");
+		Assertions.assertEquals(
 			"SVInsertion{genomePos=1:g.59017450, posCILowerBound=0, posCIUpperBound=0}",
 			anno.getVariant().toString()
 		);
-		Assert.assertEquals(
+		Assertions.assertEquals(
 			"[INTERGENIC_VARIANT, STRUCTURAL_VARIANT, CODING_TRANSCRIPT_VARIANT]",
 			anno.getEffects().toString()
 		);

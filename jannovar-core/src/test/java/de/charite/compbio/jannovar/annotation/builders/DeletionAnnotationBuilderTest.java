@@ -8,10 +8,8 @@ import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
 
 public class DeletionAnnotationBuilderTest {
 
@@ -37,7 +35,7 @@ public class DeletionAnnotationBuilderTest {
 	 */
 	TranscriptModel infoReverse;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.builderForward = TranscriptModelFactory
 			.parseKnownGenesLine(
@@ -68,11 +66,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getCDSNTChange());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(null, annotation1.getAnnoLoc());
+		Assertions.assertEquals(null, annotation1.getCDSNTChange());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -81,11 +79,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getCDSNTChange());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(null, annotation1.getAnnoLoc());
+		Assertions.assertEquals(null, annotation1.getCDSNTChange());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -95,21 +93,21 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getCDSNTChange());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(null, annotation1.getAnnoLoc());
+		Assertions.assertEquals(null, annotation1.getCDSNTChange());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 		// intergenic downstream
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6700340,
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getCDSNTChange());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(null, annotation1.getAnnoLoc());
+		Assertions.assertEquals(null, annotation1.getCDSNTChange());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation2.getEffects());
 	}
 
 	@Test
@@ -121,11 +119,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), chars200.toString(), "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-204_-70+65del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.EXON_LOSS_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-204_-70+65del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.EXON_LOSS_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -134,11 +132,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("691-11del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("691-11del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -148,11 +146,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-192del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-192del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -161,11 +159,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("*59del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("*59del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -177,33 +175,33 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the left.
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640660,
 			PositionType.ZERO_BASED), "CCCTCCAGACC", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("-9_2del", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("-9_2del", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the right.
 		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
 			PositionType.ZERO_BASED), "GGACGGCTCCT", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("3_13del", annotation3.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation3.getAnnoLoc().getRank());
+		Assertions.assertEquals("3_13del", annotation3.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.getEffects());
 
 		// Deletion from before transcript, reaching into the start codon.
 		GenomeVariant change4 = new GenomeVariant(
@@ -212,11 +210,11 @@ public class DeletionAnnotationBuilderTest {
 			"");
 		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation4.getAnnoLoc().getRank());
-		Assert.assertEquals("-69-201_1del", annotation4.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("0?", annotation4.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation4.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.INVALID_RANK, annotation4.getAnnoLoc().getRank());
+		Assertions.assertEquals("-69-201_1del", annotation4.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("0?", annotation4.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation4.getEffects());
 	}
 
 	@Test
@@ -229,11 +227,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("2067del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Tyrext*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("2067del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Tyrext*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 			annotation1.getEffects());
 
 		// Delete middle base of stop codon, leads to complete loss.
@@ -241,11 +239,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("2066del", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Cysext*?)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("2066del", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Cysext*?)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 			annotation2.getEffects());
 
 		// Delete first base of stop codon, leads to extension
@@ -253,11 +251,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("2065del", annotation3.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Serext*?)", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation3.getAnnoLoc().getRank());
+		Assertions.assertEquals("2065del", annotation3.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Serext*?)", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 			annotation3.getEffects());
 
 		// Delete two bases of stop codon.
@@ -265,11 +263,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "AT", "");
 		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation4.getAnnoLoc().getRank());
-		Assert.assertEquals("2065_2066del", annotation4.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*689Alaext*15)", annotation4.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation4.getAnnoLoc().getRank());
+		Assertions.assertEquals("2065_2066del", annotation4.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*689Alaext*15)", annotation4.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 			annotation4.getEffects());
 
 		// Delete from before into the stop codon.
@@ -277,11 +275,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CATAGCCC", "");
 		Annotation annotation5 = new DeletionAnnotationBuilder(infoForward, change5, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation5.getTranscript().getAccession());
-		Assert.assertEquals(10, annotation5.getAnnoLoc().getRank());
-		Assert.assertEquals("2063_*3del", annotation5.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(*688Asnext*14)", annotation5.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation5.getTranscript().getAccession());
+		Assertions.assertEquals(10, annotation5.getAnnoLoc().getRank());
+		Assertions.assertEquals("2063_*3del", annotation5.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(*688Asnext*14)", annotation5.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 			annotation5.getEffects());
 	}
 
@@ -292,11 +290,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("691-1del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("691-1del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 			VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 
 		// exonic splicing
@@ -304,11 +302,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TGG", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("691_693del", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Trp231del)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_REGION_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("691_693del", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Trp231del)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_REGION_VARIANT),
 			annotation2.getEffects());
 	}
 
@@ -319,11 +317,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TGGGGAGAAA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("943_952del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly315Profs*26)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("943_952del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly315Profs*26)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -333,11 +331,11 @@ public class DeletionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "GAGAAACCCT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("946_955del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu316Leufs*25)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("946_955del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu316Leufs*25)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -348,11 +346,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GAAACA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("691-3_693del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Trp231del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("691-3_693del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Trp231del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_ACCEPTOR_VARIANT),
 			annotation1.getEffects());
 
@@ -361,22 +359,22 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTGGTTCAA", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("704_712del", annotation2.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val235_Val237del)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation2.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation2.getAnnoLoc().getRank());
+		Assertions.assertEquals("704_712del", annotation2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val235_Val237del)", annotation2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation2.getEffects());
 
 		// deletion of three codons, resulting in delins case
 		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642134,
 			PositionType.ZERO_BASED), "AGTGGAGGA", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("708_716del", annotation3.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gln236_Asp239delinsHis)", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation3.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation3.getAnnoLoc().getRank());
+		Assertions.assertEquals("708_716del", annotation3.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gln236_Asp239delinsHis)", annotation3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation3.getEffects());
 	}
 
 	@Test
@@ -396,11 +394,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GCTGT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("119_123del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gln40Profs*18)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("119_123del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gln40Profs*18)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -418,11 +416,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("488_490del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser163del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("488_490del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser163del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -442,11 +440,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1476_1477del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Asn494Profs*38)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1476_1477del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Asn494Profs*38)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -464,11 +462,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TGTAACCAC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("369_377del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val124_Thr126del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("369_377del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val124_Thr126del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -486,11 +484,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TTTCCCTCTAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("275_285del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ile92Argfs*26)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("275_285del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ile92Argfs*26)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -510,11 +508,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GCGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1503_1507del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu501Aspfs*96)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1503_1507del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu501Aspfs*96)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -532,11 +530,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1219_1221del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val407del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1219_1221del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val407del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -554,11 +552,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("985del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Thr329Leufs*17)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("985del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Thr329Leufs*17)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -567,7 +565,7 @@ public class DeletionAnnotationBuilderTest {
 	 * test below, we adjusted the first and last exon by one base at the outside and use the RefSeq sequence as
 	 * obtained from Mutalyzer.
 	 */
-	@Ignore("See method comment.")
+	@Disabled("See method comment.")
 	@Test
 	public void testRealWorldCase_uc003ooo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
@@ -585,11 +583,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -609,11 +607,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -633,11 +631,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1542_1544del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Thr517del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1542_1544del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Thr517del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -657,11 +655,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "AA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("791_792del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Lys264Argfs*10)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("791_792del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Lys264Argfs*10)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -681,11 +679,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TGA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("890_892del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu297_Lys298delinsGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("890_892del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu297_Lys298delinsGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -703,11 +701,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GACA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("422_425del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Cys141Serfs*21)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("422_425del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Cys141Serfs*21)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -727,11 +725,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("377del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Pro126Glnfs*18)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(5, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("377del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Pro126Glnfs*18)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -751,11 +749,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("542_543del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu181Hisfs*20)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("542_543del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu181Hisfs*20)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -775,11 +773,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "ACTCTTCCTCCTCCAGAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("404_421del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu135_Leu140del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("404_421del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu135_Leu140del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -799,11 +797,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("100_102del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Lys34del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("100_102del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Lys34del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -823,11 +821,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CTC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(13, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("842_844del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu281del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(13, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("842_844del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu281del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -848,11 +846,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1310del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly437Valfs*5)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1310del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly437Valfs*5)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_REGION_VARIANT),
 			annotation1.getEffects());
 	}
@@ -874,11 +872,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTCAAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("243_248del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Leu82_Gln83del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("243_248del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Leu82_Gln83del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -898,11 +896,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTCAAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("552_557del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser185_Leu186del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("552_557del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser185_Leu186del)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	/**
@@ -926,11 +924,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("560del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Gly187Valfs*23)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(5, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("560del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Gly187Valfs*23)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 			annotation1.getEffects());
 	}
@@ -952,11 +950,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("317_318del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Pro106Argfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("317_318del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Pro106Argfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -974,11 +972,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "GTGTCAGGGTGAGTGAGGG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("72_90del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Ser25Hisfs*78)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("72_90del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Ser25Hisfs*78)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	@Test
@@ -998,11 +996,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CCAGAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1152_1157del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(His384_Arg386delinsGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1152_1157del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(His384_Arg386delinsGln)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
 
 	@Test
@@ -1022,11 +1020,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-25del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-25del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1046,11 +1044,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-7_-6del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-7_-6del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1070,11 +1068,11 @@ public class DeletionAnnotationBuilderTest {
 			.get("X"), 7811233, PositionType.ZERO_BASED), "AGCTGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("-11_-5del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("-11_-5del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(=)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1094,11 +1092,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("315-2del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(2, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("315-2del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 			VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 	}
 
@@ -1119,11 +1117,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1027del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Val343Trpfs*33)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(9, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1027del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Val343Trpfs*33)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_DONOR_VARIANT),
 			annotation1.getEffects());
 	}
@@ -1145,11 +1143,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(42, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("5842del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(42, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("5842del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -1167,11 +1165,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("26del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("26del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -1192,11 +1190,11 @@ public class DeletionAnnotationBuilderTest {
 			.get("Y"), 23749506, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("385del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(null, annotation1.getProteinChange());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(3, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("385del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals(null, annotation1.getProteinChange());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 			annotation1.getEffects());
 	}
 
@@ -1218,11 +1216,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "TTCT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(12, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1068_1071del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Glu357Lysfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(12, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1068_1071del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu357Lysfs*?)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
@@ -1242,11 +1240,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("2461del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(0, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("2461del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 			annotation1.getEffects());
 	}
 
@@ -1269,11 +1267,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(14, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("2296del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("(Arg766Glyfs*77)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(14, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("2296del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Arg766Glyfs*77)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(
 			ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_DONOR_VARIANT),
 			annotation1.getEffects());
 	}
@@ -1297,11 +1295,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "CAGGTGGCAGG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(-1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("1260_*10del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(-1, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("1260_*10del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 			annotation1.getEffects());
 	}
 
@@ -1324,11 +1322,11 @@ public class DeletionAnnotationBuilderTest {
 			PositionType.ZERO_BASED), "C", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 			.build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("138+1del", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+		Assertions.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
+		Assertions.assertEquals(4, annotation1.getAnnoLoc().getRank());
+		Assertions.assertEquals("138+1del", annotation1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("?", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
 

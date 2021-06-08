@@ -2,9 +2,6 @@ package de.charite.compbio.jannovar.impl.parse.refseq;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
