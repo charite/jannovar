@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnnotateVCFWithSVTestBase {
 
@@ -14,7 +14,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&mobile_element_insertion&structural_variant&coding_sequence_variant&" +
 			"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&mobile_element_insertion&structural_variant&intron_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&3_prime_UTR_exon_variant&mobile_element_insertion&structural_variant&" +
 			"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&5_prime_UTR_exon_variant&mobile_element_insertion&structural_variant&" +
 			"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&5_prime_UTR_intron_variant&mobile_element_insertion&structural_variant&" +
 			"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"SVANN=insertion&mobile_element_insertion&upstream_gene_variant&structural_variant&" +
 			"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 				"SVANN=insertion&mobile_element_insertion&downstream_gene_variant&structural_variant&" +
 				"coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=INS";
 			final String actual = loadVcfBody(outPath);
-			Assert.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class JannovarAnnotateSVMobileElementInsertionVCFTest extends JannovarAnn
 			"intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=INS";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestBase {
 
@@ -14,7 +14,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=transcript_amplification&structural_variant&coding_transcript_variant|HIGH|OMA1|115209|transcript|" +
 			"NM_145243.3|Coding|;SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=upstream_gene_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|" +
 			"NM_145243.3|Coding|;SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -110,7 +110,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"SVANN=downstream_gene_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|" +
 			"NM_145243.3|Coding|;SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class JannovarAnnotateSVDupVCFTest extends JannovarAnnotateVCFWithSVTestB
 			"intergenic_variant&structural_variant&coding_transcript_variant|MODIFIER|OMA1|115209|transcript|NM_145243.3|Coding|;" +
 			"SVTYPE=DUP";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

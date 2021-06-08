@@ -5,11 +5,10 @@ import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.JannovarException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +19,13 @@ import java.net.URISyntaxException;
  */
 public class JannovarAnnotateVCFTest {
 
-	@Rule
-	public TemporaryFolder tmpFolder = new TemporaryFolder();
+	@TempDir
+	public File tmpFolder;
 
 	// path to file with the first 93 lines of hg19 RefSeq (up to "Gnomon exon 459822 459929").
 	private String pathToSmallSer = null;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws URISyntaxException {
 		this.pathToSmallSer = this.getClass().getResource("/hg19_small.ser").toURI().getPath();
 	}
@@ -34,7 +33,8 @@ public class JannovarAnnotateVCFTest {
 	// Test on small.vcf (with default settings) and compare with the prepared gold-standard small.jv.vcf
 	@Test
 	public void testOnSmallExample() throws JannovarException, URISyntaxException, IOException {
-		final File outFolder = tmpFolder.newFolder();
+		final File outFolder = new File(tmpFolder, "output");
+		outFolder.mkdirs();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
 		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/small.jv.vcf", "-d",
 			pathToSmallSer, "-i", inputFilePath};
@@ -43,13 +43,13 @@ public class JannovarAnnotateVCFTest {
 		Jannovar.main(argv);
 
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
-		Assert.assertTrue(f.exists());
+		Assertions.assertTrue(f.exists());
 
 		final File expectedFile = new File(this.getClass().getResource("/small.jv.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
 			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	// Test on semicolons.vcf. This file contains trailing semicolons at the end of the INFO and FILTER columns.
@@ -57,7 +57,8 @@ public class JannovarAnnotateVCFTest {
 	// to the beginning. The new versions remove it.
 	@Test
 	public void testOnTrailingSemicolons() throws JannovarException, URISyntaxException, IOException {
-		final File outFolder = tmpFolder.newFolder();
+		final File outFolder = new File(tmpFolder, "output");
+		outFolder.mkdirs();
 		final String inputFilePath = this.getClass().getResource("/semicolons.vcf").toURI().getPath();
 		String[] argv = new String[]{"annotate-vcf", "-o", outFolder.toString() + "/semicolons.jv.vcf", "-d",
 			pathToSmallSer, "-i", inputFilePath};
@@ -66,13 +67,13 @@ public class JannovarAnnotateVCFTest {
 		Jannovar.main(argv);
 
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "semicolons.jv.vcf");
-		Assert.assertTrue(f.exists());
+		Assertions.assertTrue(f.exists());
 
 		final File expectedFile = new File(this.getClass().getResource("/semicolons.jv.vcf").toURI().getPath());
 		final String expected = Files.asCharSource(expectedFile, Charsets.UTF_8).read();
 		final String actual = Files.asCharSource(f, Charsets.UTF_8).read().replaceAll("##jannovarCommand.*", "##jannovarCommand")
 			.replaceAll("##jannovarVersion.*", "##jannovarVersion");
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSVTestBase {
 
@@ -14,7 +14,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&structural_variant&coding_sequence_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&structural_variant&intron_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&3_prime_UTR_exon_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&5_prime_UTR_exon_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&5_prime_UTR_intron_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&upstream_gene_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&downstream_gene_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class JannovarAnnotateSVBreakendVCFTest extends JannovarAnnotateVCFWithSV
 			"SVANN=translocation&intergenic_variant&structural_variant&coding_transcript_variant" +
 			"|HIGH|OMA1|115209|transcript|NM_145243.3|Coding|;SVTYPE=BND";
 		final String actual = loadVcfBody(outPath);
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }
