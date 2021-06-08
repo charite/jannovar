@@ -11,10 +11,9 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +42,7 @@ public class NucleotideDeletionToGenomeVariantForwardStrandTest {
 	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		// copy out files to temporary directory
 		File tmpDir = Files.createTempDir();
@@ -57,7 +56,7 @@ public class NucleotideDeletionToGenomeVariantForwardStrandTest {
 		ResourceUtils.copyResourceToFile("/ex_ctns/ref.dict", new File(dictPath));
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws FileNotFoundException, SerializationException {
 		jannovarData = new JannovarDataSerializer(dbPath).load();
 
@@ -69,22 +68,22 @@ public class NucleotideDeletionToGenomeVariantForwardStrandTest {
 	public void testPositionInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_004937.2(CTNS):c.400delA";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
-		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
+		Assertions.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.58585delA", gVar.toString());
+		Assertions.assertEquals("ref:g.58585delA", gVar.toString());
 	}
 
 	@Test
 	public void testRangeInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_004937.2(CTNS):c.400_403delATCT";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
-		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
+		Assertions.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.58585_58588delATCT", gVar.toString());
+		Assertions.assertEquals("ref:g.58585_58588delATCT", gVar.toString());
 	}
 
 }
