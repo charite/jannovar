@@ -7,9 +7,9 @@ import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.pedigree.*;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +45,7 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 	 */
 	private VCFFileReader reader;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws PedParseException {
 		// Construct first pedigree
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
@@ -79,43 +79,43 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 				proc.put(vc);
 		}
 
-		Assert.assertEquals(7, result.size());
+		Assertions.assertEquals(7, result.size());
 
-		Assert.assertEquals("1", result.get(0).getContig());
-		Assert.assertEquals(145513532, result.get(0).getStart());
-		Assert.assertEquals("[AR]", result.get(0).getAttribute(KEY).toString());
-		Assert.assertEquals("[AR_COMP_HET]", result.get(0).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("1", result.get(0).getContig());
+		Assertions.assertEquals(145513532, result.get(0).getStart());
+		Assertions.assertEquals("[AR]", result.get(0).getAttribute(KEY).toString());
+		Assertions.assertEquals("[AR_COMP_HET]", result.get(0).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("1", result.get(1).getContig());
-		Assert.assertEquals(145513533, result.get(1).getStart());
-		Assert.assertNull(result.get(1).getAttribute(KEY));
-		Assert.assertNull(result.get(1).getAttribute(KEY_SUB));
+		Assertions.assertEquals("1", result.get(1).getContig());
+		Assertions.assertEquals(145513533, result.get(1).getStart());
+		Assertions.assertNull(result.get(1).getAttribute(KEY));
+		Assertions.assertNull(result.get(1).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("1", result.get(2).getContig());
-		Assert.assertEquals(145513534, result.get(2).getStart());
-		Assert.assertEquals("[AR]", result.get(2).getAttribute(KEY).toString());
-		Assert.assertEquals("[AR_COMP_HET]", result.get(2).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("1", result.get(2).getContig());
+		Assertions.assertEquals(145513534, result.get(2).getStart());
+		Assertions.assertEquals("[AR]", result.get(2).getAttribute(KEY).toString());
+		Assertions.assertEquals("[AR_COMP_HET]", result.get(2).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("1", result.get(3).getContig());
-		Assert.assertEquals(145515898, result.get(3).getStart());
-		Assert.assertEquals("[AD]", result.get(3).getAttribute(KEY).toString());
-		Assert.assertNull(result.get(3).getAttribute(KEY_SUB));
+		Assertions.assertEquals("1", result.get(3).getContig());
+		Assertions.assertEquals(145515898, result.get(3).getStart());
+		Assertions.assertEquals("[AD]", result.get(3).getAttribute(KEY).toString());
+		Assertions.assertNull(result.get(3).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("1", result.get(4).getContig());
-		Assert.assertEquals(145515899, result.get(4).getStart());
-		Assert.assertNull(result.get(4).getAttribute(KEY));
-		Assert.assertNull(result.get(4).getAttribute(KEY_SUB));
+		Assertions.assertEquals("1", result.get(4).getContig());
+		Assertions.assertEquals(145515899, result.get(4).getStart());
+		Assertions.assertNull(result.get(4).getAttribute(KEY));
+		Assertions.assertNull(result.get(4).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("10", result.get(5).getContig());
-		Assert.assertEquals(123239370, result.get(5).getStart());
-		Assert.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
-		Assert.assertNotNull(result.get(5).getAttribute(KEY_SUB));
-		Assert.assertEquals("[AR_HOM_ALT]", result.get(5).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("10", result.get(5).getContig());
+		Assertions.assertEquals(123239370, result.get(5).getStart());
+		Assertions.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
+		Assertions.assertNotNull(result.get(5).getAttribute(KEY_SUB));
+		Assertions.assertEquals("[AR_HOM_ALT]", result.get(5).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("10", result.get(6).getContig());
-		Assert.assertEquals(123357972, result.get(6).getStart());
-		Assert.assertNull(result.get(6).getAttribute(KEY));
-		Assert.assertNull(result.get(6).getAttribute(KEY_SUB));
+		Assertions.assertEquals("10", result.get(6).getContig());
+		Assertions.assertEquals(123357972, result.get(6).getStart());
+		Assertions.assertNull(result.get(6).getAttribute(KEY));
+		Assertions.assertNull(result.get(6).getAttribute(KEY_SUB));
 	}
 
 	@Test
@@ -129,41 +129,41 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 				proc.put(vc);
 		}
 
-		Assert.assertEquals(7, result.size());
+		Assertions.assertEquals(7, result.size());
 
-		Assert.assertEquals("chr1", result.get(0).getContig());
-		Assert.assertEquals(145513532, result.get(0).getStart());
-		Assert.assertEquals("[AR]", result.get(0).getAttribute(KEY).toString());
-		Assert.assertEquals("[AR_COMP_HET]", result.get(0).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("chr1", result.get(0).getContig());
+		Assertions.assertEquals(145513532, result.get(0).getStart());
+		Assertions.assertEquals("[AR]", result.get(0).getAttribute(KEY).toString());
+		Assertions.assertEquals("[AR_COMP_HET]", result.get(0).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("chr1", result.get(1).getContig());
-		Assert.assertEquals(145513533, result.get(1).getStart());
-		Assert.assertNull(result.get(1).getAttribute(KEY));
-		Assert.assertNull(result.get(1).getAttribute(KEY_SUB));
+		Assertions.assertEquals("chr1", result.get(1).getContig());
+		Assertions.assertEquals(145513533, result.get(1).getStart());
+		Assertions.assertNull(result.get(1).getAttribute(KEY));
+		Assertions.assertNull(result.get(1).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("chr1", result.get(2).getContig());
-		Assert.assertEquals(145513534, result.get(2).getStart());
-		Assert.assertEquals("[AR]", result.get(2).getAttribute(KEY).toString());
-		Assert.assertEquals("[AR_COMP_HET]", result.get(2).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("chr1", result.get(2).getContig());
+		Assertions.assertEquals(145513534, result.get(2).getStart());
+		Assertions.assertEquals("[AR]", result.get(2).getAttribute(KEY).toString());
+		Assertions.assertEquals("[AR_COMP_HET]", result.get(2).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("chr1", result.get(3).getContig());
-		Assert.assertEquals(145515898, result.get(3).getStart());
-		Assert.assertEquals("[AD]", result.get(3).getAttribute(KEY).toString());
-		Assert.assertNull(result.get(3).getAttribute(KEY_SUB));
+		Assertions.assertEquals("chr1", result.get(3).getContig());
+		Assertions.assertEquals(145515898, result.get(3).getStart());
+		Assertions.assertEquals("[AD]", result.get(3).getAttribute(KEY).toString());
+		Assertions.assertNull(result.get(3).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("chr1", result.get(4).getContig());
-		Assert.assertEquals(145515899, result.get(4).getStart());
-		Assert.assertNull(result.get(4).getAttribute(KEY));
-		Assert.assertNull(result.get(4).getAttribute(KEY_SUB));
+		Assertions.assertEquals("chr1", result.get(4).getContig());
+		Assertions.assertEquals(145515899, result.get(4).getStart());
+		Assertions.assertNull(result.get(4).getAttribute(KEY));
+		Assertions.assertNull(result.get(4).getAttribute(KEY_SUB));
 
-		Assert.assertEquals("chr10", result.get(5).getContig());
-		Assert.assertEquals(123239370, result.get(5).getStart());
-		Assert.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
-		Assert.assertEquals("[AR_HOM_ALT]", result.get(5).getAttribute(KEY_SUB).toString());
+		Assertions.assertEquals("chr10", result.get(5).getContig());
+		Assertions.assertEquals(123239370, result.get(5).getStart());
+		Assertions.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
+		Assertions.assertEquals("[AR_HOM_ALT]", result.get(5).getAttribute(KEY_SUB).toString());
 
-		Assert.assertEquals("chr10", result.get(6).getContig());
-		Assert.assertEquals(123357972, result.get(6).getStart());
-		Assert.assertNull(result.get(6).getAttribute(KEY));
-		Assert.assertNull(result.get(6).getAttribute(KEY_SUB));
+		Assertions.assertEquals("chr10", result.get(6).getContig());
+		Assertions.assertEquals(123357972, result.get(6).getStart());
+		Assertions.assertNull(result.get(6).getAttribute(KEY));
+		Assertions.assertNull(result.get(6).getAttribute(KEY_SUB));
 	}
 }

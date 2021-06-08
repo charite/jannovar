@@ -9,10 +9,8 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +34,7 @@ public class GenomeRegionSequenceExtractorTest {
 	 */
 	JannovarData jannovarData;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		// copy out files to temporary directory
 		File tmpDir = Files.createTempDir();
@@ -50,7 +48,7 @@ public class GenomeRegionSequenceExtractorTest {
 		ResourceUtils.copyResourceToFile("/ex_fbn1/mini_fbn1.ser", new File(dbPath));
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws FileNotFoundException, SerializationException {
 		this.indexedFile = new IndexedFastaSequenceFile(new File(fastaPath));
 		this.jannovarData = new JannovarDataSerializer(dbPath).load();
@@ -61,7 +59,7 @@ public class GenomeRegionSequenceExtractorTest {
 		GenomeRegionSequenceExtractor extractor = new GenomeRegionSequenceExtractor(jannovarData, this.indexedFile);
 		GenomeInterval region = new GenomeInterval(new GenomePosition(jannovarData.getRefDict(), Strand.FWD, 1, 99), 51);
 		String seq = extractor.load(region);
-		Assert.assertEquals("CTTTAGGCCTGGGAATCAGGAGTGCTATGACAATTTCCTCCAAAGTGGAGA", seq);
+		Assertions.assertEquals("CTTTAGGCCTGGGAATCAGGAGTGCTATGACAATTTCCTCCAAAGTGGAGA", seq);
 	}
 
 }

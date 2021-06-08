@@ -11,10 +11,8 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +41,7 @@ public class NucleotideDuplicationToGenomeVariantReverseStrandTest {
 	 */
 	NucleotideChangeToGenomeVariantTranslator translator;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		// copy out files to temporary directory
 		File tmpDir = Files.createTempDir();
@@ -57,7 +55,7 @@ public class NucleotideDuplicationToGenomeVariantReverseStrandTest {
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.dict", new File(dictPath));
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws FileNotFoundException, SerializationException {
 		jannovarData = new JannovarDataSerializer(dbPath).load();
 
@@ -69,22 +67,22 @@ public class NucleotideDuplicationToGenomeVariantReverseStrandTest {
 	public void testPositionInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339dupA";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
-		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
+		Assertions.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.217679_217680insT", gVar.toString());
+		Assertions.assertEquals("ref:g.217679_217680insT", gVar.toString());
 	}
 
 	@Test
 	public void testRangeInCDS() throws CannotTranslateHGVSVariant, InvalidGenomeVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339_7341dupAGT";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
-		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
+		Assertions.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.217677_217678insACT", gVar.toString());
+		Assertions.assertEquals("ref:g.217677_217678insACT", gVar.toString());
 	}
 
 }

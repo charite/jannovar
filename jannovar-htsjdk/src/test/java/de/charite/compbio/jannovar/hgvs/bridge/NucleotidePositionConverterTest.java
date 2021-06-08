@@ -11,10 +11,10 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +38,7 @@ public class NucleotidePositionConverterTest {
 	 */
 	NucleotideLocationConverter converter;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		// copy out files to temporary directory
 		File tmpDir = Files.createTempDir();
@@ -46,7 +46,7 @@ public class NucleotidePositionConverterTest {
 		ResourceUtils.copyResourceToFile("/ex_ctns/mini_ctns.ser", new File(dbPath));
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws FileNotFoundException, SerializationException {
 		jannovarData = new JannovarDataSerializer(dbPath).load();
 		tm = (TranscriptModel) jannovarData.getTmByGeneSymbol().get("CTNS").toArray()[0];
@@ -58,21 +58,21 @@ public class NucleotidePositionConverterTest {
 	public void testConvertCDSPosition() throws CannotTranslateHGVSVariant {
 		NucleotidePointLocation pos = NucleotidePointLocation.build(10);
 		GenomePosition gPos = converter.translateNucleotidePointLocation(tm, pos, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.43511", gPos.toString());
+		Assertions.assertEquals("ref:g.43511", gPos.toString());
 	}
 
 	@Test
 	public void testConvertUTR5Position() throws CannotTranslateHGVSVariant {
 		NucleotidePointLocation pos = NucleotidePointLocation.build(-10);
 		GenomePosition gPos = converter.translateNucleotidePointLocation(tm, pos, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.43491", gPos.toString());
+		Assertions.assertEquals("ref:g.43491", gPos.toString());
 	}
 
 	@Test
 	public void testConvertUTR3Position() throws CannotTranslateHGVSVariant {
 		NucleotidePointLocation pos = NucleotidePointLocation.buildDownstreamOfCDS(10);
 		GenomePosition gPos = converter.translateNucleotidePointLocation(tm, pos, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.63671", gPos.toString());
+		Assertions.assertEquals("ref:g.63671", gPos.toString());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class NucleotidePositionConverterTest {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.build(10),
 			NucleotidePointLocation.build(20));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.43511_43521", gItv.toString());
+		Assertions.assertEquals("ref:g.43511_43521", gItv.toString());
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class NucleotidePositionConverterTest {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.build(-20),
 			NucleotidePointLocation.build(-10));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.40610_43491", gItv.toString());
+		Assertions.assertEquals("ref:g.40610_43491", gItv.toString());
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class NucleotidePositionConverterTest {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.buildDownstreamOfCDS(10),
 			NucleotidePointLocation.buildDownstreamOfCDS(20));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.63671_63681", gItv.toString());
+		Assertions.assertEquals("ref:g.63671_63681", gItv.toString());
 	}
 
 }
