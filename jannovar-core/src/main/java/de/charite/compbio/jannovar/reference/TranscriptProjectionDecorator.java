@@ -166,7 +166,7 @@ public final class TranscriptProjectionDecorator {
 		if (targetSeqPos < 0) {
 			throw new ProjectionException("Invalid transcript sequence position " + targetSeqPos);
 		} else if (targetSeqPos
-			> Anchors.seqLength(transcript.getSeqAlignment().getRefAnchors()) + 1) {
+			> Anchors.seqLength(transcript.getSeqAlignment().getQryAnchors()) + 1) {
 			throw new ProjectionException("Invalid transcript sequence position " + targetSeqPos);
 		}
 

@@ -146,4 +146,14 @@ public class AnnotationLocation {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "AnnotationLocation{" +
+			"transcript=" + transcript +
+			", rankType=" + rankType +
+			", rank=" + rank +
+			", totalRank=" + totalRank +
+			", txLocation=" + txLocation +
+			'}';
+	}
 }

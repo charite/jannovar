@@ -113,8 +113,7 @@ class VCFAnnotationData {
 			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).getPos();
 			this.cdsLength = transcript.cdsTranscriptLength();
 		} catch (ProjectionException e) {
-			// e.printStackTrace();
-			throw new Error("Bug: problem with projection!", e);
+			throw new Error("Bug: problem with projection! (" + annoLoc + ")", e);
 		}
 	}
 
