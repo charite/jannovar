@@ -25,7 +25,9 @@ in the Jannovar manual.
 
 ## Databases
 
-As of Jannovar version v0.36, we provide pre-built databases.
+As of Jannovar version v0.36, we provide pre-built databases via Zenodo.
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4916051.svg)](https://doi.org/10.5281/zenodo.4916051)
 
 You can obtain pre-built databases Zenodo as shown from the following table.
 In the case that you need is missing, please [start a Github discussion](https://github.com/charite/jannovar/discussions).
