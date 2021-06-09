@@ -1,6 +1,6 @@
 [![Build Status](https://github.com/charite/jannovar/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/charite/jannovar/actions/workflows/ci.yml)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
-[![API Docs](https://img.shields.io/badge/api-v0.34-blue.svg?style=flat)](http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.34)
+[![API Docs](https://img.shields.io/badge/api-v0.36-blue.svg?style=flat)](http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.36)
 [![Install with Bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](https://bioconda.github.io/recipes/jannovar-cli/README.html)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b12f94e30404667997f8ae264a97bd6)](https://www.codacy.com/app/visze/jannovar?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=charite/jannovar&amp;utm_campaign=Badge_Grade)
 
