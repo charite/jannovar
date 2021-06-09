@@ -11,7 +11,7 @@
     <parent>
         <groupId>de.charite.compbio</groupId>
         <artifactId>Jannovar</artifactId>
-        <version>0.36-SNAPSHOT</version>
+        <version>0.36</version>
     </parent>
 
     <properties>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>de.charite.compbio</groupId>
             <artifactId>jannovar-hgvs</artifactId>
-            <version>0.36-SNAPSHOT</version>
+            <version>0.36</version>
         </dependency>
         <!-- INI parsing -->
         <dependency>
