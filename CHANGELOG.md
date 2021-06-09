@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## HEAD (unreleased)
+## v0.36
 
 **Highlight: Pre-Built Databases**
 
