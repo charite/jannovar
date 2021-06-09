@@ -13,6 +13,7 @@
 * Apply fix for (#498, PR #499 by @roland-ewald of @limbus-medtec).
   This fixes a problem with right-shifting deletions on amino acid sequences.
   See the tickes and merge request for details.
+* Fixing problem with GRCh38 RefSeq annotation / projection (#524).
 
 ### jannovar-cli
 
