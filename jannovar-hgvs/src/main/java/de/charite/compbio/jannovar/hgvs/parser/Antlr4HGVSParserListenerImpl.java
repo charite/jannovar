@@ -20,11 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // TODO(holtgrewe): support parsing amino acid changes
 
 /**
- * Master ParseTreeListener used in {@link HVSParser} setB
+ * Master ParseTreeListener used in {@link HGVSParser} setB
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
@@ -451,7 +453,60 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 			new NucleotideShortSequenceRepeatVariability(false, range, minCount, maxCount));
 	}
 
-	/**
+  @Override
+  public void exitNt_change_sequenced_repeat(Nt_change_sequenced_repeatContext ctx) {
+    LOGGER.debug("Leaving nt_change_sequenced_repeat");
+
+    final NucleotideRange range;
+    if (ctx.nt_range() != null)
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    else
+      range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+          (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+
+    List<NucleotideRepeatSequence> sequences = null;
+    if (ctx.nt_change_repeat_sequence() != null) {
+      sequences = ctx.nt_change_repeat_sequence().stream()
+          .map(rsc -> (NucleotideRepeatSequence)getValue(rsc))
+          .collect(Collectors.toList());
+    }
+
+    setValue(ctx, new NucleotideSequencedRepeat(false, range, sequences));
+  }
+
+  @Override
+  public void exitNt_change_repeat_sequence(Nt_change_repeat_sequenceContext ctx) {
+    LOGGER.debug("Leaving nt_change_repeat_sequence");
+	  final String sequence = ctx.NT_STRING().getText();
+	  final int copyNumber = Integer.parseInt(ctx.NT_NUMBER().getText());
+	  setValue(ctx, new NucleotideRepeatSequence(sequence, copyNumber));
+  }
+
+  @Override
+  public void exitNt_change_not_sequenced_repeat(Nt_change_not_sequenced_repeatContext ctx) {
+    LOGGER.debug("Leaving nt_change_not_sequenced_repeat");
+
+    final NucleotideRange range;
+    if (ctx.nt_range() != null)
+      range = (NucleotideRange) getValue(ctx.nt_range());
+    else
+      range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+          (NucleotidePointLocation) getValue(ctx.nt_point_location()));
+
+    NucleotideNotSequencedRepeat.InDelType type = NucleotideNotSequencedRepeat.InDelType.INS;
+    if (ctx.NT_DEL() != null) {
+      type = NucleotideNotSequencedRepeat.InDelType.DEL;
+    }
+    final int minCount = Integer.parseInt(ctx.NT_NUMBER(0).getText());
+    int maxCount = minCount;
+    if (ctx.NT_NUMBER().size() > 1) {
+      maxCount = Integer.parseInt(ctx.NT_NUMBER(1).getText());
+    }
+    setValue(ctx, new NucleotideNotSequencedRepeat(false, range, type, minCount, maxCount));
+  }
+
+
+  /**
 	 * Leaving of nt_change_misc rule
 	 * <p>
 	 * Construct {@link NucleotideMiscChange} from the children's values and label ctx with this.
@@ -478,7 +533,7 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 		if (transcriptID.contains(".")) {
 			int pos = transcriptID.lastIndexOf('.');
 			transcriptVersion = Integer
-				.parseInt(transcriptID.substring(pos + 1, transcriptID.length()));
+				.parseInt(transcriptID.substring(pos + 1));
 			transcriptID = transcriptID.substring(0, pos);
 		}
 		if (ctx.PAREN_OPEN() != null)
