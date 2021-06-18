@@ -43,7 +43,7 @@ REFERENCE
 fragment
 REF_IDENTIFIER
 :
-	[_a-zA-Z0-9_]+
+	[a-zA-Z0-9_]+
 ;
 
 /** opening parenthesis */
