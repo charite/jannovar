@@ -1,5 +1,12 @@
 # Jannovar Changelog
 
+## v0.37
+
+### overall
+
+* Adding support for parsing HGVS repeats.
+* Adding support for "chr2acc" chromosome to accession mapping.
+
 ## v0.36
 
 **Highlight: Pre-Built Databases**

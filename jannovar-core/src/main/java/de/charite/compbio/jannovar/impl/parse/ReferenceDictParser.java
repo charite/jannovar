@@ -61,6 +61,8 @@ public final class ReferenceDictParser {
 		// then the assembly name. For the latter case, we allow filtering to lines where the last field matches the
 		// configuration entry "chrToAccessions.matchLast".
 		// TODO(holtgrem): improve documentation for the chrToAccessions.* keys in the default_sources.ini file.
+		//
+		// In mm39, a new format appears. the "chr_accessions" is not available any more but there is a "chr2acc" file.
 		ImmutableList<ImmutableList<String>> accessionLines = loadTSVFile(chrAccessionsPath);
 		String chrToAccessionsFormat = iniSection.fetch("chrToAccessions.format");
 		if (chrToAccessionsFormat == null)
@@ -76,6 +78,16 @@ public final class ReferenceDictParser {
 				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
 				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
 				builder.putContigID(line.get(CA_GENBANK_ACCESSION), chrID); // e.g. "CM000663.1"
+				chrID += 1;
+			}
+		} else if ("chr2acc".equals(chrToAccessionsFormat)) { // chr2acc introduced with mm39
+			final int CA_CHROMOSOME = 0;
+			final int CA_REFSEQ_ACCESSION = 1;
+			for (ImmutableList<String> line : accessionLines) {
+				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
+				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
+				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
+				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
 				chrID += 1;
 			}
 		} else { // old chr_NC_gi format
