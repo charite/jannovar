@@ -27,25 +27,29 @@ in the Jannovar manual.
 
 As of Jannovar version v0.36, we provide pre-built databases via Zenodo.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4916051.svg)](https://doi.org/10.5281/zenodo.4916051)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5410367.svg)](https://doi.org/10.5281/zenodo.5410367)
 
 You can obtain pre-built databases Zenodo as shown from the following table.
 In the case that you need is missing, please [start a Github discussion](https://github.com/charite/jannovar/discussions).
 
 | Organism | Database | DB release | Reference | File | MD5 Sum |
 | -------- | -------- | ---------- | --------- | ---- | ------- |
-| H.&nbsp;sapiens | ENSEMBL | 87 | hg19 | [ensembl_87_hg19.ser](https://zenodo.org/record/4916051/files/ensembl_87_hg19.ser?download=1) | ecaffeaa26531a002e75953c6b309c53 |
-| H.&nbsp;sapiens | ENSEMBL | 91 | hg38 | [ensembl_91_hg38.ser](https://zenodo.org/record/4916051/files/ensembl_91_hg38.ser?download=1) | 6218669555a52057ee88132edfed0ae2 |
-| H.&nbsp;sapiens | RefSeq | 105 | hg19 | [refseq_105_hg19.ser](https://zenodo.org/record/4916051/files/refseq_105_hg19.ser?download=1) | b2087f8f3d41d20ad52fb9660853642e |
-| H.&nbsp;sapiens | RefSeq\* | 105 | hg19 | [refseq_curated_105_hg19.ser](https://zenodo.org/record/4916051/files/refseq_curated_105_hg19.ser?download=1) | a92fea7b8e37d46c75936783ae326d71 |
-| H.&nbsp;sapiens | RefSeq\* | 105 | rn6 | [refseq_curated_105_rn6.ser](https://zenodo.org/record/4916051/files/refseq_curated_105_rn6.ser?download=1) | b028ae0e6768c0505b7a4d2fe89cd462 |
-| H.&nbsp;sapiens | RefSeq | 109 | hg38 | [refseq_109_hg38.ser](https://zenodo.org/record/4916051/files/refseq_109_hg38.ser?download=1) | 6b1205bb534adb5ff9e0e569e6fabc5d |
-| H.&nbsp;sapiens | RefSeq\* | 109 | hg38 | [refseq_curated_109_hg38.ser](https://zenodo.org/record/4916051/files/refseq_curated_109_hg38.ser?download=1) | c2747c4c1b42a75930603d6deda105cf |
-| M.&nbsp;musculus | RefSeq | 106 | mm9 | [refseq_106_mm9.ser](https://zenodo.org/record/4916051/files/refseq_106_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
-| M.&nbsp;musculus | RefSeq\* | 106 | mm9 | [refseq_curated_106_mm9.ser](https://zenodo.org/record/4916051/files/refseq_curated_106_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
-| M.&nbsp;musculus | RefSeq | 37.2 | mm9 | [refseq_37.2_mm9.ser](https://zenodo.org/record/4916051/files/refseq_37.2_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
-| M.&nbsp;musculus | RefSeq\* | 37.2 | mm9 | [refseq_curated_37.2_mm9.ser](https://zenodo.org/record/4916051/files/refseq_curated_37.2_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
-| R.&nbsp;norvegicus | RefSeq | 105 | rn6 | [refseq_105_rn6.ser](https://zenodo.org/record/4916051/files/refseq_105_rn6.ser?download=1) | 4a9c3416ee9159c0c71f613a3d168869 |
+| H.&nbsp;sapiens | ENSEMBL | 87 | hg19 | [ensembl_87_hg19.ser](https://zenodo.org/record/5410367/files/ensembl_87_hg19.ser?download=1) | ecaffeaa26531a002e75953c6b309c53 |
+| H.&nbsp;sapiens | ENSEMBL | 91 | hg38 | [ensembl_91_hg38.ser](https://zenodo.org/record/5410367/files/ensembl_91_hg38.ser?download=1) | 6218669555a52057ee88132edfed0ae2 |
+| H.&nbsp;sapiens | RefSeq | 105 | hg19 | [refseq_105_hg19.ser](https://zenodo.org/record/5410367/files/refseq_105_hg19.ser?download=1) | b2087f8f3d41d20ad52fb9660853642e |
+| H.&nbsp;sapiens | RefSeq\* | 105 | hg19 | [refseq_curated_105_hg19.ser](https://zenodo.org/record/5410367/files/refseq_curated_105_hg19.ser?download=1) | a92fea7b8e37d46c75936783ae326d71 |
+| H.&nbsp;sapiens | RefSeq\* | 105 | rn6 | [refseq_curated_105_rn6.ser](https://zenodo.org/record/5410367/files/refseq_curated_105_rn6.ser?download=1) | b028ae0e6768c0505b7a4d2fe89cd462 |
+| H.&nbsp;sapiens | RefSeq | 109 | hg38 | [refseq_109_hg38.ser](https://zenodo.org/record/5410367/files/refseq_109_hg38.ser?download=1) | 6b1205bb534adb5ff9e0e569e6fabc5d |
+| H.&nbsp;sapiens | RefSeq\* | 109 | hg38 | [refseq_curated_109_hg38.ser](https://zenodo.org/record/5410367/files/refseq_curated_109_hg38.ser?download=1) | c2747c4c1b42a75930603d6deda105cf |
+| M.&nbsp;musculus | RefSeq | 106 | mm9 | [refseq_106_mm9.ser](https://zenodo.org/record/5410367/files/refseq_106_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
+| M.&nbsp;musculus | RefSeq\* | 106 | mm9 | [refseq_curated_106_mm9.ser](https://zenodo.org/record/5410367/files/refseq_curated_106_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
+| M.&nbsp;musculus | RefSeq | 37.2 | mm9 | [refseq_37.2_mm9.ser](https://zenodo.org/record/5410367/files/refseq_37.2_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
+| M.&nbsp;musculus | RefSeq\* | 37.2 | mm9 | [refseq_curated_37.2_mm9.ser](https://zenodo.org/record/5410367/files/refseq_curated_37.2_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
+| M.&nbsp;musculus | RefSeq | 108 | mm10 | [refseq_108_mm10.ser](https://zenodo.org/record/5410367/files/refseq_108_mm10.ser?download=1) | a28e90913f74a9aba0c45650367f941c  |
+| M.&nbsp;musculus | RefSeq\* | 108 | mm10 | [refseq_curated_108_mm10.ser](https://zenodo.org/record/5410367/files/refseq_curated_108_mm10.ser?download=1) | 1980725f909284c6ab8f8212dbe02dd9 |
+| M.&nbsp;musculus | RefSeq | 109 | mm39 | [refseq_109_mm10.ser](https://zenodo.org/record/5410367/files/refseq_109_mm10.ser?download=1) | 6b1205bb534adb5ff9e0e569e6fabc5d  |
+| M.&nbsp;musculus | RefSeq\* | 109 | mm39 | [refseq_curated_109_mm10.ser](https://zenodo.org/record/5410367/files/refseq_curated_109_mm10.ser?download=1) | c2747c4c1b42a75930603d6deda105cf |
+| R.&nbsp;norvegicus | RefSeq | 105 | rn6 | [refseq_105_rn6.ser](https://zenodo.org/record/5410367/files/refseq_105_rn6.ser?download=1) | 4a9c3416ee9159c0c71f613a3d168869 |
 
 Note: `RefSeq*` = RefSeq with curated / `NM_` transcript only and excluding `XM_` transcripts that are based on gene predictions.
 
