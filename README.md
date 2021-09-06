@@ -43,8 +43,6 @@ In the case that you need is missing, please [start a Github discussion](https:/
 | H.&nbsp;sapiens | RefSeq\* | 109 | hg38 | [refseq_curated_109_hg38.ser](https://zenodo.org/record/5410367/files/refseq_curated_109_hg38.ser?download=1) | c2747c4c1b42a75930603d6deda105cf |
 | M.&nbsp;musculus | RefSeq | 106 | mm9 | [refseq_106_mm9.ser](https://zenodo.org/record/5410367/files/refseq_106_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
 | M.&nbsp;musculus | RefSeq\* | 106 | mm9 | [refseq_curated_106_mm9.ser](https://zenodo.org/record/5410367/files/refseq_curated_106_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
-| M.&nbsp;musculus | RefSeq | 37.2 | mm9 | [refseq_37.2_mm9.ser](https://zenodo.org/record/5410367/files/refseq_37.2_mm9.ser?download=1) | 1f7e2bf9860d06fab85225987fef3550 |
-| M.&nbsp;musculus | RefSeq\* | 37.2 | mm9 | [refseq_curated_37.2_mm9.ser](https://zenodo.org/record/5410367/files/refseq_curated_37.2_mm9.ser?download=1) | 059bd7103dbf4014bebd2f900af7b36b |
 | M.&nbsp;musculus | RefSeq | 108 | mm10 | [refseq_108_mm10.ser](https://zenodo.org/record/5410367/files/refseq_108_mm10.ser?download=1) | a28e90913f74a9aba0c45650367f941c  |
 | M.&nbsp;musculus | RefSeq\* | 108 | mm10 | [refseq_curated_108_mm10.ser](https://zenodo.org/record/5410367/files/refseq_curated_108_mm10.ser?download=1) | 1980725f909284c6ab8f8212dbe02dd9 |
 | M.&nbsp;musculus | RefSeq | 109 | mm39 | [refseq_109_mm10.ser](https://zenodo.org/record/5410367/files/refseq_109_mm10.ser?download=1) | 6b1205bb534adb5ff9e0e569e6fabc5d  |
