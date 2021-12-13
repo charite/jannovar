@@ -6,6 +6,7 @@
 
 * Adding support for parsing HGVS repeats.
 * Adding support for "chr2acc" chromosome to accession mapping.
+* Bumping log4j version against log4shell exploit.
 
 ## v0.36
 
