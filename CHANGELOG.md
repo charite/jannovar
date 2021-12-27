@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## v0.38
+
+### overall
+
+* More bumping of log4j against log4shell exploit.
+
 ## v0.37
 
 ### overall
