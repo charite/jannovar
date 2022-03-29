@@ -10,6 +10,7 @@
 ### jannovar-core
 
 - Adding support for mitochondrial genetic code (#501)
+- Fix problem with building ENSEMBL (#540)
 
 ## v0.38
 

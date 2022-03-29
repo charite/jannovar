@@ -96,8 +96,11 @@ public final class JannovarData implements Serializable {
 	private static ImmutableMultimap<String, TranscriptModel> makeTMByGeneSymbol(
 		ImmutableList<TranscriptModel> transcriptModels) {
 		ImmutableMultimap.Builder<String, TranscriptModel> builder = new ImmutableMultimap.Builder<String, TranscriptModel>();
-		for (TranscriptModel tm : transcriptModels)
-			builder.put(tm.getGeneSymbol(), tm);
+		for (TranscriptModel tm : transcriptModels) {
+			if (tm.getGeneSymbol() != null) {
+				builder.put(tm.getGeneSymbol(), tm);
+			}
+		}
 		return builder.build();
 	}
 
