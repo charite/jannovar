@@ -109,8 +109,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			Character.toString(wtNT), Character.toString(varNT));
 
 		// Construct annotation part for the protein.
-		String wtAA = Translator.getTranslator().translateDNA(wtCodon);
-		String varAA = Translator.getTranslator().translateDNA(varCodon);
+		String wtAA = Translator.getTranslator().translateDNA(wtCodon, !transcript.isMitochondrial());
+		String varAA = Translator.getTranslator().translateDNA(varCodon, !transcript.isMitochondrial());
 		ProteinChange proteinChange = ProteinSubstitution.build(true, wtAA, cdsPos.getPos() / 3, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
@@ -127,7 +127,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			} else { // change in stop codon, AA change
 				varTypes.add(VariantEffect.STOP_LOST);
 				String varNTString = seqChangeHelper.getCDSWithGenomeVariant(change);
-				String varAAString = Translator.getTranslator().translateDNA(varNTString);
+				String varAAString = Translator.getTranslator().translateDNA(varNTString, !transcript.isMitochondrial());
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
 				int shift = stopCodonPos - cdsPos.getPos() / 3;
 				proteinChange = ProteinExtension.build(true, wtAA, cdsPos.getPos() / 3, varAA, shift);

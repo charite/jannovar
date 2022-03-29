@@ -122,8 +122,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1));
 
 			// Translate the variant CDS sequence and look for stop codon.
-			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.varAASeq = t.translateDNA(varCDSSeq);
+			this.wtAASeq = t.translateDNA(wtCDSSeq, !transcript.isMitochondrial());
+			this.varAASeq = t.translateDNA(varCDSSeq, !transcript.isMitochondrial());
 			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.getPos() / 3);
 
 			// protect against going behind transcript

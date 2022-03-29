@@ -163,9 +163,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			this.insertPos = projector.projectGenomeToCDSPosition(change.getGenomePos());
 
 			// Translate the variant CDS sequence and look for stop codon.
-			this.wtAASeq = t.translateDNA(wtCDSSeq);
+			this.wtAASeq = t.translateDNA(wtCDSSeq, !transcript.isMitochondrial());
 			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.getPos() / 3);
-			this.varAASeq = t.translateDNA(varCDSSeq);
+			this.varAASeq = t.translateDNA(varCDSSeq, !transcript.isMitochondrial());
 			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.getPos() / 3);
 
 			// Build initial aaChange. This is correct for non-FS insertions, and the first affected bases for FS

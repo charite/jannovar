@@ -129,8 +129,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
 
 			// Translate the variant CDS sequence.
-			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.varAASeq = t.translateDNA(varCDSSeq);
+			this.wtAASeq = t.translateDNA(wtCDSSeq, !transcript.isMitochondrial());
+			this.varAASeq = t.translateDNA(varCDSSeq, !transcript.isMitochondrial());
 
 			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());

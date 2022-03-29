@@ -229,6 +229,13 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/**
+	 * @return <tt>true</tt> if this transcript is on the mitochondrial chromosome
+	 */
+	public boolean isMitochondrial() {
+		return this.txRegion.getChr() == 25;
+	}
+
+	/**
 	 * @return the length of the coding exon sequence
 	 */
 	public int cdsTranscriptLength() {
