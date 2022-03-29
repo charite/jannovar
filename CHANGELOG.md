@@ -11,6 +11,7 @@
 
 - Adding support for mitochondrial genetic code (#501)
 - Fix problem with building ENSEMBL (#540)
+- Fix problem with HGVS-to-VCF (#539)
 
 ## v0.38
 
