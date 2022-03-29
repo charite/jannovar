@@ -73,6 +73,9 @@ public final class VariantNormalizer {
 		boolean anyChange = true;
 		while (anyChange) {
 			anyChange = false;
+			if (ref.equals(alt)) {
+				break;
+			}
 
 			// Trim left-most nucletoide
 			if (ref.length() > 0 && alt.length() > 0 && ref.charAt(ref.length() - 1) == alt.charAt(alt.length() - 1)) {

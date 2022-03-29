@@ -99,6 +99,8 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		header.addMetaDataLine(new VCFSimpleHeaderLine("ALT", "ERROR", "Error in conversion"));
 		header.addMetaDataLine(new VCFFilterHeaderLine("PARSE_ERROR",
 			"Problem in parsing original HGVS variant string, written out as variant at 1:g.1N>N"));
+		header.addMetaDataLine(new VCFFilterHeaderLine("CORRECTION_ERROR",
+			"Problem with auto-correction (e.g., translates to A>A)"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ERROR_MESSAGE", 1, VCFHeaderLineType.String, "Error message"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ORIG_VAR", 1, VCFHeaderLineType.String,
 			"Original HGVS variant string from input file to hgvs-to-vcf"));
@@ -171,7 +173,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 				}
 
 				// Write variant to VCF file
-				writeVariant(writer, genomeVar);
+				writeVariant(writer, word, genomeVar);
 				System.err.println(word + " => " + rawVar + " => " + genomeVar);
 			}
 		} catch (FileNotFoundException e) {
@@ -203,12 +205,17 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		return nameInFasta;
 	}
 
-	private void writeVariant(VariantContextWriter writer, GenomeVariant genomeVar) {
+	private void writeVariant(VariantContextWriter writer, String origVar, GenomeVariant genomeVar) {
 		genomeVar = genomeVar.withStrand(Strand.FWD);
 		final String nameInFasta = mapContigToFasta(genomeVar.getChrName());
 		final VariantDescription desc = normalizer.normalizeInsertion(
 			new VariantDescription(nameInFasta, genomeVar.getPos(), genomeVar.getRef(), genomeVar.getAlt())
 		);
+
+		if (desc.getRef().equals(desc.getAlt())) {
+			writer.add(buildErrorVariantContext(origVar, "Problem with auto-correction"));
+			return;
+		}
 
 		final List<Allele> alleles = Lists.newArrayList(
 			Allele.create(desc.getRef(), true),
