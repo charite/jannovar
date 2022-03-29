@@ -14,13 +14,21 @@ import java.util.Map;
 public final class Translator {
 
 	/**
-	 * Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code)
+	 * Map of universal genetic code. Keys are codons and values are the corresponding amino acid (one-letter code)
 	 */
 	private ImmutableMap<String, String> codon1 = null;
 	/**
-	 * Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code)
+	 * Map of universal genetic code. Keys are codons and values are the corresponding amino acid (three-letter code)
 	 */
 	private ImmutableMap<String, String> codon3 = null;
+	/**
+	 * Map of vertebrate mitochondrial code, see {@code codon1}.
+	 */
+	private ImmutableMap<String, String> vertMtCodon1 = null;
+	/**
+	 * Map of vertebrate mitochondrial code, see {@code codon3}.
+	 */
+	private ImmutableMap<String, String> vertMtCodon3 = null;
 	/**
 	 * Map of IUPAC ambiguity codes.
 	 */
@@ -64,15 +72,24 @@ public final class Translator {
 	 * possible here. This may need refactoring in the future. (TODO).
 	 *
 	 * @param dnaseq A DNA sequence that is to be translated
+	 * @param useStandardCode Whether to use standard code (alternative is to use vertebrate mitochondrial code)
 	 * @return corresonding aminoacid sequence
 	 */
-	public String translateDNA(String dnaseq) {
-		return translateDNA(dnaseq, this.codon1);
+	public String translateDNA(String dnaseq, boolean useStandardCode) {
+		if (useStandardCode) {
+			return translateDNA(dnaseq, this.codon1);
+		} else {
+			return translateDNA(dnaseq, this.vertMtCodon1);
+		}
 	}
 
 	// same as above but returning 3-letter AA codes
-	public String translateDNA3(String dnaseq) {
-		return translateDNA(dnaseq, this.codon3);
+	public String translateDNA3(String dnaseq, boolean useStandardCode) {
+		if (useStandardCode) {
+			return translateDNA(dnaseq, this.codon3);
+		} else {
+			return translateDNA(dnaseq, this.vertMtCodon3);
+		}
 	}
 
 	/**
@@ -123,17 +140,7 @@ public final class Translator {
 		return aminoAcidSeq.toString();
 	}
 
-	/**
-	 * Initializes a set of maps that represent the gene code with various aminoacid codes. Also initializes map of
-	 * IUPAC codes.
-	 */
-	private void initializeMaps() {
-		ImmutableMap.Builder<String, String> codon1 = new ImmutableMap.Builder<String, String>();
-		ImmutableMap.Builder<String, String> codon3 = new ImmutableMap.Builder<String, String>();
-		ImmutableMap.Builder<String, String> iupac = new ImmutableMap.Builder<String, String>();
-		ImmutableMap.Builder<String, String> shortToLong = new ImmutableMap.Builder<String, String>();
-		ImmutableMap.Builder<String, String> longToShort = new ImmutableMap.Builder<String, String>();
-
+	private void initCodon1(ImmutableMap.Builder<String, String> codon1, boolean isVertebrateMt) {
 		codon1.put("AAA", "K");
 		codon1.put("AAC", "N");
 		codon1.put("AAG", "K");
@@ -142,11 +149,23 @@ public final class Translator {
 		codon1.put("ACC", "T");
 		codon1.put("ACG", "T");
 		codon1.put("ACT", "T");
-		codon1.put("AGA", "R");
+		if (isVertebrateMt) {
+			codon1.put("AGA", "*");
+		} else {
+			codon1.put("AGA", "R");
+		}
 		codon1.put("AGC", "S");
-		codon1.put("AGG", "R");
+		if (isVertebrateMt) {
+			codon1.put("AGG", "*");
+		} else {
+			codon1.put("AGG", "R");
+		}
 		codon1.put("AGT", "S");
-		codon1.put("ATA", "I");
+		if (isVertebrateMt) {
+			codon1.put("ATA", "M");
+		} else {
+			codon1.put("ATA", "I");
+		}
 		codon1.put("ATC", "I");
 		codon1.put("ATG", "M");
 		codon1.put("ATT", "I");
@@ -190,7 +209,11 @@ public final class Translator {
 		codon1.put("TCC", "S");
 		codon1.put("TCG", "S");
 		codon1.put("TCT", "S");
-		codon1.put("TGA", "*");
+		if (isVertebrateMt) {
+			codon1.put("TGA", "W");
+		} else {
+			codon1.put("TGA", "*");
+		}
 		codon1.put("TGC", "C");
 		codon1.put("TGG", "W");
 		codon1.put("TGT", "C");
@@ -198,7 +221,9 @@ public final class Translator {
 		codon1.put("TTC", "F");
 		codon1.put("TTG", "L");
 		codon1.put("TTT", "F");
+	}
 
+	private void initCodon3(ImmutableMap.Builder<String, String> codon3, boolean isVertebrateMt) {
 		codon3.put("AAA", "Lys");
 		codon3.put("AAC", "Asn");
 		codon3.put("AAG", "Lys");
@@ -207,11 +232,23 @@ public final class Translator {
 		codon3.put("ACC", "Thr");
 		codon3.put("ACG", "Thr");
 		codon3.put("ACT", "Thr");
-		codon3.put("AGA", "Arg");
+		if (isVertebrateMt) {
+			codon3.put("AGA", "*");
+		} else {
+			codon3.put("AGA", "Arg");
+		}
 		codon3.put("AGC", "Ser");
-		codon3.put("AGG", "Arg");
+		if (isVertebrateMt) {
+			codon3.put("AGG", "*");
+		} else {
+			codon3.put("AGG", "Arg");
+		}
 		codon3.put("AGT", "Ser");
-		codon3.put("ATA", "Ile");
+		if (isVertebrateMt) {
+			codon3.put("ATA", "Met");
+		} else {
+			codon3.put("ATA", "Ile");
+		}
 		codon3.put("ATC", "Ile");
 		codon3.put("ATG", "Met");
 		codon3.put("ATT", "Ile");
@@ -255,7 +292,11 @@ public final class Translator {
 		codon3.put("TCC", "Ser");
 		codon3.put("TCG", "Ser");
 		codon3.put("TCT", "Ser");
-		codon3.put("TGA", "*");
+		if (isVertebrateMt) {
+			codon3.put("TGA", "Trp");
+		} else {
+			codon3.put("TGA", "*");
+		}
 		codon3.put("TGC", "Cys");
 		codon3.put("TGG", "Trp");
 		codon3.put("TGT", "Cys");
@@ -263,6 +304,25 @@ public final class Translator {
 		codon3.put("TTC", "Phe");
 		codon3.put("TTG", "Leu");
 		codon3.put("TTT", "Phe");
+	}
+
+	/**
+	 * Initializes a set of maps that represent the gene code with various aminoacid codes. Also initializes map of
+	 * IUPAC codes.
+	 */
+	private void initializeMaps() {
+		ImmutableMap.Builder<String, String> codon1 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> codon3 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> vertMtCodon1 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> vertMtCodon3 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> iupac = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> shortToLong = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> longToShort = new ImmutableMap.Builder<String, String>();
+
+		initCodon1(codon1, false);
+		initCodon3(codon3, false);
+		initCodon1(vertMtCodon1, true);
+		initCodon3(vertMtCodon3, true);
 
 		iupac.put("-", "-");
 		iupac.put(".", "-");
@@ -312,6 +372,8 @@ public final class Translator {
 
 		this.codon1 = codon1.build();
 		this.codon3 = codon3.build();
+		this.vertMtCodon1 = vertMtCodon1.build();
+		this.vertMtCodon3 = vertMtCodon3.build();
 		this.iupac = iupac.build();
 		this.shortToLong = shortToLong.build();
 	}

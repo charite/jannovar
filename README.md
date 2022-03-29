@@ -60,8 +60,8 @@ Jannovar database `.ser` files are compatible within a given version range with 
 The following table lists the compatibility.
 
 | First Version | Last Version | Notes |
-| ------------- | ------------ | ----- |
-| 0.33          | 0.36         | first version with compatibility description |
+| ------------- |--------------| ----- |
+| 0.33          | 0.38         | first version with compatibility description |
 
 ## Developer Guidelines
 
