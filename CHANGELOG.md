@@ -4,8 +4,12 @@
 
 ### overall
 
-- moved away from split between `master` and `develop` branch to using `main` branch
-- adding support for mitochondrial genetic code (#501)
+- Moved away from split between `master` and `develop` branch to using `main` branch
+- Fixing broken download links in README (#533)
+
+### jannovar-core
+
+- Adding support for mitochondrial genetic code (#501)
 
 ## v0.38
 
