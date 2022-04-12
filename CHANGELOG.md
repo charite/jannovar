@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## HEAD (unreleased)
+## v0.39
 
 ### overall
 
