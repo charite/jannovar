@@ -56,7 +56,7 @@ public class JannovarAnnotationOptions extends JannovarBaseOptions {
 		super.setFromArgs(args);
 
 		useThreeLetterAminoAcidCode = args.getBoolean("3_letter_amino_acids");
-		nt3PrimeShifting = !args.getBoolean("3_prime_shifting");
+		nt3PrimeShifting = args.getBoolean("3_prime_shifting");
 		databaseFilePath = args.getString("database");
 		showAll = args.getBoolean("show_all");
 	}

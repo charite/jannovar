@@ -102,7 +102,7 @@ abstract class AnnotationBuilder {
 		this.seqDecorator = new TranscriptSequenceDecorator(transcript);
 
 		// Shift the GenomeChange if lies within precisely one exon.
-		if (so.liesInExon(change.getGenomeInterval())) {
+		if (so.liesInExon(change.getGenomeInterval()) && options.isNt3PrimeShifting()) {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
 				this.change = GenomeVariantNormalizer.normalizeGenomeChange(transcript, change,
