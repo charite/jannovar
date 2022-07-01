@@ -1,5 +1,12 @@
 # Jannovar Changelog
 
+## v0.40-SNAPSHOT (unreleased)
+
+### jannovar-cli
+
+- Argument `--no-3-prime-shifting` had inverse meaning (#552).
+  This has been fixed now.
+
 ## v0.39
 
 ### overall

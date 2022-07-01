@@ -59,7 +59,8 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile(options.getDatabaseFilePath());
 
-		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
+		final AnnotationBuilderOptions abOptions = new AnnotationBuilderOptions(options.isNt3PrimeShifting(), false);
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, abOptions);
 
 		try {
 			Reader in = new FileReader(options.getCsv());

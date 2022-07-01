@@ -51,7 +51,9 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile(options.getDatabaseFilePath());
 
-		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
+
+		final AnnotationBuilderOptions abOptions = new AnnotationBuilderOptions(options.isNt3PrimeShifting(), false);
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, abOptions);
 		System.out.println("#change\teffect\thgvs_annotation\tmessages");
 		for (String chromosomalChange : options.getGenomicChanges()) {
 			// Parse the chromosomal change string into a GenomeChange object.
