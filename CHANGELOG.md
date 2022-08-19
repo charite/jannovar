@@ -6,6 +6,9 @@
 
 - Argument `--no-3-prime-shifting` had inverse meaning (#552).
   This has been fixed now.
+- Hook `--no-3-prime-shifting` argument with the rest server.
+  If shifting is enabled, `?no-3-prime-shifting` can be sent as a query param in the API request to temporarily
+  disable the shifting.
 
 ## v0.39
 
