@@ -37,6 +37,12 @@ public class RestServerOptions extends JannovarBaseOptions {
 	private int port = 5050;
 
 	/**
+	 * whether or not to shift variants towards the 3' end of the transcript
+	 * (default is <code>true</code>)
+	 */
+	private boolean nt3PrimeShifting=true;
+
+	/**
 	 * Setup {@link ArgumentParser}
 	 *
 	 * @param subParsers {@link Subparsers} to setup
@@ -74,6 +80,7 @@ public class RestServerOptions extends JannovarBaseOptions {
 		host = args.getString("host");
 		port = args.getInt("port");
 		dbPaths = args.getList("database");
+		nt3PrimeShifting = args.getBoolean("3_prime_shifting");
 	}
 
 	public List<String> getDbPaths() {
@@ -100,9 +107,17 @@ public class RestServerOptions extends JannovarBaseOptions {
 		this.port = port;
 	}
 
+	public boolean isNt3PrimeShifting() {
+		return nt3PrimeShifting;
+	}
+
+	public void setNt3PrimeShifting(boolean nt3PrimeShifting) {
+		this.nt3PrimeShifting = nt3PrimeShifting;
+	}
+
 	@Override public String toString() {
 		return "RestServerOptions{" + "dbPaths=" + dbPaths + ", host='" + host + '\'' + ", port="
-			+ port + '}';
+			+ port + ", 3-prime-shifting=" + nt3PrimeShifting + '}';
 	}
 
 }

@@ -53,6 +53,7 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 		System.err.println("Options: " + options);
 		ipAddress(options.getHost());
 		port(options.getPort());
+		final boolean isNt3PrimeShifting = options.isNt3PrimeShifting();
 
 		System.err.println("Loading database");
 		final ImmutableMap<String, JannovarData> jvDatas = loadDatabases();
@@ -66,9 +67,11 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 
 				final String key = Joiner.on("/")
 					.join(req.params(":release"), req.params(":database"));
+				final boolean threePrimeShifting = !req.queryMap().hasKey("no-3-prime-shifting") && isNt3PrimeShifting;
+
 				final JannovarData jvData = jvDatas.get(key);
 				final VariantAnnotator annotator = new VariantAnnotator(jvData.getRefDict(),
-					jvData.getChromosomes(), new AnnotationBuilderOptions(true, false));
+					jvData.getChromosomes(), new AnnotationBuilderOptions(threePrimeShifting, false));
 
 				final Integer boxedInt = jvData.getRefDict().getContigNameToID().get(chromosome);
 				if (boxedInt == null) {
