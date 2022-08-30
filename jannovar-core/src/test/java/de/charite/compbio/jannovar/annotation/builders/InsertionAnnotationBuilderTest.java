@@ -729,6 +729,30 @@ public class InsertionAnnotationBuilderTest {
 		Assertions.assertEquals("?", annoInsertionBeforeExon3.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 			VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annoInsertionBeforeExon3.getEffects());
+
+		// coding insertion within splice region (frameshift)
+		GenomeVariant varInsertionInSpliceRegion1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6641358,
+			PositionType.ZERO_BASED), "", "C");
+		Annotation annoInsertionInSpliceRegion1 = new InsertionAnnotationBuilder(infoForward, varInsertionInSpliceRegion1,
+			new AnnotationBuilderOptions()).build();
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionInSpliceRegion1.getTranscript().getAccession());
+		Assertions.assertEquals(1, annoInsertionInSpliceRegion1.getAnnoLoc().getRank());
+		Assertions.assertEquals("689_690insC", annoInsertionInSpliceRegion1.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu230Aspfs*11)", annoInsertionInSpliceRegion1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT,
+			VariantEffect.SPLICE_REGION_VARIANT), annoInsertionInSpliceRegion1.getEffects());
+
+		// coding insertion within splice region (no frameshift)
+		GenomeVariant varInsertionInSpliceRegion2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6641358,
+			PositionType.ZERO_BASED), "", "CTC");
+		Annotation annoInsertionInSpliceRegion2 = new InsertionAnnotationBuilder(infoForward, varInsertionInSpliceRegion2,
+			new AnnotationBuilderOptions()).build();
+		Assertions.assertEquals(infoForward.getAccession(), annoInsertionInSpliceRegion2.getTranscript().getAccession());
+		Assertions.assertEquals(1, annoInsertionInSpliceRegion2.getAnnoLoc().getRank());
+		Assertions.assertEquals("689_690insCTC", annoInsertionInSpliceRegion2.getCDSNTChange().toHGVSString());
+		Assertions.assertEquals("(Glu230delinsAspSer)", annoInsertionInSpliceRegion2.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER)); // XXX
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+			VariantEffect.SPLICE_REGION_VARIANT), annoInsertionInSpliceRegion2.getEffects());
 	}
 
 	@Test
@@ -1493,7 +1517,8 @@ public class InsertionAnnotationBuilderTest {
 		Assertions.assertEquals(7, annotation1.getAnnoLoc().getRank());
 		Assertions.assertEquals("730_731insT", annotation1.getCDSNTChange().toHGVSString());
 		Assertions.assertEquals("(Asn244Ilefs*52)", annotation1.getProteinChange().toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
+		Assertions.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT,
+			VariantEffect.SPLICE_REGION_VARIANT), annotation1.getEffects());
 	}
 
 	/**
