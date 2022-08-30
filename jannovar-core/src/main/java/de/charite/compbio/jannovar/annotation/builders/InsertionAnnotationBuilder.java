@@ -212,6 +212,16 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				handleFrameShiftCaseWTStartWithStopCodon();
 			else
 				handleFrameShiftCaseWTStartsWithNoStopCodon();
+
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
+			final GenomePosition pos = change.getGenomePos();
+			final GenomePosition lPos = change.getGenomePos().shifted(-1);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
+			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
+			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 		}
 
 		/**
@@ -303,6 +313,16 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				handleNonFrameShiftCaseStartsWithStopCodon();
 			else
 				handleNonFrameShiftCaseStartsWithNoStopCodon();
+
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
+			final GenomePosition pos = change.getGenomePos();
+			final GenomePosition lPos = change.getGenomePos().shifted(-1);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+				varTypes.add(VariantEffect.SPLICE_DONOR_VARIANT);
+			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+				varTypes.add(VariantEffect.SPLICE_ACCEPTOR_VARIANT);
+			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				varTypes.add(VariantEffect.SPLICE_REGION_VARIANT);
 		}
 
 		private void handleNonFrameShiftCaseStartsWithStopCodon() {

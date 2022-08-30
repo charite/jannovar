@@ -2,6 +2,9 @@
 
 ## v0.40-SNAPSHOT (unreleased)
 
+### jannovar-core
+- Coding insertions are now annotated for splicing (#554)
+
 ### jannovar-cli
 
 - Argument `--no-3-prime-shifting` had inverse meaning (#552).
