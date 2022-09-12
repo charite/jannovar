@@ -1,8 +1,9 @@
 # Jannovar Changelog
 
-## v0.40-SNAPSHOT (unreleased)
+## v0.40
 
 ### jannovar-core
+
 - Coding insertions are now annotated for splicing (#554)
 
 ### jannovar-cli
