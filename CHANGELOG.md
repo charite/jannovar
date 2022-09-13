@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## v0.41 (work in progress)
+## v0.41
 
 ### jannovar-core
 
