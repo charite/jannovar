@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## v0.41 (work in progress)
+
+### jannovar-core
+
+- Fixing problem with annotating Dragen CNV VCF (#558)
+
 ## v0.40
 
 ### jannovar-core

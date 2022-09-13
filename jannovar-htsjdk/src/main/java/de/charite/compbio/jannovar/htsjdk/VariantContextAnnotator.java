@@ -484,9 +484,6 @@ public final class VariantContextAnnotator {
 		final String altStr = vc.getAlternateAllele(0).toString();
 		if (altStr.startsWith("<") && altStr.endsWith(">")) {
 			final String altSVType = altStr.substring(1, altStr.length() - 1);
-			if (!altSVType.startsWith(tmpSVType)) {
-				throw new MissingSVTypeInfoField("INFO/SVTYPE not a prefix of ALT allele");
-			}
 			svType = altSVType;
 		} else {
 			svType = tmpSVType;
