@@ -9,10 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationMessage;
-import de.charite.compbio.jannovar.annotation.VariantAnnotations;
-import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
@@ -65,38 +62,47 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 				final String reference = req.params(":reference");
 				final String alternative = req.params(":alternative");
 
+				final boolean threePrimeShifting = !req.queryMap().hasKey("no-3-prime-shifting") && isNt3PrimeShifting;
 				final String key = Joiner.on("/")
 					.join(req.params(":release"), req.params(":database"));
-				final boolean threePrimeShifting = !req.queryMap().hasKey("no-3-prime-shifting") && isNt3PrimeShifting;
-
 				final JannovarData jvData = jvDatas.get(key);
-				final VariantAnnotator annotator = new VariantAnnotator(jvData.getRefDict(),
-					jvData.getChromosomes(), new AnnotationBuilderOptions(threePrimeShifting, false));
 
-				final Integer boxedInt = jvData.getRefDict().getContigNameToID().get(chromosome);
-				if (boxedInt == null) {
-					throw new InvalidCoordinatesException("Unknown reference " + chromosome,
-						AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
-				}
-				final int chr = boxedInt.intValue();
-
-				final GenomePosition gPos = new GenomePosition(jvData.getRefDict(), Strand.FWD, chr,
-					position, PositionType.ONE_BASED);
-				final VariantAnnotations annotations = annotator
-					.buildAnnotations(new GenomeVariant(gPos, reference, alternative));
-
-				final List<VariantAnnotationInfo> result = new ArrayList<>(0);
-				for (Annotation anno : annotations.getAnnotations()) {
-					result.add(new VariantAnnotationInfo(anno.getTranscript().getAccession(),
-						anno.getEffects().stream().map(x -> x.toString().toLowerCase())
-							.collect(Collectors.toList()), anno.getTranscript().isCoding(),
-						anno.getProteinChangeStr(AminoAcidCode.ONE_LETTER),
-						anno.getCDSNTChangeStr()));
-				}
+				final List<VariantAnnotationInfo> result = getVariantAnnotations(
+					chromosome, position, reference, alternative, threePrimeShifting, jvData);
 
 				res.type("application/json");
 				return new Gson().toJson(result);
 			});
+	}
+
+	private static List<VariantAnnotationInfo> getVariantAnnotations(
+		String chromosome, int position, String reference, String alternative,
+		boolean threePrimeShifting, JannovarData jvData) throws InvalidCoordinatesException, AnnotationException {
+
+		final VariantAnnotator annotator = new VariantAnnotator(jvData.getRefDict(),
+			jvData.getChromosomes(), new AnnotationBuilderOptions(threePrimeShifting, false));
+
+		final Integer boxedInt = jvData.getRefDict().getContigNameToID().get(chromosome);
+		if (boxedInt == null) {
+			throw new InvalidCoordinatesException("Unknown reference " + chromosome,
+				AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
+		}
+		final int chr = boxedInt.intValue();
+
+		final GenomePosition gPos = new GenomePosition(jvData.getRefDict(), Strand.FWD, chr,
+			position, PositionType.ONE_BASED);
+		final VariantAnnotations annotations = annotator
+			.buildAnnotations(new GenomeVariant(gPos, reference, alternative));
+
+		final List<VariantAnnotationInfo> result = new ArrayList<>(0);
+		for (Annotation anno : annotations.getAnnotations()) {
+			result.add(new VariantAnnotationInfo(anno.getTranscript().getAccession(),
+				anno.getEffects().stream().map(x -> x.toString().toLowerCase())
+					.collect(Collectors.toList()), anno.getTranscript().isCoding(),
+				anno.getProteinChangeStr(AminoAcidCode.ONE_LETTER),
+				anno.getCDSNTChangeStr()));
+		}
+		return result;
 	}
 
 	private ImmutableMap<String, JannovarData> loadDatabases() throws SerializationException {
