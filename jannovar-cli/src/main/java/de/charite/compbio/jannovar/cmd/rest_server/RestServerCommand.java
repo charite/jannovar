@@ -1,13 +1,18 @@
 package de.charite.compbio.jannovar.cmd.rest_server;
 
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static spark.Spark.get;
+import static spark.Spark.post;
 import static spark.Spark.ipAddress;
 import static spark.Spark.port;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.annotation.*;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
@@ -18,6 +23,7 @@ import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.htsjdk.InvalidCoordinatesException;
+import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -73,6 +79,30 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 				res.type("application/json");
 				return new Gson().toJson(result);
 			});
+
+		post("/annotate-var", (req, res) -> {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				String body = req.body();
+				Variant payload = mapper.readValue(body, Variant.class);
+				if (!payload.isValid()) {
+					throw new InvalidAttributeException("Missing required data");
+				}
+				final boolean threePrimeShifting = !req.queryMap().hasKey("no-3-prime-shifting") && isNt3PrimeShifting;
+				final String key = Joiner.on("/").join(payload.source, payload.assembly);
+				final JannovarData jvData = jvDatas.get(key);
+
+				final List<VariantAnnotationInfo> result = getVariantAnnotations(
+					payload.chr, payload.pos, payload.ref, payload.alt, threePrimeShifting, jvData);
+
+				res.type("application/json");
+				return new Gson().toJson(result);
+			} catch (JsonParseException | UnrecognizedPropertyException |
+					 InvalidAttributeException | InvalidCoordinatesException e) {
+				res.status(HTTP_BAD_REQUEST);
+				return e.getMessage();
+			}
+		});
 	}
 
 	private static List<VariantAnnotationInfo> getVariantAnnotations(
@@ -137,6 +167,45 @@ public class RestServerCommand extends JannovarAnnotationCommand {
 			this.isCoding = isCoding;
 			this.hgvsProtein = hgvsProtein;
 			this.hgvsNucleotides = hgvsNucleotides;
+		}
+	}
+
+	private static class Variant {
+		private String source;
+		private String assembly;
+		private String chr;
+		private int pos;
+		private String ref;
+		private String alt;
+
+		public void setSource(String source) {
+			this.source = source;
+		}
+
+		public void setAssembly(String assembly) {
+			this.assembly = assembly;
+		}
+
+		public void setChr(String chr) {
+			this.chr = chr;
+		}
+
+		public void setPos(int pos) {
+			this.pos = pos;
+		}
+
+		public void setRef(String ref) {
+			this.ref = ref;
+		}
+
+		public void setAlt(String alt) {
+			this.alt = alt;
+		}
+
+		public boolean isValid() {
+			return source != null && !source.isEmpty() && assembly != null && !assembly.isEmpty() &&
+				chr != null && !chr.isEmpty() && pos > 0 && ref != null && !ref.isEmpty() &&
+				alt != null && !alt.isEmpty();
 		}
 	}
 

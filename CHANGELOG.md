@@ -1,5 +1,15 @@
 # Jannovar Changelog
 
+## v0.42
+
+### jannovar-cli
+- Add a `/annotate-var` endpoint to the rest server that accepts POST method for annotating single variants.
+    * Launch with `jannovar-cli rest-server -d data/hg19_refseq.ser -d data/hg19_ensembl.ser`
+  * Then, query with request body
+    `{ "source": "refseq", "assembly" : "hg19", "chr": "chr1", "pos": "111926150", "ref" : "GGCACTCCAGGGGACTA", "alt" : "G" }`
+    or `{ "source": "ensembl", "assembly" : "hg19", "chr": "chr1", "pos": "111926150", "ref" : "GGCACTCCAGGGGACTA", "alt" : "G" }`
+  * `?no-3-prime-shifting` can also be sent as a query param to temporarily disable the shifting.
+
 ## v0.41
 
 ### jannovar-core
