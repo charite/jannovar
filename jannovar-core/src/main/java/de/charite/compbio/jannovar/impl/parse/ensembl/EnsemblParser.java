@@ -12,6 +12,7 @@ import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.FeatureRecord;
 import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser;
+import de.charite.compbio.jannovar.impl.parse.refseq.ExonsTxRegions;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -44,7 +45,8 @@ public class EnsemblParser implements TranscriptParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EnsemblParser.class);
 
 	/**
-	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
+	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length
+	 * mapping
 	 */
 	private final ReferenceDictionary refDict;
 	/*
@@ -68,13 +70,14 @@ public class EnsemblParser implements TranscriptParser {
 	private final List<String> geneIdentifiers;
 
 	/**
-	 * @param refDict path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
-	 * @param basePath path to where the to-be-parsed files live
-	 * @param iniSection {@link Section} with configuration from INI file
+	 * @param refDict         path to {@link ReferenceDictionary} to use for name/id
+	 *                        and id/length mapping.
+	 * @param basePath        path to where the to-be-parsed files live
+	 * @param iniSection      {@link Section} with configuration from INI file
 	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
 	public EnsemblParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers,
-		Section iniSection) {
+			Section iniSection) {
 		this.refDict = refDict;
 		this.contigDict = refDict.getContigNameToID();
 		this.basePath = basePath;
@@ -92,7 +95,8 @@ public class EnsemblParser implements TranscriptParser {
 		LOGGER.info("Loading ENSEMBL to HGNC mappings...");
 		final Map<String, String> ensgToHgnc = loadEngsToHgnc();
 
-		// Load files that give the ENSG to Entrez ID mapping that comes directly from ENSEMBL.
+		// Load files that give the ENSG to Entrez ID mapping that comes directly from
+		// ENSEMBL.
 		LOGGER.info("Loading ENSEMBL to ENTREZ mappings...");
 		final Map<String, String> ensgToEntrez = loadEngsToEntrez();
 
@@ -100,13 +104,12 @@ public class EnsemblParser implements TranscriptParser {
 		LOGGER.info("Assigning additional HGNC information to transcripts..");
 		try {
 			new TranscriptModelBuilderHGNCExtender(
-				basePath,
-				r -> Lists.newArrayList(r.getHgncID()),
-				tx -> "HGNC:" + ensgToHgnc.get(tx.getGeneID())
-			).run(builders);
+					basePath,
+					r -> Lists.newArrayList(r.getHgncID()),
+					tx -> "HGNC:" + ensgToHgnc.get(tx.getGeneID())).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException(
-				"Problem extending transcripts with HGNC information", e);
+					"Problem extending transcripts with HGNC information", e);
 		}
 
 		// Use Entrez IDs from RefSeq if no HGNC annotation
@@ -115,13 +118,13 @@ public class EnsemblParser implements TranscriptParser {
 				if (ensgToEntrez.containsKey(val.getGeneID())) {
 					final String entrezGeneId = ensgToEntrez.get(val.getGeneID());
 					LOGGER.debug(
-						"ENSEMBL Gene {} not known to HGNC, annotating with ENTREZ_ID := {} for additional IDs",
-						new Object[]{val.getGeneID(), entrezGeneId});
+							"ENSEMBL Gene {} not known to HGNC, annotating with ENTREZ_ID := {} for additional IDs",
+							new Object[] { val.getGeneID(), entrezGeneId });
 					val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entrezGeneId);
 				}
 				LOGGER.debug(
-					"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
-					new Object[]{val.getGeneID(), val.getGeneID()});
+						"ENSEMBL Gene {} not known to HGNC, annotating with ENSEMBL_GENE_ID := {} for additional IDs",
+						new Object[] { val.getGeneID(), val.getGeneID() });
 				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
 			}
 		}
@@ -139,9 +142,9 @@ public class EnsemblParser implements TranscriptParser {
 			if (geneIdentifiers == null || geneIdentifiers.isEmpty()) {
 				result.add(builder.build());
 			} else {
-				if (geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID())
-					|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
-					ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
+				if (isGeneIdentiContain(builder)
+						|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
+								ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
 
 				) {
 					result.add(builder.build());
@@ -151,6 +154,10 @@ public class EnsemblParser implements TranscriptParser {
 		ImmutableList<TranscriptModel> transcriptModels = result.build();
 		LOGGER.info("Built {} TranscriptModels", transcriptModels.size());
 		return transcriptModels;
+	}
+
+	private boolean isGeneIdentiContain(TranscriptModelBuilder builder) {
+		return geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID());
 	}
 
 	/**
@@ -166,14 +173,14 @@ public class EnsemblParser implements TranscriptParser {
 		final String pathTableGeneMain = PathUtil.join(basePath, getINIFileName("table_gene_main"));
 		final Map<String, String> ensgToKey = new HashMap<>();
 		try (
-			FileInputStream fis = new FileInputStream(pathTableGeneMain);
-			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
-				new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(
-				pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
-			InputStreamReader reader = new InputStreamReader(gzis);
-			BufferedReader bufReader = new BufferedReader(reader)
-		) {
+				FileInputStream fis = new FileInputStream(pathTableGeneMain);
+				BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2")
+						? new BZip2CompressorInputStream(fis)
+						: null;
+				GZIPInputStream gzis = new GZIPInputStream(
+						pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
+				InputStreamReader reader = new InputStreamReader(gzis);
+				BufferedReader bufReader = new BufferedReader(reader)) {
 			String line;
 			while ((line = bufReader.readLine()) != null) {
 				final String[] arr = line.trim().split("\t");
@@ -185,17 +192,17 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Read mapping from MySQL key to Entrez ID
 		final String pathTableEntrezGene = PathUtil
-			.join(basePath, getINIFileName("table_entrezgene"));
+				.join(basePath, getINIFileName("table_entrezgene"));
 		final Map<String, String> keyToEntrez = new HashMap<>();
 		try (
-			FileInputStream fis = new FileInputStream(pathTableEntrezGene);
-			BZip2CompressorInputStream bz2is = pathTableEntrezGene.endsWith(".gz.bz2")
-				? new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(
-				pathTableEntrezGene.endsWith(".gz.bz2") ? bz2is : fis);
-			InputStreamReader reader = new InputStreamReader(gzis);
-			BufferedReader bufReader = new BufferedReader(reader)
-		) {
+				FileInputStream fis = new FileInputStream(pathTableEntrezGene);
+				BZip2CompressorInputStream bz2is = pathTableEntrezGene.endsWith(".gz.bz2")
+						? new BZip2CompressorInputStream(fis)
+						: null;
+				GZIPInputStream gzis = new GZIPInputStream(
+						pathTableEntrezGene.endsWith(".gz.bz2") ? bz2is : fis);
+				InputStreamReader reader = new InputStreamReader(gzis);
+				BufferedReader bufReader = new BufferedReader(reader)) {
 			String line;
 			while ((line = bufReader.readLine()) != null) {
 				final String[] arr = line.trim().split("\t");
@@ -214,7 +221,7 @@ public class EnsemblParser implements TranscriptParser {
 			final String key = entry1.getValue();
 			final String entrezId = keyToEntrez.get(key);
 			if (entrezId == null) {
-				LOGGER.warn("Found no Entrez ID identifier for ENSG: ", new Object[]{ensg});
+				LOGGER.warn("Found no Entrez ID identifier for ENSG: ", new Object[] { ensg });
 			} else {
 				result.put(ensg, entrezId);
 			}
@@ -222,20 +229,19 @@ public class EnsemblParser implements TranscriptParser {
 		return result;
 	}
 
-
 	private Map<String, String> loadEngsToHgnc() throws TranscriptParseException {
 		// Read mapping from ENSG to MySQL key
 		final String pathTableGeneMain = PathUtil.join(basePath, getINIFileName("table_gene_main"));
 		final Map<String, String> ensgToKey = new HashMap<>();
 		try (
-			FileInputStream fis = new FileInputStream(pathTableGeneMain);
-			BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2") ?
-				new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(
-				pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
-			InputStreamReader reader = new InputStreamReader(gzis);
-			BufferedReader bufReader = new BufferedReader(reader)
-		) {
+				FileInputStream fis = new FileInputStream(pathTableGeneMain);
+				BZip2CompressorInputStream bz2is = pathTableGeneMain.endsWith(".gz.bz2")
+						? new BZip2CompressorInputStream(fis)
+						: null;
+				GZIPInputStream gzis = new GZIPInputStream(
+						pathTableGeneMain.endsWith(".gz.bz2") ? bz2is : fis);
+				InputStreamReader reader = new InputStreamReader(gzis);
+				BufferedReader bufReader = new BufferedReader(reader)) {
 			String line;
 			while ((line = bufReader.readLine()) != null) {
 				final String[] arr = line.trim().split("\t");
@@ -249,14 +255,14 @@ public class EnsemblParser implements TranscriptParser {
 		final String pathTableHgnc = PathUtil.join(basePath, getINIFileName("table_hgnc"));
 		final Map<String, String> keyToHgnc = new HashMap<>();
 		try (
-			FileInputStream fis = new FileInputStream(pathTableHgnc);
-			BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2")
-				? new BZip2CompressorInputStream(fis) : null;
-			GZIPInputStream gzis = new GZIPInputStream(
-				pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
-			InputStreamReader reader = new InputStreamReader(gzis);
-			BufferedReader bufReader = new BufferedReader(reader)
-		) {
+				FileInputStream fis = new FileInputStream(pathTableHgnc);
+				BZip2CompressorInputStream bz2is = pathTableHgnc.endsWith(".gz.bz2")
+						? new BZip2CompressorInputStream(fis)
+						: null;
+				GZIPInputStream gzis = new GZIPInputStream(
+						pathTableHgnc.endsWith(".gz.bz2") ? bz2is : fis);
+				InputStreamReader reader = new InputStreamReader(gzis);
+				BufferedReader bufReader = new BufferedReader(reader)) {
 			String line;
 			while ((line = bufReader.readLine()) != null) {
 				final String[] arr = line.trim().split("\t");
@@ -289,7 +295,7 @@ public class EnsemblParser implements TranscriptParser {
 	 * @throws TranscriptParseException on problems with parsing the FASTA
 	 */
 	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA)
-		throws TranscriptParseException {
+			throws TranscriptParseException {
 
 		// First, build mapping from RNA accession to builder
 		Map<String, TranscriptModelBuilder> txMap = new HashMap<>();
@@ -297,7 +303,8 @@ public class EnsemblParser implements TranscriptParser {
 			TranscriptModelBuilder trnscpModelBuilder = entry.getValue();
 			txMap.put(trnscpModelBuilder.getSequence(), trnscpModelBuilder);
 			if (trnscpModelBuilder.getTxVersion() != null) {
-				txMap.put(trnscpModelBuilder.getSequence() + "." + trnscpModelBuilder.getTxVersion(), trnscpModelBuilder);
+				txMap.put(trnscpModelBuilder.getSequence() + "." + trnscpModelBuilder.getTxVersion(),
+						trnscpModelBuilder);
 			}
 		}
 
@@ -343,12 +350,15 @@ public class EnsemblParser implements TranscriptParser {
 	}
 
 	/**
-	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
+	 * Convert list of GFF records into a mapping from transcript id to
+	 * TranscriptModelBuilder
 	 * <p>
-	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the
+	 * Then, we only have to assign the sequence into the TranscriptModelBuilder
+	 * objects to get the
 	 * appropriate TranscriptModel objects.
 	 * <p>
-	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the
+	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the
+	 * mRNA set as the
 	 * sequence, so we can use this for assigning FASTA sequence to the builders.
 	 */
 	private Map<String, TranscriptModelBuilder> loadTranscriptModels(String pathGFF) throws TranscriptParseException {
@@ -366,7 +376,8 @@ public class EnsemblParser implements TranscriptParser {
 		Set<String> wantedTypes = Sets.newHashSet("exon", "CDS", "stop_codon");
 		// Read file record by record, mapping features to genes
 		//
-		// This will only work properly if the full path of feature objects from the current feature has already been
+		// This will only work properly if the full path of feature objects from the
+		// current feature has already been
 		// read. Otherwise, we will need some more fancy parsing.
 		int numRecords = 0;
 		try {
@@ -375,8 +386,9 @@ public class EnsemblParser implements TranscriptParser {
 				numRecords++;
 				// filter these out here as they are only discarded later
 				if (record.getAttributes()
-					.get("transcript_id") != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record
-					.getType())) {
+						.get("transcript_id") != null && contigDict.containsKey(record.getSeqID())
+						&& wantedTypes.contains(record
+								.getType())) {
 					LOGGER.debug("Loaded GFF record {}", record);
 					String transcriptId = record.getAttributes().get("transcript_id");
 					if (!results.containsKey(transcriptId)) {
@@ -442,18 +454,21 @@ public class EnsemblParser implements TranscriptParser {
 	private GenomeInterval buildGenomeInterval(FeatureRecord record, Strand strand) {
 		int chrom = contigDict.get(record.getSeqID());
 		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
-		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so this needs adjusting-post build
+		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so
+		// this needs adjusting-post build
 		// rather than being supplied in the constructor.
 		return interval.withStrand(strand);
 	}
 
-	private Map<String, TranscriptModelBuilder> getTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
+	private Map<String, TranscriptModelBuilder> getTranscriptModelsWithTxRegion(
+			Map<String, TranscriptModelBuilder> results) {
 		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
 
 		results.forEach((transcriptId, transcriptModelBuilder) -> {
 			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
 			if (txRegion == null) {
-				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
+				// Only warn if a transcript and not a gene, we only allow exons to be parts of
+				// genes as this is
 				// observed in RefSeq
 				LOGGER.warn("No transcript region for {}; skipping", transcriptId);
 			} else {
