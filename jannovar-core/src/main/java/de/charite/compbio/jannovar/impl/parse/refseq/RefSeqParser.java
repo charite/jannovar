@@ -39,6 +39,7 @@ import javax.annotation.Nullable;
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * Parsing of RefSeq GFF3 files
  *
@@ -52,7 +53,8 @@ public class RefSeqParser implements TranscriptParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RefSeqParser.class);
 
 	/**
-	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
+	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length
+	 * mapping
 	 */
 	private ReferenceDictionary refDict;
 
@@ -77,13 +79,14 @@ public class RefSeqParser implements TranscriptParser {
 	private final List<String> geneIdentifiers;
 
 	/**
-	 * @param refDict         path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
+	 * @param refDict         path to {@link ReferenceDictionary} to use for name/id
+	 *                        and id/length mapping.
 	 * @param basePath        path to where the to-be-parsed files live
 	 * @param iniSection      {@link Section} with configuration from INI file
 	 * @param geneIdentifiers list of gene identifiers to include if non-empty
 	 */
 	public RefSeqParser(ReferenceDictionary refDict, String basePath, List<String> geneIdentifiers,
-						Section iniSection) {
+			Section iniSection) {
 		this.refDict = refDict;
 		this.contigDict = refDict.getContigNameToID();
 
@@ -102,7 +105,7 @@ public class RefSeqParser implements TranscriptParser {
 		LOGGER.info("Assigning additional HGNC information to {} transcripts..", builders.size());
 		try {
 			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEntrezID()),
-				TranscriptModelBuilder::getGeneID).run(builders);
+					TranscriptModelBuilder::getGeneID).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
 		}
@@ -111,7 +114,7 @@ public class RefSeqParser implements TranscriptParser {
 		for (TranscriptModelBuilder val : builders.values()) {
 			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
 				LOGGER.debug("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
-					val.getGeneID(), val.getAccession());
+						val.getGeneID(), val.getAccession());
 				val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), val.getGeneID());
 			}
 		}
@@ -130,8 +133,8 @@ public class RefSeqParser implements TranscriptParser {
 				result.add(builder.build());
 			} else {
 				if (geneIdentifiers.contains(builder.getAccession()) || geneIdentifiers.contains(builder.getGeneID())
-					|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
-					ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
+						|| !Sets.intersection(ImmutableSet.copyOf(geneIdentifiers),
+								ImmutableSet.copyOf(builder.getAltGeneIDs().values())).isEmpty()
 
 				) {
 					result.add(builder.build());
@@ -144,13 +147,13 @@ public class RefSeqParser implements TranscriptParser {
 	/**
 	 * Load chrMT sequence (if available) and assign into chrMT builders.
 	 *
-	 * @param builders The transcript builders to update.
+	 * @param builders  The transcript builders to update.
 	 * @param pathFasta The path to the fasta file.
 	 *
 	 * @throws TranscriptParseException on problems with parsing the FASTA.
 	 */
 	private void loadMitochondrialFASTA(Map<String, TranscriptModelBuilder> builders)
-		throws TranscriptParseException {
+			throws TranscriptParseException {
 		if (!refDict.getContigNameToID().containsKey("chrMT")) {
 			LOGGER.info("The genome does not have a chrMT, skipping.");
 			return;
@@ -161,10 +164,9 @@ public class RefSeqParser implements TranscriptParser {
 
 		final String pathFasta = PathUtil.join(basePath, getINIFileName("faMT"));
 		if (!new File(pathFasta).exists()) {
-			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[]{ pathFasta });
+			LOGGER.warn("The chrMT FASTA File {} does not exist, skipping.", new Object[] { pathFasta });
 			return;
 		}
-
 
 		final int idMT = refDict.getContigNameToID().get("chrMT");
 
@@ -219,8 +221,10 @@ public class RefSeqParser implements TranscriptParser {
 	 *
 	 * @throws TranscriptParseException on problems with parsing the FASTA
 	 */
-	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA) throws TranscriptParseException {
-		// We must remove variants for which we did not find any sequence.  The only exception
+	private void loadFASTA(Map<String, TranscriptModelBuilder> builders, String pathFASTA)
+			throws TranscriptParseException {
+		// We must remove variants for which we did not find any sequence. The only
+		// exception
 		// is chrMT if we could load the corresponding sequence.
 		Set<String> missingSequence = new HashSet<>(builders.keySet());
 
@@ -279,12 +283,15 @@ public class RefSeqParser implements TranscriptParser {
 	}
 
 	/**
-	 * Convert list of GFF records into a mapping from transcript id to TranscriptModelBuilder
+	 * Convert list of GFF records into a mapping from transcript id to
+	 * TranscriptModelBuilder
 	 * <p>
-	 * Then, we only have to assign the sequence into the TranscriptModelBuilder objects to get the appropriate
+	 * Then, we only have to assign the sequence into the TranscriptModelBuilder
+	 * objects to get the appropriate
 	 * TranscriptModel objects.
 	 * <p>
-	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the mRNA set as the sequence, so we can
+	 * The TranscriptModelBuilder objects will have the a "Name" attribute of the
+	 * mRNA set as the sequence, so we can
 	 * use this for assigning FASTA sequence to the builders.
 	 */
 	private Map<String, TranscriptModelBuilder> loadTranscriptModels(String pathGFF) throws TranscriptParseException {
@@ -307,7 +314,8 @@ public class RefSeqParser implements TranscriptParser {
 		// Some exons do not have a gene name in mm9 and rat releases.
 		// Therefore we select collect the name from the gene.
 		Map<String, String> entrezMap = new HashMap<>();
-		// For chrMT: mapping from Entrez gene ID to the gene synonym with "MT" prefix.  We use this
+		// For chrMT: mapping from Entrez gene ID to the gene synonym with "MT" prefix.
+		// We use this
 		// as RefSeq does not contain any transcript records for mitochondrial genes.
 		Map<String, String> mtEntrezMap = new HashMap<>();
 
@@ -325,7 +333,7 @@ public class RefSeqParser implements TranscriptParser {
 
 				// Whether or not the record is on chrMT.
 				boolean isMT = contigDict.containsKey("chrMT") &&
-					contigDict.get("chrMT").equals(contigDict.get(record.getSeqID()));
+						contigDict.get("chrMT").equals(contigDict.get(record.getSeqID()));
 				if ("gene".equals(record.getType())) {
 
 					String entrezId = parseGeneID(record);
@@ -350,17 +358,21 @@ public class RefSeqParser implements TranscriptParser {
 					}
 				}
 
-
 				// Handle the records describing the transcript structure.
 				//
-				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id as
-				// the transcriptId is only stated for the exon and the proteinId is used as the CDS identifier.
-				// a further complication is that some transcriptIds are used twice by different ParentIds - those in
+				// n.b. - in the RefSeq data the exon and CDS lines are linked by the Parent id
+				// as
+				// the transcriptId is only stated for the exon and the proteinId is used as the
+				// CDS identifier.
+				// a further complication is that some transcriptIds are used twice by different
+				// ParentIds - those in
 				// the pseudoautosomal regions and some others.
 				//
-				// Also, on chrMT, RefSeq does not contain any exons for the protein-coding genes but only the CDS.
+				// Also, on chrMT, RefSeq does not contain any exons for the protein-coding
+				// genes but only the CDS.
 				String parentId = record.getAttributes().get("Parent");
-				if (parentId != null && contigDict.containsKey(record.getSeqID()) && wantedTypes.contains(record.getType())) {
+				if (parentId != null && contigDict.containsKey(record.getSeqID())
+						&& wantedTypes.contains(record.getType())) {
 					final TranscriptModelBuilder builder;
 					if (!parentIdToTranscriptModels.containsKey(parentId)) {
 						if (record.getType().equals("cDNA_match")) {
@@ -370,7 +382,8 @@ public class RefSeqParser implements TranscriptParser {
 						builder = createNewTranscriptModelBuilder(record, transcriptId, entrezMap);
 						parentIdToTranscriptModels.put(parentId, builder);
 
-						// On chrMT, we use the gene symbol (if available with prefix MT) as the transcript.
+						// On chrMT, we use the gene symbol (if available with prefix MT) as the
+						// transcript.
 						if (isMT) {
 							if ("CDS".equals(record.getType())) {
 								// Fixup coding exon, need to set transcript and exon region manually.
@@ -381,16 +394,18 @@ public class RefSeqParser implements TranscriptParser {
 
 							String entrezId = parseGeneID(record);
 
-//							// skip on chrMT some tRNA that do not have any Dbxref. This happens in mm9 and rat v6
-//							if (record.getAttributes().get("gbkey") == "tRNA" && entrezId == null) {
-//								continue;
-//							}
+							// // skip on chrMT some tRNA that do not have any Dbxref. This happens in mm9
+							// and rat v6
+							// if (record.getAttributes().get("gbkey") == "tRNA" && entrezId == null) {
+							// continue;
+							// }
 
 							transcriptId = mtEntrezMap.get(entrezId);
 							builder.setAccession(transcriptId);
 						}
 
-						// this method is used to track the rare cases of transcriptIds mapping to multiple parentIds
+						// this method is used to track the rare cases of transcriptIds mapping to
+						// multiple parentIds
 						updateTranscriptIdToParentIds(transcriptIdToParentIds, transcriptId, parentId);
 					} else {
 						// update existing
@@ -412,7 +427,7 @@ public class RefSeqParser implements TranscriptParser {
 					final String target[] = record.getAttributes().get("Target").split(" ");
 					if (!"+".equals(target[3])) {
 						throw new TranscriptParseException(
-							"Can only handle Target on strand '+' for cDNA_match: " + record);
+								"Can only handle Target on strand '+' for cDNA_match: " + record);
 					}
 
 					final String targetTxId = target[0];
@@ -422,9 +437,9 @@ public class RefSeqParser implements TranscriptParser {
 					final int refEndPos = record.getEnd();
 					final String gapStr;
 					if ((refEndPos - refBeginPos != txEndPos - txBeginPos)
-						&& record.getAttributes().get("Gap") == null) {
+							&& record.getAttributes().get("Gap") == null) {
 						throw new TranscriptParseException(
-							"ref len != tx len but no gap string: " + record);
+								"ref len != tx len but no gap string: " + record);
 					} else {
 						if (record.getAttributes().get("Gap") == null) {
 							gapStr = "M" + (txEndPos - txBeginPos);
@@ -437,10 +452,10 @@ public class RefSeqParser implements TranscriptParser {
 					if (parentIds != null) {
 						for (String builderParentId : parentIds) {
 							TranscriptModelBuilder builder = parentIdToTranscriptModels
-								.get(builderParentId);
+									.get(builderParentId);
 							builder.getAlignmentParts().add(
-								new AlignmentPart(refBeginPos, refEndPos, txBeginPos, txEndPos,
-									gapStr));
+									new AlignmentPart(refBeginPos, refEndPos, txBeginPos, txEndPos,
+											gapStr));
 						}
 					}
 				}
@@ -449,9 +464,11 @@ public class RefSeqParser implements TranscriptParser {
 			throw new TranscriptParseException("Problem parsing GFF file", e);
 		}
 
-		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = mapTranscriptIdsToTranscriptModels(parentIdToTranscriptModels, transcriptIdToParentIds);
+		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = mapTranscriptIdsToTranscriptModels(
+				parentIdToTranscriptModels, transcriptIdToParentIds);
 
-		LOGGER.info("Parsed {} GFF records as {} TranscriptModels", numRecords, transcriptIdToTranscriptModelBuilders.size());
+		LOGGER.info("Parsed {} GFF records as {} TranscriptModels", numRecords,
+				transcriptIdToTranscriptModelBuilders.size());
 
 		return transcriptIdToTranscriptModelBuilders;
 	}
@@ -471,7 +488,8 @@ public class RefSeqParser implements TranscriptParser {
 	}
 
 	/**
-	 * @return {@code true} for allowing empty CDS in transcripts starting with {@code NM_}.
+	 * @return {@code true} for allowing empty CDS in transcripts starting with
+	 *         {@code NM_}.
 	 */
 	private boolean allowNonCodingNm() {
 		return checkFlagInSection(iniSection.fetch("allowNonCodingNm"));
@@ -488,7 +506,8 @@ public class RefSeqParser implements TranscriptParser {
 		return false;
 	}
 
-	private void updateTranscriptIdToParentIds(Map<String, List<String>> transciptIdToParentIds, String transcriptId, String parentId) {
+	private void updateTranscriptIdToParentIds(Map<String, List<String>> transciptIdToParentIds, String transcriptId,
+			String parentId) {
 		if (transcriptId != null) {
 			if (transciptIdToParentIds.containsKey(transcriptId)) {
 				List<String> parentIds = transciptIdToParentIds.get(transcriptId);
@@ -502,7 +521,8 @@ public class RefSeqParser implements TranscriptParser {
 		}
 	}
 
-	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId, Map<String, String> notMtEntrezMap) {
+	private TranscriptModelBuilder createNewTranscriptModelBuilder(FeatureRecord record, String transcriptId,
+			Map<String, String> notMtEntrezMap) {
 		TranscriptModelBuilder builder = new TranscriptModelBuilder();
 		// Parse out the simple attributes from the mRNA record
 		Strand strand = parseStrand(record);
@@ -566,23 +586,29 @@ public class RefSeqParser implements TranscriptParser {
 	private GenomeInterval buildGenomeInterval(FeatureRecord record, Strand strand) {
 		int chrom = contigDict.get(record.getSeqID());
 		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
-		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so this needs adjusting-post build
+		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so
+		// this needs adjusting-post build
 		// rather than being supplied in the constructor.
 		return interval.withStrand(strand);
 	}
 
-	private Map<String, TranscriptModelBuilder> mapTranscriptIdsToTranscriptModels(Map<String, TranscriptModelBuilder> parentIdToTranscriptModels, Map<String, List<String>> transciptIdToParentIds) {
-		Map<String, TranscriptModelBuilder> parentIdToTranscriptModelsWithTxRegion = mapParentIdsToTranscriptModelsWithTxRegion(parentIdToTranscriptModels);
-		return mapNonRedundantTranscriptIdsToTranscriptModelBuilder(parentIdToTranscriptModelsWithTxRegion, transciptIdToParentIds);
+	private Map<String, TranscriptModelBuilder> mapTranscriptIdsToTranscriptModels(
+			Map<String, TranscriptModelBuilder> parentIdToTranscriptModels,
+			Map<String, List<String>> transciptIdToParentIds) {
+		Map<String, TranscriptModelBuilder> parentIdToTranscriptModelsWithTxRegion = mapParentIdsToTranscriptModelsWithTxRegion(
+				parentIdToTranscriptModels);
+		return ForRedundantToTransBuilder(parentIdToTranscriptModelsWithTxRegion, transciptIdToParentIds);
 	}
 
-	private Map<String, TranscriptModelBuilder> mapParentIdsToTranscriptModelsWithTxRegion(Map<String, TranscriptModelBuilder> results) {
+	private Map<String, TranscriptModelBuilder> mapParentIdsToTranscriptModelsWithTxRegion(
+			Map<String, TranscriptModelBuilder> results) {
 		Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion = new HashMap<>(results.size());
 
 		results.forEach((parentId, transcriptModelBuilder) -> {
 			GenomeInterval txRegion = transcriptModelBuilder.getTXRegion();
 			if (txRegion == null) {
-				// Only warn if a transcript and not a gene, we only allow exons to be parts of genes as this is
+				// Only warn if a transcript and not a gene, we only allow exons to be parts of
+				// genes as this is
 				// observed in RefSeq
 				LOGGER.debug("No transcript region for {}; skipping", parentId);
 			} else {
@@ -598,9 +624,10 @@ public class RefSeqParser implements TranscriptParser {
 
 	private void failIfCdsRegionExpected(TranscriptModelBuilder transcriptModelBuilder) {
 		if (Optional.ofNullable(transcriptModelBuilder.getAccession())
-			.map(x -> x.startsWith("NM_") || x.startsWith("XM_"))
-			.orElse(false)) {
-			final String msg = "No CDS region found for coding transcript '" + transcriptModelBuilder.getAccession() + "'.";
+				.map(x -> x.startsWith("NM_") || x.startsWith("XM_"))
+				.orElse(false)) {
+			final String msg = "No CDS region found for coding transcript '" + transcriptModelBuilder.getAccession()
+					+ "'.";
 			if (!allowNonCodingNm()) {
 				throw new IllegalStateException(msg);
 			} else {
@@ -609,10 +636,13 @@ public class RefSeqParser implements TranscriptParser {
 		}
 	}
 
-	private Map<String, TranscriptModelBuilder> mapNonRedundantTranscriptIdsToTranscriptModelBuilder(Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion, Map<String, List<String>> transciptIdToParentIds) {
+	private Map<String, TranscriptModelBuilder> ForRedundantToTransBuilder(
+			Map<String, TranscriptModelBuilder> transcriptModelsWithTxRegion,
+			Map<String, List<String>> transciptIdToParentIds) {
 
-		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = new HashMap<>(transcriptModelsWithTxRegion
-			.size());
+		Map<String, TranscriptModelBuilder> transcriptIdToTranscriptModelBuilders = new HashMap<>(
+				transcriptModelsWithTxRegion
+						.size());
 
 		boolean assignPseudoAutosomalTranscriptsToX = preferPARTranscriptsOnChrX();
 		if (assignPseudoAutosomalTranscriptsToX) {
@@ -627,7 +657,8 @@ public class RefSeqParser implements TranscriptParser {
 				continue;
 			}
 			if (parentIds.size() == 1) {
-				// transcriptModelsWithTxRegion used the ParentId as the key (something like 'rna58569'), but we need
+				// transcriptModelsWithTxRegion used the ParentId as the key (something like
+				// 'rna58569'), but we need
 				// the final map to use the transcriptId e.g. 'XM_005255624.1' as the key
 				TranscriptModelBuilder transcriptModelBuilder = transcriptModelsWithTxRegion.get(parentIds.get(0));
 				transcriptIdToTranscriptModelBuilders.put(transcriptId, transcriptModelBuilder);
@@ -639,20 +670,24 @@ public class RefSeqParser implements TranscriptParser {
 				// Pseudoautosomal gene
 				if (currentChromosome == 23 && newChromosome == 24) {
 					// e.g. https://www.ncbi.nlm.nih.gov/nuccore/NM_001636
-					TranscriptModelBuilder preferred = assignPseudoAutosomalTranscriptsToX ? existingTranscriptBuilder : updatedTranscriptBuilder;
+					TranscriptModelBuilder preferred = assignPseudoAutosomalTranscriptsToX ? existingTranscriptBuilder
+							: updatedTranscriptBuilder;
 					LOGGER.info("Assigning pseudoautosomal gene {} transcript {} to chromsome {}",
-						preferred.getGeneSymbol(), preferred.getAccession(), preferred.getTXRegion().getChr());
+							preferred.getGeneSymbol(), preferred.getAccession(), preferred.getTXRegion().getChr());
 					transcriptIdToTranscriptModelBuilders.put(transcriptId, preferred);
 				} else {
 					duplicatedTranscriptIdCount++;
-					// This is a tricky call - there are about 30 transcripts with duplicated transcriptIds due to imperfect
-					// alignment to the genomic reference.  We chose the one with the best match between alignment from cDNA_match
+					// This is a tricky call - there are about 30 transcripts with duplicated
+					// transcriptIds due to imperfect
+					// alignment to the genomic reference. We chose the one with the best match
+					// between alignment from cDNA_match
 					// and exons.
-					LOGGER.warn("Transcript {} has {} possible transcript models - picking best by cDNA_match", transcriptId, parentIds
-						.size());
+					LOGGER.warn("Transcript {} has {} possible transcript models - picking best by cDNA_match",
+							transcriptId, parentIds
+									.size());
 					List<TranscriptModelBuilder> possibleModels = parentIds.stream()
-						.map(transcriptModelsWithTxRegion::get)
-						.collect(toList());
+							.map(transcriptModelsWithTxRegion::get)
+							.collect(toList());
 					TranscriptModelBuilder bestModel = findBestModelByCdnaMatch(possibleModels);
 					transcriptIdToTranscriptModelBuilders.put(transcriptId, bestModel);
 				}
