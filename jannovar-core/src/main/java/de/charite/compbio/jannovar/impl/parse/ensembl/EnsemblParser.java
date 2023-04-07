@@ -430,34 +430,12 @@ public class EnsemblParser implements TranscriptParser {
 	}
 
 	private void updateExonsTxRegionsAndCds(FeatureRecord record, TranscriptModelBuilder builder) {
-		Strand strand = parseStrand(record);
-		if (record.getType().equals("exon")) {
-			GenomeInterval exon = buildGenomeInterval(record, strand);
-			GenomeInterval txRegion = updateGenomeInterval(exon, builder.getTXRegion());
-			builder.setTXRegion(txRegion);
-			builder.addExonRegion(exon);
-		} else if ("CDS".equals(record.getType()) || "stop_codon".equals(record.getType())) {
-			GenomeInterval cds = buildGenomeInterval(record, strand);
-			GenomeInterval cdsRegion = updateGenomeInterval(cds, builder.getCDSRegion());
-			builder.setCDSRegion(cdsRegion);
-		}
-	}
-
-	private GenomeInterval updateGenomeInterval(GenomeInterval latest, GenomeInterval existing) {
-		return existing == null ? latest : existing.union(latest);
+		ExonsTxRegions txRegions = new ExonsTxRegions(refDict);
+		txRegions.updateExonsTxRegions(record, builder);
 	}
 
 	private Strand parseStrand(FeatureRecord record) {
 		return (record.getStrand() == FeatureRecord.Strand.FORWARD) ? Strand.FWD : Strand.REV;
-	}
-
-	private GenomeInterval buildGenomeInterval(FeatureRecord record, Strand strand) {
-		int chrom = contigDict.get(record.getSeqID());
-		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, chrom, record.getBegin(), record.getEnd());
-		// CAUTION! GFF record begin and end are listed using the FORWARD strand, so
-		// this needs adjusting-post build
-		// rather than being supplied in the constructor.
-		return interval.withStrand(strand);
 	}
 
 	private Map<String, TranscriptModelBuilder> getTranscriptModelsWithTxRegion(
