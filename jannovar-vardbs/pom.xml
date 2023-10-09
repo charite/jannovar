@@ -108,7 +108,7 @@
             <!-- Specify the resources which need to be made accessible to the user -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
