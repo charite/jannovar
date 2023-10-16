@@ -14,7 +14,7 @@
 
         <junit.jupiter.version>5.7.2</junit.jupiter.version>
         <junit.platform.version>1.7.2</junit.platform.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>2.0.9</slf4j.version>
         <guava.version>22.0</guava.version>
         <antlr.version>4.7</antlr.version>
         <antlr4-maven-plugin.version>4.7.2</antlr4-maven-plugin.version>
