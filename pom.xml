@@ -8,7 +8,7 @@
     <name>Jannovar</name>
 
     <properties>
-        <htsjdk.version>4.0.2</htsjdk.version>
+        <htsjdk.version>4.1.0</htsjdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j.version>2.22.0</log4j.version>
 
