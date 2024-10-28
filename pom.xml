@@ -22,7 +22,7 @@
         <h2.version>2.3.232</h2.version>
 
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <maven-jxr-plugin.version>3.4.0</maven-jxr-plugin.version>
+        <maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
         <checkstyle.version>8.17</checkstyle.version>
     </properties>
